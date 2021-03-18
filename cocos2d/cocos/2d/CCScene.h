@@ -74,8 +74,8 @@ public:
      *
      * @return An autoreleased Scene object.
      */
-    static Scene *create();
-    static Scene *remove();
+    static Scene* create();
+    static Scene* remove();
 
     /** Creates a new Scene object with a predefined Size. 
      *
@@ -83,29 +83,35 @@ public:
      * @return An autoreleased Scene object.
      * @js NA
      */
-    static Scene *createWithSize(const Size& size);
+    static Scene* createWithSize(const Size &size);
 
     using Node::addChild;
     virtual std::string getDescription() const override;
-    
+
     /** Get all cameras.
      * 
      * @return The vector of all cameras, ordered by camera depth.
      * @js NA
      */
-    const std::vector<Camera*>& getCameras();
+    const std::vector<Camera*> &getCameras();
 
     /** Get the default camera.
      * @js NA
      * @return The default camera of scene.
      */
-    Camera* getDefaultCamera() const { return _defaultCamera; }
+    Camera* getDefaultCamera() const
+    {
+        return _defaultCamera;
+    }
 
     /** Get lights.
      * @return The vector of lights.
      * @js NA
      */
-    const std::vector<BaseLight*>& getLights() const { return _lights; }
+    const std::vector<BaseLight*> &getLights() const
+    {
+        return _lights;
+    }
 
     /** Render the scene.
      * @param renderer The renderer use to render the scene.
@@ -113,20 +119,23 @@ public:
      * @param eyeProjection The projection matrix of camera.
      * @js NA
      */
-    virtual void render(Renderer* renderer, const Mat4& eyeTransform, const Mat4* eyeProjection = nullptr);
-  
+    virtual void render(Renderer* renderer, const Mat4 &eyeTransform, const Mat4* eyeProjection = nullptr);
+
     /** override function */
     virtual void removeAllChildren() override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     Scene();
     virtual ~Scene();
-    
+
     bool init() override;
-    bool initWithSize(const Size& size);
-    
-    void setCameraOrderDirty() { _cameraOrderDirty = true; }
-    
+    bool initWithSize(const Size &size);
+
+    void setCameraOrderDirty()
+    {
+        _cameraOrderDirty = true;
+    }
+
     void onProjectionChanged(EventCustom* event);
 
 protected:
@@ -136,83 +145,96 @@ protected:
     friend class Camera;
     friend class BaseLight;
     friend class Renderer;
-    
-    std::vector<Camera*> _cameras; //weak ref to Camera
-    Camera*              _defaultCamera = nullptr; //weak ref, default camera created by scene, _cameras[0], Caution that the default camera can not be added to _cameras before onEnter is called
-    bool                 _cameraOrderDirty = true; // order is dirty, need sort
-    EventListenerCustom*       _event = nullptr;
 
-    std::vector<BaseLight *> _lights;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Scene);
-    
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION))
+    std::vector<Camera*> _cameras; //weak ref to Camera
+    Camera* _defaultCamera = nullptr; //weak ref, default camera created by scene, _cameras[0], Caution that the default camera can not be added to _cameras before onEnter is called
+    bool _cameraOrderDirty = true; // order is dirty, need sort
+    EventListenerCustom* _event = nullptr;
+
+    std::vector<BaseLight*> _lights;
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(Scene);
+
+    #if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION))
 public:
-    
-#if CC_USE_PHYSICS
+
+        #if CC_USE_PHYSICS
+
     /** Get the physics world of the scene.
      * @return The physics world of the scene.
      * @js NA
      */
-    PhysicsWorld* getPhysicsWorld() const { return _physicsWorld; }
-#endif
-    
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+    PhysicsWorld* getPhysicsWorld() const
+    {
+        return _physicsWorld;
+    }
+
+        #endif
+
+        #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+
     /** Get the 3d physics world of the scene.
      * @return The 3d physics world of the scene.
      * @js NA
      */
-    Physics3DWorld* getPhysics3DWorld() { return _physics3DWorld; }
-    
+    Physics3DWorld* getPhysics3DWorld()
+    {
+        return _physics3DWorld;
+    }
+
     /** 
      * Set Physics3D debug draw camera.
      */
     void setPhysics3DDebugCamera(Camera* camera);
-#endif
-    
+        #endif
+
     /** Create a scene with physics.
      * @return An autoreleased Scene object with physics.
      * @js NA
      */
-    static Scene *createWithPhysics();
-    
+    static Scene* createWithPhysics();
+
 CC_CONSTRUCTOR_ACCESS:
     bool initWithPhysics();
-    
+
 protected:
     void addChildToPhysicsWorld(Node* child);
 
-#if CC_USE_PHYSICS
+        #if CC_USE_PHYSICS
     PhysicsWorld* _physicsWorld = nullptr;
-#endif
-    
-#if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
-    Physics3DWorld*            _physics3DWorld = nullptr;
-    Camera*                    _physics3dDebugCamera = nullptr;
-#endif
-#endif // (CC_USE_PHYSICS || CC_USE_3D_PHYSICS)
-    
-#if CC_USE_NAVMESH
+        #endif
+
+        #if CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION
+    Physics3DWorld* _physics3DWorld = nullptr;
+    Camera* _physics3dDebugCamera = nullptr;
+        #endif
+    #endif // (CC_USE_PHYSICS || CC_USE_3D_PHYSICS)
+
+    #if CC_USE_NAVMESH
 public:
     /** set navigation mesh */
     void setNavMesh(NavMesh* navMesh);
+
     /** get navigation mesh */
-    NavMesh* getNavMesh() const { return _navMesh; }
+    NavMesh* getNavMesh() const
+    {
+        return _navMesh;
+    }
+
     /**
     * Set NavMesh debug draw camera.
     */
-    void setNavMeshDebugCamera(Camera *camera);
+    void setNavMeshDebugCamera(Camera* camera);
 
 protected:
-    NavMesh*        _navMesh = nullptr;
-    Camera *        _navMeshDebugCamera = nullptr;
-#endif
-    
-#if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION) || CC_USE_NAVMESH)
+    NavMesh* _navMesh = nullptr;
+    Camera* _navMeshDebugCamera = nullptr;
+    #endif
+
+    #if (CC_USE_PHYSICS || (CC_USE_3D_PHYSICS && CC_ENABLE_BULLET_INTEGRATION) || CC_USE_NAVMESH)
 public:
     void stepPhysicsAndNavigation(float deltaTime);
-#endif
+    #endif
 };
 
 // end of _2d group

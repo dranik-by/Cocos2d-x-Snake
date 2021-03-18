@@ -40,8 +40,8 @@ NS_CC_BEGIN
 
 struct CC_DLL PipelineDescriptor
 {
-    backend::ProgramState*          programState = nullptr;
-    backend::BlendDescriptor        blendDescriptor;
+    backend::ProgramState* programState = nullptr;
+    backend::BlendDescriptor blendDescriptor;
 };
 
 //end of renderer group

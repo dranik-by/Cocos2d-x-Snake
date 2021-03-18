@@ -1,20 +1,20 @@
 
-if(APPLE)
+if (APPLE)
     set(COCOS_BASE_SPECIFIC_SRC
         base/CCUserDefault-apple.mm
         base/CCController-apple.mm
         )
 
-elseif(ANDROID)
+elseif (ANDROID)
     set(COCOS_BASE_SPECIFIC_SRC
         base/CCUserDefault-android.cpp
         base/CCController-android.cpp
         )
-elseif(LINUX OR WINDOWS)
+elseif (LINUX OR WINDOWS)
     set(COCOS_BASE_SPECIFIC_SRC
         base/CCController-linux-win32.cpp
         )
-endif()
+endif ()
 
 set(COCOS_BASE_HEADER
     base/pvr.h

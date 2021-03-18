@@ -53,16 +53,19 @@ public:
      * @lua new
      */
     ActionCamera();
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ActionCamera(){};
+    virtual ~ActionCamera()
+    {
+    };
 
     // Overrides
-    virtual void startWithTarget(Node *target) override;
-    virtual ActionCamera * reverse() const override;
-    virtual ActionCamera *clone() const override;
+    virtual void startWithTarget(Node* target) override;
+    virtual ActionCamera* reverse() const override;
+    virtual ActionCamera* clone() const override;
 
     /* Sets the Eye value of the Camera. 
      * 
@@ -71,36 +74,50 @@ public:
      */
     void setEye(const Vec3 &eye);
     void setEye(float x, float y, float z);
-    /* Returns the Eye value of the Camera. 
+
+    /* Returns the Eye value of the Camera.
      *
      * @return The Eye value of the Camera.
      * @js NA
      */
-    const Vec3& getEye() const { return _eye; }
-    /* Sets the Center value of the Camera. 
+    const Vec3 &getEye() const
+    {
+        return _eye;
+    }
+
+    /* Sets the Center value of the Camera.
      *
      * @param center The Center value of the Camera.
      * @js NA
      */
     void setCenter(const Vec3 &center);
-    /* Returns the Center value of the Camera. 
+
+    /* Returns the Center value of the Camera.
      *
      * @return The Center value of the Camera.
      * @js NA
      */
-    const Vec3& getCenter() const { return _center; }
-    /* Sets the Up value of the Camera. 
+    const Vec3 &getCenter() const
+    {
+        return _center;
+    }
+
+    /* Sets the Up value of the Camera.
      *
      * @param up The Up value of the Camera.
      * @js NA
      */
     void setUp(const Vec3 &up);
-    /* Returns the Up value of the Camera. 
+
+    /* Returns the Up value of the Camera.
      *
      * @return The Up value of the Camera.
      * @js NA
      */
-    const Vec3& getUp() const { return _up; }
+    const Vec3 &getUp() const
+    {
+        return _up;
+    }
 
 protected:
 
@@ -132,21 +149,22 @@ public:
      * @param deltaAngleX The delta angle in X.
      * @return An OrbitCamera.
      */
-    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
-    
+    static OrbitCamera* create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX,
+                               float deltaAngleX);
+
     /** Positions the camera according to spherical coordinates. 
      *
      * @param r The spherical radius.
      * @param zenith The spherical zenith.
      * @param azimuth The spherical azimuth.
      */
-    void sphericalRadius(float *r, float *zenith, float *azimuth);
+    void sphericalRadius(float* r, float* zenith, float* azimuth);
 
     // Overrides
-    OrbitCamera *clone() const override;
-    virtual void startWithTarget(Node *target) override;
+    OrbitCamera* clone() const override;
+    virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     /**
      * @js ctor
@@ -157,9 +175,10 @@ CC_CONSTRUCTOR_ACCESS:
      * @lua NA
      */
     virtual ~OrbitCamera();
-    
+
     /** Initializes a OrbitCamera action with radius, delta-radius,  z, deltaZ, x, deltaX. */
-    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX);
+    bool initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX,
+                          float deltaAngleX);
 
 protected:
     float _radius;

@@ -31,7 +31,8 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCDatas.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class Bone;
 
@@ -42,20 +43,20 @@ class Bone;
 class CC_STUDIO_DLL DisplayManager : public cocos2d::Ref
 {
 public:
-    static DisplayManager *create(Bone *bone);
+    static DisplayManager* create(Bone* bone);
 
 public:
     DisplayManager();
     ~DisplayManager();
 
-    bool init(Bone *bone);
+    bool init(Bone* bone);
 
     /**
      * Use BoneData to init the display list.
      * If display is a sprite, and it have texture info in the TextureData, then use TextureData to init the display's anchor point
      * If the display is a Armature, then create a new Armature
      */
-    virtual void initDisplayList(BoneData *boneData);
+    virtual void initDisplayList(BoneData* boneData);
 
     /**
      * Add display and use  _DisplayData init the display.
@@ -68,20 +69,20 @@ public:
      *    @param     index the index of the display you want to replace or add to
      *                    -1 : append display from back
      */
-    void addDisplay(DisplayData *displayData, int index);
+    void addDisplay(DisplayData* displayData, int index);
 
-    void addDisplay(cocos2d::Node *display, int index);
+    void addDisplay(cocos2d::Node* display, int index);
 
     void removeDisplay(int index);
 
-    const cocos2d::Vector<DecorativeDisplay*>& getDecorativeDisplayList() const;
+    const cocos2d::Vector<DecorativeDisplay*> &getDecorativeDisplayList() const;
 
     /*
      * @deprecated, please use changeDisplayWithIndex and changeDisplayWithName
      */
     CC_DEPRECATED_ATTRIBUTE void changeDisplayByIndex(int index, bool force);
-    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(const std::string& name, bool force);
-    
+    CC_DEPRECATED_ATTRIBUTE void changeDisplayByName(const std::string &name, bool force);
+
     /**
      * Change display by index. You can just use this method to change display in the display list.
      * The display list is just used for this bone, and it is the displays you may use in every frame.
@@ -92,16 +93,16 @@ public:
      * @param force If true, then force change display to specified display, or current display will set to  display index edit in the flash every key frame.
      */
     void changeDisplayWithIndex(int index, bool force);
-    void changeDisplayWithName(const std::string& name, bool force);
+    void changeDisplayWithName(const std::string &name, bool force);
 
-    cocos2d::Node *getDisplayRenderNode() const;
+    cocos2d::Node* getDisplayRenderNode() const;
     DisplayType getDisplayRenderNodeType() const;
 
     int getCurrentDisplayIndex() const;
 
-    virtual void setCurrentDecorativeDisplay(DecorativeDisplay *decoDisplay);
-    virtual DecorativeDisplay *getCurrentDecorativeDisplay() const;
-    virtual DecorativeDisplay *getDecorativeDisplayByIndex( int index) const;
+    virtual void setCurrentDecorativeDisplay(DecorativeDisplay* decoDisplay);
+    virtual DecorativeDisplay* getCurrentDecorativeDisplay() const;
+    virtual DecorativeDisplay* getDecorativeDisplayByIndex(int index) const;
 
     /**
      * Sets whether the display is visible
@@ -134,16 +135,24 @@ public:
      */
     virtual bool containPoint(float x, float y);
 
-    virtual void setForceChangeDisplay(bool force) { _forceChangeDisplay = force; }
-    virtual bool isForceChangeDisplay() const { return _forceChangeDisplay; }
+    virtual void setForceChangeDisplay(bool force)
+    {
+        _forceChangeDisplay = force;
+    }
+
+    virtual bool isForceChangeDisplay() const
+    {
+        return _forceChangeDisplay;
+    }
+
 protected:
     cocos2d::Vector<DecorativeDisplay*> _decoDisplayList;
     //! Display render node.
-    cocos2d::Node *_displayRenderNode;
+    cocos2d::Node* _displayRenderNode;
     //! Display render node type
     DisplayType _displayType;
     //! Include current display information, like contour sprite, etc.
-    DecorativeDisplay *_currentDecoDisplay;
+    DecorativeDisplay* _currentDecoDisplay;
     //! Current display index
     int _displayIndex;
 
@@ -152,7 +161,7 @@ protected:
     //! Whether of not the bone is visible. Default is true
     bool _visible;
 
-    Bone *_bone;
+    Bone* _bone;
 };
 
 }

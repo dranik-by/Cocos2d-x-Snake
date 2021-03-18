@@ -31,17 +31,18 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
+    #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
 NS_CC_BEGIN
 
 class Label;
 
-namespace ui {
+namespace ui
+{
 
 class EditBox;
 
-class EditBoxImplLinux: public EditBoxImplCommon
+class EditBoxImplLinux : public EditBoxImplCommon
 {
 public:
     /**
@@ -53,35 +54,81 @@ public:
      * @lua NA
      */
     virtual ~EditBoxImplLinux();
-    
 
     virtual bool isEditing() override;
-    virtual void createNativeControl(const Rect& frame) override {};
-    virtual void setNativeFont(const char* pFontName, int fontSize) override {};
-    virtual void setNativeFontColor(const Color4B& color) override {};
-    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override {};
-    virtual void setNativePlaceholderFontColor(const Color4B& color) override {};
-    virtual void setNativeInputMode(EditBox::InputMode inputMode) override {};
-    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override {};
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)override {};
-    virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment) {};
-    virtual void setNativeText(const char* pText) override {};
-    virtual void setNativePlaceHolder(const char* pText) override {};
-    virtual void setNativeVisible(bool visible) override {};
-    virtual void updateNativeFrame(const Rect& rect) override {};
-    virtual const char* getNativeDefaultFontName() override {};
-    virtual void nativeOpenKeyboard() override;
-    virtual void nativeCloseKeyboard() override {};
-    virtual void setNativeMaxLength(int maxLength) override {};
 
-    
+    virtual void createNativeControl(const Rect &frame) override
+    {
+    };
+
+    virtual void setNativeFont(const char* pFontName, int fontSize) override
+    {
+    };
+
+    virtual void setNativeFontColor(const Color4B &color) override
+    {
+    };
+
+    virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override
+    {
+    };
+
+    virtual void setNativePlaceholderFontColor(const Color4B &color) override
+    {
+    };
+
+    virtual void setNativeInputMode(EditBox::InputMode inputMode) override
+    {
+    };
+
+    virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override
+    {
+    };
+
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override
+    {
+    };
+
+    virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment)
+    {
+    };
+
+    virtual void setNativeText(const char* pText) override
+    {
+    };
+
+    virtual void setNativePlaceHolder(const char* pText) override
+    {
+    };
+
+    virtual void setNativeVisible(bool visible) override
+    {
+    };
+
+    virtual void updateNativeFrame(const Rect &rect) override
+    {
+    };
+
+    virtual const char* getNativeDefaultFontName() override
+    {
+    };
+    virtual void nativeOpenKeyboard() override;
+
+    virtual void nativeCloseKeyboard() override
+    {
+    };
+
+    virtual void setNativeMaxLength(int maxLength) override
+    {
+    };
+
 private:
-    virtual void doAnimationWhenKeyboardMove(float duration, float distance)override {}
+    virtual void doAnimationWhenKeyboardMove(float duration, float distance) override
+    {
+    }
 };
 
-
 }
-
 
 NS_CC_END
 

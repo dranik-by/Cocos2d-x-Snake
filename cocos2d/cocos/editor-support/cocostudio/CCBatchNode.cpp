@@ -33,11 +33,12 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-BatchNode *BatchNode::create()
+namespace cocostudio
 {
-    BatchNode *batchNode = new (std::nothrow) BatchNode();
+
+BatchNode* BatchNode::create()
+{
+    BatchNode* batchNode = new(std::nothrow) BatchNode();
     if (batchNode && batchNode->init())
     {
         batchNode->autorelease();
@@ -63,37 +64,37 @@ bool BatchNode::init()
     return ret;
 }
 
-void BatchNode::addChild(Node *child, int zOrder, int tag)
+void BatchNode::addChild(Node* child, int zOrder, int tag)
 {
     Node::addChild(child, zOrder, tag);
-    Armature *armature = dynamic_cast<Armature *>(child);
+    Armature* armature = dynamic_cast<Armature*>(child);
     if (armature != nullptr)
     {
         armature->setBatchNode(this);
         if (_groupCommand == nullptr)
         {
-            _groupCommand = new (std::nothrow) GroupCommand();
+            _groupCommand = new(std::nothrow) GroupCommand();
         }
     }
 }
 
-void BatchNode::addChild(cocos2d::Node *child, int zOrder, const std::string &name)
+void BatchNode::addChild(cocos2d::Node* child, int zOrder, const std::string &name)
 {
     Node::addChild(child, zOrder, name);
-    Armature *armature = dynamic_cast<Armature *>(child);
+    Armature* armature = dynamic_cast<Armature*>(child);
     if (armature != nullptr)
     {
         armature->setBatchNode(this);
         if (_groupCommand == nullptr)
         {
-            _groupCommand = new (std::nothrow) GroupCommand();
+            _groupCommand = new(std::nothrow) GroupCommand();
         }
     }
 }
 
 void BatchNode::removeChild(Node* child, bool cleanup)
 {
-    Armature *armature = dynamic_cast<Armature *>(child);
+    Armature* armature = dynamic_cast<Armature*>(child);
     if (armature != nullptr)
     {
         armature->setBatchNode(nullptr);
@@ -102,7 +103,7 @@ void BatchNode::removeChild(Node* child, bool cleanup)
     Node::removeChild(child, cleanup);
 }
 
-void BatchNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void BatchNode::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -120,31 +121,31 @@ void BatchNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t 
         Director* director = Director::getInstance();
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
         director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-        
+
         sortAllChildren();
         draw(renderer, _modelViewTransform, flags);
-        
+
         // FIX ME: Why need to set _orderOfArrival to 0??
         // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
         // setOrderOfArrival(0);
-        
+
         director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 }
 
-void BatchNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void BatchNode::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
 {
     if (_children.empty())
     {
         return;
     }
 
-//    CC_NODE_DRAW_SETUP();
+    //    CC_NODE_DRAW_SETUP();
 
     bool pushed = false;
-    for(auto object : _children)
+    for (auto object : _children)
     {
-        Armature *armature = dynamic_cast<Armature *>(object);
+        Armature* armature = dynamic_cast<Armature*>(object);
         if (armature)
         {
             if (!pushed)
@@ -152,15 +153,15 @@ void BatchNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
                 generateGroupCommand();
                 pushed = true;
             }
-        
+
             armature->visit(renderer, transform, flags);
         }
         else
         {
             renderer->popGroup();
             pushed = false;
-            
-            ((Node *)object)->visit(renderer, transform, flags);
+
+            ((Node*)object)->visit(renderer, transform, flags);
         }
     }
 }

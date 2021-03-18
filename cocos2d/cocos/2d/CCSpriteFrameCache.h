@@ -92,16 +92,23 @@ protected:
     /**
     * used to wrap plist & frame names & SpriteFrames
     */
-    class PlistFramesCache {
+    class PlistFramesCache
+    {
     public:
-        PlistFramesCache() { }
-        void init() {
-            _spriteFrames.reserve(20); clear();
+        PlistFramesCache()
+        {
         }
-        /**  Record SpriteFrame with plist and frame name, add frame name 
+
+        void init()
+        {
+            _spriteFrames.reserve(20);
+            clear();
+        }
+
+        /**  Record SpriteFrame with plist and frame name, add frame name
         *    and plist to index
         */
-        void insertFrame(const std::string &plist, const std::string &frame, SpriteFrame *frameObj);
+        void insertFrame(const std::string &plist, const std::string &frame, SpriteFrame* frameObj);
         /** Delete frame from cache, rebuild index
         */
         bool eraseFrame(const std::string &frame);
@@ -118,15 +125,20 @@ protected:
         inline bool hasFrame(const std::string &frame) const;
         inline bool isPlistUsed(const std::string &plist) const;
 
-        inline SpriteFrame *at(const std::string &frame);
-        inline Map<std::string, SpriteFrame*>& getSpriteFrames();
+        inline SpriteFrame* at(const std::string &frame);
+        inline Map<std::string, SpriteFrame*> &getSpriteFrames();
 
-        void markPlistFull(const std::string &plist, bool full) { _isPlistFull[plist] = full; }
+        void markPlistFull(const std::string &plist, bool full)
+        {
+            _isPlistFull[plist] = full;
+        }
+
         bool isPlistFull(const std::string &plist) const
         {
             auto it = _isPlistFull.find(plist);
             return it == _isPlistFull.end() ? false : it->second;
         }
+
     private:
         Map<std::string, SpriteFrame*> _spriteFrames;
         std::unordered_map<std::string, std::set<std::string>> _indexPlist2Frames;
@@ -152,7 +164,7 @@ public:
      * @lua NA
      */
     virtual ~SpriteFrameCache();
-    
+
     /** Initialize method.
      *
      * @return if success return true.
@@ -167,7 +179,7 @@ public:
      *
      * @param plist Plist file name.
      */
-    void addSpriteFramesWithFile(const std::string& plist);
+    void addSpriteFramesWithFile(const std::string &plist);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames.
      @since v0.99.5
@@ -177,7 +189,7 @@ public:
      * @param plist Plist file name.
      * @param textureFileName Texture file name.
      */
-    void addSpriteFramesWithFile(const std::string& plist, const std::string& textureFileName);
+    void addSpriteFramesWithFile(const std::string &plist, const std::string &textureFileName);
 
     /** Adds multiple Sprite Frames from a plist file. The texture will be associated with the created sprite frames. 
      * @js addSpriteFrames
@@ -186,7 +198,7 @@ public:
      * @param plist Plist file name.
      * @param texture Texture pointer.
      */
-    void addSpriteFramesWithFile(const std::string&plist, Texture2D *texture);
+    void addSpriteFramesWithFile(const std::string &plist, Texture2D* texture);
 
     /** Adds multiple Sprite Frames from a plist file content. The texture will be associated with the created sprite frames. 
      * @js NA
@@ -195,7 +207,7 @@ public:
      * @param plist_content Plist file content string.
      * @param texture Texture pointer.
      */
-    void addSpriteFramesWithFileContent(const std::string& plist_content, Texture2D *texture);
+    void addSpriteFramesWithFileContent(const std::string &plist_content, Texture2D* texture);
 
     /** Adds an sprite frame with a given name.
      If the name already exists, then the contents of the old name will be replaced with the new one.
@@ -203,7 +215,7 @@ public:
      * @param frame A certain sprite frame.
      * @param frameName The name of the sprite frame.
      */
-    void addSpriteFrame(SpriteFrame *frame, const std::string& frameName);
+    void addSpriteFrame(SpriteFrame* frame, const std::string &frameName);
 
     /** Check if multiple Sprite Frames from a plist file have been loaded.
     * @js NA
@@ -212,7 +224,7 @@ public:
     * @param plist Plist file name.
     * @return True if the file is loaded.
     */
-    bool isSpriteFramesWithFileLoaded(const std::string& plist) const;
+    bool isSpriteFramesWithFileLoaded(const std::string &plist) const;
 
     /** Purges the dictionary of loaded sprite frames.
      * Call this method if you receive the "Memory Warning".
@@ -233,7 +245,7 @@ public:
      *
      * @param name The name of the sprite frame that needs to removed.
      */
-    void removeSpriteFrameByName(const std::string& name);
+    void removeSpriteFrameByName(const std::string &name);
 
     /** Removes multiple Sprite Frames from a plist file.
     * Sprite Frames stored in this file will be removed.
@@ -242,7 +254,7 @@ public:
     *
     * @param plist The name of the plist that needs to removed.
     */
-    void removeSpriteFramesFromFile(const std::string& plist);
+    void removeSpriteFramesFromFile(const std::string &plist);
 
     /** Removes multiple Sprite Frames from a plist file content.
     * Sprite Frames stored in this file will be removed.
@@ -251,7 +263,7 @@ public:
     * @param plist_content The string of the plist content that needs to removed.
     * @js NA
     */
-    void removeSpriteFramesFromFileContent(const std::string& plist_content);
+    void removeSpriteFramesFromFileContent(const std::string &plist_content);
 
     /** Removes all Sprite Frames associated with the specified textures.
      * It is convenient to call this method when a specific texture needs to be removed.
@@ -270,36 +282,35 @@ public:
      * @param name A certain sprite frame name.
      * @return The sprite frame.
      */
-    SpriteFrame* getSpriteFrameByName(const std::string& name);
+    SpriteFrame* getSpriteFrameByName(const std::string &name);
 
-    bool reloadTexture(const std::string& plist);
+    bool reloadTexture(const std::string &plist);
 
 protected:
     // MARMALADE: Made this protected not private, as deriving from this class is pretty useful
-    SpriteFrameCache(){}
+    SpriteFrameCache()
+    {
+    }
 
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
      */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D *texture, const std::string &plist);
-    
+    void addSpriteFramesWithDictionary(ValueMap &dictionary, Texture2D* texture, const std::string &plist);
+
     /*Adds multiple Sprite Frames with a dictionary. The texture will be associated with the created sprite frames.
      */
-    void addSpriteFramesWithDictionary(ValueMap& dictionary, const std::string &texturePath, const std::string &plist);
-    
+    void addSpriteFramesWithDictionary(ValueMap &dictionary, const std::string &texturePath, const std::string &plist);
+
     /** Removes multiple Sprite Frames from Dictionary.
     * @since v0.99.5
     */
-    void removeSpriteFramesFromDictionary(ValueMap& dictionary);
+    void removeSpriteFramesFromDictionary(ValueMap &dictionary);
 
     /** Configures PolygonInfo class with the passed sizes + triangles */
-    void initializePolygonInfo(const Size &textureSize,
-                               const Size &spriteSize,
-                               const std::vector<int> &vertices,
-                               const std::vector<int> &verticesUV,
-                               const std::vector<int> &triangleIndices,
+    void initializePolygonInfo(const Size &textureSize, const Size &spriteSize, const std::vector<int> &vertices,
+                               const std::vector<int> &verticesUV, const std::vector<int> &triangleIndices,
                                PolygonInfo &polygonInfo);
 
-    void reloadSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D *texture, const std::string &plist);
+    void reloadSpriteFramesWithDictionary(ValueMap &dictionary, Texture2D* texture, const std::string &plist);
 
     ValueMap _spriteFramesAliases;
     PlistFramesCache _spriteFramesCache;

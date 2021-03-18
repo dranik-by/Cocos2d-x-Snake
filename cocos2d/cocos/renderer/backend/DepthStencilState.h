@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -41,8 +41,8 @@ CC_BACKEND_BEGIN
  */
 struct StencilDescriptor
 {
-    bool operator ==(const StencilDescriptor& rhs) const;
-    
+    bool operator==(const StencilDescriptor &rhs) const;
+
     StencilOperation stencilFailureOperation = StencilOperation::KEEP;
     StencilOperation depthFailureOperation = StencilOperation::KEEP;
     StencilOperation depthStencilPassOperation = StencilOperation::KEEP;
@@ -59,7 +59,7 @@ struct DepthStencilDescriptor
     CompareFunction depthCompareFunction = CompareFunction::LESS;
     bool depthWriteEnabled = false;
     bool depthTestEnabled = false;
-    
+
     bool stencilTestEnabled = false;
     StencilDescriptor backFaceStencil;
     StencilDescriptor frontFaceStencil;
@@ -74,9 +74,9 @@ protected:
     /**
      * @param descriptor Specifies depth and stencil descriptor.
      */
-    DepthStencilState(const DepthStencilDescriptor& descriptor);
+    DepthStencilState(const DepthStencilDescriptor &descriptor);
     virtual ~DepthStencilState();
-    
+
     DepthStencilDescriptor _depthStencilInfo; ///< depth and stencil descriptor.
     bool _isBackFrontStencilEqual = false; ///< Does front stencil status equals to back stencil's.
 };

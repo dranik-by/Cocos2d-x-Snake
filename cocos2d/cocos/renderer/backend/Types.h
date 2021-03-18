@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -157,13 +157,13 @@ enum class PrimitiveType : uint32_t
     TRIANGLE_STRIP
 };
 
-enum class TextureType: uint32_t
+enum class TextureType : uint32_t
 {
     TEXTURE_2D,
     TEXTURE_CUBE
 };
 
-enum class SamplerAddressMode: uint32_t
+enum class SamplerAddressMode : uint32_t
 {
     REPEAT,
     MIRROR_REPEAT,
@@ -171,7 +171,7 @@ enum class SamplerAddressMode: uint32_t
     DONT_CARE,
 };
 
-enum class SamplerFilter: uint32_t
+enum class SamplerFilter : uint32_t
 {
     NEAREST,
     NEAREST_MIPMAP_NEAREST,
@@ -182,7 +182,7 @@ enum class SamplerFilter: uint32_t
     DONT_CARE,
 };
 
-enum class StencilOperation: uint32_t
+enum class StencilOperation : uint32_t
 {
     KEEP,
     ZERO,
@@ -192,7 +192,7 @@ enum class StencilOperation: uint32_t
     DECREMENT_WRAP
 };
 
-enum class CompareFunction: uint32_t
+enum class CompareFunction : uint32_t
 {
     NEVER,
     LESS,
@@ -204,7 +204,7 @@ enum class CompareFunction: uint32_t
     ALWAYS
 };
 
-enum class BlendOperation: uint32_t
+enum class BlendOperation : uint32_t
 {
     ADD,
     SUBTRACT,
@@ -229,7 +229,7 @@ enum class BlendFactor : uint32_t
     BLEND_CLOLOR
 };
 
-enum class ColorWriteMask: uint32_t
+enum class ColorWriteMask : uint32_t
 {
     NONE = 0x00000000,
     RED = 0x00000001,
@@ -246,25 +246,28 @@ struct SamplerDescriptor
     SamplerAddressMode sAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
     SamplerAddressMode tAddressMode = SamplerAddressMode::CLAMP_TO_EDGE;
 
-    SamplerDescriptor() {}
+    SamplerDescriptor()
+    {
+    }
 
-    SamplerDescriptor(
-        SamplerFilter _magFilter,
-        SamplerFilter _minFilter,
-        SamplerAddressMode _sAddressMode,
-        SamplerAddressMode _tAddressMode
-    ) : magFilter(_magFilter), minFilter(_minFilter),
-        sAddressMode(_sAddressMode), tAddressMode(_tAddressMode) {}
+    SamplerDescriptor(SamplerFilter _magFilter, SamplerFilter _minFilter, SamplerAddressMode _sAddressMode,
+                      SamplerAddressMode _tAddressMode)
+    : magFilter(_magFilter)
+    , minFilter(_minFilter)
+    , sAddressMode(_sAddressMode)
+    , tAddressMode(_tAddressMode)
+    {
+    }
 };
 
-enum class CullMode: uint32_t
+enum class CullMode : uint32_t
 {
     NONE = 0x00000000,
     BACK = 0x00000001,
     FRONT = 0x00000002
 };
 
-enum class Winding: uint32_t
+enum class Winding : uint32_t
 {
     CLOCK_WISE,
     COUNTER_CLOCK_WISE
@@ -274,7 +277,7 @@ struct UniformInfo
 {
     int count = 0;
     int location = -1;
-    
+
     //in opengl, type means uniform data type, i.e. GL_FLOAT_VEC2, while in metal type means data basic type, i.e. float
     unsigned int type = 0;
     bool isArray = false;
@@ -295,33 +298,38 @@ struct UniformLocation
     int location[2] = {-1, -1};
     ShaderStage shaderStage = ShaderStage::VERTEX;
     UniformLocation() = default;
+
     operator bool()
     {
-        if(shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)
+        if (shaderStage == ShaderStage::VERTEX_AND_FRAGMENT)
             return location[0] >= 0 && location[1] >= 0;
         else
-            return location[int(shaderStage)] >=0;
+            return location[int(shaderStage)] >= 0;
     }
-    void reset() { location[0] = location[1] = -1; }
-    bool operator == (const UniformLocation &other) const;
+
+    void reset()
+    {
+        location[0] = location[1] = -1;
+    }
+
+    bool operator==(const UniformLocation &other) const;
     std::size_t operator()(const UniformLocation &uniform) const;
 };
-
 
 struct AttributeBindInfo
 {
     std::string attributeName;
-    int         location    = -1;
-    int         size        = 0;
-    int         type        = 0;
+    int location = -1;
+    int size = 0;
+    int type = 0;
 };
 
 enum class TextureCubeFace : uint32_t
 {
     POSITIVE_X = 0,
     NEGATIVE_X = 1,
-    POSITIVE_Y = 2, 
-    NEGATIVE_Y = 3, 
+    POSITIVE_Y = 2,
+    NEGATIVE_Y = 3,
     POSITIVE_Z = 4,
     NEGATIVE_Z = 5
 };
@@ -340,14 +348,14 @@ enum class ProgramType : size_t
     LABLE_OUTLINE,                          //positionTextureColor_vert,    labelOutline_frag
     LABLE_DISTANCEFIELD_GLOW,               //positionTextureColor_vert,    labelDistanceFieldGlow_frag
     LABEL_DISTANCE_NORMAL,                  //positionTextureColor_vert,    label_distanceNormal_frag
-   
+
     LAYER_RADIA_GRADIENT,                   //position_vert,                layer_radialGradient_frag
-    
+
     ETC1,                                   //positionTextureColor_vert,    etc1_frag
     ETC1_GRAY,                              //positionTextureColor_vert,    etc1Gray_frag
     GRAY_SCALE,                             //positionTextureColor_vert,    grayScale_frag
     CAMERA_CLEAR,                           //cameraClear_vert,             cameraClear_frag
-    
+
     TERRAIN_3D,                             //CC3D_terrain_vert,                    CC3D_terrain_frag
     LINE_COLOR_3D,                          //lineColor3D_vert,                     lineColor3D_frag
     SKYBOX_3D,                              //CC3D_skybox_vert,                     CC3D_skybox_frag
@@ -389,12 +397,12 @@ static const char* ATTRIBUTE_NAME_TEXCOORD3 = "a_texCoord3";
 struct BlendDescriptor
 {
     ColorWriteMask writeMask = ColorWriteMask::ALL;
-    
+
     bool blendEnabled = false;
-    
+
     BlendOperation rgbBlendOperation = BlendOperation::ADD;
     BlendOperation alphaBlendOperation = BlendOperation::ADD;
-    
+
     BlendFactor sourceRGBBlendFactor = BlendFactor::ONE;
     BlendFactor destinationRGBBlendFactor = BlendFactor::ZERO;
     BlendFactor sourceAlphaBlendFactor = BlendFactor::ONE;

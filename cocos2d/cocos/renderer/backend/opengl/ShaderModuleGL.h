@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../ShaderModule.h"
@@ -44,20 +44,23 @@ public:
      * @param stage Specifies whether is vertex shader or fragment shader.
      * @param source Specifies shader source.
      */
-    ShaderModuleGL(ShaderStage stage, const std::string& source);
+    ShaderModuleGL(ShaderStage stage, const std::string &source);
     ~ShaderModuleGL();
 
     /**
      * Get shader object.
      * @return Shader object.
      */
-    inline GLuint getShader() const { return _shader; }
-    
+    inline GLuint getShader() const
+    {
+        return _shader;
+    }
+
 private:
-    void compileShader(ShaderStage stage, const std::string& source);
+    void compileShader(ShaderStage stage, const std::string &source);
     char* getErrorLog(GLuint shader) const;
     void deleteShader();
-    
+
     GLuint _shader = 0;
     friend class ProgramGL;
 };

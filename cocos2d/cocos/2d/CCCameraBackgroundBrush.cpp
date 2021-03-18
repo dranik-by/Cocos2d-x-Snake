@@ -37,17 +37,17 @@
 #include "renderer/ccShaders.h"
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-#include "base/CCEventCustom.h"
-#include "base/CCEventListenerCustom.h"
-#include "base/CCEventType.h"
-#include "base/CCEventDispatcher.h"
+    #include "base/CCEventCustom.h"
+    #include "base/CCEventListenerCustom.h"
+    #include "base/CCEventType.h"
+    #include "base/CCEventDispatcher.h"
 #endif
 
 NS_CC_BEGIN
 
 CameraBackgroundBrush::CameraBackgroundBrush()
 {
-    
+
 }
 
 CameraBackgroundBrush::~CameraBackgroundBrush()
@@ -57,14 +57,14 @@ CameraBackgroundBrush::~CameraBackgroundBrush()
 
 CameraBackgroundBrush* CameraBackgroundBrush::createNoneBrush()
 {
-    auto ret = new (std::nothrow) CameraBackgroundBrush();
+    auto ret = new(std::nothrow) CameraBackgroundBrush();
     ret->init();
-    
+
     ret->autorelease();
     return ret;
 }
 
-CameraBackgroundColorBrush* CameraBackgroundBrush::createColorBrush(const Color4F& color, float depth)
+CameraBackgroundColorBrush* CameraBackgroundBrush::createColorBrush(const Color4F &color, float depth)
 {
     return CameraBackgroundColorBrush::create(color, depth);
 }
@@ -74,7 +74,12 @@ CameraBackgroundDepthBrush* CameraBackgroundBrush::createDepthBrush(float depth)
     return CameraBackgroundDepthBrush::create(depth);
 }
 
-CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(const std::string& positive_x, const std::string& negative_x, const std::string& positive_y, const std::string& negative_y, const std::string& positive_z, const std::string& negative_z)
+CameraBackgroundSkyBoxBrush* CameraBackgroundBrush::createSkyboxBrush(const std::string &positive_x,
+                                                                      const std::string &negative_x,
+                                                                      const std::string &positive_y,
+                                                                      const std::string &negative_y,
+                                                                      const std::string &positive_z,
+                                                                      const std::string &negative_z)
 {
     return CameraBackgroundSkyBoxBrush::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
 }
@@ -85,29 +90,30 @@ CameraBackgroundDepthBrush::CameraBackgroundDepthBrush()
 : _depth(0.f)
 , _clearColor(false)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    , _backToForegroundListener(nullptr)
+, _backToForegroundListener(nullptr)
 #endif
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*)
         {
             initBuffer();
         }
     );
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    #endif
 }
+
 CameraBackgroundDepthBrush::~CameraBackgroundDepthBrush()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
+    #endif
 }
 
 CameraBackgroundDepthBrush* CameraBackgroundDepthBrush::create(float depth)
 {
-    auto ret = new (std::nothrow) CameraBackgroundDepthBrush();
-    
+    auto ret = new(std::nothrow) CameraBackgroundDepthBrush();
+
     if (nullptr != ret && ret->init())
     {
         ret->_depth = depth;
@@ -133,21 +139,24 @@ bool CameraBackgroundDepthBrush::init()
     pipelineDescriptor.programState = _programState;
 
     auto layout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    const auto &attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        layout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, offsetof(V3F_C4B_T2F, vertices), false);
+        layout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3,
+                             offsetof(V3F_C4B_T2F, vertices), false);
     }
     iter = attributeInfo.find("a_color");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        layout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
+        layout->setAttribute("a_color", iter->second.location, backend::VertexFormat::UBYTE4,
+                             offsetof(V3F_C4B_T2F, colors), true);
     }
     iter = attributeInfo.find("a_texCoord");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        layout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), true);
+        layout->setAttribute("a_texCoord", iter->second.location, backend::VertexFormat::FLOAT2,
+                             offsetof(V3F_C4B_T2F, texCoords), true);
     }
     layout->setLayout(sizeof(_vertices[0]));
 
@@ -173,9 +182,10 @@ bool CameraBackgroundDepthBrush::init()
 
 void CameraBackgroundDepthBrush::initBuffer()
 {
-    uint16_t indices[6] = { 0, 1, 2, 2, 3, 0 };
+    uint16_t indices[6] = {0, 1, 2, 2, 3, 0};
     _customCommand.createVertexBuffer(sizeof(_vertices[0]), _vertices.size(), CustomCommand::BufferUsage::STATIC);
-    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(indices) / sizeof(indices[0]), CustomCommand::BufferUsage::STATIC);
+    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(indices) / sizeof(indices[0]),
+                                     CustomCommand::BufferUsage::STATIC);
 
     _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * _vertices.size());
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
@@ -187,18 +197,18 @@ void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
     _groupCommand.init(-1.0f);
     _customCommand.init(0.0f);
 
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
 
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
-    auto &pipelineDescriptor    = _customCommand.getPipelineDescriptor();
-    auto &blend                 = pipelineDescriptor.blendDescriptor;
-    blend.writeMask             = _clearColor ? backend::ColorWriteMask::ALL : backend::ColorWriteMask::NONE;
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto &blend = pipelineDescriptor.blendDescriptor;
+    blend.writeMask = _clearColor ? backend::ColorWriteMask::ALL : backend::ColorWriteMask::NONE;
 
     //draw
     _programState->setUniform(_locDepth, &_depth, sizeof(_depth));
-    
+
     renderer->addCommand(&_customCommand);
 
     renderer->popGroup();
@@ -206,10 +216,10 @@ void CameraBackgroundDepthBrush::drawBackground(Camera* /*camera*/)
 
 void CameraBackgroundDepthBrush::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
-    _stateBlock.stencilWriteMask    = renderer->getStencilWriteMask();
-    _stateBlock.depthTest           = renderer->getDepthTest();
-    _stateBlock.compareFunc         = renderer->getDepthCompareFunction();
+    auto* renderer = Director::getInstance()->getRenderer();
+    _stateBlock.stencilWriteMask = renderer->getStencilWriteMask();
+    _stateBlock.depthTest = renderer->getDepthTest();
+    _stateBlock.compareFunc = renderer->getDepthCompareFunction();
 
     renderer->setStencilWriteMask(0);
     renderer->setDepthTest(true);
@@ -218,7 +228,7 @@ void CameraBackgroundDepthBrush::onBeforeDraw()
 
 void CameraBackgroundDepthBrush::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setStencilWriteMask(_stateBlock.stencilWriteMask);
     renderer->setDepthTest(_stateBlock.depthTest);
     renderer->setDepthCompareFunction(_stateBlock.compareFunc);
@@ -229,12 +239,12 @@ void CameraBackgroundDepthBrush::onAfterDraw()
 CameraBackgroundColorBrush::CameraBackgroundColorBrush()
 : _color(0.f, 0.f, 0.f, 0.f)
 {
-    
+
 }
 
 CameraBackgroundColorBrush::~CameraBackgroundColorBrush()
 {
-    
+
 }
 
 bool CameraBackgroundColorBrush::init()
@@ -246,17 +256,17 @@ bool CameraBackgroundColorBrush::init()
 
 void CameraBackgroundColorBrush::drawBackground(Camera* camera)
 {
-    BlendFunc op = { BlendFunc::ALPHA_NON_PREMULTIPLIED.src, BlendFunc::ALPHA_NON_PREMULTIPLIED.dst };
+    BlendFunc op = {BlendFunc::ALPHA_NON_PREMULTIPLIED.src, BlendFunc::ALPHA_NON_PREMULTIPLIED.dst};
 
     auto &blend = _customCommand.getPipelineDescriptor().blendDescriptor;
-    blend.sourceRGBBlendFactor      = blend.sourceAlphaBlendFactor = op.src;
+    blend.sourceRGBBlendFactor = blend.sourceAlphaBlendFactor = op.src;
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = op.dst;
-    blend.blendEnabled              = true;
+    blend.blendEnabled = true;
 
     CameraBackgroundDepthBrush::drawBackground(camera);
 }
 
-void CameraBackgroundColorBrush::setColor(const Color4F& color)
+void CameraBackgroundColorBrush::setColor(const Color4F &color)
 {
     for (auto &vert : _vertices)
     {
@@ -265,9 +275,9 @@ void CameraBackgroundColorBrush::setColor(const Color4F& color)
     _customCommand.updateVertexBuffer(_vertices.data(), sizeof(_vertices[0]) * _vertices.size());
 }
 
-CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color4F& color, float depth)
+CameraBackgroundColorBrush* CameraBackgroundColorBrush::create(const Color4F &color, float depth)
 {
-    auto ret = new (std::nothrow) CameraBackgroundColorBrush();
+    auto ret = new(std::nothrow) CameraBackgroundColorBrush();
 
     if (nullptr != ret && ret->init())
     {
@@ -292,7 +302,7 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
 , _backToForegroundListener(nullptr)
 #endif
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED,
                                                             [this](EventCustom*)
                                                             {
@@ -300,34 +310,27 @@ CameraBackgroundSkyBoxBrush::CameraBackgroundSkyBoxBrush()
                                                             }
                                                             );
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    #endif
 }
 
 CameraBackgroundSkyBoxBrush::~CameraBackgroundSkyBoxBrush()
 {
     CC_SAFE_RELEASE(_texture);
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
+    #endif
 }
 
-CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(
-    const std::string& positive_x,
-    const std::string& negative_x,
-    const std::string& positive_y,
-    const std::string& negative_y,
-    const std::string& positive_z,
-    const std::string& negative_z
-    )
+CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(const std::string &positive_x,
+                                                                 const std::string &negative_x,
+                                                                 const std::string &positive_y,
+                                                                 const std::string &negative_y,
+                                                                 const std::string &positive_z,
+                                                                 const std::string &negative_z)
 {
     CameraBackgroundSkyBoxBrush* ret = nullptr;
 
-    auto texture = TextureCube::create(positive_x,
-                                       negative_x,
-                                       positive_y,
-                                       negative_y,
-                                       positive_z,
-                                       negative_z);
+    auto texture = TextureCube::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
 
     if (texture != nullptr)
     {
@@ -339,7 +342,7 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(
         tRepeatParams.tAddressMode = backend::SamplerAddressMode::CLAMP_TO_EDGE;
         texture->setTexParameters(tRepeatParams);
 
-        ret = new (std::nothrow) CameraBackgroundSkyBoxBrush;
+        ret = new(std::nothrow) CameraBackgroundSkyBoxBrush;
 
         if (nullptr != ret && ret->init())
         {
@@ -358,8 +361,8 @@ CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create(
 
 CameraBackgroundSkyBoxBrush* CameraBackgroundSkyBoxBrush::create()
 {
-    auto ret = new (std::nothrow) CameraBackgroundSkyBoxBrush();
-    
+    auto ret = new(std::nothrow) CameraBackgroundSkyBoxBrush();
+
     if (nullptr != ret && ret->init())
     {
         ret->autorelease();
@@ -392,7 +395,7 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
     _programState->setUniform(_uniformColorLoc, &color, sizeof(color));
     _programState->setUniform(_uniformCameraRotLoc, cameraModelMat.m, sizeof(cameraModelMat.m));
 
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
 
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
@@ -400,9 +403,9 @@ void CameraBackgroundSkyBoxBrush::drawBackground(Camera* camera)
     renderer->addCommand(&_customCommand);
 
     renderer->popGroup();
-   
+
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
-    
+
 }
 
 bool CameraBackgroundSkyBoxBrush::init()
@@ -413,17 +416,16 @@ bool CameraBackgroundSkyBoxBrush::init()
 
     CC_SAFE_RELEASE_NULL(_programState);
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::SKYBOX_3D);
-    _programState           = new backend::ProgramState(program);
-    _uniformColorLoc        = _programState->getUniformLocation("u_color");
-    _uniformCameraRotLoc    = _programState->getUniformLocation("u_cameraRot");
-    _uniformEnvLoc          = _programState->getUniformLocation("u_Env");
+    _programState = new backend::ProgramState(program);
+    _uniformColorLoc = _programState->getUniformLocation("u_color");
+    _uniformCameraRotLoc = _programState->getUniformLocation("u_cameraRot");
+    _uniformEnvLoc = _programState->getUniformLocation("u_Env");
 
-
-    auto &pipelineDescriptor                            = _customCommand.getPipelineDescriptor();
-    auto layout                                         = _programState->getVertexLayout();
-    pipelineDescriptor.programState                     = _programState;
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto layout = _programState->getVertexLayout();
+    pipelineDescriptor.programState = _programState;
     // disable blend
-    pipelineDescriptor.blendDescriptor.blendEnabled     = false;
+    pipelineDescriptor.blendDescriptor.blendEnabled = false;
 
     layout->setAttribute(shaderinfos::attribute::ATTRIBUTE_NAME_POSITION, 0, backend::VertexFormat::FLOAT3, 0, false);
     layout->setLayout(sizeof(Vec3));
@@ -436,29 +438,30 @@ bool CameraBackgroundSkyBoxBrush::init()
 void CameraBackgroundSkyBoxBrush::initBuffer()
 {
     // init vertex buffer object
-    Vec3 vexBuf[] =
-    {
-        Vec3(1, -1, 1),  Vec3(1, 1, 1),  Vec3(-1, 1, 1),  Vec3(-1, -1, 1),
-        Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1), Vec3(-1, -1, -1)
+    Vec3 vexBuf[] = {
+    Vec3(1, -1, 1), Vec3(1, 1, 1), Vec3(-1, 1, 1), Vec3(-1, -1, 1), Vec3(1, -1, -1), Vec3(1, 1, -1), Vec3(-1, 1, -1)
+    , Vec3(-1, -1, -1)
     };
 
-    _customCommand.createVertexBuffer(sizeof(vexBuf[0]), sizeof(vexBuf) / sizeof(vexBuf[0]), CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(vexBuf[0]), sizeof(vexBuf) / sizeof(vexBuf[0]),
+                                      CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vexBuf, sizeof(vexBuf));
 
     // init index buffer object
-    uint16_t idxBuf[] = { 
-        2, 1, 0, 3, 2, 0, // font
-        1, 5, 4, 1, 4, 0, // right
-        4, 5, 6, 4, 6, 7, // back
-        7, 6, 2, 7, 2, 3, // left
-        2, 6, 5, 2, 5, 1, // up
-        3, 0, 4, 3, 4, 7  // down
+    uint16_t idxBuf[] = {
+    2, 1, 0, 3, 2, 0, // font
+    1, 5, 4, 1, 4, 0, // right
+    4, 5, 6, 4, 6, 7, // back
+    7, 6, 2, 7, 2, 3, // left
+    2, 6, 5, 2, 5, 1, // up
+    3, 0, 4, 3, 4, 7  // down
     };
-    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(idxBuf) / sizeof(idxBuf[0]), CustomCommand::BufferUsage::STATIC);
+    _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, sizeof(idxBuf) / sizeof(idxBuf[0]),
+                                     CustomCommand::BufferUsage::STATIC);
     _customCommand.updateIndexBuffer(idxBuf, sizeof(idxBuf));
 }
 
-void CameraBackgroundSkyBoxBrush::setTexture(TextureCube*  texture)
+void CameraBackgroundSkyBoxBrush::setTexture(TextureCube* texture)
 {
     CC_SAFE_RETAIN(texture);
     CC_SAFE_RELEASE(_texture);
@@ -470,14 +473,15 @@ bool CameraBackgroundSkyBoxBrush::isActived() const
 {
     return _actived;
 }
+
 void CameraBackgroundSkyBoxBrush::setActived(bool actived)
 {
-    _actived        = actived;
+    _actived = actived;
 }
 
 void CameraBackgroundSkyBoxBrush::setTextureValid(bool valid)
 {
-    _textureValid   = valid;
+    _textureValid = valid;
 }
 
 bool CameraBackgroundSkyBoxBrush::isValid()
@@ -487,16 +491,16 @@ bool CameraBackgroundSkyBoxBrush::isValid()
 
 void CameraBackgroundSkyBoxBrush::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
-    _stateBlock.depthTest   = renderer->getDepthTest();
-    _stateBlock.depthWrite  = renderer->getDepthWrite();
-    _stateBlock.depthFunc   = renderer->getDepthCompareFunction();
-    _stateBlock.cullMode    = renderer->getCullMode();
+    auto* renderer = Director::getInstance()->getRenderer();
+    _stateBlock.depthTest = renderer->getDepthTest();
+    _stateBlock.depthWrite = renderer->getDepthWrite();
+    _stateBlock.depthFunc = renderer->getDepthCompareFunction();
+    _stateBlock.cullMode = renderer->getCullMode();
 }
 
 void CameraBackgroundSkyBoxBrush::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setDepthTest(_stateBlock.depthTest);
     renderer->setDepthWrite(_stateBlock.depthWrite);
     renderer->setDepthCompareFunction(_stateBlock.depthFunc);

@@ -20,7 +20,7 @@
 #define ETC1_DECODED_BLOCK_SIZE 48
 
 #ifndef ETC1_RGB8_OES
-#define ETC1_RGB8_OES 0x8D64
+    #define ETC1_RGB8_OES 0x8D64
 #endif
 
 typedef unsigned char etc1_byte;
@@ -65,8 +65,8 @@ etc1_uint32 etc1_get_encoded_data_size(etc1_uint32 width, etc1_uint32 height);
 // pixelSize can be 2 or 3. 2 is an GL_UNSIGNED_SHORT_5_6_5 image, 3 is a GL_BYTE RGB image.
 // returns non-zero if there is an error.
 
-int etc1_encode_image(const etc1_byte* pIn, etc1_uint32 width, etc1_uint32 height,
-        etc1_uint32 pixelSize, etc1_uint32 stride, etc1_byte* pOut);
+int etc1_encode_image(const etc1_byte* pIn, etc1_uint32 width, etc1_uint32 height, etc1_uint32 pixelSize,
+                      etc1_uint32 stride, etc1_byte* pOut);
 
 // Decode an entire image.
 // pIn - pointer to encoded data.
@@ -76,9 +76,8 @@ int etc1_encode_image(const etc1_byte* pIn, etc1_uint32 width, etc1_uint32 heigh
 // pixelSize can be 2 or 3. 2 is an GL_UNSIGNED_SHORT_5_6_5 image, 3 is a GL_BYTE RGB image.
 // returns non-zero if there is an error.
 
-int etc1_decode_image(const etc1_byte* pIn, etc1_byte* pOut,
-        etc1_uint32 width, etc1_uint32 height,
-        etc1_uint32 pixelSize, etc1_uint32 stride);
+int etc1_decode_image(const etc1_byte* pIn, etc1_byte* pOut, etc1_uint32 width, etc1_uint32 height,
+                      etc1_uint32 pixelSize, etc1_uint32 stride);
 
 // Size of a PKM header, in bytes.
 

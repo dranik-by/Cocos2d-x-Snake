@@ -61,8 +61,13 @@ public:
      Interface for custom action when before or after draw.
      @js NA
      */
-    virtual void beforeBlit() {}
-    virtual void afterBlit() {}
+    virtual void beforeBlit()
+    {
+    }
+
+    virtual void afterBlit()
+    {
+    }
     /**@}*/
 
     /**Interface used to blit the texture with grid to screen.*/
@@ -79,67 +84,100 @@ public:
      @param flipped whether or not the grab texture should be flip by Y or not.
      @param rect The effective grid rect.
     */
-    bool initWithSize(const Size& gridSize);
-    bool initWithSize(const Size& gridSize, const Rect& rect);
-    bool initWithSize(const Size& gridSize, Texture2D *texture, bool flipped);
-    bool initWithSize(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    bool initWithSize(const Size &gridSize);
+    bool initWithSize(const Size &gridSize, const Rect &rect);
+    bool initWithSize(const Size &gridSize, Texture2D* texture, bool flipped);
+    bool initWithSize(const Size &gridSize, Texture2D* texture, bool flipped, const Rect &rect);
 
     /**@}*/
     /** @{
     Getter and setter of the active state of the grid.
     */
-    bool isActive() const { return _active; }
+    bool isActive() const
+    {
+        return _active;
+    }
+
     void setActive(bool active);
     /**@}*/
 
     /** Get number of times that the grid will be reused. */
-    int getReuseGrid() const { return _reuseGrid; }
+    int getReuseGrid() const
+    {
+        return _reuseGrid;
+    }
+
     /** Set number of times that the grid will be reused. */
-    void setReuseGrid(int reuseGrid) { _reuseGrid = reuseGrid; }
+    void setReuseGrid(int reuseGrid)
+    {
+        _reuseGrid = reuseGrid;
+    }
 
     /** Size of the grid. */
-    const Size& getGridSize() const { return _gridSize; }
+    const Size &getGridSize() const
+    {
+        return _gridSize;
+    }
+
     /**Set the size of the grid.*/
-    void setGridSize(const Size& gridSize) { _gridSize = gridSize; }
+    void setGridSize(const Size &gridSize)
+    {
+        _gridSize = gridSize;
+    }
 
     /** Pixels between the grids. */
-    const Vec2& getStep() const { return _step; }
+    const Vec2 &getStep() const
+    {
+        return _step;
+    }
+
     /**Get the pixels between the grids.*/
-    void setStep(const Vec2& step) { _step = step; }
+    void setStep(const Vec2 &step)
+    {
+        _step = step;
+    }
 
     /** is texture flipped. */
-    bool isTextureFlipped() const { return _isTextureFlipped; }
+    bool isTextureFlipped() const
+    {
+        return _isTextureFlipped;
+    }
+
     /**Set the texture flipped or not.*/
     void setTextureFlipped(bool flipped);
-    
+
     /**@{
      Init and reset the status when render effects by using the grid.
      */
     void beforeDraw();
-    void afterDraw(Node *target);
+    void afterDraw(Node* target);
     /**@}*/
-    
+
     /**Change projection to 2D for grabbing.*/
     void set2DProjection();
-    
+
     /**
      * @brief Set the effect grid rect.
      * @param rect The effect grid rect.
      */
-    void setGridRect(const Rect& rect);
+    void setGridRect(const Rect &rect);
+
     /**
      * @brief Get the effect grid rect.
      * @return Return the effect grid rect.
      */
-    const Rect& getGridRect() const { return _gridRect; }
+    const Rect &getGridRect() const
+    {
+        return _gridRect;
+    }
 
 protected:
     void updateBlendState();
-    
+
     bool _active = false;
-    int  _reuseGrid = 0;
+    int _reuseGrid = 0;
     Size _gridSize;
-    Texture2D *_texture = nullptr;
+    Texture2D* _texture = nullptr;
     Vec2 _step;
     bool _isTextureFlipped = false;
     Director::Projection _directorProjection = Director::Projection::_2D;
@@ -157,12 +195,12 @@ protected:
     Texture2D* _oldColorAttachment = nullptr;
     Texture2D* _oldDepthAttachment = nullptr;
     Texture2D* _oldStencilAttachment = nullptr;
-    
+
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _textureLocation;
     backend::ProgramState* _programState = nullptr;
-    
-    BlendFunc  _blendFunc;
+
+    BlendFunc _blendFunc;
 };
 
 /**
@@ -172,13 +210,13 @@ class CC_DLL Grid3D : public GridBase
 {
 public:
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize);
+    static Grid3D* create(const Size &gridSize);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, const Rect& rect);
+    static Grid3D* create(const Size &gridSize, const Rect &rect);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, Texture2D *texture, bool flipped);
+    static Grid3D* create(const Size &gridSize, Texture2D* texture, bool flipped);
     /** create one Grid. */
-    static Grid3D* create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static Grid3D* create(const Size &gridSize, Texture2D* texture, bool flipped, const Rect &rect);
     /**
      Constructor.
      * @js ctor
@@ -195,18 +233,18 @@ public:
      * @js NA
      * @lua NA
      */
-    Vec3 getVertex(const Vec2& pos) const;
+    Vec3 getVertex(const Vec2 &pos) const;
 
     /** Returns the original (non-transformed) vertex at a given position.
      * @js NA
      * @lua NA
      */
-    Vec3 getOriginalVertex(const Vec2& pos) const;
+    Vec3 getOriginalVertex(const Vec2 &pos) const;
 
     /** Sets a new vertex at a given position.
      * @lua NA
      */
-    void setVertex(const Vec2& pos, const Vec3& vertex);
+    void setVertex(const Vec2 &pos, const Vec3 &vertex);
     /**@{
      Implementations for interfaces in base class.
      */
@@ -216,13 +254,20 @@ public:
     virtual void reuse() override;
     virtual void calculateVertexPoints() override;
     /**@}*/
-    
+
     /**@{
      Getter and Setter for depth test state when blit.
      @js NA
      */
-    void setNeedDepthTestForBlit(bool neededDepthTest) { _needDepthTestForBlit = neededDepthTest; }
-    bool getNeedDepthTestForBlit() const { return _needDepthTestForBlit; }
+    void setNeedDepthTestForBlit(bool neededDepthTest)
+    {
+        _needDepthTestForBlit = neededDepthTest;
+    }
+
+    bool getNeedDepthTestForBlit() const
+    {
+        return _needDepthTestForBlit;
+    }
     /**@}*/
 protected:
     void updateVertexBuffer();
@@ -232,7 +277,7 @@ protected:
     void* _texCoordinates = nullptr;
     void* _vertices = nullptr;
     void* _originalVertices = nullptr;
-    unsigned short *_indices = nullptr;
+    unsigned short* _indices = nullptr;
     bool _needDepthTestForBlit = false;
     bool _oldDepthTest = false;
     bool _oldDepthWrite = false;
@@ -246,13 +291,13 @@ class CC_DLL TiledGrid3D : public GridBase
 {
 public:
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize);
+    static TiledGrid3D* create(const Size &gridSize);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, const Rect& rect);
+    static TiledGrid3D* create(const Size &gridSize, const Rect &rect);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, Texture2D *texture, bool flipped);
+    static TiledGrid3D* create(const Size &gridSize, Texture2D* texture, bool flipped);
     /** Create one Grid. */
-    static TiledGrid3D* create(const Size& gridSize, Texture2D *texture, bool flipped, const Rect& rect);
+    static TiledGrid3D* create(const Size &gridSize, Texture2D* texture, bool flipped, const Rect &rect);
 
     /**@{
      Implementations for interfaces in base class.
@@ -266,17 +311,17 @@ public:
      * @js NA
      * @lua NA
      */
-    Quad3 getTile(const Vec2& pos) const;
+    Quad3 getTile(const Vec2 &pos) const;
     /** Returns the original tile (untransformed) at the given position.
      * @js NA
      * @lua NA
      */
-    Quad3 getOriginalTile(const Vec2& pos) const;
+    Quad3 getOriginalTile(const Vec2 &pos) const;
 
     /** Sets a new tile.
      * @lua NA
      */
-    void setTile(const Vec2& pos, const Quad3& coords);
+    void setTile(const Vec2 &pos, const Quad3 &coords);
 
 protected:
     /**

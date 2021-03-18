@@ -27,11 +27,12 @@
 #define __CCPHYSICS_HELPER_H__
 
 #include "base/ccConfig.h"
+
 #if CC_USE_PHYSICS
 
-#include "chipmunk/chipmunk.h"
-#include "platform/CCPlatformMacros.h"
-#include "math/CCGeometry.h"
+    #include "chipmunk/chipmunk.h"
+    #include "platform/CCPlatformMacros.h"
+    #include "math/CCGeometry.h"
 
 NS_CC_BEGIN
 
@@ -51,26 +52,47 @@ class PhysicsHelper
 {
 public:
     /** Make cpVect type convert to Vec2 type. */
-    static Vec2 cpv2point(const cpVect& vec) { return Vec2(vec.x, vec.y); }
+    static Vec2 cpv2point(const cpVect &vec)
+    {
+        return Vec2(vec.x, vec.y);
+    }
 
     /** Make Vec2 type convert to cpVect type. */
-    static cpVect point2cpv(const Vec2& point) { return cpv(point.x, point.y); }
-    
+    static cpVect point2cpv(const Vec2 &point)
+    {
+        return cpv(point.x, point.y);
+    }
+
     /** Make cpVect type convert to Size type. */
-    static Size cpv2size(const cpVect& vec) { return Size(vec.x, vec.y); }
-    
+    static Size cpv2size(const cpVect &vec)
+    {
+        return Size(vec.x, vec.y);
+    }
+
     /** Make Size type convert to cpVect type. */
-    static cpVect size2cpv(const Size& size) { return cpv(size.width, size.height); }
-    
+    static cpVect size2cpv(const Size &size)
+    {
+        return cpv(size.width, size.height);
+    }
+
     /** Make cpFloat type convert to float type. */
-    static float cpfloat2float(cpFloat f) { return f; }
-    
+    static float cpfloat2float(cpFloat f)
+    {
+        return f;
+    }
+
     /** Make Rect type convert to cpBB type. */
-    static cpBB rect2cpbb(const Rect& rect) { return cpBBNew(rect.origin.x, rect.origin.y, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height); }
-    
+    static cpBB rect2cpbb(const Rect &rect)
+    {
+        return cpBBNew(rect.origin.x, rect.origin.y, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+    }
+
     /** Make cpBB type convert to Rect type. */
-    static Rect cpbb2rect(const cpBB& bb) { return Rect(bb.l, bb.b, bb.r -  bb.l, bb.t - bb.b); }
-    
+    static Rect cpbb2rect(const cpBB &bb)
+    {
+        return Rect(bb.l, bb.b, bb.r - bb.l, bb.t - bb.b);
+    }
+
     /** 
      Make cpVect array convert to Vec2 array.
      
@@ -85,10 +107,10 @@ public:
         {
             out[i] = cpv2point(cpvs[i]);
         }
-        
+
         return out;
     }
-    
+
     /**
      Make Vec2 array convert to cpVect array.
      
@@ -103,7 +125,7 @@ public:
         {
             out[i] = point2cpv(points[i]);
         }
-        
+
         return out;
     }
 };

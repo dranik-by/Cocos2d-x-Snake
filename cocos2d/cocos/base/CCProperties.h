@@ -45,7 +45,6 @@ class Mat4;
 class Quaternion;
 class Data;
 
-
 /**
  * Defines a properties file for loading text files.
  *
@@ -186,7 +185,7 @@ public:
      * @return The created Properties or NULL if there was an error.
      * @script{create}
      */
-    static Properties* createNonRefCounted(const std::string& url);
+    static Properties* createNonRefCounted(const std::string &url);
 
     /**
      * Destructor.
@@ -490,7 +489,7 @@ public:
      * @return True if a valid Vector3 was parsed, false otherwise.
      */
     static bool parseVec3(const char* str, Vec3* out);
-    
+
     /**
      * Attempts to parse the specified string as a Vector4 value.
      *
@@ -540,7 +539,7 @@ public:
     static bool parseColor(const char* str, Vec4* out);
 
 private:
-    
+
     /**
      * Internal structure containing a single property.
      */
@@ -548,7 +547,12 @@ private:
     {
         std::string name;
         std::string value;
-        Property(const std::string& aname, const std::string& avalue) : name(aname), value(avalue) { }
+
+        Property(const std::string &aname, const std::string &avalue)
+        : name(aname)
+        , value(avalue)
+        {
+        }
     };
 
     /**
@@ -562,12 +566,13 @@ private:
      * @param stream The stream used for reading the properties from file.
      */
     Properties(Data* data, ssize_t* dataIdx);
-    Properties(const Properties& copy);
+    Properties(const Properties &copy);
 
     /**
      * Constructor. Read from the beginning of namespace specified.
      */
-    Properties(Data* data, ssize_t* dataIdx, const std::string& name, const char* id, const char* parentID, Properties* parent);
+    Properties(Data* data, ssize_t* dataIdx, const std::string &name, const char* id, const char* parentID,
+               Properties* parent);
 
     // Data manipulation methods
     void readProperties();
@@ -588,15 +593,15 @@ private:
     Properties* clone();
 
     void setDirectoryPath(const std::string* path);
-    void setDirectoryPath(const std::string& path);
+    void setDirectoryPath(const std::string &path);
 
     /**
      * Reads the next character from the Data. Returns EOF if the end of the Data is reached.
      */
 
     // XXX: hack in order to simulate GamePlay's Stream with Cocos2d's Data
-    ssize_t *_dataIdx;
-    Data *_data;
+    ssize_t* _dataIdx;
+    Data* _data;
 
     std::string _namespace;
     std::string _id;

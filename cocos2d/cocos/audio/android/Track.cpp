@@ -30,19 +30,20 @@ THE SOFTWARE.
 
 #include <math.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 Track::Track(const PcmData &pcmData)
-        : onStateChanged(nullptr)
-        , _pcmData(pcmData)
-        , _prevState(State::IDLE)
-        , _state(State::IDLE)
-        , _name(-1)
-        , _volume(1.0f)
-        , _isVolumeDirty(true)
-        , _isLoop(false)
-        , _isInitialized(false)
-        , _isAudioFocus(true)
+: onStateChanged(nullptr)
+, _pcmData(pcmData)
+, _prevState(State::IDLE)
+, _state(State::IDLE)
+, _name(-1)
+, _volume(1.0f)
+, _isVolumeDirty(true)
+, _isLoop(false)
+, _isInitialized(false)
+, _isAudioFocus(true)
 {
     init(_pcmData.pcmBuffer->data(), _pcmData.numFrames, _pcmData.bitsPerSample / 8 * _pcmData.numChannels);
 }
@@ -61,7 +62,7 @@ gain_minifloat_packed_t Track::getVolumeLR()
 
 bool Track::setPosition(float pos)
 {
-    _nextFrame = (size_t) (pos * _numFrames / _pcmData.duration);
+    _nextFrame = (size_t)(pos * _numFrames / _pcmData.duration);
     _unrel = 0;
     return true;
 }

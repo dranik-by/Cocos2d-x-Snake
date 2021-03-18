@@ -45,43 +45,59 @@ public:
     virtual void gotoFrame(int frameIndex);
     virtual void stepToFrame(int frameIndex);
 
-    virtual const cocos2d::Vector<Frame*>& getFrames() const { return _frames; }
+    virtual const cocos2d::Vector<Frame*> &getFrames() const
+    {
+        return _frames;
+    }
 
     virtual void addFrame(Frame* frame);
     virtual void insertFrame(Frame* frame, int index);
     virtual void removeFrame(Frame* frame);
 
-    virtual void setActionTag(int tag) { _actionTag = tag; }
-    virtual int  getActionTag() const { return _actionTag; }
+    virtual void setActionTag(int tag)
+    {
+        _actionTag = tag;
+    }
+
+    virtual int getActionTag() const
+    {
+        return _actionTag;
+    }
 
     virtual void setNode(cocos2d::Node* node);
     virtual cocos2d::Node* getNode() const;
 
-    virtual void setActionTimeline(ActionTimeline* action) { _ActionTimeline = action; }
-    virtual ActionTimeline* getActionTimeline() const { return _ActionTimeline; }
+    virtual void setActionTimeline(ActionTimeline* action)
+    {
+        _ActionTimeline = action;
+    }
+
+    virtual ActionTimeline* getActionTimeline() const
+    {
+        return _ActionTimeline;
+    }
 
     virtual Timeline* clone();
 
 protected:
     virtual void apply(unsigned int frameIndex);
 
-    virtual void binarySearchKeyFrame (unsigned int frameIndex);
+    virtual void binarySearchKeyFrame(unsigned int frameIndex);
     virtual void updateCurrentKeyFrame(unsigned int frameIndex);
 
     cocos2d::Vector<Frame*> _frames;
     Frame* _currentKeyFrame;
     unsigned int _currentKeyFrameIndex;
 
-	unsigned int _fromIndex;
-	unsigned int _toIndex;
-	unsigned int _betweenDuration;
-	unsigned int _actionTag;
+    unsigned int _fromIndex;
+    unsigned int _toIndex;
+    unsigned int _betweenDuration;
+    unsigned int _actionTag;
 
-    ActionTimeline*  _ActionTimeline;
+    ActionTimeline* _ActionTimeline;
     cocos2d::Node* _node;
 };
 
 NS_TIMELINE_END
-
 
 #endif /*__CCTIMELINE_H__*/

@@ -41,7 +41,9 @@
 #include "2d/CCComponent.h"
 
 #if CC_USE_PHYSICS
-#include "physics/CCPhysicsBody.h"
+
+    #include "physics/CCPhysicsBody.h"
+
 #endif
 
 NS_CC_BEGIN
@@ -62,8 +64,9 @@ class Material;
 class Camera;
 class PhysicsBody;
 
-namespace backend{
-    class ProgramState;
+namespace backend
+{
+class ProgramState;
 }
 
 /**
@@ -71,7 +74,8 @@ namespace backend{
  * @{
  */
 
-enum {
+enum
+{
     kNodeOnEnter,
     kNodeOnExit,
     kNodeOnEnterTransitionDidFinish,
@@ -114,7 +118,8 @@ public:
     /** Default tag used for all the nodes */
     static const int INVALID_TAG = -1;
 
-    enum {
+    enum
+    {
         FLAGS_TRANSFORM_DIRTY = (1 << 0),
         FLAGS_CONTENT_SIZE_DIRTY = (1 << 1),
         FLAGS_RENDER_AS_3D = (1 << 3),
@@ -128,14 +133,14 @@ public:
      * Allocates and initializes a node.
      * @return A initialized node which is marked as "autorelease".
      */
-    static Node * create();
+    static Node* create();
 
     /**
      * Gets count of nodes those are attached to scene graph.
      */
     static int getAttachedNodeCount();
 public:
-    
+
     /**
      * Gets the description string. It makes debugging easier.
      * @return A string
@@ -167,7 +172,7 @@ public:
      * @param localZOrder The local Z order value.
      */
     virtual void setLocalZOrder(std::int32_t localZOrder);
-    
+
     /* 
      Helper function used by `setLocalZOrder`. Don't use it unless you know what you are doing.
      @js NA
@@ -194,7 +199,10 @@ public:
      * @return The local (relative to its siblings) Z order.
      */
 
-    virtual std::int32_t getLocalZOrder() const { return _localZOrder; }
+    virtual std::int32_t getLocalZOrder() const
+    {
+        return _localZOrder;
+    }
 
     /**
      Defines the order in which the nodes are renderer.
@@ -218,6 +226,7 @@ public:
      * @param globalZOrder The global Z order value.
      */
     virtual void setGlobalZOrder(float globalZOrder);
+
     /**
      * Returns the Node's Global Z Order.
      *
@@ -225,7 +234,10 @@ public:
      *
      * @return The node's global Z order
      */
-    virtual float getGlobalZOrder() const { return _globalZOrder; }
+    virtual float getGlobalZOrder() const
+    {
+        return _globalZOrder;
+    }
 
     /**
      * Sets the scale (x) of the node.
@@ -245,7 +257,6 @@ public:
      * @return The scale factor on X axis.
      */
     virtual float getScaleX() const;
-
 
     /**
      * Sets the scale (y) of the node.
@@ -285,7 +296,6 @@ public:
      */
     virtual float getScaleZ() const;
 
-
     /**
      * Sets the scale (x,y,z) of the node.
      *
@@ -306,16 +316,16 @@ public:
      */
     virtual float getScale() const;
 
-     /**
-     * Sets the scale (x,y) of the node.
-     *
-     * It is a scaling factor that multiplies the width and height of the node and its children.
-     *
-     * @param scaleX     The scale factor on X axis.
-     * @param scaleY     The scale factor on Y axis.
-     *
-     * @warning The physics body doesn't support this.
-     */
+    /**
+    * Sets the scale (x,y) of the node.
+    *
+    * It is a scaling factor that multiplies the width and height of the node and its children.
+    *
+    * @param scaleX     The scale factor on X axis.
+    * @param scaleY     The scale factor on Y axis.
+    *
+    * @warning The physics body doesn't support this.
+    */
     virtual void setScale(float scaleX, float scaleY);
 
     /**
@@ -345,8 +355,12 @@ public:
      * @param position The normalized position (x,y) of the node, using value between 0 and 1.
      */
     virtual void setPositionNormalized(const Vec2 &position);
+
     // FIXME: should get deprecated in v4.0
-    virtual void setNormalizedPosition(const Vec2 &position) { setPositionNormalized(position); }
+    virtual void setNormalizedPosition(const Vec2 &position)
+    {
+        setPositionNormalized(position);
+    }
 
     /**
      * Gets the position (x,y) of the node in its parent's coordinate system.
@@ -358,15 +372,19 @@ public:
      * In js and lua return value is table which contains x,y.
      * @endcode
      */
-    virtual const Vec2& getPosition() const;
+    virtual const Vec2 &getPosition() const;
 
     /** Returns the normalized position.
      * 
      * @return The normalized position.
      */
-    virtual const Vec2& getPositionNormalized() const;
+    virtual const Vec2 &getPositionNormalized() const;
+
     // FIXME: should get deprecated in v4.0
-    virtual const Vec2& getNormalizedPosition() const { return getPositionNormalized(); }
+    virtual const Vec2 &getNormalizedPosition() const
+    {
+        return getPositionNormalized();
+    }
 
     /**
      * Sets the position (x,y) of the node in its parent's coordinate system.
@@ -403,7 +421,7 @@ public:
      *
      * @param x The x coordinate of the node.
      */
-    virtual void  setPositionX(float x);
+    virtual void setPositionX(float x);
     /** Gets the x coordinate of the node in its parent's coordinate system.
      *
      * @return The x coordinate of the node.
@@ -413,7 +431,7 @@ public:
      *
      * @param y The y coordinate of the node.
      */
-    virtual void  setPositionY(float y);
+    virtual void setPositionY(float y);
     /** Gets the y coordinate of the node in its parent's coordinate system.
      *
      * @return The y coordinate of the node.
@@ -426,7 +444,7 @@ public:
      * @param position The position (X, Y, and Z) in its parent's coordinate system.
      * @js NA
      */
-    virtual void setPosition3D(const Vec3& position);
+    virtual void setPosition3D(const Vec3 &position);
     /**
      * Returns the position (X,Y,Z) in its parent's coordinate system.
      *
@@ -484,7 +502,6 @@ public:
      */
     virtual float getSkewX() const;
 
-
     /**
      * Changes the Y skew angle of the node in degrees.
      *
@@ -509,7 +526,6 @@ public:
      */
     virtual float getSkewY() const;
 
-
     /**
      * Sets the anchor point in percent.
      *
@@ -522,7 +538,7 @@ public:
      *
      * @param anchorPoint   The anchor point of node.
      */
-    virtual void setAnchorPoint(const Vec2& anchorPoint);
+    virtual void setAnchorPoint(const Vec2 &anchorPoint);
     /**
      * Returns the anchor point in percent.
      *
@@ -530,7 +546,7 @@ public:
      *
      * @return The anchor point of node.
      */
-    virtual const Vec2& getAnchorPoint() const;
+    virtual const Vec2 &getAnchorPoint() const;
     /**
      * Returns the anchorPoint in absolute pixels.
      *
@@ -539,8 +555,7 @@ public:
      *
      * @return The anchor point in absolute pixels.
      */
-    virtual const Vec2& getAnchorPointInPoints() const;
-
+    virtual const Vec2 &getAnchorPointInPoints() const;
 
     /**
      * Sets the untransformed size of the node.
@@ -550,7 +565,7 @@ public:
      *
      * @param contentSize   The untransformed size of the node.
      */
-    virtual void setContentSize(const Size& contentSize);
+    virtual void setContentSize(const Size &contentSize);
     /**
      * Returns the untransformed size of the node.
      *
@@ -558,8 +573,7 @@ public:
      *
      * @return The untransformed size of the node.
      */
-    virtual const Size& getContentSize() const;
-
+    virtual const Size &getContentSize() const;
 
     /**
      * Sets whether the node is visible.
@@ -577,7 +591,6 @@ public:
      * @return true if the node is visible, false if the node is hidden.
      */
     virtual bool isVisible() const;
-
 
     /**
      * Sets the rotation (angle) of the node in degrees.
@@ -606,7 +619,7 @@ public:
      * @param rotation The rotation of the node in 3d.
      * @js NA
      */
-    virtual void setRotation3D(const Vec3& rotation);
+    virtual void setRotation3D(const Vec3 &rotation);
     /**
      * Returns the rotation (X,Y,Z) in degrees.
      * 
@@ -614,15 +627,15 @@ public:
      * @js NA
      */
     virtual Vec3 getRotation3D() const;
-    
+
     /**
      * Set rotation by quaternion. You should make sure the quaternion is normalized.
      *
      * @param quat The rotation in quaternion, note that the quat must be normalized.
      * @js NA
      */
-    virtual void setRotationQuat(const Quaternion& quat);
-    
+    virtual void setRotationQuat(const Quaternion &quat);
+
     /**
      * Return the rotation by quaternion, Note that when _rotationZ_X == _rotationZ_Y, the returned quaternion equals to RotationZ_X * RotationY * RotationX,
      * it equals to RotationY * RotationX otherwise.
@@ -693,7 +706,7 @@ public:
      * @param ignore    true if anchor point will be (0,0) when you position this node.
      */
     virtual void setIgnoreAnchorPointForPosition(bool ignore);
-    
+
     /**
      * Gets whether the anchor point will be (0,0) when you position this node.
      *
@@ -716,7 +729,7 @@ public:
      *
      * @param child A child node.
      */
-    virtual void addChild(Node * child);
+    virtual void addChild(Node* child);
     /**
      * Adds a child to the container with a local z-order.
      *
@@ -725,7 +738,7 @@ public:
      * @param child     A child node.
      * @param localZOrder    Z order for drawing priority. Please refer to `setLocalZOrder(int)`.
      */
-    virtual void addChild(Node * child, int localZOrder);
+    virtual void addChild(Node* child, int localZOrder);
     /**
      * Adds a child to the container with z order and tag.
      *
@@ -737,7 +750,7 @@ public:
      * 
      * Please use `addChild(Node* child, int localZOrder, const std::string &name)` instead.
      */
-     virtual void addChild(Node* child, int localZOrder, int tag);
+    virtual void addChild(Node* child, int localZOrder, int tag);
     /**
      * Adds a child to the container with z order and tag
      *
@@ -758,18 +771,21 @@ public:
      *
      * Please use `getChildByName()` instead.
      */
-     virtual Node * getChildByTag(int tag) const;
-    
-     /**
-     * Gets a child from the container with its tag that can be cast to Type T.
-     *
-     * @param tag   An identifier to find the child node.
-     *
-     * @return a Node with the given tag that can be cast to Type T.
-    */
+    virtual Node* getChildByTag(int tag) const;
+
+    /**
+    * Gets a child from the container with its tag that can be cast to Type T.
+    *
+    * @param tag   An identifier to find the child node.
+    *
+    * @return a Node with the given tag that can be cast to Type T.
+   */
     template <typename T>
-    T getChildByTag(int tag) const { return static_cast<T>(getChildByTag(tag)); }
-    
+    T getChildByTag(int tag) const
+    {
+        return static_cast<T>(getChildByTag(tag));
+    }
+
     /**
      * Gets a child from the container with its name.
      *
@@ -779,7 +795,8 @@ public:
      *
      * @since v3.2
      */
-    virtual Node* getChildByName(const std::string& name) const;
+    virtual Node* getChildByName(const std::string &name) const;
+
     /**
      * Gets a child from the container with its name that can be cast to Type T.
      *
@@ -788,7 +805,11 @@ public:
      * @return a Node with the given name that can be cast to Type T.
     */
     template <typename T>
-    T getChildByName(const std::string& name) const { return static_cast<T>(getChildByName(name)); }
+    T getChildByName(const std::string &name) const
+    {
+        return static_cast<T>(getChildByName(name));
+    }
+
     /** Search the children of the receiving node to perform processing for nodes which share a name.
      *
      * @param name The name to search for, supports c++11 regular expression.
@@ -817,14 +838,22 @@ public:
      * @since v3.2
      */
     virtual void enumerateChildren(const std::string &name, std::function<bool(Node* node)> callback) const;
+
     /**
      * Returns the array of the node's children.
      *
      * @return the array the node's children.
      */
-    virtual Vector<Node*>& getChildren() { return _children; }
-    virtual const Vector<Node*>& getChildren() const { return _children; }
-    
+    virtual Vector<Node*> &getChildren()
+    {
+        return _children;
+    }
+
+    virtual const Vector<Node*> &getChildren() const
+    {
+        return _children;
+    }
+
     /** 
      * Returns the amount of children.
      *
@@ -838,6 +867,7 @@ public:
      * @param parent    A pointer to the parent node.
      */
     virtual void setParent(Node* parent);
+
     /**
      * Returns a pointer to the parent node.
      *
@@ -845,8 +875,15 @@ public:
      *
      * @returns A pointer to the parent node.
      */
-    virtual Node* getParent() { return _parent; }
-    virtual const Node* getParent() const { return _parent; }
+    virtual Node* getParent()
+    {
+        return _parent;
+    }
+
+    virtual const Node* getParent() const
+    {
+        return _parent;
+    }
 
 
     ////// REMOVES //////
@@ -882,7 +919,7 @@ public:
      *
      * Please use `removeChildByName` instead.
      */
-     virtual void removeChildByTag(int tag, bool cleanup = true);
+    virtual void removeChildByTag(int tag, bool cleanup = true);
     /**
      * Removes a child from the container by tag value. It will also cleanup all running actions depending on the cleanup parameter.
      *
@@ -911,7 +948,7 @@ public:
      * @param child     An already added child node. It MUST be already added.
      * @param localZOrder Z order for drawing priority. Please refer to setLocalZOrder(int).
      */
-    virtual void reorderChild(Node * child, int localZOrder);
+    virtual void reorderChild(Node* child, int localZOrder);
 
     /**
      * Sorts the children array once before drawing, instead of every time when a child is added or reordered.
@@ -924,23 +961,24 @@ public:
     * Sorts helper function
     *
     */
-    template<typename _T> inline
-    static void sortNodes(cocos2d::Vector<_T*>& nodes)
+    template <typename _T>
+    inline static void sortNodes(cocos2d::Vector<_T*> &nodes)
     {
         static_assert(std::is_base_of<Node, _T>::value, "Node::sortNodes: Only accept derived of Node!");
-#if CC_64BITS
-        std::sort(std::begin(nodes), std::end(nodes), [](_T* n1, _T* n2) {
+        #if CC_64BITS
+        std::sort(std::begin(nodes), std::end(nodes), [](_T* n1, _T* n2)
+        {
             return (n1->_localZOrder$Arrival < n2->_localZOrder$Arrival);
         });
-#else
+        #else
         std::sort(std::begin(nodes), std::end(nodes), [](_T* n1, _T* n2) {
             return (n1->_localZOrder == n2->_localZOrder && n1->_orderOfArrival < n2->_orderOfArrival) || n1->_localZOrder < n2->_localZOrder;
         });
-#endif
+        #endif
     }
 
     /// @} end of Children and Parent
-    
+
     /// @{
     /// @name Tag & User data
 
@@ -951,7 +989,7 @@ public:
      *
      * Please use `getTag()` instead.
      */
-     virtual int getTag() const;
+    virtual int getTag() const;
     /**
      * Changes the tag that is used to identify the node easily.
      *
@@ -961,22 +999,21 @@ public:
      *
      * Please use `setName()` instead.
      */
-     virtual void setTag(int tag);
-    
+    virtual void setTag(int tag);
+
     /** Returns a string that is used to identify the node.
      * @return A string that identifies the node.
      * 
      * @since v3.2
      */
-    virtual const std::string& getName() const;
+    virtual const std::string &getName() const;
     /** Changes the name that is used to identify the node easily.
      * @param name A string that identifies the node.
      *
      * @since v3.2
      */
-    virtual void setName(const std::string& name);
+    virtual void setName(const std::string &name);
 
-    
     /**
      * Returns a custom user data pointer.
      *
@@ -985,11 +1022,18 @@ public:
      * @return A custom user data pointer.
      * @lua NA
      */
-    virtual void* getUserData() { return _userData; }
+    virtual void* getUserData()
+    {
+        return _userData;
+    }
+
     /**
     * @lua NA
     */
-    virtual const void* getUserData() const { return _userData; }
+    virtual const void* getUserData() const
+    {
+        return _userData;
+    }
 
     /**
      * Sets a custom user data pointer.
@@ -1001,7 +1045,7 @@ public:
      * @param userData  A custom user data pointer.
      * @lua NA
      */
-    virtual void setUserData(void *userData);
+    virtual void setUserData(void* userData);
 
     /**
      * Returns a user assigned Object.
@@ -1011,11 +1055,18 @@ public:
      * @return A user assigned Object.
      * @lua NA
      */
-    virtual Ref* getUserObject() { return _userObject; }
+    virtual Ref* getUserObject()
+    {
+        return _userObject;
+    }
+
     /**
     * @lua NA
     */
-    virtual const Ref* getUserObject() const { return _userObject; }
+    virtual const Ref* getUserObject() const
+    {
+        return _userObject;
+    }
 
     /**
      * Returns a user assigned Object.
@@ -1027,7 +1078,7 @@ public:
      *
      * @param userObject    A user assigned Object.
      */
-    virtual void setUserObject(Ref *userObject);
+    virtual void setUserObject(Ref* userObject);
 
     /// @} end of Tag & User Data
 
@@ -1109,7 +1160,7 @@ public:
      * @param transform A transform matrix.
      * @param flags Renderer flag.
      */
-    virtual void draw(Renderer *renderer, const Mat4& transform, uint32_t flags);
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags);
     virtual void draw() final;
 
     /**
@@ -1119,9 +1170,8 @@ public:
      * @param parentTransform A transform matrix.
      * @param parentFlags Renderer flag.
      */
-    virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags);
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags);
     virtual void visit() final;
-
 
     /** Returns the Scene that contains the Node.
      It returns `nullptr` if the node doesn't belong to any Scene.
@@ -1143,11 +1193,15 @@ public:
      * @param dispatcher The event dispatcher of scene.
      */
     virtual void setEventDispatcher(EventDispatcher* dispatcher);
+
     /** Get the event dispatcher of scene.
      *
      * @return The event dispatcher of scene.
      */
-    virtual EventDispatcher* getEventDispatcher() const { return _eventDispatcher; };
+    virtual EventDispatcher* getEventDispatcher() const
+    {
+        return _eventDispatcher;
+    };
 
     /// @{
     /// @name Actions
@@ -1160,13 +1214,21 @@ public:
      * @param actionManager     A ActionManager object that is used by all actions.
      */
     virtual void setActionManager(ActionManager* actionManager);
+
     /**
      * Gets the ActionManager object that is used by all actions.
      * @see setActionManager(ActionManager*)
      * @return A ActionManager object.
      */
-    virtual ActionManager* getActionManager() { return _actionManager; }
-    virtual const ActionManager* getActionManager() const { return _actionManager; }
+    virtual ActionManager* getActionManager()
+    {
+        return _actionManager;
+    }
+
+    virtual const ActionManager* getActionManager() const
+    {
+        return _actionManager;
+    }
 
     /**
      * Executes an action, and returns the action that is executed.
@@ -1196,7 +1258,7 @@ public:
      * @param tag   A tag that indicates the action to be removed.
      */
     void stopActionByTag(int tag);
-    
+
     /**
      * Removes all actions from the running action list by its tag.
      *
@@ -1260,15 +1322,22 @@ public:
      * @param scheduler     A Scheduler object that is used to schedule all "update" and timers.
      */
     virtual void setScheduler(Scheduler* scheduler);
+
     /**
      * Gets a Scheduler object.
      *
      * @see setScheduler(Scheduler*)
      * @return A Scheduler object.
      */
-    virtual Scheduler* getScheduler() { return _scheduler; }
-    virtual const Scheduler* getScheduler() const { return _scheduler; }
+    virtual Scheduler* getScheduler()
+    {
+        return _scheduler;
+    }
 
+    virtual const Scheduler* getScheduler() const
+    {
+        return _scheduler;
+    }
 
     /**
      * Checks whether a selector is scheduled.
@@ -1365,7 +1434,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it.
      * @lua NA
      */
-    void scheduleOnce(const std::function<void(float)>& callback, float delay, const std::string &key);
+    void scheduleOnce(const std::function<void(float)> &callback, float delay, const std::string &key);
 
     /**
      * Schedules a custom selector, the scheduled selector will be ticked every frame.
@@ -1383,7 +1452,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it.
      * @lua NA
      */
-    void schedule(const std::function<void(float)>& callback, const std::string &key);
+    void schedule(const std::function<void(float)> &callback, const std::string &key);
 
     /**
      * Schedules a lambda function. The scheduled lambda function will be called every "interval" seconds
@@ -1393,7 +1462,7 @@ public:
      * @param key           The key of the lambda function. To be used if you want to unschedule it
      * @lua NA
      */
-    void schedule(const std::function<void(float)>& callback, float interval, const std::string &key);
+    void schedule(const std::function<void(float)> &callback, float interval, const std::string &key);
 
     /**
      * Schedules a lambda function.
@@ -1405,7 +1474,8 @@ public:
      * @param key       The key of the lambda function. To be used if you want to unschedule it.
      * @lua NA
      */
-    void schedule(const std::function<void(float)>& callback, float interval, unsigned int repeat, float delay, const std::string &key);
+    void schedule(const std::function<void(float)> &callback, float interval, unsigned int repeat, float delay,
+                  const std::string &key);
 
     /**
      * Unschedules a custom selector.
@@ -1468,7 +1538,7 @@ public:
      *
      * @return The transformation matrix.
      */
-    virtual const Mat4& getNodeToParentTransform() const;
+    virtual const Mat4 &getNodeToParentTransform() const;
     virtual AffineTransform getNodeToParentAffineTransform() const;
 
     /**
@@ -1499,7 +1569,7 @@ public:
      *
      * @param transform A given transformation matrix.
      */
-    virtual void setNodeToParentTransform(const Mat4& transform);
+    virtual void setNodeToParentTransform(const Mat4 &transform);
 
     /**
      * Returns the matrix that transform parent's space coordinates to the node's (local) space coordinates.
@@ -1507,7 +1577,7 @@ public:
      *
      * @return The transformation matrix.
      */
-    virtual const Mat4& getParentToNodeTransform() const;
+    virtual const Mat4 &getParentToNodeTransform() const;
     virtual AffineTransform getParentToNodeAffineTransform() const;
 
     /**
@@ -1538,7 +1608,7 @@ public:
      * @param worldPoint A given coordinate.
      * @return A point in node (local) space coordinates.
      */
-    Vec2 convertToNodeSpace(const Vec2& worldPoint) const;
+    Vec2 convertToNodeSpace(const Vec2 &worldPoint) const;
 
     /**
      * Converts a Vec2 to world space coordinates. The result is in Points.
@@ -1546,7 +1616,7 @@ public:
      * @param nodePoint A given coordinate.
      * @return A point in world space coordinates.
      */
-    Vec2 convertToWorldSpace(const Vec2& nodePoint) const;
+    Vec2 convertToWorldSpace(const Vec2 &nodePoint) const;
 
     /**
      * Converts a Vec2 to node (local) space coordinates. The result is in Points.
@@ -1555,7 +1625,7 @@ public:
      * @param worldPoint A given coordinate.
      * @return A point in node (local) space coordinates, anchor relative.
      */
-    Vec2 convertToNodeSpaceAR(const Vec2& worldPoint) const;
+    Vec2 convertToNodeSpaceAR(const Vec2 &worldPoint) const;
 
     /**
      * Converts a local Vec2 to world space coordinates.The result is in Points.
@@ -1564,7 +1634,7 @@ public:
      * @param nodePoint A given coordinate.
      * @return A point in world space coordinates, anchor relative.
      */
-    Vec2 convertToWorldSpaceAR(const Vec2& nodePoint) const;
+    Vec2 convertToWorldSpaceAR(const Vec2 &nodePoint) const;
 
     /**
      * convenience methods which take a Touch instead of Vec2.
@@ -1572,7 +1642,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates.
      */
-    Vec2 convertTouchToNodeSpace(Touch * touch) const;
+    Vec2 convertTouchToNodeSpace(Touch* touch) const;
 
     /**
      * converts a Touch (world coordinates) into a local coordinate. This method is AR (Anchor Relative).
@@ -1580,7 +1650,7 @@ public:
      * @param touch A given touch.
      * @return A point in world space coordinates, anchor relative.
      */
-    Vec2 convertTouchToNodeSpaceAR(Touch * touch) const;
+    Vec2 convertTouchToNodeSpaceAR(Touch* touch) const;
 
     /**
      *  Sets an additional transform matrix to the node.
@@ -1593,12 +1663,12 @@ public:
      * @param additionalTransform An additional transform matrix.
      */
     void setAdditionalTransform(const Mat4* additionalTransform);
-    void setAdditionalTransform(const Mat4& additionalTransform);
-    void setAdditionalTransform(const AffineTransform& additionalTransform);
+    void setAdditionalTransform(const Mat4 &additionalTransform);
+    void setAdditionalTransform(const AffineTransform &additionalTransform);
 
     /// @} end of Coordinate Converters
 
-      /// @{
+    /// @{
     /// @name component functions
     /**
      * Gets a component by its name.
@@ -1606,7 +1676,7 @@ public:
      * @param name A given name of component.
      * @return The Component by name.
      */
-    Component* getComponent(const std::string& name);
+    Component* getComponent(const std::string &name);
 
     /**
      * Adds a component.
@@ -1614,7 +1684,7 @@ public:
      * @param component A given component.
      * @return True if added success.
      */
-    virtual bool addComponent(Component *component);
+    virtual bool addComponent(Component* component);
 
     /**
      * Removes a component by its name.
@@ -1622,7 +1692,7 @@ public:
      * @param name A given name of component.
      * @return True if removed success.
      */
-    virtual bool removeComponent(const std::string& name);
+    virtual bool removeComponent(const std::string &name);
 
     /** 
      * Removes a component by its pointer.
@@ -1630,13 +1700,13 @@ public:
      * @param component A given component.
      * @return True if removed success.
      */
-    virtual bool removeComponent(Component *component);
+    virtual bool removeComponent(Component* component);
     /**
      * Removes all components
      */
     virtual void removeAllComponents();
     /// @} end of component functions
-    
+
     // overrides
     /**
      * Return the node's opacity.
@@ -1675,22 +1745,22 @@ public:
      * Query node's color value.
      * @return A Color3B color value.
      */
-    virtual const Color3B& getColor() const;
+    virtual const Color3B &getColor() const;
     /**
      * Query node's displayed color.
      * @return A Color3B color value.
      */
-    virtual const Color3B& getDisplayedColor() const;
+    virtual const Color3B &getDisplayedColor() const;
     /**
      * Change the color of node.
      * @param color A Color3B color value.
      */
-    virtual void setColor(const Color3B& color);
+    virtual void setColor(const Color3B &color);
     /**
      * Update node's displayed color with its parent color.
      * @param parentColor A Color3B color value.
      */
-    virtual void updateDisplayedColor(const Color3B& parentColor);
+    virtual void updateDisplayedColor(const Color3B &parentColor);
     /**
      * Query whether cascadeColor is enabled or not.
      * @return Whether cascadeColor is enabled or not.
@@ -1718,47 +1788,82 @@ public:
      * Set the callback of event onEnter.
      * @param callback A std::function<void()> callback.
      */
-    void setOnEnterCallback(const std::function<void()>& callback) { _onEnterCallback = callback; }
+    void setOnEnterCallback(const std::function<void()> &callback)
+    {
+        _onEnterCallback = callback;
+    }
+
     /**
      * Get the callback of event onEnter.
      * @return A std:function<void()> callback.
      */
-    const std::function<void()>& getOnEnterCallback() const { return _onEnterCallback; }
+    const std::function<void()> &getOnEnterCallback() const
+    {
+        return _onEnterCallback;
+    }
+
     /**
      * Set the callback of event onExit.
      * @param callback A std::function<void()> callback.
      */
-    void setOnExitCallback(const std::function<void()>& callback) { _onExitCallback = callback; }
+    void setOnExitCallback(const std::function<void()> &callback)
+    {
+        _onExitCallback = callback;
+    }
+
     /**
      * Get the callback of event onExit.
      * @return A std::function<void()>.
      */
-    const std::function<void()>& getOnExitCallback() const { return _onExitCallback; }
+    const std::function<void()> &getOnExitCallback() const
+    {
+        return _onExitCallback;
+    }
+
     /**
      * Set the callback of event EnterTransitionDidFinish.
      * @param callback A std::function<void()> callback.
      */
-    void setOnEnterTransitionDidFinishCallback(const std::function<void()>& callback) { _onEnterTransitionDidFinishCallback = callback; }
+    void setOnEnterTransitionDidFinishCallback(const std::function<void()> &callback)
+    {
+        _onEnterTransitionDidFinishCallback = callback;
+    }
+
     /**
      * Get the callback of event EnterTransitionDidFinish.
      * @return std::function<void()>
      */
-    const std::function<void()>& getOnEnterTransitionDidFinishCallback() const { return _onEnterTransitionDidFinishCallback; }
+    const std::function<void()> &getOnEnterTransitionDidFinishCallback() const
+    {
+        return _onEnterTransitionDidFinishCallback;
+    }
+
     /**
      * Set the callback of event ExitTransitionDidStart.
      * @param callback A std::function<void()> callback.
      */
-    void setOnExitTransitionDidStartCallback(const std::function<void()>& callback) { _onExitTransitionDidStartCallback = callback; }
+    void setOnExitTransitionDidStartCallback(const std::function<void()> &callback)
+    {
+        _onExitTransitionDidStartCallback = callback;
+    }
+
     /**
      * Get the callback of event ExitTransitionDidStart.
      * @return std::function<void()>
      */
-    const std::function<void()>& getOnExitTransitionDidStartCallback() const { return _onExitTransitionDidStartCallback; }
-    
+    const std::function<void()> &getOnExitTransitionDidStartCallback() const
+    {
+        return _onExitTransitionDidStartCallback;
+    }
+
     /**
      * get & set camera mask, the node is visible by the camera whose camera flag & node's camera mask is true
      */
-    unsigned short getCameraMask() const { return _cameraMask; }
+    unsigned short getCameraMask() const
+    {
+        return _cameraMask;
+    }
+
     /**
      * Modify the camera mask for current node.
      * If applyChildren is true, then it will modify the camera mask of its children recursively.
@@ -1766,7 +1871,7 @@ public:
      * @param applyChildren A boolean value to determine whether the mask bit should apply to its children or not.
      */
     virtual void setCameraMask(unsigned short mask, bool applyChildren = true);
-    
+
     virtual void setProgramState(backend::ProgramState* programState);
     virtual backend::ProgramState* getProgramState() const;
 
@@ -1780,39 +1885,42 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     /// lazy allocs
     void childrenAlloc();
-    
+
     /// helper that reorder a child
     void insertChild(Node* child, int z);
 
     /// Removes a child, call child->onExit(), do cleanup, remove it from children array.
-    void detachChild(Node *child, ssize_t index, bool doCleanup);
+    void detachChild(Node* child, ssize_t index, bool doCleanup);
 
     /// Convert cocos2d coordinates to UI windows coordinate.
-    Vec2 convertToWindowSpace(const Vec2& nodePoint) const;
+    Vec2 convertToWindowSpace(const Vec2 &nodePoint) const;
 
     Mat4 transform(const Mat4 &parentTransform);
-    uint32_t processParentFlags(const Mat4& parentTransform, uint32_t parentFlags);
+    uint32_t processParentFlags(const Mat4 &parentTransform, uint32_t parentFlags);
 
     virtual void updateCascadeOpacity();
     virtual void disableCascadeOpacity();
     virtual void updateCascadeColor();
     virtual void disableCascadeColor();
-    virtual void updateColor() {}
-    
-    bool doEnumerate(std::string name, std::function<bool (Node *)> callback) const;
-    bool doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool (Node *)> callback) const;
-    
+
+    virtual void updateColor()
+    {
+    }
+
+    bool doEnumerate(std::string name, std::function<bool(Node*)> callback) const;
+    bool doEnumerateRecursive(const Node* node, const std::string &name, std::function<bool(Node*)> callback) const;
+
     //check whether this camera mask is visible by the current visiting camera
     bool isVisitableByVisitingCamera() const;
-    
+
     // update quaternion from Rotation3D
     void updateRotationQuat();
     // update Rotation3D from quaternion
     void updateRotation3D();
-    
+
 private:
     void addChildHelper(Node* child, int localZOrder, int tag, const std::string &name, bool setTag);
-    
+
 protected:
 
     float _rotationX;               ///< rotation on the X-axis
@@ -1821,7 +1929,7 @@ protected:
     // rotation Z is decomposed in 2 to simulate Skew for Flash animations
     float _rotationZ_X;             ///< rotation angle on Z-axis, component X
     float _rotationZ_Y;             ///< rotation angle on Z-axis, component Y
-    
+
     Quaternion _rotationQuat;       ///rotation using quaternion, if _rotationZ_X == _rotationZ_Y, _rotationQuat = RotationZ_X * RotationY * RotationX, else _rotationQuat = RotationY * RotationX
 
     float _scaleX;                  ///< scaling factor on x-axis
@@ -1854,15 +1962,17 @@ protected:
     mutable bool _additionalTransformDirty; ///< transform dirty ?
     bool _transformUpdated;         ///< Whether or not the Transform object was updated since the last frame
 
-#if CC_LITTLE_ENDIAN
-    union {
-        struct {
+    #if CC_LITTLE_ENDIAN
+    union
+    {
+        struct
+        {
             std::uint32_t _orderOfArrival;
             std::int32_t _localZOrder;
         };
         std::int64_t _localZOrder$Arrival;
     };
-#else
+    #else
     union {
         struct {
             std::int32_t _localZOrder;
@@ -1870,26 +1980,26 @@ protected:
         };
         std::int64_t _localZOrder$Arrival;
     };
-#endif
+    #endif
 
     float _globalZOrder;            ///< Global order used to sort the node
 
     static std::uint32_t s_globalOrderOfArrival;
 
     Vector<Node*> _children;        ///< array of children nodes
-    Node *_parent;                  ///< weak reference to parent node
+    Node* _parent;                  ///< weak reference to parent node
     Director* _director;            //cached director pointer to improve rendering performance
     int _tag;                       ///< a tag. Can be any number you assigned just to identify this node
-    
+
     std::string _name;              ///<a string label, an user defined string to identify this node
     size_t _hashOfName;             ///<hash value of _name, used for speed in getChildByName
 
-    void *_userData;                ///< A user assigned void pointer, Can be point to any cpp object
-    Ref *_userObject;               ///< A user assigned Object
-    
-    Scheduler *_scheduler;          ///< scheduler used to schedule timers and updates
+    void* _userData;                ///< A user assigned void pointer, Can be point to any cpp object
+    Ref* _userObject;               ///< A user assigned Object
 
-    ActionManager *_actionManager;  ///< a pointer to ActionManager singleton, which is used to handle all the actions
+    Scheduler* _scheduler;          ///< scheduler used to schedule timers and updates
+
+    ActionManager* _actionManager;  ///< a pointer to ActionManager singleton, which is used to handle all the actions
 
     EventDispatcher* _eventDispatcher;  ///< event dispatcher used to dispatch all kinds of events
 
@@ -1898,39 +2008,39 @@ protected:
     bool _visible;                  ///< is this node visible
 
     bool _ignoreAnchorPointForPosition; ///< true if the Anchor Vec2 will be (0,0) when you position the Node, false otherwise.
-                                          ///< Used by Layer and Scene.
+    ///< Used by Layer and Scene.
 
     bool _reorderChildDirty;          ///< children order dirty flag
     bool _isTransitionFinished;       ///< flag to indicate whether the transition was finished
 
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     int _scriptHandler;               ///< script handler for onEnter() & onExit(), used in Javascript binding and Lua binding.
     int _updateScriptHandler;         ///< script handler for update() callback per frame, which is invoked from lua & javascript.
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
-#endif
-    
-    ComponentContainer *_componentContainer;        ///< Dictionary of components
-    
+    #endif
+
+    ComponentContainer* _componentContainer;        ///< Dictionary of components
+
     // opacity controls
-    uint8_t     _displayedOpacity;
-    uint8_t     _realOpacity;
-    Color3B     _displayedColor;
-    Color3B     _realColor;
-    bool        _cascadeColorEnabled;
-    bool        _cascadeOpacityEnabled;
+    uint8_t _displayedOpacity;
+    uint8_t _realOpacity;
+    Color3B _displayedColor;
+    Color3B _realColor;
+    bool _cascadeColorEnabled;
+    bool _cascadeOpacityEnabled;
 
     // camera mask, it is visible only when _cameraMask & current camera' camera flag is true
     unsigned short _cameraMask;
-    
+
     std::function<void()> _onEnterCallback;
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
-    
+
     backend::ProgramState* _programState = nullptr;
 
-//Physics:remaining backwardly compatible  
-#if CC_USE_PHYSICS
+    //Physics:remaining backwardly compatible
+    #if CC_USE_PHYSICS
     PhysicsBody* _physicsBody;
 public:
     void setPhysicsBody(PhysicsBody* physicsBody)
@@ -1942,15 +2052,18 @@ public:
 
         addComponent(physicsBody);
     }
-    PhysicsBody* getPhysicsBody() const { return _physicsBody; }
+
+    PhysicsBody* getPhysicsBody() const
+    {
+        return _physicsBody;
+    }
 
     friend class PhysicsBody;
-#endif
+    #endif
 
     static int __attachedNodeCount;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Node);
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(Node);
 };
 
 /**
@@ -1968,7 +2081,7 @@ private:
  * @parma p         Point to a Vec3 for store the intersect point, if don't need them set to nullptr.
  * @return true if the point is in content rectangle, false otherwise.
  */
-bool CC_DLL isScreenPointInRect(const Vec2 &pt, const Camera* camera, const Mat4& w2l, const Rect& rect, Vec3 *p);
+bool CC_DLL isScreenPointInRect(const Vec2 &pt, const Camera* camera, const Mat4 &w2l, const Rect &rect, Vec3* p);
 
 // end of _2d group
 /// @}

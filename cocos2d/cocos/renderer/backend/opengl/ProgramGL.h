@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Macros.h"
@@ -69,33 +69,39 @@ public:
      * @param vertexShader Specifes the vertex shader source.
      * @param fragmentShader Specifes the fragment shader source.
      */
-    ProgramGL(const std::string& vertexShader, const std::string& fragmentShader);
+    ProgramGL(const std::string &vertexShader, const std::string &fragmentShader);
 
     ~ProgramGL();
-    
+
     /**
      * Get attribute informations.
      * @return Attribute informations.
      */
-    inline const std::vector<AttributeInfo>& getAttributeInfos() const { return _attributeInfos; }
+    inline const std::vector<AttributeInfo> &getAttributeInfos() const
+    {
+        return _attributeInfos;
+    }
 
     /**
      * Get program object.
      * @return Program object.
      */
-    inline GLuint getHandler() const { return _program; }
+    inline GLuint getHandler() const
+    {
+        return _program;
+    }
 
     /**
      * Calculate attribute information according to vertex layout.
      */
-    void computeAttributeInfos(const RenderPipelineDescriptor& descriptor);
+    void computeAttributeInfos(const RenderPipelineDescriptor &descriptor);
 
     /**
      * Get uniform location by name.
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    virtual UniformLocation getUniformLocation(const std::string& uniform) const override;
+    virtual UniformLocation getUniformLocation(const std::string &uniform) const override;
 
     /**
      * Get uniform location by engine built-in uniform enum name.
@@ -109,7 +115,7 @@ public:
      * @param name Specifies the attribute name.
      * @return The attribute location.
      */
-    virtual int getAttributeLocation(const std::string& name) const override;
+    virtual int getAttributeLocation(const std::string &name) const override;
 
     /**
      * Get attribute location by engine built-in attribute enum name.
@@ -135,52 +141,53 @@ public:
      * @return Active vertex attributes. key is active attribute name, Value is corresponding attribute info.
      */
     virtual const std::unordered_map<std::string, AttributeBindInfo> getActiveAttributes() const override;
-    
+
     /**
      * Get uniform buffer size in bytes that can hold all the uniforms.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @return The uniform buffer size in bytes.
      */
     virtual std::size_t getUniformBufferSize(ShaderStage stage) const override;
-    
+
     /**
      * Get a uniformInfo in given location from the specific shader stage.
      * @param stage Specifies the shader stage. The symbolic constant can be either VERTEX or FRAGMENT.
      * @param location Specifies the uniform locaion.
      * @return The uniformInfo.
      */
-    virtual const UniformInfo& getActiveUniformInfo(ShaderStage stage, int location) const override;
+    virtual const UniformInfo &getActiveUniformInfo(ShaderStage stage, int location) const override;
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    virtual const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo(ShaderStage stage) const override ;
+    virtual const std::unordered_map<std::string, UniformInfo> &getAllActiveUniformInfo(
+    ShaderStage stage) const override;
 
 private:
     void compileProgram();
-    bool getAttributeLocation(const std::string& attributeName, unsigned int& location) const;
+    bool getAttributeLocation(const std::string &attributeName, unsigned int &location) const;
     void computeUniformInfos();
     void computeLocations();
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     virtual void reloadProgram();
     virtual int getMappedLocation(int location) const override;
     virtual int getOriginalLocation(int location) const override;
     virtual const std::unordered_map<std::string, int> getAllUniformsLocation() const override { return _originalUniformLocations; }
-#endif
-    
+    #endif
+
     GLuint _program = 0;
     ShaderModuleGL* _vertexShaderModule = nullptr;
     ShaderModuleGL* _fragmentShaderModule = nullptr;
-    
+
     std::vector<AttributeInfo> _attributeInfos;
     std::unordered_map<std::string, UniformInfo> _activeUniformInfos;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     std::unordered_map<std::string, int> _originalUniformLocations; ///< record the uniform location when shader was first created.
     std::unordered_map<int, int> _mapToCurrentActiveLocation; ///< 
     std::unordered_map<int, int> _mapToOriginalLocation; ///< 
     EventListenerCustom* _backToForegroundListener = nullptr;
-#endif
+    #endif
 
     std::size_t _totalBufferSize = 0;
     int _maxLocation = -1;

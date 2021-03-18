@@ -36,8 +36,9 @@
 
 NS_CC_BEGIN
 
-namespace ui {
-    class Widget;
+namespace ui
+{
+class Widget;
 }
 
 /** @class EventFocus
@@ -53,14 +54,13 @@ public:
      * @js ctor
      */
     EventFocus(ui::Widget* widgetLoseFocus, ui::Widget* widgetGetFocus);
-    
+
 private:
-    ui::Widget *_widgetGetFocus;
-    ui::Widget *_widgetLoseFocus;
-    
+    ui::Widget* _widgetGetFocus;
+    ui::Widget* _widgetLoseFocus;
+
     friend class EventListenerFocus;
 };
-
 
 NS_CC_END
 

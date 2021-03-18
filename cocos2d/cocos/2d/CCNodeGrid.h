@@ -48,45 +48,59 @@ public:
      * @return An autorelease Grid Node.
      */
     static NodeGrid* create();
-    
-    static NodeGrid* create(const Rect& rect);
-    
+
+    static NodeGrid* create(const Rect &rect);
+
     /** Get a Grid Node. 
      *
      * @return Return a GridBase.
      */
-    GridBase* getGrid() { return _nodeGrid; }
+    GridBase* getGrid()
+    {
+        return _nodeGrid;
+    }
+
     /**
      * @js NA
      */
-    const GridBase* getGrid() const { return _nodeGrid; }
+    const GridBase* getGrid() const
+    {
+        return _nodeGrid;
+    }
 
     /**
      * Changes a grid object that is used when applying effects.
      *
      * @param grid  A Grid object that is used when applying effects.
      */
-    void setGrid(GridBase *grid);
-    
+    void setGrid(GridBase* grid);
+
     /** Set the Grid Target. 
      *
      * @param target A Node is used to set the Grid Target.
      */
-    void setTarget(Node *target);
-    
+    void setTarget(Node* target);
+
     /**
      * @brief Set the effect grid rect.
      * @param gridRect The effect grid rect.
      */
-    void setGridRect(const Rect& gridRect) { _gridRect = gridRect; }
+    void setGridRect(const Rect &gridRect)
+    {
+        _gridRect = gridRect;
+    }
+
     /**
      * @brief Get the effect grid rect.
      * @return Return the effect grid rect.
      */
-    const Rect& getGridRect() const { return _gridRect; }
+    const Rect &getGridRect() const
+    {
+        return _gridRect;
+    }
 
     // overrides
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
 
 CC_CONSTRUCTOR_ACCESS:
     NodeGrid();
@@ -101,11 +115,10 @@ protected:
     GroupCommand _groupCommand;
     CustomCommand _gridBeginCommand;
     CustomCommand _gridEndCommand;
-    
+
     Rect _gridRect = Rect::ZERO;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
+private: CC_DISALLOW_COPY_AND_ASSIGN(NodeGrid);
 };
 /** @} */
 NS_CC_END

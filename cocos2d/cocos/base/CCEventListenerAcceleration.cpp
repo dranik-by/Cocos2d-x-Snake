@@ -41,9 +41,9 @@ EventListenerAcceleration::~EventListenerAcceleration()
     CCLOGINFO("In the destructor of AccelerationEventListener. %p", this);
 }
 
-EventListenerAcceleration* EventListenerAcceleration::create(const std::function<void(Acceleration*, Event*)>& callback)
+EventListenerAcceleration* EventListenerAcceleration::create(const std::function<void(Acceleration*, Event*)> &callback)
 {
-    EventListenerAcceleration* ret = new (std::nothrow) EventListenerAcceleration();
+    EventListenerAcceleration* ret = new(std::nothrow) EventListenerAcceleration();
     if (ret && ret->init(callback))
     {
         ret->autorelease();
@@ -52,30 +52,31 @@ EventListenerAcceleration* EventListenerAcceleration::create(const std::function
     {
         CC_SAFE_DELETE(ret);
     }
-    
+
     return ret;
 }
 
-bool EventListenerAcceleration::init(const std::function<void(Acceleration*, Event* event)>& callback)
+bool EventListenerAcceleration::init(const std::function<void(Acceleration*, Event* event)> &callback)
 {
-    auto listener = [this](Event* event){
+    auto listener = [this](Event* event)
+    {
         auto accEvent = static_cast<EventAcceleration*>(event);
         this->onAccelerationEvent(&accEvent->_acc, event);
     };
-    
+
     if (EventListener::init(Type::ACCELERATION, LISTENER_ID, listener))
     {
         onAccelerationEvent = callback;
         return true;
     }
-    
+
     return false;
 }
 
 EventListenerAcceleration* EventListenerAcceleration::clone()
 {
-    auto ret = new (std::nothrow) EventListenerAcceleration();
-    
+    auto ret = new(std::nothrow) EventListenerAcceleration();
+
     if (ret && ret->init(onAccelerationEvent))
     {
         ret->autorelease();
@@ -84,14 +85,14 @@ EventListenerAcceleration* EventListenerAcceleration::clone()
     {
         CC_SAFE_DELETE(ret);
     }
-    
+
     return ret;
 }
 
 bool EventListenerAcceleration::checkAvailable()
 {
     CCASSERT(onAccelerationEvent, "onAccelerationEvent can't be nullptr!");
-    
+
     return true;
 }
 

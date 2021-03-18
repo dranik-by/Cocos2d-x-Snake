@@ -38,5 +38,4 @@ Event::~Event()
 {
 }
 
-
 NS_CC_END

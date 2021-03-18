@@ -47,66 +47,68 @@ NS_CC_BEGIN
  * @{
  */
 
- /**
- * the maximum amount of the chunks
- **/
+/**
+* the maximum amount of the chunks
+**/
 #define MAX_CHUNKES 256
 
-  /**
-    * Terrain
-    * Defines a Terrain that is capable of rendering large landscapes from 2D heightmap images.
-    * Terrains can be constructed from several different internal formats heightmap sources:
-    *  1. RGB888
-    *  2. RGBA8888
-    *  3. Luminance(gray-scale)8
-    *  
-    *  Terrain use TerrainData struct to initialize.the TerrainData struct warp 
-    *  all parameters that Terrain initialization need.
-    *  TerrainData provide several handy constructor for users
-    *  
-    * Surface detail is provided via texture splatting, where multiple Detail texture layers can be added
-    * along with alpha map to define how different Detail texture blend with each other. These DetailTexture
-    * can be defined in TerrainData. The number of supported Detail texture is Four. although typically 2-3 levels is
-    * sufficient. For simple usage ,surface detail also is provided via simple Texture.
-    * 
-    * Internally, Terrain is divide into smaller, more manageable chunks, which can be culled
-    * separately for more efficient rendering. The size of the terrain chunks can be controlled
-    * via the chunkSize property in TerrainData.
-    * 
-    * Chunks are managed under the QuadTree.As DE FACTO terminal Node of the QuadTree;
-    * let us cull chunks efficiently to reduce drawCall amount And reduce the VBOs'Size that pass to the GPU.
-    * 
-    * Level of detail (LOD) is supported using a technique that is similar to texture mipmapping -- called GeoMapping.
-    * A distance-to-camera based test used to decide
-    * the appropriate LOD for a terrain chunk. The number of LOD levels is 0 by default (which
-    * means only the base level is used),the maximum number of LOD levels is 4. Of course ,you can hack the value individually.
-    * 
-    * Finally, when LOD is enabled, cracks can begin to appear between terrain Chunks of
-    * different LOD levels. An acceptable solution might be to simply reduce the lower LOD(high detail,smooth) chunks border,
-    * And let the higher LOD(rough) chunks to seamlessly connect it.
-    * 
-    * We can use ray-terrain intersection to pick a point of the terrain;
-    * Also we can get an arbitrary point of the terrain's height and normal vector for convenience .
-    **/
+/**
+  * Terrain
+  * Defines a Terrain that is capable of rendering large landscapes from 2D heightmap images.
+  * Terrains can be constructed from several different internal formats heightmap sources:
+  *  1. RGB888
+  *  2. RGBA8888
+  *  3. Luminance(gray-scale)8
+  *
+  *  Terrain use TerrainData struct to initialize.the TerrainData struct warp
+  *  all parameters that Terrain initialization need.
+  *  TerrainData provide several handy constructor for users
+  *
+  * Surface detail is provided via texture splatting, where multiple Detail texture layers can be added
+  * along with alpha map to define how different Detail texture blend with each other. These DetailTexture
+  * can be defined in TerrainData. The number of supported Detail texture is Four. although typically 2-3 levels is
+  * sufficient. For simple usage ,surface detail also is provided via simple Texture.
+  *
+  * Internally, Terrain is divide into smaller, more manageable chunks, which can be culled
+  * separately for more efficient rendering. The size of the terrain chunks can be controlled
+  * via the chunkSize property in TerrainData.
+  *
+  * Chunks are managed under the QuadTree.As DE FACTO terminal Node of the QuadTree;
+  * let us cull chunks efficiently to reduce drawCall amount And reduce the VBOs'Size that pass to the GPU.
+  *
+  * Level of detail (LOD) is supported using a technique that is similar to texture mipmapping -- called GeoMapping.
+  * A distance-to-camera based test used to decide
+  * the appropriate LOD for a terrain chunk. The number of LOD levels is 0 by default (which
+  * means only the base level is used),the maximum number of LOD levels is 4. Of course ,you can hack the value individually.
+  *
+  * Finally, when LOD is enabled, cracks can begin to appear between terrain Chunks of
+  * different LOD levels. An acceptable solution might be to simply reduce the lower LOD(high detail,smooth) chunks border,
+  * And let the higher LOD(rough) chunks to seamlessly connect it.
+  *
+  * We can use ray-terrain intersection to pick a point of the terrain;
+  * Also we can get an arbitrary point of the terrain's height and normal vector for convenience .
+  **/
 class CC_DLL Terrain : public Node
 {
 public:
 
     /**the crack fix type. use to fix the gaps between different LOD chunks */
-    enum class CrackFixedType{
+    enum class CrackFixedType
+    {
         SKIRT,
         INCREASE_LOWER,
     };
 
-   /**
-    *DetailMap
-    *this struct maintain a detail map data ,including source file ,detail size.
-    *the DetailMap can use for terrain splatting
-    **/
-    struct CC_DLL DetailMap{
+    /**
+     *DetailMap
+     *this struct maintain a detail map data ,including source file ,detail size.
+     *the DetailMap can use for terrain splatting
+     **/
+    struct CC_DLL DetailMap
+    {
         /*Constructors*/
         DetailMap();
-        DetailMap(const std::string& detailMapSrc, float size = 35);
+        DetailMap(const std::string &detailMapSrc, float size = 35);
         /*detail Image source file path*/
         std::string _detailMapSrc;
         /*detailMapSize determine how many tiles that Terrain represent*/
@@ -118,28 +120,32 @@ public:
      */
     struct Triangle
     {
-        Triangle(const Vec3& p1, const Vec3& p2, const Vec3& p3);
-        bool getIntersectPoint(const Ray& ray, Vec3& intersectPoint) const;
+        Triangle(const Vec3 &p1, const Vec3 &p2, const Vec3 &p3);
+        bool getIntersectPoint(const Ray &ray, Vec3 &intersectPoint) const;
 
-        void transform(const Mat4& matrix);
+        void transform(const Mat4 &matrix);
         Vec3 _p1, _p2, _p3;
     };
 
-
-   /**
-    *TerrainData
-    *This TerrainData struct warp all parameter that Terrain need to create
-    */
+    /**
+     *TerrainData
+     *This TerrainData struct warp all parameter that Terrain need to create
+     */
     struct CC_DLL TerrainData
     {
         /**empty constructor*/
         TerrainData();
         /**constructor, this constructor construct a simple terrain which only have 1 detailmap*/
-        TerrainData(const std::string& heightMapsrc, const std::string& textureSrc, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string &heightMapsrc, const std::string &textureSrc,
+                    const Size &chunksize = Size(32, 32), float mapHeight = 2, float mapScale = 0.1);
         /**constructor, this constructor construct a terrain which have 4 detailmaps, 1 alpha map*/
-        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const DetailMap& detail4, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string &heightMapsrc, const std::string &alphamap, const DetailMap &detail1,
+                    const DetailMap &detail2, const DetailMap &detail3, const DetailMap &detail4,
+                    const Size &chunksize = Size(32, 32), float mapHeight = 2, float mapScale = 0.1);
         /**constructor, this constructor construct a terrain which have 3 detailmaps, 1 alpha map*/
-        TerrainData(const std::string& heightMapsrc, const std::string& alphamap, const DetailMap& detail1,const DetailMap& detail2, const DetailMap& detail3, const Size & chunksize = Size(32,32), float mapHeight = 2, float mapScale = 0.1);
+        TerrainData(const std::string &heightMapsrc, const std::string &alphamap, const DetailMap &detail1,
+                    const DetailMap &detail2, const DetailMap &detail3, const Size &chunksize = Size(32, 32),
+                    float mapHeight = 2, float mapScale = 0.1);
         /**
         *determine the chunk size,chunk is the minimal subdivision of the Terrain
         */
@@ -165,9 +171,9 @@ private:
     {
         ChunkIndices() = default;
         ChunkIndices(const ChunkIndices &);
-        ChunkIndices &operator = (const ChunkIndices &o);
+        ChunkIndices &operator=(const ChunkIndices &o);
         ~ChunkIndices();
-        backend::Buffer *_indexBuffer = nullptr;
+        backend::Buffer* _indexBuffer = nullptr;
         unsigned short _size = 0;
     };
 
@@ -176,7 +182,6 @@ private:
         int _relativeLod[5];
         ChunkIndices _chunkIndices;
     };
-
 
     struct ChunkLODIndicesSkirt
     {
@@ -189,12 +194,16 @@ private:
     struct CC_DLL TerrainVertexData
     {
         /*constructor*/
-        TerrainVertexData(){};
-        TerrainVertexData(const Vec3& v1, const Tex2F& v2)
+        TerrainVertexData()
+        {
+        };
+
+        TerrainVertexData(const Vec3 &v1, const Tex2F &v2)
         {
             _position = v1;
             _texcoord = v2;
         }
+
         /*the vertex's attributes*/
         cocos2d::Vec3 _position;
         cocos2d::Tex2F _texcoord;
@@ -208,22 +217,23 @@ private:
     struct Chunk
     {
         /**Constructor*/
-        Chunk(Terrain *);
+        Chunk(Terrain*);
         /**destructor*/
         ~Chunk();
         /*vertices*/
         std::vector<TerrainVertexData> _originalVertices;
         /*LOD indices*/
-        struct LOD{
+        struct LOD
+        {
             std::vector<uint16_t> _indices;
         };
-        ChunkIndices _chunkIndices; 
+        ChunkIndices _chunkIndices;
         /**we now support four levels of detail*/
         LOD _lod[4];
         /**AABB in local space*/
         AABB _aabb;
         /**setup Chunk data*/
-        void generate(int map_width, int map_height, int m, int n, const unsigned char * data);
+        void generate(int map_width, int map_height, int m, int n, const unsigned char* data);
         /**calculateAABB*/
         void calculateAABB();
         /**internal use draw function*/
@@ -240,7 +250,7 @@ private:
         /**calculate the average slop of chunk*/
         void calculateSlope();
 
-        bool getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoint);
+        bool getIntersectPointWithRay(const Ray &ray, Vec3 &intersectPoint);
 
         /**current LOD of the chunk*/
         int _currentLod;
@@ -249,19 +259,19 @@ private:
 
         int _neighborOldLOD[4];
         /*the left,right,front,back neighbors*/
-        Chunk * _left;
-        Chunk * _right;
-        Chunk * _front;
-        Chunk * _back;
+        Chunk* _left;
+        Chunk* _right;
+        Chunk* _front;
+        Chunk* _back;
 
-        QuadTree * _parent;
+        QuadTree* _parent;
 
         /**the position X in terrain space*/
         int _posX;
         /**the position Y in terrain space*/
         int _posY;
         /**parent terrain*/
-        Terrain * _terrain;
+        Terrain* _terrain;
         /**chunk size*/
         Size _size;
         /**chunk's estimated slope*/
@@ -270,18 +280,18 @@ private:
 
         std::vector<Triangle> _trianglesList;
 
-        backend::Buffer *_buffer = nullptr;
+        backend::Buffer* _buffer = nullptr;
         MeshCommand _command;
     };
 
-   /**
-    *QuadTree
-    * @brief use to hierarchically frustum culling and set LOD
-    **/
+    /**
+     *QuadTree
+     * @brief use to hierarchically frustum culling and set LOD
+     **/
     struct CC_DLL QuadTree
     {
         /**constructor*/
-        QuadTree(int x, int y, int width, int height, Terrain * terrain);
+        QuadTree(int x, int y, int width, int height, Terrain* terrain);
         /**destructor*/
         ~QuadTree();
         /**recursively draw*/
@@ -289,26 +299,26 @@ private:
         /**recursively set itself and its children is need to draw*/
         void resetNeedDraw(bool value);
         /**recursively potential visible culling*/
-        void cullByCamera(const Camera * camera, const Mat4 & worldTransform);
+        void cullByCamera(const Camera* camera, const Mat4 &worldTransform);
         /**precalculate the AABB(In world space) of each quad*/
-        void preCalculateAABB(const Mat4 & worldTransform);
-        QuadTree * _tl;
-        QuadTree * _tr;
-        QuadTree * _bl;
-        QuadTree * _br;
+        void preCalculateAABB(const Mat4 &worldTransform);
+        QuadTree* _tl;
+        QuadTree* _tr;
+        QuadTree* _bl;
+        QuadTree* _br;
         /**A flag present current quadTree node whether a terminal node,the terminal node is de facto the chunk*/
         bool _isTerminal;
-        Chunk * _chunk;
+        Chunk* _chunk;
         int _posX;
         int _posY;
         int _height;
         int _width;
-        QuadTree * _parent;
+        QuadTree* _parent;
         /**AABB's cache (in local space)*/
         AABB _localAABB;
         /**AABB's cache (in world space)*/
         AABB _worldSpaceAABB;
-        Terrain * _terrain;
+        Terrain* _terrain;
         /** a flag determine whether a quadTree node need draw*/
         bool _needDraw;
     };
@@ -316,36 +326,36 @@ private:
     friend Chunk;
 public:
     /** set light map texture */
-    void setLightMap(const std::string& fileName);
+    void setLightMap(const std::string &fileName);
 
     /**
      set directional light for the terrain
      @param lightDir The direction of directional light, Note that lightDir is in the terrain's local space. Most of the time terrain is placed at (0,0,0) and without rotation, so lightDir is also in the world space.
      */
-    void setLightDir(const Vec3& lightDir);
+    void setLightDir(const Vec3 &lightDir);
     /*init function*/
     /**initialize all Properties which terrain need */
     bool initProperties();
     /**initialize heightMap data */
-    bool initHeightMap(const std::string& heightMap);
+    bool initHeightMap(const std::string &heightMap);
     /**initialize alphaMap ,detailMaps textures*/
     bool initTextures();
     /**create entry*/
-    static Terrain * create(TerrainData &parameter, CrackFixedType fixedType = CrackFixedType::INCREASE_LOWER);
+    static Terrain* create(TerrainData &parameter, CrackFixedType fixedType = CrackFixedType::INCREASE_LOWER);
     /**get specified position's height mapping to the terrain,use bi-linear interpolation method
      * @param x the X position
      * @param z the Z position
      * @param normal the specified position's normal vector in terrain . if this argument is NULL or nullptr,Normal calculation shall be skip.
      * @return the height value of the specified position of the terrain, if the (X,Z) position is out of the terrain bounds,it shall return 0;
      **/
-    float getHeight(float x, float z, Vec3 * normal= nullptr) const;
+    float getHeight(float x, float z, Vec3* normal = nullptr) const;
 
     /**get specified position's height mapping to the terrain,use bi-linear interpolation method
      * @param pos the position (X,Z)
      * @param normal the specified position's normal vector in terrain . if this argument is NULL or nullptr,Normal calculation shall be skip.
      * @return the height value of the specified position of the terrain, if the (X,Z) position is out of the terrain bounds,it shall return 0;
      **/
-    float getHeight(const Vec2& pos, Vec3* normal = nullptr) const;
+    float getHeight(const Vec2 &pos, Vec3* normal = nullptr) const;
 
     /**get the normal of the specified position in terrain
      * @return the normal vector of the specified position of the terrain.
@@ -370,7 +380,7 @@ public:
     void setIsEnableFrustumCull(bool boolValue);
 
     /** set the alpha map*/
-    void setAlphaMap(cocos2d::Texture2D * newAlphaMapTexture);
+    void setAlphaMap(cocos2d::Texture2D* newAlphaMapTexture);
     /**set the Detail Map */
     void setDetailMap(unsigned int index, DetailMap detailMap);
 
@@ -380,15 +390,15 @@ public:
      * Ray-Terrain intersection.
      * @return the intersection point
      */
-    Vec3 getIntersectionPoint(const Ray & ray) const;
+    Vec3 getIntersectionPoint(const Ray &ray) const;
 
-   /**
-    * Ray-Terrain intersection.
-    * @param ray to hit the terrain
-    * @param intersectionPoint hit point if hit
-    * @return true if hit, false otherwise
-    */
-    bool getIntersectionPoint(const Ray & ray, Vec3 & intersectionPoint) const;
+    /**
+     * Ray-Terrain intersection.
+     * @param ray to hit the terrain
+     * @param intersectionPoint hit point if hit
+     * @return true if hit, false otherwise
+     */
+    bool getIntersectionPoint(const Ray &ray, Vec3 &intersectionPoint) const;
 
     /**
      * set the MaxDetailAmount.
@@ -398,12 +408,12 @@ public:
     /**
      * Convert a world Space position (X,Z) to terrain space position (X,Z)
      */
-    Vec2 convertToTerrainSpace(const Vec2& worldSpace) const;
+    Vec2 convertToTerrainSpace(const Vec2 &worldSpace) const;
 
     /**
      * reset the heightmap data.
      */
-    void resetHeightMap(const std::string& heightMap);
+    void resetHeightMap(const std::string &heightMap);
 
     /**
      * get the terrain's minimal height.
@@ -428,15 +438,18 @@ public:
     /**
      * get the terrain's quad tree which is also the root node.
      */
-    QuadTree * getQuadTree();
+    QuadTree* getQuadTree();
 
     void reload();
-    
+
     /**
      * get the terrain's size
      */
-    Size getTerrainSize() const { return Size(static_cast<float>(_imageWidth), static_cast<float>(_imageHeight)); }
-    
+    Size getTerrainSize() const
+    {
+        return Size(static_cast<float>(_imageWidth), static_cast<float>(_imageHeight));
+    }
+
     /**
      * get the terrain's height data
      */
@@ -447,12 +460,12 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~Terrain();
     bool initWithTerrainData(TerrainData &parameter, CrackFixedType fixedType);
 protected:
-    
+
     /**
      * recursively set each chunk's LOD
      * @param cameraPos the camera position in world space
      **/
-    void setChunksLOD(const Vec3& cameraPos);
+    void setChunksLOD(const Vec3 &cameraPos);
 
     /**
      * load Vertices from height filed for the whole terrain.
@@ -473,37 +486,37 @@ protected:
     void cacheUniformAttribLocation();
 
     //IBO generate & cache
-    ChunkIndices lookForIndicesLODSkrit(int selfLod, bool * result);
+    ChunkIndices lookForIndicesLODSkrit(int selfLod, bool* result);
 
-    ChunkIndices lookForIndicesLOD(int neighborLod[4], int selfLod, bool * result);
+    ChunkIndices lookForIndicesLOD(int neighborLod[4], int selfLod, bool* result);
 
-    ChunkIndices insertIndicesLOD(int neighborLod[4], int selfLod, uint16_t * indices, int size);
+    ChunkIndices insertIndicesLOD(int neighborLod[4], int selfLod, uint16_t* indices, int size);
 
-    ChunkIndices insertIndicesLODSkirt(int selfLod, uint16_t * indices, int size);
-    
-    Chunk * getChunkByIndex(int x,int y) const;
+    ChunkIndices insertIndicesLODSkirt(int selfLod, uint16_t* indices, int size);
+
+    Chunk* getChunkByIndex(int x, int y) const;
 
 private:
     void onBeforeDraw();
-    
+
     void onAfterDraw();
-    
+
 protected:
-    std::vector <ChunkLODIndices> _chunkLodIndicesSet;
+    std::vector<ChunkLODIndices> _chunkLodIndicesSet;
     std::vector<ChunkLODIndicesSkirt> _chunkLodIndicesSkirtSet;
     Mat4 _CameraMatrix;
     bool _isCameraViewChanged;
     TerrainData _terrainData;
     bool _isDrawWire;
-    unsigned char * _data;
+    unsigned char* _data;
     float _lodDistance[3];
-    Texture2D * _detailMapTextures[4];
-    Texture2D * _alphaMap;
-    Texture2D * _lightMap;
-    Texture2D * _dummyTexture = nullptr;
+    Texture2D* _detailMapTextures[4];
+    Texture2D* _alphaMap;
+    Texture2D* _lightMap;
+    Texture2D* _dummyTexture = nullptr;
     Vec3 _lightDir;
-    QuadTree * _quadRoot;
-    Chunk * _chunkesArray[MAX_CHUNKES][MAX_CHUNKES];
+    QuadTree* _quadRoot;
+    Chunk* _chunkesArray[MAX_CHUNKES][MAX_CHUNKES];
     std::vector<TerrainVertexData> _vertices;
     std::vector<unsigned int> _indices;
     int _imageWidth;
@@ -511,7 +524,7 @@ protected:
     Size _chunkSize;
     bool _isEnableFrustumCull;
     int _maxDetailMapValue;
-    cocos2d::Image * _heightMapImage;
+    cocos2d::Image* _heightMapImage;
     Mat4 _oldCameraModelMatrix;
     Mat4 _terrainModelMatrix;
     float _maxHeight;
@@ -519,19 +532,20 @@ protected:
     CrackFixedType _crackFixedType;
     float _skirtRatio;
     int _skirtVerticesOffset[4];
-    struct StateBlock {
-       // bool blend;
+    struct StateBlock
+    {
+        // bool blend;
         bool depthWrite = true;
-        bool depthTest  = true ;
+        bool depthTest = true;
         backend::CullMode cullFace = backend::CullMode::FRONT;
-        backend::Winding  winding  = backend::Winding::CLOCK_WISE;
+        backend::Winding winding = backend::Winding::CLOCK_WISE;
         void apply();
         void save();
     };
-    
+
     StateBlock _stateBlock;
     StateBlock _stateBlockOld;
-    
+
 private:
     //uniform locations
     backend::UniformLocation _detailMapLocation[4];
@@ -543,9 +557,9 @@ private:
     backend::UniformLocation _lightDirLocation;
 
     backend::UniformLocation _mvpMatrixLocation;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
-#endif
+    #endif
 };
 
 // end of actions group

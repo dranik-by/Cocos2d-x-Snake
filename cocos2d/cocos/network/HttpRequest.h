@@ -39,7 +39,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
 class HttpClient;
 class HttpResponse;
@@ -79,11 +80,11 @@ public:
          Please refer to HttpRequestTest.cpp to find its usage.
      */
     HttpRequest()
-        : _requestType(Type::UNKNOWN)
-        , _pTarget(nullptr)
-        , _pSelector(nullptr)
-        , _pCallback(nullptr)
-        , _pUserData(nullptr)
+    : _requestType(Type::UNKNOWN)
+    , _pTarget(nullptr)
+    , _pSelector(nullptr)
+    , _pCallback(nullptr)
+    , _pUserData(nullptr)
     {
     }
 
@@ -137,7 +138,7 @@ public:
      *
      * @param url the string object.
      */
-    void setUrl(const std::string& url)
+    void setUrl(const std::string &url)
     {
         _url = url;
     }
@@ -170,7 +171,7 @@ public:
      */
     char* getRequestData()
     {
-        if(!_requestData.empty())
+        if (!_requestData.empty())
             return _requestData.data();
 
         return nullptr;
@@ -192,7 +193,7 @@ public:
      *
      * @param tag the string object.
      */
-    void setTag(const std::string& tag)
+    void setTag(const std::string &tag)
     {
         _tag = tag;
     }
@@ -230,7 +231,7 @@ public:
     {
         return _pUserData;
     }
-    
+
     /**
      * Set the target and related callback selector of HttpRequest object.
      * When response come back, we would call (pTarget->*pSelector) to process response data.
@@ -242,17 +243,18 @@ public:
     {
         doSetResponseCallback(pTarget, pSelector);
     }
+
     /**
      * Set response callback function of HttpRequest object.
      * When response come back, we would call _pCallback to process response data.
      *
      * @param callback the ccHttpRequestCallback function.
      */
-    void setResponseCallback(const ccHttpRequestCallback& callback)
+    void setResponseCallback(const ccHttpRequestCallback &callback)
     {
         _pCallback = callback;
     }
-    
+
     /** 
      * Get the target of callback selector function, mainly used by HttpClient.
      *
@@ -272,10 +274,21 @@ public:
     {
     public:
         /** Constructor. */
-        _prxy( SEL_HttpResponse cb ) :_cb(cb) {}
+        _prxy(SEL_HttpResponse cb)
+        : _cb(cb)
+        {
+        }
+
         /** Destructor. */
-        ~_prxy(){};
-        operator SEL_HttpResponse() const { return _cb; }
+        ~_prxy()
+        {
+        };
+
+        operator SEL_HttpResponse() const
+        {
+            return _cb;
+        }
+
     protected:
         SEL_HttpResponse _cb;
     };
@@ -295,7 +308,7 @@ public:
      *
      * @return const ccHttpRequestCallback& ccHttpRequestCallback callback function.
      */
-    const ccHttpRequestCallback& getCallback() const
+    const ccHttpRequestCallback &getCallback() const
     {
         return _pCallback;
     }
@@ -305,7 +318,7 @@ public:
      *
      * @param headers The string vector of custom-defined headers.
      */
-    void setHeaders(const std::vector<std::string>& headers)
+    void setHeaders(const std::vector<std::string> &headers)
     {
         _headers = headers;
     }
@@ -327,7 +340,7 @@ private:
         {
             _pTarget->release();
         }
-        
+
         _pTarget = pTarget;
         _pSelector = pSelector;
         if (_pTarget)
@@ -338,15 +351,15 @@ private:
 
 protected:
     // properties
-    Type                        _requestType;    /// kHttpRequestGet, kHttpRequestPost or other enums
-    std::string                 _url;            /// target url that this request is sent to
-    std::vector<char>           _requestData;    /// used for POST
-    std::string                 _tag;            /// user defined tag, to identify different requests in response callback
-    Ref*                        _pTarget;        /// callback target of pSelector function
-    SEL_HttpResponse            _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(HttpClient *sender, HttpResponse * response)
-    ccHttpRequestCallback       _pCallback;      /// C++11 style callbacks
-    void*                       _pUserData;      /// You can add your customed data here
-    std::vector<std::string>    _headers;        /// custom http headers
+    Type _requestType;    /// kHttpRequestGet, kHttpRequestPost or other enums
+    std::string _url;            /// target url that this request is sent to
+    std::vector<char> _requestData;    /// used for POST
+    std::string _tag;            /// user defined tag, to identify different requests in response callback
+    Ref* _pTarget;        /// callback target of pSelector function
+    SEL_HttpResponse _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(HttpClient *sender, HttpResponse * response)
+    ccHttpRequestCallback _pCallback;      /// C++11 style callbacks
+    void* _pUserData;      /// You can add your customed data here
+    std::vector<std::string> _headers;        /// custom http headers
 };
 
 }

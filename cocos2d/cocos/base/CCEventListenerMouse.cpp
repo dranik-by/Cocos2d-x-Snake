@@ -37,7 +37,7 @@ bool EventListenerMouse::checkAvailable()
 
 EventListenerMouse* EventListenerMouse::create()
 {
-    auto ret = new (std::nothrow) EventListenerMouse();
+    auto ret = new(std::nothrow) EventListenerMouse();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -51,7 +51,7 @@ EventListenerMouse* EventListenerMouse::create()
 
 EventListenerMouse* EventListenerMouse::clone()
 {
-    auto ret = new (std::nothrow) EventListenerMouse();
+    auto ret = new(std::nothrow) EventListenerMouse();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -77,24 +77,25 @@ EventListenerMouse::EventListenerMouse()
 
 bool EventListenerMouse::init()
 {
-    auto listener = [this](Event* event){
+    auto listener = [this](Event* event)
+    {
         auto mouseEvent = static_cast<EventMouse*>(event);
         switch (mouseEvent->_mouseEventType)
         {
             case EventMouse::MouseEventType::MOUSE_DOWN:
-                if(onMouseDown != nullptr)
+                if (onMouseDown != nullptr)
                     onMouseDown(mouseEvent);
                 break;
             case EventMouse::MouseEventType::MOUSE_UP:
-                if(onMouseUp != nullptr)
+                if (onMouseUp != nullptr)
                     onMouseUp(mouseEvent);
                 break;
             case EventMouse::MouseEventType::MOUSE_MOVE:
-                if(onMouseMove != nullptr)
+                if (onMouseMove != nullptr)
                     onMouseMove(mouseEvent);
                 break;
             case EventMouse::MouseEventType::MOUSE_SCROLL:
-                if(onMouseScroll != nullptr)
+                if (onMouseScroll != nullptr)
                     onMouseScroll(mouseEvent);
                 break;
             default:

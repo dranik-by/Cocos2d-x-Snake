@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 #include "audio/android/audio_utils/include/audio_utils/minifloat.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class IVolumeProvider
 {
@@ -36,10 +37,12 @@ public:
 
 protected:
     IVolumeProvider()
-    { }
+    {
+    }
 
     virtual ~IVolumeProvider()
-    { }
+    {
+    }
 };
 
 } // namespace cocos2d {

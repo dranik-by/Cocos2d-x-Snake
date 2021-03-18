@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Device.h"
@@ -46,40 +46,43 @@ public:
      * @param metalLayer A CAMetalLayer object.
      */
     static void setCAMetalLayer(CAMetalLayer* metalLayer);
-    
+
     /**
      * Invoke by engine internally at the beginning of rendering a new frame.
      */
     static void updateDrawable();
-    
+
     /**
      * Get a CAMetalLayer.
      * @return A CAMetalLayer object.
      */
-    static CAMetalLayer* getCAMetalLayer() { return DeviceMTL::_metalLayer; }
-    
+    static CAMetalLayer* getCAMetalLayer()
+    {
+        return DeviceMTL::_metalLayer;
+    }
+
     /**
      * Get available Drawable.
      * @return an available drawable.
      */
-    static id<CAMetalDrawable> getCurrentDrawable();
-    
+    static id <CAMetalDrawable> getCurrentDrawable();
+
     /**
      * Reset current drawable to nil.
      */
     static void resetCurrentDrawable();
-    
+
     /// @name Constructor, Destructor and Initializers
     DeviceMTL();
     ~DeviceMTL();
-    
+
     /// @name Setters & Getters
     /**
      * New a CommandBuffer object.
      * @return A CommandBuffer object.
      */
     virtual CommandBuffer* newCommandBuffer() override;
-    
+
     /**
      * New a Buffer object.
      * @param size Specifies the size in bytes of the buffer object's new data store.
@@ -88,28 +91,28 @@ public:
      * @return A Buffer object.
      */
     virtual Buffer* newBuffer(std::size_t size, BufferType type, BufferUsage usage) override;
-    
+
     /**
      * New a TextureBackend object.
      * @param descriptor Specifies texture description.
      * @return A TextureBackend object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
-    
+    virtual TextureBackend* newTexture(const TextureDescriptor &descriptor) override;
+
     /**
      * Create a DepthStencilState object.
      * @param descriptor Specifies depth and stencil description.
      * @return An auto release DepthStencilState object.
      */
-    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor& descriptor) override;
-    
+    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor &descriptor) override;
+
     /**
      * New a RenderPipeline object.
      * @param descriptor Specifies render pipeline description.
      * @return A RenderPipeline object.
      */
     virtual RenderPipeline* newRenderPipeline() override;
-    
+
     /**
      * This property controls whether or not the drawables'
      * MTLTextures may only be used for framebuffer attachments (YES) or
@@ -125,20 +128,26 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) override;
+    virtual Program* newProgram(const std::string &vertexShader, const std::string &fragmentShader) override;
 
     /**
      * Get a MTLDevice object.
      * @return A MTLDevice object.
      */
-    inline id<MTLDevice> getMTLDevice() const { return _mtlDevice; }
-    
+    inline id <MTLDevice> getMTLDevice() const
+    {
+        return _mtlDevice;
+    }
+
     /**
      * Get a MTLCommandQueue object.
      * @return A MTLCommandQueue object.
      */
-    inline id<MTLCommandQueue> getMTLCommandQueue() const { return _mtlCommandQueue; }
-    
+    inline id <MTLCommandQueue> getMTLCommandQueue() const
+    {
+        return _mtlCommandQueue;
+    }
+
 protected:
     /**
      * New a shaderModule.
@@ -146,14 +155,14 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
-    
+    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string &source) override;
+
 private:
     static CAMetalLayer* _metalLayer;
-    static id<CAMetalDrawable> _currentDrawable;
-    
-    id<MTLDevice> _mtlDevice = nil;
-    id<MTLCommandQueue> _mtlCommandQueue = nil;
+    static id <CAMetalDrawable> _currentDrawable;
+
+    id <MTLDevice> _mtlDevice = nil;
+    id <MTLCommandQueue> _mtlCommandQueue = nil;
 };
 
 // end of _metal group

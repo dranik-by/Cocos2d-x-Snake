@@ -33,11 +33,12 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-DisplayManager *DisplayManager::create(Bone *bone)
+namespace cocostudio
 {
-    DisplayManager *pDisplayManager = new (std::nothrow) DisplayManager();
+
+DisplayManager* DisplayManager::create(Bone* bone)
+{
+    DisplayManager* pDisplayManager = new(std::nothrow) DisplayManager();
     if (pDisplayManager && pDisplayManager->init(bone))
     {
         pDisplayManager->autorelease();
@@ -47,15 +48,14 @@ DisplayManager *DisplayManager::create(Bone *bone)
     return nullptr;
 }
 
-
 DisplayManager::DisplayManager()
-    : _displayRenderNode(nullptr)
-    , _displayType(CS_DISPLAY_MAX)
-    , _currentDecoDisplay(nullptr)
-    , _displayIndex(-1)
-    , _forceChangeDisplay(false)
-    , _visible(true)
-    , _bone(nullptr)
+: _displayRenderNode(nullptr)
+, _displayType(CS_DISPLAY_MAX)
+, _currentDecoDisplay(nullptr)
+, _displayIndex(-1)
+, _forceChangeDisplay(false)
+, _visible(true)
+, _bone(nullptr)
 {
 }
 
@@ -63,16 +63,16 @@ DisplayManager::~DisplayManager()
 {
     _decoDisplayList.clear();
 
-    if( _displayRenderNode )
+    if (_displayRenderNode)
     {
         _displayRenderNode->removeFromParentAndCleanup(true);
-        if(_displayRenderNode->getReferenceCount() > 0)
+        if (_displayRenderNode->getReferenceCount() > 0)
             CC_SAFE_RELEASE_NULL(_displayRenderNode);
     }
 
 }
 
-bool DisplayManager::init(Bone *bone)
+bool DisplayManager::init(Bone* bone)
 {
     bool ret = false;
 
@@ -84,20 +84,18 @@ bool DisplayManager::init(Bone *bone)
         initDisplayList(bone->getBoneData());
 
         ret = true;
-    }
-    while (0);
+    } while (0);
 
     return ret;
 }
 
-
-void DisplayManager::addDisplay(DisplayData *displayData, int index)
+void DisplayManager::addDisplay(DisplayData* displayData, int index)
 {
-    DecorativeDisplay *decoDisplay = nullptr;
+    DecorativeDisplay* decoDisplay = nullptr;
 
-    if( (index >= 0) && (index < _decoDisplayList.size()) )
+    if ((index >= 0) && (index < _decoDisplayList.size()))
     {
-        decoDisplay = (DecorativeDisplay *)_decoDisplayList.at(index);
+        decoDisplay = (DecorativeDisplay*)_decoDisplayList.at(index);
     }
     else
     {
@@ -108,18 +106,18 @@ void DisplayManager::addDisplay(DisplayData *displayData, int index)
     DisplayFactory::addDisplay(_bone, decoDisplay, displayData);
 
     //! if changed display index is current display index, then change current display to the new display
-    if(index == _displayIndex)
+    if (index == _displayIndex)
     {
         _displayIndex = -1;
         changeDisplayWithIndex(index, false);
     }
 }
 
-void DisplayManager::addDisplay(Node *display, int index)
+void DisplayManager::addDisplay(Node* display, int index)
 {
-    DecorativeDisplay *decoDisplay = nullptr;
+    DecorativeDisplay* decoDisplay = nullptr;
 
-    if( (index >= 0) && (index < _decoDisplayList.size()) )
+    if ((index >= 0) && (index < _decoDisplayList.size()))
     {
         decoDisplay = _decoDisplayList.at(index);
     }
@@ -129,27 +127,27 @@ void DisplayManager::addDisplay(Node *display, int index)
         _decoDisplayList.pushBack(decoDisplay);
     }
 
-    DisplayData *displayData = nullptr;
-    if (Skin *skin = dynamic_cast<Skin *>(display))
+    DisplayData* displayData = nullptr;
+    if (Skin* skin = dynamic_cast<Skin*>(display))
     {
         skin->setBone(_bone);
         displayData = SpriteDisplayData::create();
 
         DisplayFactory::initSpriteDisplay(_bone, decoDisplay, skin->getDisplayName().c_str(), skin);
 
-        if (SpriteDisplayData *spriteDisplayData = (SpriteDisplayData *)decoDisplay->getDisplayData())
+        if (SpriteDisplayData* spriteDisplayData = (SpriteDisplayData*)decoDisplay->getDisplayData())
         {
             skin->setSkinData(spriteDisplayData->skinData);
-            ((SpriteDisplayData *)displayData)->skinData = spriteDisplayData->skinData;
+            ((SpriteDisplayData*)displayData)->skinData = spriteDisplayData->skinData;
         }
         else
         {
             bool find = false;
 
-            for (long i = _decoDisplayList.size()-2; i>=0; i--)
+            for (long i = _decoDisplayList.size() - 2; i >= 0; i--)
             {
-                DecorativeDisplay *dd = _decoDisplayList.at(i);
-                SpriteDisplayData *sdd = static_cast<SpriteDisplayData*>(dd->getDisplayData());
+                DecorativeDisplay* dd = _decoDisplayList.at(i);
+                SpriteDisplayData* sdd = static_cast<SpriteDisplayData*>(dd->getDisplayData());
                 if (sdd)
                 {
                     find = true;
@@ -166,20 +164,20 @@ void DisplayManager::addDisplay(Node *display, int index)
             }
         }
     }
-    else if (dynamic_cast<ParticleSystemQuad *>(display))
+    else if (dynamic_cast<ParticleSystemQuad*>(display))
     {
         displayData = ParticleDisplayData::create();
 
         display->removeFromParent();
         display->cleanup();
-        
-        Armature *armature = _bone->getArmature();
+
+        Armature* armature = _bone->getArmature();
         if (armature)
         {
             display->setParent(armature);
         }
     }
-    else if(Armature *armature = dynamic_cast<Armature *>(display))
+    else if (Armature* armature = dynamic_cast<Armature*>(display))
     {
         displayData = ArmatureDisplayData::create();
         displayData->displayName = armature->getName();
@@ -194,7 +192,7 @@ void DisplayManager::addDisplay(Node *display, int index)
     decoDisplay->setDisplayData(displayData);
 
     //! if changed display index is current display index, then change current display to the new display
-    if(index == _displayIndex)
+    if (index == _displayIndex)
     {
         _displayIndex = -1;
         changeDisplayWithIndex(index, false);
@@ -203,7 +201,7 @@ void DisplayManager::addDisplay(Node *display, int index)
 
 void DisplayManager::removeDisplay(int index)
 {
-    if(index == _displayIndex)
+    if (index == _displayIndex)
     {
         setCurrentDecorativeDisplay(nullptr);
         _displayIndex = -1;
@@ -212,28 +210,27 @@ void DisplayManager::removeDisplay(int index)
     _decoDisplayList.erase(index);
 }
 
-const cocos2d::Vector<DecorativeDisplay*>& DisplayManager::getDecorativeDisplayList() const
+const cocos2d::Vector<DecorativeDisplay*> &DisplayManager::getDecorativeDisplayList() const
 {
     return _decoDisplayList;
 }
 
 void DisplayManager::changeDisplayWithIndex(int index, bool force)
 {
-    CCASSERT( index < (int)_decoDisplayList.size(), "the _index value is out of range");
+    CCASSERT(index < (int)_decoDisplayList.size(), "the _index value is out of range");
 
     _forceChangeDisplay = force;
 
     //! If index is equal to current display index,then do nothing
-    if ( _displayIndex == index)
+    if (_displayIndex == index)
         return;
-
 
     _displayIndex = index;
 
     //! If displayIndex < 0, it means you want to hide you display
     if (_displayIndex < 0)
     {
-        if(_displayRenderNode)
+        if (_displayRenderNode)
         {
             _displayRenderNode->removeFromParentAndCleanup(true);
             setCurrentDecorativeDisplay(nullptr);
@@ -241,15 +238,14 @@ void DisplayManager::changeDisplayWithIndex(int index, bool force)
         return;
     }
 
-
-    DecorativeDisplay *decoDisplay = (DecorativeDisplay *)_decoDisplayList.at(_displayIndex);
+    DecorativeDisplay* decoDisplay = (DecorativeDisplay*)_decoDisplayList.at(_displayIndex);
 
     setCurrentDecorativeDisplay(decoDisplay);
 }
 
-void DisplayManager::changeDisplayWithName(const std::string& name, bool force)
+void DisplayManager::changeDisplayWithName(const std::string &name, bool force)
 {
-    for (int i = 0; i<_decoDisplayList.size(); i++)
+    for (int i = 0; i < _decoDisplayList.size(); i++)
     {
         if (_decoDisplayList.at(i)->getDisplayData()->displayName == name)
         {
@@ -259,28 +255,28 @@ void DisplayManager::changeDisplayWithName(const std::string& name, bool force)
     }
 }
 
-void DisplayManager::setCurrentDecorativeDisplay(DecorativeDisplay *decoDisplay)
+void DisplayManager::setCurrentDecorativeDisplay(DecorativeDisplay* decoDisplay)
 {
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (_currentDecoDisplay && _currentDecoDisplay->getColliderDetector())
     {
         _currentDecoDisplay->getColliderDetector()->setActive(false);
     }
-#endif
+    #endif
 
     _currentDecoDisplay = decoDisplay;
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (_currentDecoDisplay && _currentDecoDisplay->getColliderDetector())
     {
         _currentDecoDisplay->getColliderDetector()->setActive(true);
     }
-#endif
+    #endif
 
-    Node *displayRenderNode = _currentDecoDisplay == nullptr ? nullptr : _currentDecoDisplay->getDisplay();
+    Node* displayRenderNode = _currentDecoDisplay == nullptr ? nullptr : _currentDecoDisplay->getDisplay();
     if (_displayRenderNode)
     {
-        if (dynamic_cast<Armature *>(_displayRenderNode) != nullptr)
+        if (dynamic_cast<Armature*>(_displayRenderNode) != nullptr)
         {
             _bone->setChildArmature(nullptr);
         }
@@ -290,14 +286,14 @@ void DisplayManager::setCurrentDecorativeDisplay(DecorativeDisplay *decoDisplay)
 
     _displayRenderNode = displayRenderNode;
 
-    if(_displayRenderNode)
+    if (_displayRenderNode)
     {
-        if (Armature *armature = dynamic_cast<Armature *>(_displayRenderNode))
+        if (Armature* armature = dynamic_cast<Armature*>(_displayRenderNode))
         {
             _bone->setChildArmature(armature);
             armature->setParentBone(_bone);
         }
-        else if (ParticleSystemQuad *particle = dynamic_cast<ParticleSystemQuad *>(_displayRenderNode))
+        else if (ParticleSystemQuad* particle = dynamic_cast<ParticleSystemQuad*>(_displayRenderNode))
         {
             particle->resetSystem();
         }
@@ -312,15 +308,14 @@ void DisplayManager::setCurrentDecorativeDisplay(DecorativeDisplay *decoDisplay)
     }
     else
     {
-        _displayType =  CS_DISPLAY_MAX;
+        _displayType = CS_DISPLAY_MAX;
     }
 }
 
-Node *DisplayManager::getDisplayRenderNode() const
+Node* DisplayManager::getDisplayRenderNode() const
 {
     return _displayRenderNode;
 }
-
 
 DisplayType DisplayManager::getDisplayRenderNodeType() const
 {
@@ -332,27 +327,27 @@ int DisplayManager::getCurrentDisplayIndex() const
     return _displayIndex;
 }
 
-DecorativeDisplay *DisplayManager::getCurrentDecorativeDisplay() const
+DecorativeDisplay* DisplayManager::getCurrentDecorativeDisplay() const
 {
     return _currentDecoDisplay;
 }
 
-DecorativeDisplay *DisplayManager::getDecorativeDisplayByIndex( int index) const
+DecorativeDisplay* DisplayManager::getDecorativeDisplayByIndex(int index) const
 {
     return _decoDisplayList.at(index);
 }
 
-void DisplayManager::initDisplayList(BoneData *boneData)
+void DisplayManager::initDisplayList(BoneData* boneData)
 {
     _decoDisplayList.clear();
 
     CS_RETURN_IF(!boneData);
 
-    for(auto& object : boneData->displayDataList)
+    for (auto &object : boneData->displayDataList)
     {
-        DisplayData *displayData = static_cast<DisplayData *>(object);
+        DisplayData* displayData = static_cast<DisplayData*>(object);
 
-        DecorativeDisplay *decoDisplay = DecorativeDisplay::create();
+        DecorativeDisplay* decoDisplay = DecorativeDisplay::create();
         decoDisplay->setDisplayData(displayData);
 
         DisplayFactory::createDisplay(_bone, decoDisplay);
@@ -361,10 +356,9 @@ void DisplayManager::initDisplayList(BoneData *boneData)
     }
 }
 
-
 bool DisplayManager::containPoint(Vec2 &point)
 {
-    if(!_visible || _displayIndex < 0)
+    if (!_visible || _displayIndex < 0)
     {
         return false;
     }
@@ -373,28 +367,28 @@ bool DisplayManager::containPoint(Vec2 &point)
 
     switch (_currentDecoDisplay->getDisplayData()->displayType)
     {
-    case CS_DISPLAY_SPRITE:
-    {
-        /*
-         *  First we first check if the point is in the sprite content rect. If false, then we continue to check
-         *  the contour point. If this step is also false, then we can say the bone not contain this point.
-         *
-         */
+        case CS_DISPLAY_SPRITE:
+        {
+            /*
+             *  First we first check if the point is in the sprite content rect. If false, then we continue to check
+             *  the contour point. If this step is also false, then we can say the bone not contain this point.
+             *
+             */
 
-        Vec2 outPoint;
+            Vec2 outPoint;
 
-        Sprite *sprite = (Sprite *)_currentDecoDisplay->getDisplay();
-        Sprite *child = (Sprite *)sprite->getChildByTag(0);
-        if(nullptr != child)
-            sprite = child;
+            Sprite* sprite = (Sprite*)_currentDecoDisplay->getDisplay();
+            Sprite* child = (Sprite*)sprite->getChildByTag(0);
+            if (nullptr != child)
+                sprite = child;
 
-        if (nullptr != sprite)
-            ret = CC_SPRITE_CONTAIN_POINT_WITH_RETURN(sprite, point, outPoint);
-    }
-    break;
+            if (nullptr != sprite)
+                ret = CC_SPRITE_CONTAIN_POINT_WITH_RETURN(sprite, point, outPoint);
+        }
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
     return ret;
 }
@@ -405,10 +399,9 @@ bool DisplayManager::containPoint(float x, float y)
     return containPoint(p);
 }
 
-
 void DisplayManager::setVisible(bool visible)
 {
-    if(!_displayRenderNode)
+    if (!_displayRenderNode)
         return;
 
     _visible = visible;
@@ -419,7 +412,6 @@ bool DisplayManager::isVisible() const
 {
     return _visible;
 }
-
 
 Size DisplayManager::getContentSize() const
 {
@@ -433,7 +425,6 @@ Rect DisplayManager::getBoundingBox() const
     return _displayRenderNode->getBoundingBox();
 }
 
-
 Vec2 DisplayManager::getAnchorPoint() const
 {
     CS_RETURN_IF(!_displayRenderNode) Vec2(0, 0);
@@ -445,6 +436,5 @@ Vec2 DisplayManager::getAnchorPointInPoints() const
     CS_RETURN_IF(!_displayRenderNode) Vec2(0, 0);
     return _displayRenderNode->getAnchorPointInPoints();
 }
-
 
 }

@@ -35,13 +35,13 @@ NS_CC_BEGIN
 
 ProgressTo* ProgressTo::create(float duration, float percent)
 {
-    ProgressTo *progressTo = new (std::nothrow) ProgressTo();
+    ProgressTo* progressTo = new(std::nothrow) ProgressTo();
     if (progressTo && progressTo->initWithDuration(duration, percent))
     {
         progressTo->autorelease();
         return progressTo;
     }
-    
+
     delete progressTo;
     return nullptr;
 }
@@ -70,7 +70,7 @@ ProgressTo* ProgressTo::reverse() const
     return nullptr;
 }
 
-void ProgressTo::startWithTarget(Node *target)
+void ProgressTo::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
     _from = ((kProgressTimerCast)(target))->getPercentage();
@@ -85,12 +85,13 @@ void ProgressTo::update(float time)
 
 ProgressFromTo* ProgressFromTo::create(float duration, float fromPercentage, float toPercentage)
 {
-    ProgressFromTo *progressFromTo = new (std::nothrow) ProgressFromTo();
-    if (progressFromTo && progressFromTo->initWithDuration(duration, fromPercentage, toPercentage)) {
+    ProgressFromTo* progressFromTo = new(std::nothrow) ProgressFromTo();
+    if (progressFromTo && progressFromTo->initWithDuration(duration, fromPercentage, toPercentage))
+    {
         progressFromTo->autorelease();
         return progressFromTo;
     }
-    
+
     delete progressFromTo;
     return nullptr;
 }
@@ -114,13 +115,12 @@ ProgressFromTo* ProgressFromTo::clone() const
     return ProgressFromTo::create(_duration, _from, _to);
 }
 
-
 ProgressFromTo* ProgressFromTo::reverse() const
 {
     return ProgressFromTo::create(_duration, _to, _from);
 }
 
-void ProgressFromTo::startWithTarget(Node *target)
+void ProgressFromTo::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
 }

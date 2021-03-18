@@ -28,7 +28,8 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 AffineTransform TransformHelp::helpMatrix1;
 AffineTransform TransformHelp::helpMatrix2;
@@ -99,9 +100,9 @@ void TransformHelp::nodeToMatrix(const BaseData &node, AffineTransform &matrix)
 {
     if (node.skewX == -node.skewY)
     {
-        double sine   = sin(node.skewX);
+        double sine = sin(node.skewX);
         double cosine = cos(node.skewX);
-        
+
         matrix.a = node.scaleX * cosine;
         matrix.b = node.scaleX * -sine;
         matrix.c = node.scaleY * sine;
@@ -125,7 +126,7 @@ void TransformHelp::nodeToMatrix(const BaseData &node, Mat4 &matrix)
 
     if (node.skewX == -node.skewY)
     {
-        double sine   = sin(node.skewX);
+        double sine = sin(node.skewX);
         double cosine = cos(node.skewX);
 
         matrix.m[0] = node.scaleX * cosine;
@@ -140,11 +141,10 @@ void TransformHelp::nodeToMatrix(const BaseData &node, Mat4 &matrix)
         matrix.m[4] = node.scaleY * sin(node.skewX);
         matrix.m[5] = node.scaleY * cos(node.skewX);
     }
-    
+
     matrix.m[12] = node.x;
     matrix.m[13] = node.y;
 }
-
 
 void TransformHelp::matrixToNode(const AffineTransform &matrix, BaseData &node)
 {
@@ -197,7 +197,6 @@ void TransformHelp::matrixToNode(const Mat4 &matrix, BaseData &node)
     node.x = matrix.m[12];
     node.y = matrix.m[13];
 }
-
 
 void TransformHelp::nodeConcat(BaseData &target, BaseData &source)
 {

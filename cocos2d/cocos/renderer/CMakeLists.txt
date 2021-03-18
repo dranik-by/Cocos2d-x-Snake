@@ -74,62 +74,62 @@ set(COCOS_RENDERER_SRC
     renderer/backend/RenderPassDescriptor.cpp
     )
 
-if(ANDROID OR WINDOWS OR LINUX) 
+if (ANDROID OR WINDOWS OR LINUX)
 
-list(APPEND COCOS_RENDERER_HEADER
-    renderer/backend/opengl/BufferGL.h
-    renderer/backend/opengl/CommandBufferGL.h
-    renderer/backend/opengl/DepthStencilStateGL.h
-    renderer/backend/opengl/DeviceGL.h
-    renderer/backend/opengl/ProgramGL.h
-    renderer/backend/opengl/RenderPipelineGL.h
-    renderer/backend/opengl/ShaderModuleGL.h
-    renderer/backend/opengl/TextureGL.h
-    renderer/backend/opengl/UtilsGL.h
-    renderer/backend/opengl/DeviceInfoGL.h
-)
+    list(APPEND COCOS_RENDERER_HEADER
+         renderer/backend/opengl/BufferGL.h
+         renderer/backend/opengl/CommandBufferGL.h
+         renderer/backend/opengl/DepthStencilStateGL.h
+         renderer/backend/opengl/DeviceGL.h
+         renderer/backend/opengl/ProgramGL.h
+         renderer/backend/opengl/RenderPipelineGL.h
+         renderer/backend/opengl/ShaderModuleGL.h
+         renderer/backend/opengl/TextureGL.h
+         renderer/backend/opengl/UtilsGL.h
+         renderer/backend/opengl/DeviceInfoGL.h
+         )
 
-list(APPEND COCOS_RENDERER_SRC
-    renderer/backend/opengl/BufferGL.cpp
-    renderer/backend/opengl/CommandBufferGL.cpp
-    renderer/backend/opengl/DepthStencilStateGL.cpp
-    renderer/backend/opengl/DeviceGL.cpp
-    renderer/backend/opengl/ProgramGL.cpp
-    renderer/backend/opengl/RenderPipelineGL.cpp
-    renderer/backend/opengl/ShaderModuleGL.cpp
-    renderer/backend/opengl/TextureGL.cpp
-    renderer/backend/opengl/UtilsGL.cpp
-    renderer/backend/opengl/DeviceInfoGL.cpp
-)
+    list(APPEND COCOS_RENDERER_SRC
+         renderer/backend/opengl/BufferGL.cpp
+         renderer/backend/opengl/CommandBufferGL.cpp
+         renderer/backend/opengl/DepthStencilStateGL.cpp
+         renderer/backend/opengl/DeviceGL.cpp
+         renderer/backend/opengl/ProgramGL.cpp
+         renderer/backend/opengl/RenderPipelineGL.cpp
+         renderer/backend/opengl/ShaderModuleGL.cpp
+         renderer/backend/opengl/TextureGL.cpp
+         renderer/backend/opengl/UtilsGL.cpp
+         renderer/backend/opengl/DeviceInfoGL.cpp
+         )
 
-else()
+else ()
 
-list(APPEND COCOS_RENDERER_HEADER
-    renderer/backend/metal/BufferMTL.h
-    renderer/backend/metal/BufferManager.h
-    renderer/backend/metal/CommandBufferMTL.h
-    renderer/backend/metal/DepthStencilStateMTL.h
-    renderer/backend/metal/DeviceMTL.h
-    renderer/backend/metal/RenderPipelineMTL.h
-    renderer/backend/metal/ShaderModuleMTL.h
-    renderer/backend/metal/TextureMTL.h
-    renderer/backend/metal/Utils.h
-    renderer/backend/metal/ProgramMTL.h
-    renderer/backend/metal/DeviceInfoMTL.h
-)
+    list(APPEND COCOS_RENDERER_HEADER
+         renderer/backend/metal/BufferMTL.h
+         renderer/backend/metal/BufferManager.h
+         renderer/backend/metal/CommandBufferMTL.h
+         renderer/backend/metal/DepthStencilStateMTL.h
+         renderer/backend/metal/DeviceMTL.h
+         renderer/backend/metal/RenderPipelineMTL.h
+         renderer/backend/metal/ShaderModuleMTL.h
+         renderer/backend/metal/TextureMTL.h
+         renderer/backend/metal/Utils.h
+         renderer/backend/metal/ProgramMTL.h
+         renderer/backend/metal/DeviceInfoMTL.h
+         )
 
-list(APPEND COCOS_RENDERER_SRC
-    renderer/backend/metal/BufferMTL.mm
-    renderer/backend/metal/BufferManager.mm
-    renderer/backend/metal/CommandBufferMTL.mm
-    renderer/backend/metal/DepthStencilStateMTL.mm
-    renderer/backend/metal/DeviceMTL.mm
-    renderer/backend/metal/RenderPipelineMTL.mm
-    renderer/backend/metal/ShaderModuleMTL.mm
-    renderer/backend/metal/TextureMTL.mm
-    renderer/backend/metal/Utils.mm
-    renderer/backend/metal/ProgramMTL.mm
-    renderer/backend/metal/DeviceInfoMTL.mm
-)
+    list(APPEND COCOS_RENDERER_SRC
+         renderer/backend/metal/BufferMTL.mm
+         renderer/backend/metal/BufferManager.mm
+         renderer/backend/metal/CommandBufferMTL.mm
+         renderer/backend/metal/DepthStencilStateMTL.mm
+         renderer/backend/metal/DeviceMTL.mm
+         renderer/backend/metal/RenderPipelineMTL.mm
+         renderer/backend/metal/ShaderModuleMTL.mm
+         renderer/backend/metal/TextureMTL.mm
+         renderer/backend/metal/Utils.mm
+         renderer/backend/metal/ProgramMTL.mm
+         renderer/backend/metal/DeviceInfoMTL.mm
+         )
 
-endif()
+endif ()

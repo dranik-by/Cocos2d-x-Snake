@@ -28,9 +28,9 @@ THE SOFTWARE.
 
 #include "editor-support/cocostudio/WidgetReader/SkeletonReader/BoneNodeReader.h"
 
-class SkeletonNodeReader : public  BoneNodeReader
+class SkeletonNodeReader : public BoneNodeReader
 {
-    DECLARE_CLASS_NODE_READER_INFO
+DECLARE_CLASS_NODE_READER_INFO
 
 public:
 

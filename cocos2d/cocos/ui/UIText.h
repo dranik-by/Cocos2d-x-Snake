@@ -40,7 +40,8 @@ NS_CC_BEGIN
 class Label;
 class Sprite;
 
-namespace ui {
+namespace ui
+{
 
 /**
  *  For creating a system font or a TTF font Text
@@ -48,7 +49,7 @@ namespace ui {
 class CC_GUI_DLL Text : public Widget, public cocos2d::BlendProtocol
 {
 
-    DECLARE_CLASS_GUI_INFO
+DECLARE_CLASS_GUI_INFO
 
 public:
     /** Type Text type.
@@ -95,23 +96,21 @@ public:
      * @param fontSize A given font size.
      * @return An autoreleased Text object.
      */
-    static Text* create(const std::string& textContent,
-                        const std::string& fontName,
-                        float fontSize);
+    static Text* create(const std::string &textContent, const std::string &fontName, float fontSize);
 
     /**
      * Changes the string value of label.
      *
      * @param text  String value.
      */
-    void setString(const std::string& text);
+    void setString(const std::string &text);
 
     /**
      * Gets the string value of label.
      *
      * @return String value.
      */
-    const std::string& getString()const;
+    const std::string &getString() const;
 
     /**
      * Gets the string length of the label.
@@ -121,7 +120,7 @@ public:
      *
      * @return  String length.
      */
-    ssize_t getStringLength()const;
+    ssize_t getStringLength() const;
 
     /**
      * Sets the font size of label.
@@ -135,7 +134,7 @@ public:
      *
      * @return The font size.
      */
-    float getFontSize()const;
+    float getFontSize() const;
 
     /**
      * Sets the font name of label.
@@ -152,13 +151,13 @@ public:
      * @endcode
      * @param name Font name.
      */
-    void setFontName(const std::string& name);
+    void setFontName(const std::string &name);
 
     /** Gets the font name.
      *
      * @return Font name.
      */
-    const std::string& getFontName()const;
+    const std::string &getFontName() const;
 
     /** Gets the font type.
      * @return The font type.
@@ -177,7 +176,7 @@ public:
      *
      * @return  Touch scale enabled of label.
      */
-    bool isTouchScaleChangeEnabled()const;
+    bool isTouchScaleChangeEnabled() const;
 
     //override "getVirtualRendererSize" method of widget.
     virtual Size getVirtualRendererSize() const override;
@@ -210,7 +209,7 @@ public:
      *
      * @return The text rendering area size.
      */
-    const Size& getTextAreaSize()const;
+    const Size &getTextAreaSize() const;
 
     /** Sets text horizontal alignment.
      *
@@ -222,7 +221,7 @@ public:
      *
      * @return Horizontal text alignment type
      */
-    TextHAlignment getTextHorizontalAlignment()const;
+    TextHAlignment getTextHorizontalAlignment() const;
 
     /** Sets text vertical alignment.
      *
@@ -234,7 +233,7 @@ public:
      *
      * @return Vertical text alignment type
      */
-    TextVAlignment getTextVerticalAlignment()const;
+    TextVAlignment getTextVerticalAlignment() const;
 
     /** Sets text color.
      *
@@ -246,7 +245,7 @@ public:
      *
      * @return Text color.
      */
-    const Color4B& getTextColor() const;
+    const Color4B &getTextColor() const;
 
     /**
      * Enable shadow for the label.
@@ -257,8 +256,7 @@ public:
      * @param offset The offset of shadow effect.
      * @param blurRadius The blur radius of shadow effect.
      */
-    void enableShadow(const Color4B& shadowColor = Color4B::BLACK,
-                      const Size &offset = Size(2,-2),
+    void enableShadow(const Color4B &shadowColor = Color4B::BLACK, const Size &offset = Size(2, -2),
                       int blurRadius = 0);
 
     /**
@@ -268,13 +266,13 @@ public:
      * @param outlineColor The color of outline.
      * @param outlineSize The size of outline.
      */
-    void enableOutline(const Color4B& outlineColor,int outlineSize = 1);
+    void enableOutline(const Color4B &outlineColor, int outlineSize = 1);
 
     /** Only support for TTF.
      *
      * @param glowColor The color of glow.
      */
-    void enableGlow(const Color4B& glowColor);
+    void enableGlow(const Color4B &glowColor);
 
     /** Disable all text effects, including shadow, outline and glow.
      */
@@ -316,13 +314,13 @@ public:
     * Return current effect color value.
     */
     Color4B getEffectColor() const;
-    
+
     /**
      * Provides a way to treat each character like a Sprite.
      * @warning No support system font.
      */
-    virtual Sprite * getLetter(int lettetIndex);
-    
+    virtual Sprite* getLetter(int lettetIndex);
+
     /**
      * Sets the source blending function.
      *
@@ -331,7 +329,7 @@ public:
      * @lua NA
      */
     virtual void setBlendFunc(const BlendFunc &blendFunc) override;
-    
+
     /**
      * Returns the blending function that is currently being used.
      *
@@ -343,9 +341,7 @@ public:
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
-    virtual bool init(const std::string& textContent,
-                      const std::string& fontName,
-                      float fontSize);
+    virtual bool init(const std::string &textContent, const std::string &fontName, float fontSize);
 
 protected:
     virtual void initRenderer() override;

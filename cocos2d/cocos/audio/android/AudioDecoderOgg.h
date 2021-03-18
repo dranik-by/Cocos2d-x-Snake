@@ -29,7 +29,8 @@ THE SOFTWARE.
 
 #include "Tremolo/ivorbisfile.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoderOgg : public AudioDecoder
 {

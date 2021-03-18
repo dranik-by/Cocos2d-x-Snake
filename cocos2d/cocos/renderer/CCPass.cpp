@@ -46,25 +46,25 @@ NS_CC_BEGIN
 
 //uniform names
 
-static const char          *s_dirLightUniformColorName = "u_DirLightSourceColor";
-static const char          *s_dirLightUniformDirName = "u_DirLightSourceDirection";
+static const char* s_dirLightUniformColorName = "u_DirLightSourceColor";
+static const char* s_dirLightUniformDirName = "u_DirLightSourceDirection";
 
-static const char          *s_pointLightUniformColorName = "u_PointLightSourceColor";
-static const char          *s_pointLightUniformPositionName = "u_PointLightSourcePosition";
-static const char          *s_pointLightUniformRangeInverseName = "u_PointLightSourceRangeInverse";
+static const char* s_pointLightUniformColorName = "u_PointLightSourceColor";
+static const char* s_pointLightUniformPositionName = "u_PointLightSourcePosition";
+static const char* s_pointLightUniformRangeInverseName = "u_PointLightSourceRangeInverse";
 
-static const char          *s_spotLightUniformColorName = "u_SpotLightSourceColor";
-static const char          *s_spotLightUniformPositionName = "u_SpotLightSourcePosition";
-static const char          *s_spotLightUniformDirName = "u_SpotLightSourceDirection";
-static const char          *s_spotLightUniformInnerAngleCosName = "u_SpotLightSourceInnerAngleCos";
-static const char          *s_spotLightUniformOuterAngleCosName = "u_SpotLightSourceOuterAngleCos";
-static const char          *s_spotLightUniformRangeInverseName = "u_SpotLightSourceRangeInverse";
+static const char* s_spotLightUniformColorName = "u_SpotLightSourceColor";
+static const char* s_spotLightUniformPositionName = "u_SpotLightSourcePosition";
+static const char* s_spotLightUniformDirName = "u_SpotLightSourceDirection";
+static const char* s_spotLightUniformInnerAngleCosName = "u_SpotLightSourceInnerAngleCos";
+static const char* s_spotLightUniformOuterAngleCosName = "u_SpotLightSourceOuterAngleCos";
+static const char* s_spotLightUniformRangeInverseName = "u_SpotLightSourceRangeInverse";
 
-static const char          *s_ambientLightUniformColorName = "u_AmbientLightSourceColor";
+static const char* s_ambientLightUniformColorName = "u_AmbientLightSourceColor";
 
 Pass* Pass::create(Technique* technique)
 {
-    auto pass = new (std::nothrow) Pass();
+    auto pass = new(std::nothrow) Pass();
     if (pass && pass->init(technique))
     {
         pass->autorelease();
@@ -76,7 +76,7 @@ Pass* Pass::create(Technique* technique)
 
 Pass* Pass::createWithProgramState(Technique* technique, backend::ProgramState* programState)
 {
-    auto pass = new (std::nothrow) Pass();
+    auto pass = new(std::nothrow) Pass();
     if (pass && pass->initWithProgramState(technique, programState))
     {
         pass->autorelease();
@@ -92,7 +92,7 @@ bool Pass::init(Technique* technique)
     return true;
 }
 
-bool Pass::initWithProgramState(Technique* technique, backend::ProgramState *programState)
+bool Pass::initWithProgramState(Technique* technique, backend::ProgramState* programState)
 {
     _technique = technique;
     setProgramState(programState);
@@ -112,7 +112,7 @@ Pass::~Pass()
 
 Pass* Pass::clone() const
 {
-    auto pass = new (std::nothrow) Pass();
+    auto pass = new(std::nothrow) Pass();
     if (pass)
     {
         pass->_renderState = _renderState;
@@ -131,7 +131,7 @@ Pass* Pass::clone() const
 
 backend::ProgramState* Pass::getProgramState() const
 {
-   return _programState;
+    return _programState;
 }
 
 void Pass::setProgramState(backend::ProgramState* programState)
@@ -148,7 +148,7 @@ void Pass::setProgramState(backend::ProgramState* programState)
 
 void Pass::initUniformLocations()
 {
-    auto *ps = _programState;
+    auto* ps = _programState;
 
     _locMVPMatrix = ps->getUniformLocation("u_MVPMatrix");
     _locMVMatrix = ps->getUniformLocation("u_MVMatrix");
@@ -157,7 +157,7 @@ void Pass::initUniformLocations()
 
     _locTexture = ps->getUniformLocation("u_texture");
     _locNormalTexture = ps->getUniformLocation("u_normalTex");
-    
+
     _locColor = ps->getUniformLocation("u_color");
     _locMatrixPalette = ps->getUniformLocation("u_matrixPalette");
 
@@ -178,9 +178,9 @@ void Pass::initUniformLocations()
     _locAmbientLigthColor = ps->getUniformLocation(s_ambientLightUniformColorName);
 }
 
-void Pass::draw(MeshCommand *meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
-                MeshCommand::PrimitiveType primitive, MeshCommand::IndexFormat indexFormat,
-                unsigned int indexCount, const Mat4& modelView)
+void Pass::draw(MeshCommand* meshCommand, float globalZOrder, backend::Buffer* vertexBuffer,
+                backend::Buffer* indexBuffer, MeshCommand::PrimitiveType primitive,
+                MeshCommand::IndexFormat indexFormat, unsigned int indexCount, const Mat4 &modelView)
 {
 
     meshCommand->setBeforeCallback(CC_CALLBACK_0(Pass::onBeforeVisitCmd, this, meshCommand));
@@ -192,13 +192,12 @@ void Pass::draw(MeshCommand *meshCommand, float globalZOrder, backend::Buffer* v
     meshCommand->setIndexDrawInfo(0, indexCount);
     meshCommand->getPipelineDescriptor().programState = _programState;
 
-
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
 
     renderer->addCommand(meshCommand);
 }
 
-void Pass::updateMVPUniform(const Mat4& modelView)
+void Pass::updateMVPUniform(const Mat4 &modelView)
 {
     auto &matrixP = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto mvp = matrixP * modelView;
@@ -221,9 +220,9 @@ void Pass::updateMVPUniform(const Mat4& modelView)
 
 }
 
-void Pass::onBeforeVisitCmd(MeshCommand *command)
+void Pass::onBeforeVisitCmd(MeshCommand* command)
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
 
     //save renderer states
     _rendererDepthTestEnabled = renderer->getDepthTest();
@@ -237,9 +236,9 @@ void Pass::onBeforeVisitCmd(MeshCommand *command)
     updateMVPUniform(command->getMV());
 }
 
-void Pass::onAfterVisitCmd(MeshCommand *command)
+void Pass::onAfterVisitCmd(MeshCommand* command)
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     // restore renderer states
     renderer->setDepthTest(_rendererDepthTestEnabled);
     renderer->setDepthCompareFunction(_rendererDepthCmpFunc);
@@ -248,16 +247,15 @@ void Pass::onAfterVisitCmd(MeshCommand *command)
     renderer->setWinding(_rendererWinding);
 }
 
-
 Node* Pass::getTarget() const
 {
     CCASSERT(_technique && _technique->_material, "Pass must have a Technique and Material");
 
-    Material *material = _technique->_material;
+    Material* material = _technique->_material;
     return material->_target;
 }
 
-void Pass::setTechnique(Technique *technique)
+void Pass::setTechnique(Technique* technique)
 {
     _technique = technique; //weak reference
 }
@@ -277,12 +275,12 @@ VertexAttribBinding* Pass::getVertexAttributeBinding() const
     return _vertexAttribBinding;
 }
 
-void Pass::setUniformTexture(uint32_t slot, backend::TextureBackend *tex)
+void Pass::setUniformTexture(uint32_t slot, backend::TextureBackend* tex)
 {
     _programState->setTexture(_locTexture, slot, tex);
 }
 
-void Pass::setUniformNormTexture(uint32_t slot, backend::TextureBackend *tex)
+void Pass::setUniformNormTexture(uint32_t slot, backend::TextureBackend* tex)
 {
     _programState->setTexture(_locNormalTexture, slot, tex);
 }
@@ -292,74 +290,72 @@ void Pass::setUniformNormTexture(uint32_t slot, backend::TextureBackend *tex)
         _programState->setUniform(loc, data, (uint32_t)dataLen);    \
     } } while(false)
 
-
-void Pass::setUniformColor(const void *data, size_t dataLen)
+void Pass::setUniformColor(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locColor);
 }
 
-void Pass::setUniformMatrixPalette(const void *data, size_t dataLen)
+void Pass::setUniformMatrixPalette(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locMatrixPalette);
 }
 
-
-void Pass::setUniformDirLightColor(const void *data, size_t dataLen)
+void Pass::setUniformDirLightColor(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locDirLightColor);
 }
 
-void Pass::setUniformDirLightDir(const void *data, size_t dataLen)
+void Pass::setUniformDirLightDir(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locDirLightDir);
 }
 
-void Pass::setUniformPointLightColor(const void *data, size_t dataLen)
+void Pass::setUniformPointLightColor(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locPointLightColor);
 }
 
-void Pass::setUniformPointLightPosition(const void *data, size_t dataLen)
+void Pass::setUniformPointLightPosition(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locPointLightPosition);
 }
 
-void Pass::setUniformPointLightRangeInverse(const void *data, size_t dataLen)
+void Pass::setUniformPointLightRangeInverse(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locPointLightRangeInverse);
 }
 
-void Pass::setUniformSpotLightColor(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightColor(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightColor);
 }
 
-void Pass::setUniformSpotLightPosition(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightPosition(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightPosition);
 }
 
-void Pass::setUniformSpotLightDir(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightDir(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightDir);
 }
 
-void Pass::setUniformSpotLightInnerAngleCos(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightInnerAngleCos(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightInnerAngleCos);
 }
 
-void Pass::setUniformSpotLightOuterAngleCos(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightOuterAngleCos(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightOuterAngleCos);
 }
 
-void Pass::setUniformSpotLightRangeInverse(const void *data, size_t dataLen)
+void Pass::setUniformSpotLightRangeInverse(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locSpotLightRangeInverse);
 }
 
-void Pass::setUniformAmbientLigthColor(const void *data, size_t dataLen)
+void Pass::setUniformAmbientLigthColor(const void* data, size_t dataLen)
 {
     TRY_SET_UNIFORM(_locAmbientLigthColor);
 }

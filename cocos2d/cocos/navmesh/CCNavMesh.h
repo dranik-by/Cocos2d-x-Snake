@@ -27,22 +27,22 @@
 #define __CCNAV_MESH_H__
 
 #include "base/ccConfig.h"
+
 #if CC_USE_NAVMESH
 
-#include "base/CCRef.h"
-#include "math/Vec3.h"
-#include "recast/Detour/DetourNavMesh.h"
-#include "recast/Detour/DetourNavMeshQuery.h"
-#include "recast/DetourCrowd/DetourCrowd.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
-#include <string>
-#include <vector>
+    #include "base/CCRef.h"
+    #include "math/Vec3.h"
+    #include "recast/Detour/DetourNavMesh.h"
+    #include "recast/Detour/DetourNavMeshQuery.h"
+    #include "recast/DetourCrowd/DetourCrowd.h"
+    #include "recast/DetourTileCache/DetourTileCache.h"
+    #include <string>
+    #include <vector>
 
-#include "navmesh/CCNavMeshAgent.h"
-#include "navmesh/CCNavMeshDebugDraw.h"
-#include "navmesh/CCNavMeshObstacle.h"
-#include "navmesh/CCNavMeshUtils.h"
-
+    #include "navmesh/CCNavMeshAgent.h"
+    #include "navmesh/CCNavMeshDebugDraw.h"
+    #include "navmesh/CCNavMeshObstacle.h"
+    #include "navmesh/CCNavMeshUtils.h"
 
 NS_CC_BEGIN
 
@@ -77,16 +77,16 @@ public:
     bool isDebugDrawEnabled() const;
 
     /** add a agent to navmesh. */
-    void addNavMeshAgent(NavMeshAgent *agent);
+    void addNavMeshAgent(NavMeshAgent* agent);
 
     /** remove a agent from navmesh. */
-    void removeNavMeshAgent(NavMeshAgent *agent);
+    void removeNavMeshAgent(NavMeshAgent* agent);
 
     /** add a obstacle to navmesh. */
-    void addNavMeshObstacle(NavMeshObstacle *obstacle);
+    void addNavMeshObstacle(NavMeshObstacle* obstacle);
 
     /** remove a obstacle from navmesh. */
-    void removeNavMeshObstacle(NavMeshObstacle *obstacle);
+    void removeNavMeshObstacle(NavMeshObstacle* obstacle);
 
     /**
     find a path on navmesh
@@ -114,14 +114,14 @@ protected:
 
 protected:
 
-    dtNavMesh *_navMesh;
-    dtNavMeshQuery *_navMeshQuery;
-    dtCrowd *_crowed;
-    dtTileCache *_tileCache;
-    LinearAllocator *_allocator;
-    FastLZCompressor *_compressor;
-    MeshProcess *_meshProcess;
-    GeomData *_geomData;
+    dtNavMesh* _navMesh;
+    dtNavMeshQuery* _navMeshQuery;
+    dtCrowd* _crowed;
+    dtTileCache* _tileCache;
+    LinearAllocator* _allocator;
+    FastLZCompressor* _compressor;
+    MeshProcess* _meshProcess;
+    GeomData* _geomData;
 
     std::vector<NavMeshAgent*> _agentList;
     std::vector<NavMeshObstacle*> _obstacleList;

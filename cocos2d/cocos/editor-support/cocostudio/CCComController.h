@@ -31,17 +31,18 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include "2d/CCComponent.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CC_STUDIO_DLL ComController : public cocos2d::Component, public InputDelegate
 {
-    DECLARE_CLASS_COMPONENT_INFO
+DECLARE_CLASS_COMPONENT_INFO
 public:
     /**
      *  @js ctor
      */
     ComController();
-    
+
 public:
     const static std::string COMPONENT_NAME;
 

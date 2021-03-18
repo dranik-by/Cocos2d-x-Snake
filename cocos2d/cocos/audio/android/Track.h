@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <functional>
 #include <mutex>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class Track : public PcmBufferProvider, public IVolumeProvider
 {
@@ -51,14 +52,31 @@ public:
     Track(const PcmData &pcmData);
     virtual ~Track();
 
-    inline State getState() const { return _state; };
+    inline State getState() const
+    {
+        return _state;
+    };
     void setState(State state);
 
-    inline State getPrevState() const { return _prevState; };
+    inline State getPrevState() const
+    {
+        return _prevState;
+    };
 
-    inline bool isPlayOver() const { return _state == State::PLAYING && _nextFrame >= _numFrames;};
-    inline void setName(int name) { _name = name; };
-    inline int getName() const { return _name; };
+    inline bool isPlayOver() const
+    {
+        return _state == State::PLAYING && _nextFrame >= _numFrames;
+    };
+
+    inline void setName(int name)
+    {
+        _name = name;
+    };
+
+    inline int getName() const
+    {
+        return _name;
+    };
 
     void setVolume(float volume);
     float getVolume() const;
@@ -68,25 +86,40 @@ public:
     bool setPosition(float pos);
     float getPosition() const;
 
-    virtual gain_minifloat_packed_t getVolumeLR() override ;
+    virtual gain_minifloat_packed_t getVolumeLR() override;
 
-    inline void setLoop(bool isLoop) { _isLoop = isLoop; };
-    inline bool isLoop() const { return _isLoop; };
+    inline void setLoop(bool isLoop)
+    {
+        _isLoop = isLoop;
+    };
+
+    inline bool isLoop() const
+    {
+        return _isLoop;
+    };
 
     std::function<void(State)> onStateChanged;
 
 private:
     inline bool isVolumeDirty() const
-    { return _isVolumeDirty; };
+    {
+        return _isVolumeDirty;
+    };
 
     inline void setVolumeDirty(bool isDirty)
-    { _isVolumeDirty = isDirty; };
+    {
+        _isVolumeDirty = isDirty;
+    };
 
     inline bool isInitialized() const
-    { return _isInitialized; };
+    {
+        return _isInitialized;
+    };
 
     inline void setInitialized(bool isInitialized)
-    { _isInitialized = isInitialized; };
+    {
+        _isInitialized = isInitialized;
+    };
 
 private:
     PcmData _pcmData;

@@ -30,7 +30,8 @@ __BEGIN_DECLS
 // visible to clients
 typedef int sf_count_t;
 
-typedef struct {
+typedef struct
+{
     sf_count_t frames;
     int samplerate;
     int channels;
@@ -50,22 +51,23 @@ typedef struct SNDFILE_ SNDFILE;
 #define SF_FORMAT_PCM_32    8
 #define SF_FORMAT_PCM_24    10
 
-typedef struct {
-    void* (*open)(const char* path, void* user);
-    size_t (*read)  (void* ptr, size_t size, size_t nmemb, void* datasource);
-    int    (*seek)  (void* datasource, long offset, int whence);
-    int    (*close) (void* datasource);
-    long   (*tell)  (void* datasource);
+typedef struct
+{
+    void* (* open)(const char* path, void* user);
+    size_t (* read)(void* ptr, size_t size, size_t nmemb, void* datasource);
+    int (* seek)(void* datasource, long offset, int whence);
+    int (* close)(void* datasource);
+    long (* tell)(void* datasource);
 } snd_callbacks;
 
 // Open stream
-SNDFILE *sf_open_read(const char *path, SF_INFO *info, snd_callbacks* cb, void* user);
+SNDFILE* sf_open_read(const char* path, SF_INFO* info, snd_callbacks* cb, void* user);
 
 // Close stream
-void sf_close(SNDFILE *handle);
+void sf_close(SNDFILE* handle);
 
 // Read interleaved frames and return actual number of frames read
-sf_count_t sf_readf_short(SNDFILE *handle, short *ptr, sf_count_t desired);
+sf_count_t sf_readf_short(SNDFILE* handle, short* ptr, sf_count_t desired);
 /*
 sf_count_t sf_readf_float(SNDFILE *handle, float *ptr, sf_count_t desired);
 sf_count_t sf_readf_int(SNDFILE *handle, int *ptr, sf_count_t desired);

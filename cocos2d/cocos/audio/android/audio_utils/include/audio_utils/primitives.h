@@ -45,7 +45,7 @@ __BEGIN_DECLS
  * The out and sums buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void ditherAndClamp(int32_t* out, const int32_t *sums, size_t c);
+void ditherAndClamp(int32_t* out, const int32_t* sums, size_t c);
 
 /* Expand and copy samples from unsigned 8-bit offset by 0x80 to signed 16-bit.
  * Parameters:
@@ -55,7 +55,7 @@ void ditherAndClamp(int32_t* out, const int32_t *sums, size_t c);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_i16_from_u8(int16_t *dst, const uint8_t *src, size_t count);
+void memcpy_to_i16_from_u8(int16_t* dst, const uint8_t* src, size_t count);
 
 /* Shrink and copy samples from signed 16-bit to unsigned 8-bit offset by 0x80.
  * Parameters:
@@ -66,7 +66,7 @@ void memcpy_to_i16_from_u8(int16_t *dst, const uint8_t *src, size_t count);
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  * The conversion is done by truncation, without dithering, so it loses resolution.
  */
-void memcpy_to_u8_from_i16(uint8_t *dst, const int16_t *src, size_t count);
+void memcpy_to_u8_from_i16(uint8_t* dst, const int16_t* src, size_t count);
 
 /* Copy samples from float to unsigned 8-bit offset by 0x80.
  * Parameters:
@@ -77,7 +77,7 @@ void memcpy_to_u8_from_i16(uint8_t *dst, const int16_t *src, size_t count);
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  * The conversion is done by truncation, without dithering, so it loses resolution.
  */
-void memcpy_to_u8_from_float(uint8_t *dst, const float *src, size_t count);
+void memcpy_to_u8_from_float(uint8_t* dst, const float* src, size_t count);
 
 /* Shrink and copy samples from signed 32-bit fixed-point Q0.31 to signed 16-bit Q0.15.
  * Parameters:
@@ -88,7 +88,7 @@ void memcpy_to_u8_from_float(uint8_t *dst, const float *src, size_t count);
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  * The conversion is done by truncation, without dithering, so it loses resolution.
  */
-void memcpy_to_i16_from_i32(int16_t *dst, const int32_t *src, size_t count);
+void memcpy_to_i16_from_i32(int16_t* dst, const int32_t* src, size_t count);
 
 /* Shrink and copy samples from single-precision floating-point to signed 16-bit.
  * Each float should be in the range -1.0 to 1.0.  Values outside that range are clamped,
@@ -101,7 +101,7 @@ void memcpy_to_i16_from_i32(int16_t *dst, const int32_t *src, size_t count);
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  * The conversion is done by truncation, without dithering, so it loses resolution.
  */
-void memcpy_to_i16_from_float(int16_t *dst, const float *src, size_t count);
+void memcpy_to_i16_from_float(int16_t* dst, const float* src, size_t count);
 
 /* Copy samples from signed fixed-point 32-bit Q4.27 to single-precision floating-point.
  * The nominal output float range is [-1.0, 1.0] if the fixed-point range is
@@ -114,7 +114,7 @@ void memcpy_to_i16_from_float(int16_t *dst, const float *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_float_from_q4_27(float *dst, const int32_t *src, size_t count);
+void memcpy_to_float_from_q4_27(float* dst, const int32_t* src, size_t count);
 
 /* Copy samples from signed fixed-point 16 bit Q0.15 to single-precision floating-point.
  * The output float range is [-1.0, 1.0) for the fixed-point range [0x8000, 0x7fff].
@@ -125,7 +125,7 @@ void memcpy_to_float_from_q4_27(float *dst, const int32_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_float_from_i16(float *dst, const int16_t *src, size_t count);
+void memcpy_to_float_from_i16(float* dst, const int16_t* src, size_t count);
 
 /* Copy samples from unsigned fixed-point 8 bit to single-precision floating-point.
  * The output float range is [-1.0, 1.0) for the fixed-point range [0x00, 0xFF].
@@ -136,7 +136,7 @@ void memcpy_to_float_from_i16(float *dst, const int16_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_float_from_u8(float *dst, const uint8_t *src, size_t count);
+void memcpy_to_float_from_u8(float* dst, const uint8_t* src, size_t count);
 
 /* Copy samples from signed fixed-point packed 24 bit Q0.23 to single-precision floating-point.
  * The packed 24 bit input is stored in native endian format in a uint8_t byte array.
@@ -148,7 +148,7 @@ void memcpy_to_float_from_u8(float *dst, const uint8_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_float_from_p24(float *dst, const uint8_t *src, size_t count);
+void memcpy_to_float_from_p24(float* dst, const uint8_t* src, size_t count);
 
 /* Copy samples from signed fixed-point packed 24 bit Q0.23 to signed fixed point 16 bit Q0.15.
  * The packed 24 bit output is stored in native endian format in a uint8_t byte array.
@@ -160,7 +160,7 @@ void memcpy_to_float_from_p24(float *dst, const uint8_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_i16_from_p24(int16_t *dst, const uint8_t *src, size_t count);
+void memcpy_to_i16_from_p24(int16_t* dst, const uint8_t* src, size_t count);
 
 /* Copy samples from signed fixed-point packed 24 bit Q0.23 to signed fixed-point 32-bit Q0.31.
  * The packed 24 bit input is stored in native endian format in a uint8_t byte array.
@@ -171,7 +171,7 @@ void memcpy_to_i16_from_p24(int16_t *dst, const uint8_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_i32_from_p24(int32_t *dst, const uint8_t *src, size_t count);
+void memcpy_to_i32_from_p24(int32_t* dst, const uint8_t* src, size_t count);
 
 /* Copy samples from signed fixed point 16 bit Q0.15 to signed fixed-point packed 24 bit Q0.23.
  * The packed 24 bit output is assumed to be a native-endian uint8_t byte array.
@@ -183,7 +183,7 @@ void memcpy_to_i32_from_p24(int32_t *dst, const uint8_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_p24_from_i16(uint8_t *dst, const int16_t *src, size_t count);
+void memcpy_to_p24_from_i16(uint8_t* dst, const int16_t* src, size_t count);
 
 /* Copy samples from single-precision floating-point to signed fixed-point packed 24 bit Q0.23.
  * The packed 24 bit output is assumed to be a native-endian uint8_t byte array.
@@ -196,7 +196,7 @@ void memcpy_to_p24_from_i16(uint8_t *dst, const int16_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_p24_from_float(uint8_t *dst, const float *src, size_t count);
+void memcpy_to_p24_from_float(uint8_t* dst, const float* src, size_t count);
 
 /* Copy samples from signed fixed-point 32-bit Q8.23 to signed fixed-point packed 24 bit Q0.23.
  * The packed 24 bit output is assumed to be a native-endian uint8_t byte array.
@@ -207,7 +207,7 @@ void memcpy_to_p24_from_float(uint8_t *dst, const float *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_p24_from_q8_23(uint8_t *dst, const int32_t *src, size_t count);
+void memcpy_to_p24_from_q8_23(uint8_t* dst, const int32_t* src, size_t count);
 
 /* Shrink and copy samples from signed 32-bit fixed-point Q0.31
  * to signed fixed-point packed 24 bit Q0.23.
@@ -220,7 +220,7 @@ void memcpy_to_p24_from_q8_23(uint8_t *dst, const int32_t *src, size_t count);
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  * The conversion is done by truncation, without dithering, so it loses resolution.
  */
-void memcpy_to_p24_from_i32(uint8_t *dst, const int32_t *src, size_t count);
+void memcpy_to_p24_from_i32(uint8_t* dst, const int32_t* src, size_t count);
 
 /* Copy samples from signed fixed point 16-bit Q0.15 to signed fixed-point 32-bit Q8.23.
  * The output data range is [0xff800000, 0x007fff00] at intervals of 0x100.
@@ -230,7 +230,7 @@ void memcpy_to_p24_from_i32(uint8_t *dst, const int32_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_q8_23_from_i16(int32_t *dst, const int16_t *src, size_t count);
+void memcpy_to_q8_23_from_i16(int32_t* dst, const int16_t* src, size_t count);
 
 /* Copy samples from single-precision floating-point to signed fixed-point 32-bit Q8.23.
  * This copy will clamp the Q8.23 representation to [0xff800000, 0x007fffff] even though there
@@ -243,7 +243,7 @@ void memcpy_to_q8_23_from_i16(int32_t *dst, const int16_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_q8_23_from_float_with_clamp(int32_t *dst, const float *src, size_t count);
+void memcpy_to_q8_23_from_float_with_clamp(int32_t* dst, const float* src, size_t count);
 
 /* Copy samples from signed fixed point packed 24-bit Q0.23 to signed fixed-point 32-bit Q8.23.
  * The output data range is [0xff800000, 0x007fffff].
@@ -253,7 +253,7 @@ void memcpy_to_q8_23_from_float_with_clamp(int32_t *dst, const float *src, size_
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_q8_23_from_p24(int32_t *dst, const uint8_t *src, size_t count);
+void memcpy_to_q8_23_from_p24(int32_t* dst, const uint8_t* src, size_t count);
 
 /* Copy samples from single-precision floating-point to signed fixed-point 32-bit Q4.27.
  * The conversion will use the full available Q4.27 range, including guard bits.
@@ -266,7 +266,7 @@ void memcpy_to_q8_23_from_p24(int32_t *dst, const uint8_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_q4_27_from_float(int32_t *dst, const float *src, size_t count);
+void memcpy_to_q4_27_from_float(int32_t* dst, const float* src, size_t count);
 
 /* Copy samples from signed fixed-point 32-bit Q8.23 to signed fixed point 16-bit Q0.15.
  * The data is clamped, and truncated without rounding.
@@ -277,7 +277,7 @@ void memcpy_to_q4_27_from_float(int32_t *dst, const float *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_i16_from_q8_23(int16_t *dst, const int32_t *src, size_t count);
+void memcpy_to_i16_from_q8_23(int16_t* dst, const int32_t* src, size_t count);
 
 /* Copy samples from signed fixed-point 32-bit Q8.23 to single-precision floating-point.
  * The nominal output float range is [-1.0, 1.0) for the fixed-point
@@ -291,7 +291,7 @@ void memcpy_to_i16_from_q8_23(int16_t *dst, const int32_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_float_from_q8_23(float *dst, const int32_t *src, size_t count);
+void memcpy_to_float_from_q8_23(float* dst, const int32_t* src, size_t count);
 
 /* Copy samples from signed fixed point 16-bit Q0.15 to signed fixed-point 32-bit Q0.31.
  * The output data range is [0x80000000, 0x7fff0000] at intervals of 0x10000.
@@ -301,7 +301,7 @@ void memcpy_to_float_from_q8_23(float *dst, const int32_t *src, size_t count);
  *  count   Number of samples to copy
  * The destination and source buffers must be completely separate.
  */
-void memcpy_to_i32_from_i16(int32_t *dst, const int16_t *src, size_t count);
+void memcpy_to_i32_from_i16(int32_t* dst, const int16_t* src, size_t count);
 
 /* Copy samples from single-precision floating-point to signed fixed-point 32-bit Q0.31.
  * If rounding is needed on truncation, the fractional lsb is rounded to nearest,
@@ -313,7 +313,7 @@ void memcpy_to_i32_from_i16(int32_t *dst, const int16_t *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_i32_from_float(int32_t *dst, const float *src, size_t count);
+void memcpy_to_i32_from_float(int32_t* dst, const float* src, size_t count);
 
 /* Copy samples from signed fixed-point 32-bit Q0.31 to single-precision floating-point.
  * The float range is [-1.0, 1.0] for the fixed-point range [0x80000000, 0x7fffffff].
@@ -325,7 +325,7 @@ void memcpy_to_i32_from_float(int32_t *dst, const float *src, size_t count);
  * The destination and source buffers must either be completely separate (non-overlapping), or
  * they must both start at the same address.  Partially overlapping buffers are not supported.
  */
-void memcpy_to_float_from_i32(float *dst, const int32_t *src, size_t count);
+void memcpy_to_float_from_i32(float* dst, const int32_t* src, size_t count);
 
 /* Downmix pairs of interleaved stereo input 16-bit samples to mono output 16-bit samples.
  * Parameters:
@@ -335,7 +335,7 @@ void memcpy_to_float_from_i32(float *dst, const int32_t *src, size_t count);
  * The destination and source buffers must be completely separate (non-overlapping).
  * The current implementation truncates the mean rather than dither, but this may change.
  */
-void downmix_to_mono_i16_from_stereo_i16(int16_t *dst, const int16_t *src, size_t count);
+void downmix_to_mono_i16_from_stereo_i16(int16_t* dst, const int16_t* src, size_t count);
 
 /* Upmix mono input 16-bit samples to pairs of interleaved stereo output 16-bit samples by
  * duplicating.
@@ -345,7 +345,7 @@ void downmix_to_mono_i16_from_stereo_i16(int16_t *dst, const int16_t *src, size_
  *  count   Number of mono samples to upmix
  * The destination and source buffers must be completely separate (non-overlapping).
  */
-void upmix_to_stereo_i16_from_mono_i16(int16_t *dst, const int16_t *src, size_t count);
+void upmix_to_stereo_i16_from_mono_i16(int16_t* dst, const int16_t* src, size_t count);
 
 /* Downmix pairs of interleaved stereo input float samples to mono output float samples
  * by averaging the stereo pair together.
@@ -356,7 +356,7 @@ void upmix_to_stereo_i16_from_mono_i16(int16_t *dst, const int16_t *src, size_t 
  * The destination and source buffers must be completely separate (non-overlapping),
  * or they must both start at the same address.
  */
-void downmix_to_mono_float_from_stereo_float(float *dst, const float *src, size_t count);
+void downmix_to_mono_float_from_stereo_float(float* dst, const float* src, size_t count);
 
 /* Upmix mono input float samples to pairs of interleaved stereo output float samples by
  * duplicating.
@@ -366,23 +366,23 @@ void downmix_to_mono_float_from_stereo_float(float *dst, const float *src, size_
  *  count   Number of mono samples to upmix
  * The destination and source buffers must be completely separate (non-overlapping).
  */
-void upmix_to_stereo_float_from_mono_float(float *dst, const float *src, size_t count);
+void upmix_to_stereo_float_from_mono_float(float* dst, const float* src, size_t count);
 
 /* Return the total number of non-zero 32-bit samples */
-size_t nonZeroMono32(const int32_t *samples, size_t count);
+size_t nonZeroMono32(const int32_t* samples, size_t count);
 
 /* Return the total number of non-zero 16-bit samples */
-size_t nonZeroMono16(const int16_t *samples, size_t count);
+size_t nonZeroMono16(const int16_t* samples, size_t count);
 
 /* Return the total number of non-zero stereo frames, where a frame is considered non-zero
  * if either of its constituent 32-bit samples is non-zero
  */
-size_t nonZeroStereo32(const int32_t *frames, size_t count);
+size_t nonZeroStereo32(const int32_t* frames, size_t count);
 
 /* Return the total number of non-zero stereo frames, where a frame is considered non-zero
  * if either of its constituent 16-bit samples is non-zero
  */
-size_t nonZeroStereo16(const int16_t *frames, size_t count);
+size_t nonZeroStereo16(const int16_t* frames, size_t count);
 
 /* Copy frames, selecting source samples based on a source channel mask to fit
  * the destination channel mask. Unmatched channels in the destination channel mask
@@ -399,8 +399,8 @@ size_t nonZeroStereo16(const int16_t *frames, size_t count);
  * The destination and source buffers must be completely separate (non-overlapping).
  * If the sample size is not in range, the function will abort.
  */
-void memcpy_by_channel_mask(void *dst, uint32_t dst_mask,
-        const void *src, uint32_t src_mask, size_t sample_size, size_t count);
+void memcpy_by_channel_mask(void* dst, uint32_t dst_mask, const void* src, uint32_t src_mask, size_t sample_size,
+                            size_t count);
 
 /* Copy frames, selecting source samples based on an index array (idxary).
  * The idxary[] consists of dst_channels number of elements.
@@ -433,9 +433,8 @@ void memcpy_by_channel_mask(void *dst, uint32_t dst_mask,
  * The destination and source buffers must be completely separate (non-overlapping).
  * If the sample size is not in range, the function will abort.
  */
-void memcpy_by_index_array(void *dst, uint32_t dst_channels,
-        const void *src, uint32_t src_channels,
-        const int8_t *idxary, size_t sample_size, size_t count);
+void memcpy_by_index_array(void* dst, uint32_t dst_channels, const void* src, uint32_t src_channels,
+                           const int8_t* idxary, size_t sample_size, size_t count);
 
 /* Prepares an index array (idxary) from channel masks, which can be later
  * used by memcpy_by_index_array(). Returns the number of array elements required.
@@ -454,8 +453,7 @@ void memcpy_by_index_array(void *dst, uint32_t dst_channels,
  *  dst_mask    Bit mask corresponding to destination channels present
  *  src_mask    Bit mask corresponding to source channels present
  */
-size_t memcpy_by_index_array_initialization(int8_t *idxary, size_t idxcount,
-        uint32_t dst_mask, uint32_t src_mask);
+size_t memcpy_by_index_array_initialization(int8_t* idxary, size_t idxcount, uint32_t dst_mask, uint32_t src_mask);
 
 /* Prepares an index array (idxary) from channel masks, which can be later
  * used by memcpy_by_index_array(). Returns the number of array elements required.
@@ -472,8 +470,8 @@ size_t memcpy_by_index_array_initialization(int8_t *idxary, size_t idxcount,
  *  dst_mask    Bit mask corresponding to destination channels present
  *  src_mask    Bit mask corresponding to source channels present
  */
-size_t memcpy_by_index_array_initialization_src_index(int8_t *idxary, size_t idxcount,
-        uint32_t dst_mask, uint32_t src_mask);
+size_t memcpy_by_index_array_initialization_src_index(int8_t* idxary, size_t idxcount, uint32_t dst_mask,
+                                                      uint32_t src_mask);
 
 /* Prepares an index array (idxary) from channel mask bits, which can be later
  * used by memcpy_by_index_array(). Returns the number of array elements required.
@@ -493,16 +491,16 @@ size_t memcpy_by_index_array_initialization_src_index(int8_t *idxary, size_t idx
  *  dst_mask    Bit mask corresponding to destination channels present
  *  src_mask    Bit mask corresponding to source channels present
  */
-size_t memcpy_by_index_array_initialization_dst_index(int8_t *idxary, size_t idxcount,
-        uint32_t dst_mask, uint32_t src_mask);
+size_t memcpy_by_index_array_initialization_dst_index(int8_t* idxary, size_t idxcount, uint32_t dst_mask,
+                                                      uint32_t src_mask);
 
 /**
  * Clamp (aka hard limit or clip) a signed 32-bit sample to 16-bit range.
  */
 static inline int16_t clamp16(int32_t sample)
 {
-    if ((sample>>15) ^ (sample>>31))
-        sample = 0x7FFF ^ (sample>>31);
+    if ((sample >> 15) ^ (sample >> 31))
+        sample = 0x7FFF ^ (sample >> 31);
     return sample;
 }
 
@@ -529,7 +527,8 @@ static inline int16_t clamp16_from_float(float f)
     static const int32_t limneg = (0x10f << 22) /*zero*/ - 32768; /* 0x43bf8000 */
     static const int32_t limpos = (0x10f << 22) /*zero*/ + 32767; /* 0x43c07fff */
 
-    union {
+    union
+    {
         float f;
         int32_t i;
     } u;
@@ -568,7 +567,8 @@ static inline uint8_t clamp8_from_float(float f)
     static const int32_t limneg = (0x11f << 22) /*zero*/;
     static const int32_t limpos = (0x11f << 22) /*zero*/ + 255; /* 0x47c000ff */
 
-    union {
+    union
+    {
         float f;
         int32_t i;
     } u;
@@ -599,9 +599,12 @@ static inline int32_t clamp24_from_float(float f)
     static const float limpos = 0x7fffff / (float)(1 << 23);
     static const float limneg = -0x800000 / (float)(1 << 23);
 
-    if (f <= limneg) {
+    if (f <= limneg)
+    {
         return -0x800000;
-    } else if (f >= limpos) {
+    }
+    else if (f >= limpos)
+    {
         return 0x7fffff;
     }
     f *= scale;
@@ -620,11 +623,16 @@ static inline int32_t clamp24_from_q8_23(int32_t ival)
 {
     static const int32_t limpos = 0x7fffff;
     static const int32_t limneg = -0x800000;
-    if (ival < limneg) {
+    if (ival < limneg)
+    {
         return limneg;
-    } else if (ival > limpos) {
+    }
+    else if (ival > limpos)
+    {
         return limpos;
-    } else {
+    }
+    else
+    {
         return ival;
     }
 }
@@ -642,9 +650,12 @@ static inline int32_t clampq4_27_from_float(float f)
     static const float limpos = 16.;
     static const float limneg = -16.;
 
-    if (f <= limneg) {
+    if (f <= limneg)
+    {
         return -0x80000000; /* or 0x80000000 */
-    } else if (f >= limpos) {
+    }
+    else if (f >= limpos)
+    {
         return 0x7fffffff;
     }
     f *= scale;
@@ -667,9 +678,12 @@ static inline int32_t clamp32_from_float(float f)
     static const float limpos = 1.;
     static const float limneg = -1.;
 
-    if (f <= limneg) {
+    if (f <= limneg)
+    {
         return -0x80000000; /* or 0x80000000 */
-    } else if (f >= limpos) {
+    }
+    else if (f >= limpos)
+    {
         return 0x7fffffff;
     }
     f *= scale;
@@ -741,9 +755,12 @@ static inline uint32_t u4_28_from_float(float f)
     static const float scale = (float)(1 << 28);
     static const float limpos = 0xffffffffUL / (float)(1 << 28);
 
-    if (f <= 0.) {
+    if (f <= 0.)
+    {
         return 0;
-    } else if (f >= limpos) {
+    }
+    else if (f >= limpos)
+    {
         return 0xffffffff;
     }
     /* integer conversion is through truncation (though int to float is not).
@@ -764,9 +781,12 @@ static inline uint16_t u4_12_from_float(float f)
     static const float scale = (float)(1 << 12);
     static const float limpos = 0xffff / (float)(1 << 12);
 
-    if (f <= 0.) {
+    if (f <= 0.)
+    {
         return 0;
-    } else if (f >= limpos) {
+    }
+    else if (f >= limpos)
+    {
         return 0xffff;
     }
     /* integer conversion is through truncation (though int to float is not).
@@ -814,7 +834,7 @@ static inline float float_from_u8(uint8_t uval)
  * Avoid relying on the limited output range, as future implementations may go
  * to full range.
  */
-static inline int32_t i32_from_p24(const uint8_t *packed24)
+static inline int32_t i32_from_p24(const uint8_t* packed24)
 {
     /* convert to 32b */
     return (packed24[0] << 8) | (packed24[1] << 16) | (packed24[2] << 24);
@@ -841,7 +861,7 @@ static inline float float_from_i32(int32_t ival)
  *
  * There is no rounding, the conversion and representation is exact.
  */
-static inline float float_from_p24(const uint8_t *packed24)
+static inline float float_from_p24(const uint8_t* packed24)
 {
     return float_from_i32(i32_from_p24(packed24));
 }
@@ -863,46 +883,43 @@ static inline float float_from_q8_23(int32_t ival)
 /**
  * Multiply-accumulate 16-bit terms with 32-bit result: return a + in*v.
  */
-static inline
-int32_t mulAdd(int16_t in, int16_t v, int32_t a)
+static inline int32_t mulAdd(int16_t in, int16_t v, int32_t a)
 {
-#if defined(__arm__) && !defined(__thumb__)
+    #if defined(__arm__) && !defined(__thumb__)
     int32_t out;
     asm( "smlabb %[out], %[in], %[v], %[a] \n"
          : [out]"=r"(out)
          : [in]"%r"(in), [v]"r"(v), [a]"r"(a)
          : );
     return out;
-#else
+    #else
     return a + in * (int32_t)v;
-#endif
+    #endif
 }
 
 /**
  * Multiply 16-bit terms with 32-bit result: return in*v.
  */
-static inline
-int32_t mul(int16_t in, int16_t v)
+static inline int32_t mul(int16_t in, int16_t v)
 {
-#if defined(__arm__) && !defined(__thumb__)
+    #if defined(__arm__) && !defined(__thumb__)
     int32_t out;
     asm( "smulbb %[out], %[in], %[v] \n"
          : [out]"=r"(out)
          : [in]"%r"(in), [v]"r"(v)
          : );
     return out;
-#else
+    #else
     return in * (int32_t)v;
-#endif
+    #endif
 }
 
 /**
  * Similar to mulAdd, but the 16-bit terms are extracted from a 32-bit interleaved stereo pair.
  */
-static inline
-int32_t mulAddRL(int left, uint32_t inRL, uint32_t vRL, int32_t a)
+static inline int32_t mulAddRL(int left, uint32_t inRL, uint32_t vRL, int32_t a)
 {
-#if defined(__arm__) && !defined(__thumb__)
+    #if defined(__arm__) && !defined(__thumb__)
     int32_t out;
     if (left) {
         asm( "smlabb %[out], %[inRL], %[vRL], %[a] \n"
@@ -916,22 +933,24 @@ int32_t mulAddRL(int left, uint32_t inRL, uint32_t vRL, int32_t a)
              : );
     }
     return out;
-#else
-    if (left) {
-        return a + (int16_t)(inRL&0xFFFF) * (int16_t)(vRL&0xFFFF);
-    } else {
-        return a + (int16_t)(inRL>>16) * (int16_t)(vRL>>16);
+    #else
+    if (left)
+    {
+        return a + (int16_t)(inRL & 0xFFFF) * (int16_t)(vRL & 0xFFFF);
     }
-#endif
+    else
+    {
+        return a + (int16_t)(inRL >> 16) * (int16_t)(vRL >> 16);
+    }
+    #endif
 }
 
 /**
  * Similar to mul, but the 16-bit terms are extracted from a 32-bit interleaved stereo pair.
  */
-static inline
-int32_t mulRL(int left, uint32_t inRL, uint32_t vRL)
+static inline int32_t mulRL(int left, uint32_t inRL, uint32_t vRL)
 {
-#if defined(__arm__) && !defined(__thumb__)
+    #if defined(__arm__) && !defined(__thumb__)
     int32_t out;
     if (left) {
         asm( "smulbb %[out], %[inRL], %[vRL] \n"
@@ -945,13 +964,16 @@ int32_t mulRL(int left, uint32_t inRL, uint32_t vRL)
              : );
     }
     return out;
-#else
-    if (left) {
-        return (int16_t)(inRL&0xFFFF) * (int16_t)(vRL&0xFFFF);
-    } else {
-        return (int16_t)(inRL>>16) * (int16_t)(vRL>>16);
+    #else
+    if (left)
+    {
+        return (int16_t)(inRL & 0xFFFF) * (int16_t)(vRL & 0xFFFF);
     }
-#endif
+    else
+    {
+        return (int16_t)(inRL >> 16) * (int16_t)(vRL >> 16);
+    }
+    #endif
 }
 
 __END_DECLS

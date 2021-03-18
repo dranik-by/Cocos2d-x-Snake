@@ -31,11 +31,12 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/DictionaryHelper.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CocoLoader;
 struct stExpCocoNode;
-    
+
 /**
 *  @js NA
 *  @lua NA
@@ -164,18 +165,17 @@ public:
     void updateToFrameByTime(float fTime);
 
     /*init properties with a json dictionary*/
-    void initWithDictionary(const rapidjson::Value& dic, cocos2d::Ref* root);
-    
-    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode, cocos2d::Ref* root);
+    void initWithDictionary(const rapidjson::Value &dic, cocos2d::Ref* root);
 
+    void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, cocos2d::Ref* root);
 
     /*scheduler update function*/
     void simulationActionUpdate(float dt);
 protected:
-    int valueToInt(const std::string& value);
-    bool valueToBool(const std::string& value);
-    float valueToFloat(const std::string& value);
-    
+    int valueToInt(const std::string &value);
+    bool valueToBool(const std::string &value);
+    float valueToFloat(const std::string &value);
+
     cocos2d::Vector<ActionNode*> _actionNodeList;
     std::string _name;
     bool _loop;
@@ -183,8 +183,8 @@ protected:
     bool _bPlaying;
     float _fUnitTime;
     float _currentTime;
-    cocos2d::Scheduler *_pScheduler;
-    cocos2d::CallFunc *_CallBack;
+    cocos2d::Scheduler* _pScheduler;
+    cocos2d::CallFunc* _CallBack;
     float _fTotalTime;
 };
 

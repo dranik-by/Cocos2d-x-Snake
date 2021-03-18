@@ -21,16 +21,17 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
 #include "Types.h"
 #include "base/CCRef.h"
 
-namespace cocos2d {
-    class MeshVertexData;
-    class MeshIndexData;
+namespace cocos2d
+{
+class MeshVertexData;
+class MeshIndexData;
 }
 
 CC_BACKEND_BEGIN
@@ -53,7 +54,7 @@ public:
      * @see `updateSubData(void* data, unsigned int offset, unsigned int size)`
      */
     virtual void updateData(void* data, std::size_t size) = 0;
-    
+
     /**
      * @brief Update buffer sub-region data
      * @param data Specifies a pointer to the new data that will be copied into the data store.
@@ -74,7 +75,10 @@ public:
      * Get buffer size in bytes.
      * @return The buffer size in bytes.
      */
-    std::size_t getSize() const { return _size; }
+    std::size_t getSize() const
+    {
+        return _size;
+    }
 
 protected:
     /**
@@ -86,10 +90,11 @@ protected:
     : _usage(usage)
     , _type(type)
     , _size(size)
-    {}
-    
+    {
+    }
+
     virtual ~Buffer() = default;
-    
+
     BufferUsage _usage = BufferUsage::DYNAMIC; ///< Buffer usage.
     BufferType _type = BufferType::VERTEX; ///< Buffer type.
     std::size_t _size = 0; ///< buffer size in bytes.

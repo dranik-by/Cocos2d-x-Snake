@@ -30,17 +30,18 @@ THE SOFTWARE.
 #include "2d/CCComponent.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CC_STUDIO_DLL ComRender : public cocos2d::Component
 {
-    DECLARE_CLASS_COMPONENT_INFO
- 
+DECLARE_CLASS_COMPONENT_INFO
+
 public:
     const static std::string COMPONENT_NAME;
 
     static ComRender* create();
-    static ComRender* create(cocos2d::Node *node, const char *comName);
+    static ComRender* create(cocos2d::Node* node, const char* comName);
 
     /**
      * @js NA
@@ -64,14 +65,14 @@ public:
     virtual void onRemove() override;
     virtual bool serialize(void* r) override;
     virtual cocos2d::Node* getNode();
-    virtual void setNode(cocos2d::Node *node);
+    virtual void setNode(cocos2d::Node* node);
 
 CC_CONSTRUCTOR_ACCESS:
     /**
     *  @js ctor
     */
     ComRender();
-    ComRender(cocos2d::Node *node, const char *comName);
+    ComRender(cocos2d::Node* node, const char* comName);
     /**
     * @js NA
     * @lua NA
@@ -81,7 +82,7 @@ CC_CONSTRUCTOR_ACCESS:
 private:
     bool readJson(const std::string &fileName, rapidjson::Document &doc);
 
-    cocos2d::Node *_render;
+    cocos2d::Node* _render;
 };
 
 }

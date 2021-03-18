@@ -31,12 +31,11 @@
 #include "base/ccTypes.h"
 #include "base/CCDirector.h"
 
-
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #elif _MSC_VER >= 1400 //vs 2005 or higher
-#pragma warning (push)
-#pragma warning (disable: 4996)
+    #pragma warning (push)
+    #pragma warning (disable: 4996)
 #endif
 
 NS_CC_BEGIN
@@ -48,7 +47,6 @@ const Size CCSizeZero = Size::ZERO;
 
 /* The "zero" rectangle -- equivalent to Rect(0, 0, 0, 0). */
 const Rect CCRectZero = Rect::ZERO;
-
 
 const Color3B ccWHITE = Color3B::WHITE;
 const Color3B ccYELLOW = Color3B::YELLOW;
@@ -81,11 +79,11 @@ void CC_DLL kmGLPopMatrix()
 
 void CC_DLL kmGLMatrixMode(unsigned int mode)
 {
-    if(KM_GL_MODELVIEW == mode)
+    if (KM_GL_MODELVIEW == mode)
         currentActiveStackType = MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW;
-    else if(KM_GL_PROJECTION == mode)
+    else if (KM_GL_PROJECTION == mode)
         currentActiveStackType = MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION;
-    else if(KM_GL_TEXTURE == mode)
+    else if (KM_GL_TEXTURE == mode)
         currentActiveStackType = MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE;
     else
     {
@@ -131,11 +129,11 @@ void CC_DLL kmGLScalef(float x, float y, float z)
 
 void CC_DLL kmGLGetMatrix(unsigned int mode, Mat4* pOut)
 {
-    if(KM_GL_MODELVIEW == mode)
+    if (KM_GL_MODELVIEW == mode)
         *pOut = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    else if(KM_GL_PROJECTION == mode)
+    else if (KM_GL_PROJECTION == mode)
         *pOut = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    else if(KM_GL_TEXTURE == mode)
+    else if (KM_GL_TEXTURE == mode)
         *pOut = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_TEXTURE);
     else
     {
@@ -221,7 +219,8 @@ Mat4* kmMat4PerspectiveProjection(Mat4* pOut, float fovY, float aspect, float zN
     return pOut;
 }
 
-Mat4* kmMat4OrthographicProjection(Mat4* pOut, float left, float right, float bottom, float top, float nearVal, float farVal)
+Mat4* kmMat4OrthographicProjection(Mat4* pOut, float left, float right, float bottom, float top, float nearVal,
+                                   float farVal)
 {
     Mat4::createOrthographicOffCenter(left, right, bottom, top, nearVal, farVal, pOut);
     return pOut;
@@ -253,9 +252,9 @@ float kmVec3LengthSq(const Vec3* pIn)
 
 CC_DLL Vec3* kmVec3Lerp(Vec3* pOut, const Vec3* pV1, const Vec3* pV2, float t)
 {
-    pOut->x = pV1->x + t * ( pV2->x - pV1->x );
-    pOut->y = pV1->y + t * ( pV2->y - pV1->y );
-    pOut->z = pV1->z + t * ( pV2->z - pV1->z );
+    pOut->x = pV1->x + t * (pV2->x - pV1->x);
+    pOut->y = pV1->y + t * (pV2->y - pV1->y);
+    pOut->z = pV1->z + t * (pV2->z - pV1->z);
     return pOut;
 }
 
@@ -304,7 +303,7 @@ Vec3* kmVec3TransformCoord(Vec3* pOut, const Vec3* pV, const Mat4* pM)
 {
     Vec4 v(pV->x, pV->y, pV->z, 1);
     pM->transformVector(&v);
-    v = v * (1/v.w);
+    v = v * (1 / v.w);
     pOut->set(v.x, v.y, v.z);
     return pOut;
 }
@@ -351,8 +350,8 @@ Vec2* kmVec2Normalize(Vec2* pOut, const Vec2* pIn)
 
 Vec2* kmVec2Lerp(Vec2* pOut, const Vec2* pV1, const Vec2* pV2, float t)
 {
-    pOut->x = pV1->x + t * ( pV2->x - pV1->x );
-    pOut->y = pV1->y + t * ( pV2->y - pV1->y );
+    pOut->x = pV1->x + t * (pV2->x - pV1->x);
+    pOut->y = pV1->y + t * (pV2->y - pV1->y);
     return pOut;
 }
 
@@ -414,10 +413,10 @@ float kmVec4LengthSq(const Vec4* pIn)
 
 Vec4* kmVec4Lerp(Vec4* pOut, const Vec4* pV1, const Vec4* pV2, float t)
 {
-    pOut->x = pV1->x + t * ( pV2->x - pV1->x );
-    pOut->y = pV1->y + t * ( pV2->y - pV1->y );
-    pOut->z = pV1->z + t * ( pV2->z - pV1->z );
-    pOut->w = pV1->w + t * ( pV2->w - pV1->w );
+    pOut->x = pV1->x + t * (pV2->x - pV1->x);
+    pOut->y = pV1->y + t * (pV2->y - pV1->y);
+    pOut->z = pV1->z + t * (pV2->z - pV1->z);
+    pOut->w = pV1->w + t * (pV2->w - pV1->w);
     return pOut;
 }
 
@@ -474,7 +473,7 @@ const Vec2 KM_VEC2_ZERO(0, 0);
 NS_CC_END
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+    #pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #elif _MSC_VER >= 1400 //vs 2005 or higher
-#pragma warning (pop)
+    #pragma warning (pop)
 #endif

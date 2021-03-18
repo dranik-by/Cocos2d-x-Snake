@@ -37,12 +37,8 @@ enum class S3TCDecodeFlag
 };
 
 //Decode S3TC encode data to RGB32
- void s3tc_decode(uint8_t *encode_data,
-                 uint8_t *decode_data,
-                 const int pixelsWidth,
-                 const int pixelsHeight,
-                 S3TCDecodeFlag decodeFlag
-                 );
+void s3tc_decode(uint8_t* encode_data, uint8_t* decode_data, const int pixelsWidth, const int pixelsHeight,
+                 S3TCDecodeFlag decodeFlag);
 
- /// @endcond
+/// @endcond
 #endif /* defined(COCOS2DX_PLATFORM_THIRDPARTY_S3TC_) */

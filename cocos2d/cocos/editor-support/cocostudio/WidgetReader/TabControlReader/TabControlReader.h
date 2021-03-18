@@ -30,23 +30,22 @@
 #include "editor-support/cocostudio/WidgetReader/NodeReaderDefine.h"
 #include "editor-support/cocostudio/WidgetReader/TabControlReader/CSTabControl_generated.h"
 
-
 class TabControlReader : public cocos2d::Ref, public cocostudio::NodeReaderProtocol
 {
-    DECLARE_CLASS_NODE_READER_INFO
-    
+DECLARE_CLASS_NODE_READER_INFO
+
 public:
     TabControlReader();
     ~TabControlReader();
-    
+
     static TabControlReader* getInstance();
     static void destroyInstance();
-    
+
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder) override;
-    
+
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
-    
+
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 private:
     static TabControlReader* _tabReaderInstance;
@@ -54,49 +53,48 @@ private:
 
 class TabHeaderReader : public cocos2d::Ref, public cocostudio::NodeReaderProtocol
 {
-    DECLARE_CLASS_NODE_READER_INFO
-    
+DECLARE_CLASS_NODE_READER_INFO
+
 public:
     TabHeaderReader();
     ~TabHeaderReader();
-    
+
     static TabHeaderReader* getInstance();
     static void destroyInstance();
-    
+
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
                                                                          flatbuffers::FlatBufferBuilder* builder) override;
-    
+
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
-    
+
     //CSArmatureNode
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
 private:
     static TabHeaderReader* _tabheaderReaderInstance;
-    int    getResourceType(std::string key);
+    int getResourceType(std::string key);
 };
 
 class TabItemReader : public cocos2d::Ref, public cocostudio::NodeReaderProtocol
 {
-    DECLARE_CLASS_NODE_READER_INFO
-    
+DECLARE_CLASS_NODE_READER_INFO
+
 public:
     TabItemReader();
     ~TabItemReader();
-    
+
     static TabItemReader* getInstance();
     static void destroyInstance();
-    
+
     flatbuffers::Offset<flatbuffers::TabItemOption> createTabItemOptionWithFlatBuffers(
-                                                                                       const tinyxml2::XMLElement* objectData,
-                                                                                       flatbuffers::FlatBufferBuilder* builder);
-    
+    const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder);
+
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOption) override;
-    
+
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) override;
-    
-    virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(
-                                                                                 const tinyxml2::XMLElement* objectData, flatbuffers::FlatBufferBuilder* builder) override;
-    
+
+    virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                                 flatbuffers::FlatBufferBuilder* builder) override;
+
 private:
     static TabItemReader* _tabItemReaderInstance;
 };

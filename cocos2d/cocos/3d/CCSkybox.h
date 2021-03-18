@@ -48,7 +48,7 @@ class CC_DLL Skybox : public Node
 {
 public:
     CREATE_FUNC(Skybox);
-    
+
     /** create skybox from 6 textures.
      @param positive_x texture for the right side of the texture cube face.
      @param negative_x texture for the left side of the texture cube face.
@@ -58,15 +58,14 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new skybox inited with given parameters.
      */
-    static Skybox* create(const std::string& positive_x, const std::string& negative_x,
-                               const std::string& positive_y, const std::string& negative_y,
-                               const std::string& positive_z, const std::string& negative_z);
+    static Skybox* create(const std::string &positive_x, const std::string &negative_x, const std::string &positive_y,
+                          const std::string &negative_y, const std::string &positive_z, const std::string &negative_z);
 
     /**texture getter and setter*/
     void setTexture(TextureCube*);
 
     /** draw Skybox object */
-    virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
 
     /** reload sky box after GLESContext reconstructed.*/
     void reload();
@@ -86,13 +85,12 @@ CC_CONSTRUCTOR_ACCESS:
     * init Skybox.
     */
     virtual bool init() override;
-    
+
     /**
      * initialize with texture path
      */
-    bool init(const std::string& positive_x, const std::string& negative_x,
-              const std::string& positive_y, const std::string& negative_y,
-              const std::string& positive_z, const std::string& negative_z);
+    bool init(const std::string &positive_x, const std::string &negative_x, const std::string &positive_y,
+              const std::string &negative_y, const std::string &positive_z, const std::string &negative_z);
 
 protected:
 
@@ -100,11 +98,10 @@ protected:
     * init internal buffers for Skybox.
     */
     void initBuffers();
-    
+
     CustomCommand _customCommand;
-    TextureCube*  _texture;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Skybox);
+    TextureCube* _texture;
+private: CC_DISALLOW_COPY_AND_ASSIGN(Skybox);
 
     backend::UniformLocation _uniformColorLoc;
     backend::UniformLocation _uniformCameraRotLoc;

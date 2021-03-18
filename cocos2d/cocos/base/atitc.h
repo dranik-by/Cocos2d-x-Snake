@@ -37,12 +37,8 @@ enum class ATITCDecodeFlag
 };
 
 //Decode ATITC encode data to RGB32
-void atitc_decode(uint8_t *encode_data,
-                  uint8_t *decode_data,
-                  const int pixelsWidth,
-                  const int pixelsHeight,
-                  ATITCDecodeFlag decodeFlag
-                  );
+void atitc_decode(uint8_t* encode_data, uint8_t* decode_data, const int pixelsWidth, const int pixelsHeight,
+                  ATITCDecodeFlag decodeFlag);
 
 /// @endcond
 #endif /* defined(COCOS2DX_PLATFORM_THIRDPARTY_ATITC_) */

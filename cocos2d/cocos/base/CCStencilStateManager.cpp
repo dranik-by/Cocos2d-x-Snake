@@ -35,15 +35,15 @@ int StencilStateManager::s_layer = -1;
 
 StencilStateManager::StencilStateManager()
 {
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_UCOLOR);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new(std::nothrow) backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
-    
+
     auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    const auto &attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
     }
@@ -51,13 +51,9 @@ StencilStateManager::StencilStateManager()
 
     _mvpMatrixLocaiton = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _colorUniformLocation = pipelineDescriptor.programState->getUniformLocation("u_color");
-    
-   
+
     Vec2 vertices[4] = {
-        Vec2(-1.0f, -1.0f),
-        Vec2(1.0f, -1.0f),
-        Vec2(1.0f, 1.0f),
-        Vec2(-1.0f, 1.0f)
+    Vec2(-1.0f, -1.0f), Vec2(1.0f, -1.0f), Vec2(1.0f, 1.0f), Vec2(-1.0f, 1.0f)
     };
     _customCommand.createVertexBuffer(sizeof(Vec2), 4, CustomCommand::BufferUsage::STATIC);
     _customCommand.updateVertexBuffer(vertices, sizeof(vertices));
@@ -82,13 +78,12 @@ void StencilStateManager::drawFullScreenQuadClearStencil(float globalZOrder)
     _programState->setUniform(_mvpMatrixLocaiton, Mat4::IDENTITY.m, sizeof(Mat4::IDENTITY.m));
 }
 
-
 void StencilStateManager::setAlphaThreshold(float alphaThreshold)
 {
     _alphaThreshold = alphaThreshold;
 }
 
-float StencilStateManager::getAlphaThreshold()const
+float StencilStateManager::getAlphaThreshold() const
 {
     return _alphaThreshold;
 }
@@ -98,7 +93,7 @@ void StencilStateManager::setInverted(bool inverted)
     _inverted = inverted;
 }
 
-bool StencilStateManager::isInverted()const
+bool StencilStateManager::isInverted() const
 {
     return _inverted;
 }
@@ -168,8 +163,7 @@ void StencilStateManager::onBeforeDrawQuadCmd()
     //     if in inverted mode: set the current layer value to 1 in the stencil buffer
     renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
     renderer->setStencilOperation(!_inverted ? backend::StencilOperation::ZERO : backend::StencilOperation::REPLACE,
-        backend::StencilOperation::KEEP,
-        backend::StencilOperation::KEEP);
+                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawQuadCmd()
@@ -178,23 +172,22 @@ void StencilStateManager::onAfterDrawQuadCmd()
     renderer->setStencilCompareFunction(backend::CompareFunction::NEVER, _currentLayerMask, _currentLayerMask);
 
     renderer->setStencilOperation(!_inverted ? backend::StencilOperation::REPLACE : backend::StencilOperation::ZERO,
-        backend::StencilOperation::KEEP,
-        backend::StencilOperation::KEEP);
+                                  backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
 }
 
 void StencilStateManager::onAfterDrawStencil()
 {
     // restore the depth test state
-//    glDepthMask(_currentDepthWriteMask);
+    //    glDepthMask(_currentDepthWriteMask);
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setDepthWrite(_currentDepthWriteMask);
     //if (currentDepthTestEnabled) {
     //    glEnable(GL_DEPTH_TEST);
     //}
-    
+
     ///////////////////////////////////
     // DRAW CONTENT
-    
+
     // setup the stencil test function like this:
     // for each pixel of this node and its children
     //     if all layers less than or equals to the current are set to 1 in the stencil buffer
@@ -203,7 +196,8 @@ void StencilStateManager::onAfterDrawStencil()
     //         do not draw the pixel but keep the current layer in the stencil buffer
     renderer->setStencilCompareFunction(backend::CompareFunction::EQUAL, _mask_layer_le, _mask_layer_le);
 
-    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP, backend::StencilOperation::KEEP);
+    renderer->setStencilOperation(backend::StencilOperation::KEEP, backend::StencilOperation::KEEP,
+                                  backend::StencilOperation::KEEP);
 
     // draw (according to the stencil test function) this node and its children
 
@@ -213,7 +207,7 @@ void StencilStateManager::onAfterVisit()
 {
     ///////////////////////////////////
     // CLEANUP
-    
+
     // manually restore the stencil state
     auto renderer = Director::getInstance()->getRenderer();
     renderer->setStencilCompareFunction(_currentStencilFunc, _currentStencilRef, _currentStencilReadMask);
@@ -225,10 +219,9 @@ void StencilStateManager::onAfterVisit()
     {
         renderer->setStencilTest(false);
     }
-    
+
     // we are done using this layer, decrement
     s_layer--;
 }
-
 
 NS_CC_END

@@ -45,40 +45,39 @@ void cocos_audioengine_focus_change(int focusChange);
 
 using namespace cocos2d;
 
-extern "C"
-{
+extern "C" {
 
 // ndk break compatibility, refer to https://github.com/cocos2d/cocos2d-x/issues/16267 for detail information
 // should remove it when using NDK r13 since NDK r13 will add back bsd_signal()
 #if __ANDROID_API__ > 19
-#include <signal.h>
-#include <dlfcn.h>
-    typedef __sighandler_t (*bsd_signal_func_t)(int, __sighandler_t);
-    bsd_signal_func_t bsd_signal_func = NULL;
+    #include <signal.h>
+    #include <dlfcn.h>
+typedef __sighandler_t (*bsd_signal_func_t)(int, __sighandler_t);
+bsd_signal_func_t bsd_signal_func = NULL;
 
-    __sighandler_t bsd_signal(int s, __sighandler_t f) {
+__sighandler_t bsd_signal(int s, __sighandler_t f) {
+    if (bsd_signal_func == NULL) {
+        // For now (up to Android 7.0) this is always available
+        bsd_signal_func = (bsd_signal_func_t) dlsym(RTLD_DEFAULT, "bsd_signal");
+
         if (bsd_signal_func == NULL) {
-            // For now (up to Android 7.0) this is always available 
-            bsd_signal_func = (bsd_signal_func_t) dlsym(RTLD_DEFAULT, "bsd_signal");
-
-            if (bsd_signal_func == NULL) {
-                __android_log_assert("", "bsd_signal_wrapper", "bsd_signal symbol not found!");
-            }
+            __android_log_assert("", "bsd_signal_wrapper", "bsd_signal symbol not found!");
         }
-        return bsd_signal_func(s, f);
     }
+    return bsd_signal_func(s, f);
+}
 #endif // __ANDROID_API__ > 19
 
-JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved)
-{
-    JniHelper::setJavaVM(vm);
+JNIEXPORT jint
+JNI_OnLoad(JavaVM * vm , void* reserved ) {
+JniHelper::setJavaVM(vm);
 
-    cocos_android_app_init(JniHelper::getEnv());
+cocos_android_app_init (JniHelper::getEnv());
 
-    return JNI_VERSION_1_4;
+return JNI_VERSION_1_4;
 }
 
-JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, jobject thiz, jint w, jint h)
+JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv* env, jobject thiz, jint w, jint h)
 {
     auto director = cocos2d::Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -101,29 +100,45 @@ JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeInit(JNIEnv*  env, j
     cocos2d::network::_preloadJavaDownloaderClass();
 }
 
-JNIEXPORT jintArray Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv*  env, jobject thiz)
+JNIEXPORT jintArray
+Java_org_cocos2dx_lib_Cocos2dxActivity_getGLContextAttrs(JNIEnv
+*  env,
+jobject thiz
+)
 {
-    cocos2d::Application::getInstance()->initGLContextAttrs(); 
-    GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
-    
-    int tmp[7] = {_glContextAttrs.redBits, _glContextAttrs.greenBits, _glContextAttrs.blueBits,
-                           _glContextAttrs.alphaBits, _glContextAttrs.depthBits, _glContextAttrs.stencilBits, _glContextAttrs.multisamplingCount};
+cocos2d::Application::getInstance()->initGLContextAttrs();
+GLContextAttrs _glContextAttrs = GLView::getGLContextAttrs();
 
+int tmp[7] = {
+_glContextAttrs.redBits, _glContextAttrs.greenBits, _glContextAttrs.blueBits, _glContextAttrs.alphaBits
+, _glContextAttrs.depthBits, _glContextAttrs.stencilBits, _glContextAttrs.multisamplingCount
+};
 
-    jintArray glContextAttrsJava = env->NewIntArray(7);
-        env->SetIntArrayRegion(glContextAttrsJava, 0, 7, tmp);
-    
-    return glContextAttrsJava;
+jintArray glContextAttrsJava = env->NewIntArray(7);
+env->
+SetIntArrayRegion(glContextAttrsJava,
+0, 7, tmp);
+
+return
+glContextAttrsJava;
 }
 
-JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxAudioFocusManager_nativeOnAudioFocusChange(JNIEnv* env, jobject thiz, jint focusChange)
+JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxAudioFocusManager_nativeOnAudioFocusChange(JNIEnv * env, jobject
+thiz,
+jint focusChange
+)
 {
-    cocos_audioengine_focus_change(focusChange);
+cocos_audioengine_focus_change(focusChange);
 }
 
-JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv*  env, jobject thiz, jint w, jint h)
+JNIEXPORT void Java_org_cocos2dx_lib_Cocos2dxRenderer_nativeOnSurfaceChanged(JNIEnv * env, jobject
+thiz,
+jint w, jint
+h)
 {
-    cocos2d::Application::getInstance()->applicationScreenSizeChanged(w, h);
+cocos2d::Application::getInstance()->
+applicationScreenSizeChanged(w, h
+);
 }
 
 }

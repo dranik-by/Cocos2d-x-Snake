@@ -32,17 +32,17 @@
  */
 @protocol CCUITextInput <NSObject>
 
-@property (nonatomic, retain, setter=ccui_setText:) NSString *ccui_text;
-@property (nonatomic, retain, setter=ccui_setTextColor:) NSColor *ccui_textColor;
-@property (nonatomic, retain, setter=ccui_setFont:) NSFont *ccui_font;
-@property (nonatomic, assign, setter=ccui_setMaxLength:)int ccui_maxLength;
-@property (nonatomic, retain, setter=ccui_setPlaceholder:) NSString *ccui_placeholder;
-@property (nonatomic, retain, setter=ccui_setPlaceholderColor:) NSColor *ccui_placeholderColor;
-@property (nonatomic, retain, setter=ccui_setPlaceholderFont:) NSFont *ccui_placeholderFont;
-@property (nonatomic, assign, setter=ccui_setTextHorizontalAlignment:) NSTextAlignment ccui_alignment;
+@property(nonatomic, retain, setter=ccui_setText:) NSString* ccui_text;
+@property(nonatomic, retain, setter=ccui_setTextColor:) NSColor* ccui_textColor;
+@property(nonatomic, retain, setter=ccui_setFont:) NSFont* ccui_font;
+@property(nonatomic, assign, setter=ccui_setMaxLength:) int ccui_maxLength;
+@property(nonatomic, retain, setter=ccui_setPlaceholder:) NSString* ccui_placeholder;
+@property(nonatomic, retain, setter=ccui_setPlaceholderColor:) NSColor* ccui_placeholderColor;
+@property(nonatomic, retain, setter=ccui_setPlaceholderFont:) NSFont* ccui_placeholderFont;
+@property(nonatomic, assign, setter=ccui_setTextHorizontalAlignment:) NSTextAlignment ccui_alignment;
 
 /* can only set. and not get, since the getter will only return one delegate implementation */
-- (void)ccui_setDelegate:(id<NSTextFieldDelegate, NSTextViewDelegate>)delegate;
+- (void)ccui_setDelegate:(id <NSTextFieldDelegate, NSTextViewDelegate>)delegate;
 
 @end
 

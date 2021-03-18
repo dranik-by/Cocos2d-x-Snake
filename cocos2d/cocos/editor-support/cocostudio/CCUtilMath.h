@@ -31,27 +31,26 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include <math.h>
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 #define CC_DOUBLE_PI (M_PI*2)
 
 #define CC_HALF_PI  (M_PI * 0.5f)
 
-
 //! hit test function
-bool CC_STUDIO_DLL isSpriteContainPoint(cocos2d::Sprite *sprite, cocos2d::Vec2 point);
-bool CC_STUDIO_DLL isSpriteContainPoint(cocos2d::Sprite *sprite, cocos2d::Vec2 point, cocos2d::Vec2 &outPoint);
+bool CC_STUDIO_DLL isSpriteContainPoint(cocos2d::Sprite* sprite, cocos2d::Vec2 point);
+bool CC_STUDIO_DLL isSpriteContainPoint(cocos2d::Sprite* sprite, cocos2d::Vec2 point, cocos2d::Vec2 &outPoint);
 
 #define CC_SPRITE_CONTAIN_POINT(sprite, point) isSpriteContainPoint((sprite), (point))
 #define CC_SPRITE_CONTAIN_POINT_WITH_RETURN(sprite, point, outPoint) isSpriteContainPoint((sprite), (point), outPoint)
 
-
 //! motion curve function
 cocos2d::Vec2 CC_STUDIO_DLL bezierTo(float t, cocos2d::Vec2 &point1, cocos2d::Vec2 &point2, cocos2d::Vec2 &point3);
-cocos2d::Vec2 CC_STUDIO_DLL bezierTo(float t, cocos2d::Vec2 &point1, cocos2d::Vec2 &point2, cocos2d::Vec2 &point3, cocos2d::Vec2 &point4);
+cocos2d::Vec2 CC_STUDIO_DLL bezierTo(float t, cocos2d::Vec2 &point1, cocos2d::Vec2 &point2, cocos2d::Vec2 &point3,
+                                     cocos2d::Vec2 &point4);
 
 cocos2d::Vec2 CC_STUDIO_DLL circleTo(float t, cocos2d::Vec2 &center, float radius, float fromRadian, float radianDif);
-
 
 }
 

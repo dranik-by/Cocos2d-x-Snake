@@ -36,10 +36,10 @@ ComponentContainer::ComponentContainer(Node* node)
 }
 
 ComponentContainer::~ComponentContainer()
-{  
+{
 }
 
-Component* ComponentContainer::get(const std::string& name) const
+Component* ComponentContainer::get(const std::string &name) const
 {
     Component* ret = nullptr;
 
@@ -52,7 +52,7 @@ Component* ComponentContainer::get(const std::string& name) const
     return ret;
 }
 
-bool ComponentContainer::add(Component *com)
+bool ComponentContainer::add(Component* com)
 {
     bool ret = false;
     CCASSERT(com != nullptr, "Component must be non-nil");
@@ -72,15 +72,15 @@ bool ComponentContainer::add(Component *com)
         com->onAdd();
 
         ret = true;
-    } while(0);
+    } while (0);
     return ret;
 }
 
-bool ComponentContainer::remove(const std::string& componentName)
+bool ComponentContainer::remove(const std::string &componentName)
 {
     bool ret = false;
-    do 
-    {        
+    do
+    {
         auto iter = _componentMap.find(componentName);
         CC_BREAK_IF(iter == _componentMap.end());
 
@@ -92,12 +92,12 @@ bool ComponentContainer::remove(const std::string& componentName)
         component->release();
 
         ret = true;
-    } while(0);
+    } while (0);
 
     return ret;
- }
+}
 
-bool ComponentContainer::remove(Component *com)
+bool ComponentContainer::remove(Component* com)
 {
     return remove(com->getName());
 }
@@ -106,13 +106,13 @@ void ComponentContainer::removeAll()
 {
     if (!_componentMap.empty())
     {
-        for (auto& iter : _componentMap)
+        for (auto &iter : _componentMap)
         {
             iter.second->onRemove();
             iter.second->setOwner(nullptr);
             iter.second->release();
         }
-        
+
         _componentMap.clear();
         _owner->unscheduleUpdate();
     }
@@ -123,7 +123,7 @@ void ComponentContainer::visit(float delta)
     if (!_componentMap.empty())
     {
         CC_SAFE_RETAIN(_owner);
-        for (auto& iter : _componentMap)
+        for (auto &iter : _componentMap)
         {
             iter.second->update(delta);
         }
@@ -133,7 +133,7 @@ void ComponentContainer::visit(float delta)
 
 void ComponentContainer::onEnter()
 {
-    for (auto& iter : _componentMap)
+    for (auto &iter : _componentMap)
     {
         iter.second->onEnter();
     }
@@ -141,7 +141,7 @@ void ComponentContainer::onEnter()
 
 void ComponentContainer::onExit()
 {
-    for (auto& iter : _componentMap)
+    for (auto &iter : _componentMap)
     {
         iter.second->onExit();
     }

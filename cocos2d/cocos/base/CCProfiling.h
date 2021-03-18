@@ -76,8 +76,7 @@ public:
      */
     static Profiler* getInstance();
 
-
-    /** Creates and adds a new timer 
+    /** Creates and adds a new timer
      * @js NA
      * @lua NA
      */
@@ -119,11 +118,15 @@ public:
      * @lua NA
      */
     virtual std::string getDescription() const;
+
     /**
      * @js NA
      * @lua NA
      */
-    const std::chrono::high_resolution_clock::time_point& getStartTime() { return _startTime; }
+    const std::chrono::high_resolution_clock::time_point &getStartTime()
+    {
+        return _startTime;
+    }
 
     /** resets the timer properties
      * @js NA
@@ -141,9 +144,9 @@ public:
     long numberOfCalls;
 };
 
-extern void CC_DLL ProfilingBeginTimingBlock(const char *timerName);
-extern void CC_DLL ProfilingEndTimingBlock(const char *timerName);
-extern void CC_DLL ProfilingResetTimingBlock(const char *timerName);
+extern void CC_DLL ProfilingBeginTimingBlock(const char* timerName);
+extern void CC_DLL ProfilingEndTimingBlock(const char* timerName);
+extern void CC_DLL ProfilingResetTimingBlock(const char* timerName);
 
 /*
  * cocos2d profiling categories

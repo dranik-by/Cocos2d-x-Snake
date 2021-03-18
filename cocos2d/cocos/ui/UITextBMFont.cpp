@@ -29,28 +29,29 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 static const int LABELBMFONT_RENDERER_Z = (-1);
-    
+
 IMPLEMENT_CLASS_GUI_INFO(TextBMFont)
-    
-TextBMFont::TextBMFont():
-_labelBMFontRenderer(nullptr),
-_fntFileName(""),
-_stringValue(""),
-_labelBMFontRendererAdaptDirty(true)
+
+TextBMFont::TextBMFont()
+: _labelBMFontRenderer(nullptr)
+, _fntFileName("")
+, _stringValue("")
+, _labelBMFontRendererAdaptDirty(true)
 {
 }
 
 TextBMFont::~TextBMFont()
 {
-    
+
 }
 
 TextBMFont* TextBMFont::create()
 {
-    TextBMFont* widget = new (std::nothrow) TextBMFont();
+    TextBMFont* widget = new(std::nothrow) TextBMFont();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -59,10 +60,10 @@ TextBMFont* TextBMFont::create()
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
+
 TextBMFont* TextBMFont::create(const std::string &text, const std::string &filename)
 {
-    TextBMFont* widget = new (std::nothrow) TextBMFont();
+    TextBMFont* widget = new(std::nothrow) TextBMFont();
     if (widget && widget->init())
     {
         widget->setFntFile(filename);
@@ -80,7 +81,7 @@ void TextBMFont::initRenderer()
     addProtectedChild(_labelBMFontRenderer, LABELBMFONT_RENDERER_Z, -1);
 }
 
-void TextBMFont::setFntFile(const std::string& fileName)
+void TextBMFont::setFntFile(const std::string &fileName)
 {
     if (fileName.empty())
     {
@@ -88,12 +89,12 @@ void TextBMFont::setFntFile(const std::string& fileName)
     }
     _fntFileName = fileName;
     _labelBMFontRenderer->setBMFontFilePath(fileName);
-    
+
     updateContentSizeWithTextureSize(_labelBMFontRenderer->getContentSize());
     _labelBMFontRendererAdaptDirty = true;
 }
 
-void TextBMFont::setString(const std::string& value)
+void TextBMFont::setString(const std::string &value)
 {
     if (value == _labelBMFontRenderer->getString())
     {
@@ -105,12 +106,12 @@ void TextBMFont::setString(const std::string& value)
     _labelBMFontRendererAdaptDirty = true;
 }
 
-const std::string& TextBMFont::getString()const
+const std::string &TextBMFont::getString() const
 {
     return _stringValue;
 }
-    
-ssize_t TextBMFont::getStringLength()const
+
+ssize_t TextBMFont::getStringLength() const
 {
     return _labelBMFontRenderer->getStringLength();
 }
@@ -120,7 +121,7 @@ void TextBMFont::onSizeChanged()
     Widget::onSizeChanged();
     _labelBMFontRendererAdaptDirty = true;
 }
-    
+
 void TextBMFont::adaptRenderers()
 {
     if (_labelBMFontRendererAdaptDirty)
@@ -172,7 +173,7 @@ Widget* TextBMFont::createCloneInstance()
     return TextBMFont::create();
 }
 
-void TextBMFont::copySpecialProperties(Widget *widget)
+void TextBMFont::copySpecialProperties(Widget* widget)
 {
     TextBMFont* labelBMFont = dynamic_cast<TextBMFont*>(widget);
     if (labelBMFont)

@@ -44,7 +44,7 @@ NS_CC_BEGIN
 // implementation RenderTexture
 RenderTexture::RenderTexture()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
     auto toBackgroundListener = EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, CC_CALLBACK_1(RenderTexture::listenToBackground, this));
@@ -52,7 +52,7 @@ RenderTexture::RenderTexture()
 
     auto toForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, CC_CALLBACK_1(RenderTexture::listenToForeground, this));
     _eventDispatcher->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
-#endif
+    #endif
 }
 
 RenderTexture::~RenderTexture()
@@ -67,7 +67,7 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
 {
     // We have not found a way to dispatch the enter background message before the texture data are destroyed.
     // So we disable this pair of message handler at present.
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     // to get the rendered texture data
     auto func = [&](Image* uiTextureImage){
         if (uiTextureImage)
@@ -92,12 +92,12 @@ void RenderTexture::listenToBackground(EventCustom* /*event*/)
     auto callback = std::bind(func, std::placeholders::_1);
     newImage(callback, false);
 
-#endif
+    #endif
 }
 
 void RenderTexture::listenToForeground(EventCustom* /*event*/)
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     const Size& s = _texture2D->getContentSizeInPixels();
     //TODO new-renderer: field _depthAndStencilFormat removal
 //    if (_depthAndStencilFormat != 0)
@@ -110,14 +110,14 @@ void RenderTexture::listenToForeground(EventCustom* /*event*/)
     {
         _texture2DCopy->setAntiAliasTexParameters();
     }
-#endif
+    #endif
 }
 
-RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture* ret = new(std::nothrow) RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, eFormat))
+    if (ret && ret->initWithWidthAndHeight(w, h, eFormat))
     {
         ret->autorelease();
         return ret;
@@ -126,11 +126,11 @@ RenderTexture * RenderTexture::create(int w, int h, backend::PixelFormat eFormat
     return nullptr;
 }
 
-RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
+RenderTexture* RenderTexture::create(int w, int h, backend::PixelFormat eFormat, PixelFormat uDepthStencilFormat)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture* ret = new(std::nothrow) RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
+    if (ret && ret->initWithWidthAndHeight(w, h, eFormat, uDepthStencilFormat))
     {
         ret->autorelease();
         return ret;
@@ -139,11 +139,11 @@ RenderTexture * RenderTexture::create(int w ,int h, backend::PixelFormat eFormat
     return nullptr;
 }
 
-RenderTexture * RenderTexture::create(int w, int h)
+RenderTexture* RenderTexture::create(int w, int h)
 {
-    RenderTexture *ret = new (std::nothrow) RenderTexture();
+    RenderTexture* ret = new(std::nothrow) RenderTexture();
 
-    if(ret && ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8888, PixelFormat::NONE))
+    if (ret && ret->initWithWidthAndHeight(w, h, backend::PixelFormat::RGBA8888, PixelFormat::NONE))
     {
         ret->autorelease();
         return ret;
@@ -164,11 +164,11 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
     bool ret = false;
     do
     {
-        _fullRect = _rtTextureRect = Rect(0,0,w,h);
+        _fullRect = _rtTextureRect = Rect(0, 0, w, h);
         w = (int)(w * CC_CONTENT_SCALE_FACTOR());
         h = (int)(h * CC_CONTENT_SCALE_FACTOR());
-        _fullviewPort = Rect(0,0,w,h);
-        
+        _fullviewPort = Rect(0, 0, w, h);
+
         // textures must be power of two squared
         int powW = 0;
         int powH = 0;
@@ -183,17 +183,17 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             powW = ccNextPOT(w);
             powH = ccNextPOT(h);
         }
-        
+
         backend::TextureDescriptor descriptor;
         descriptor.width = powW;
         descriptor.height = powH;
         descriptor.textureUsage = TextureUsage::RENDER_TARGET;
         descriptor.textureFormat = PixelFormat::RGBA8888;
         auto texture = backend::Device::getInstance()->newTexture(descriptor);
-        if (! texture)
+        if (!texture)
             break;
 
-        _texture2D = new (std::nothrow) Texture2D();
+        _texture2D = new(std::nothrow) Texture2D();
         if (_texture2D)
         {
             _texture2D->initWithBackendTexture(texture, CC_ENABLE_PREMULTIPLIED_ALPHA != 0);
@@ -212,10 +212,10 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
             _renderTargetFlags = RenderTargetFlag::ALL;
             descriptor.textureFormat = depthStencilFormat;
             texture = backend::Device::getInstance()->newTexture(descriptor);
-            if (! texture)
+            if (!texture)
                 break;
 
-            _depthStencilTexture = new (std::nothrow) Texture2D;
+            _depthStencilTexture = new(std::nothrow) Texture2D;
             if (!_depthStencilTexture)
             {
                 texture->release();
@@ -237,33 +237,33 @@ bool RenderTexture::initWithWidthAndHeight(int w, int h, backend::PixelFormat fo
 
         _texture2D->release();
 
-#if defined(CC_USE_GL) || defined(CC_USE_GLES)
+        #if defined(CC_USE_GL) || defined(CC_USE_GLES)
         _sprite->setFlippedY(true);
-#endif
+        #endif
 
-#if CC_ENABLE_PREMULTIPLIED_ALPHA != 0
+        #if CC_ENABLE_PREMULTIPLIED_ALPHA != 0
         _sprite->setBlendFunc(BlendFunc::ALPHA_PREMULTIPLIED);
         _sprite->setOpacityModifyRGB(true);
-#else
+        #else
         _sprite->setBlendFunc(BlendFunc::ALPHA_NON_PREMULTIPLIED);
         _sprite->setOpacityModifyRGB(false);
-#endif
-        
+        #endif
+
         // Disabled by default.
         _autoDraw = false;
-        
+
         // add sprite for backward compatibility
         addChild(_sprite);
-        
+
         ret = true;
     } while (0);
-    
+
     return ret;
 }
 
 void RenderTexture::setSprite(Sprite* sprite)
 {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -272,13 +272,13 @@ void RenderTexture::setSprite(Sprite* sprite)
         if (_sprite)
             sEngine->releaseScriptObject(this, _sprite);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     CC_SAFE_RETAIN(sprite);
     CC_SAFE_RELEASE(_sprite);
     _sprite = sprite;
 }
 
-void RenderTexture::setVirtualViewport(const Vec2& rtBegin, const Rect& fullRect, const Rect& fullViewport)
+void RenderTexture::setVirtualViewport(const Vec2 &rtBegin, const Rect &fullRect, const Rect &fullViewport)
 {
     _rtTextureRect.origin.x = rtBegin.x;
     _rtTextureRect.origin.y = rtBegin.y;
@@ -303,7 +303,8 @@ void RenderTexture::beginWithClear(float r, float g, float b, float a, float dep
     beginWithClear(r, g, b, a, depthValue, stencilValue, ClearFlag::ALL);
 }
 
-void RenderTexture::beginWithClear(float r, float g, float b, float a, float depthValue, int stencilValue, ClearFlag flags)
+void RenderTexture::beginWithClear(float r, float g, float b, float a, float depthValue, int stencilValue,
+                                   ClearFlag flags)
 {
     setClearColor(Color4F(r, g, b, a));
     setClearDepth(depthValue);
@@ -329,7 +330,7 @@ void RenderTexture::clearStencil(int stencilValue)
     setClearStencil(stencilValue);
 }
 
-void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void RenderTexture::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     // override visit.
     // Don't call visit on its children
@@ -337,7 +338,7 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     {
         return;
     }
-    
+
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
     Director* director = Director::getInstance();
@@ -352,7 +353,7 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     {
         draw(renderer, _modelViewTransform, flags);
     }
-    
+
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // FIX ME: Why need to set _orderOfArrival to 0??
@@ -360,7 +361,8 @@ void RenderTexture::visit(Renderer *renderer, const Mat4 &parentTransform, uint3
     // setOrderOfArrival(0);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA, std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFileAsNonPMA(const std::string &filename, bool isRGBA,
+                                       std::function<void(RenderTexture*, const std::string &)> callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
@@ -371,7 +373,8 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA,
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
-        if (isRGBA) CCLOG("RGBA is not supported for JPG format.");
+        if (isRGBA)
+            CCLOG("RGBA is not supported for JPG format.");
         return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
     }
     else
@@ -380,35 +383,39 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& filename, bool isRGBA,
     }
 
     return saveToFileAsNonPMA(filename, Image::Format::JPG, false, callback);
-}     
-                                                              
-bool RenderTexture::saveToFile(const std::string& filename, bool isRGBA, std::function<void (RenderTexture*, const std::string&)> callback)
+}
+
+bool RenderTexture::saveToFile(const std::string &filename, bool isRGBA,
+                               std::function<void(RenderTexture*, const std::string &)> callback)
 {
     std::string basename(filename);
     std::transform(basename.begin(), basename.end(), basename.begin(), ::tolower);
-    
+
     if (basename.find(".png") != std::string::npos)
     {
         return saveToFile(filename, Image::Format::PNG, isRGBA, callback);
     }
     else if (basename.find(".jpg") != std::string::npos)
     {
-        if (isRGBA) CCLOG("RGBA is not supported for JPG format.");
+        if (isRGBA)
+            CCLOG("RGBA is not supported for JPG format.");
         return saveToFile(filename, Image::Format::JPG, false, callback);
     }
     else
     {
         CCLOG("Only PNG and JPG format are supported now!");
     }
-    
+
     return saveToFile(filename, Image::Format::JPG, false, callback);
 }
 
-bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Format format, bool isRGBA, std::function<void(RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFileAsNonPMA(const std::string &fileName, Image::Format format, bool isRGBA,
+                                       std::function<void(RenderTexture*, const std::string &)> callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
-        "the image can only be saved as JPG or PNG format");
-    if (isRGBA && format == Image::Format::JPG) CCLOG("RGBA is not supported for JPG format");
+             "the image can only be saved as JPG or PNG format");
+    if (isRGBA && format == Image::Format::JPG)
+        CCLOG("RGBA is not supported for JPG format");
 
     _saveFileCallback = callback;
 
@@ -420,26 +427,28 @@ bool RenderTexture::saveToFileAsNonPMA(const std::string& fileName, Image::Forma
     return true;
 }
 
-
-bool RenderTexture::saveToFile(const std::string& fileName, Image::Format format, bool isRGBA, std::function<void (RenderTexture*, const std::string&)> callback)
+bool RenderTexture::saveToFile(const std::string &fileName, Image::Format format, bool isRGBA,
+                               std::function<void(RenderTexture*, const std::string &)> callback)
 {
     CCASSERT(format == Image::Format::JPG || format == Image::Format::PNG,
              "the image can only be saved as JPG or PNG format");
-    if (isRGBA && format == Image::Format::JPG) CCLOG("RGBA is not supported for JPG format");
-    
+    if (isRGBA && format == Image::Format::JPG)
+        CCLOG("RGBA is not supported for JPG format");
+
     _saveFileCallback = callback;
-    
+
     std::string fullpath = FileUtils::getInstance()->getWritablePath() + fileName;
     _saveToFileCommand.init(_globalZOrder);
     _saveToFileCommand.func = CC_CALLBACK_0(RenderTexture::onSaveToFile, this, fullpath, isRGBA, false);
-    
+
     Director::getInstance()->getRenderer()->addCommand(&_saveToFileCommand);
     return true;
 }
 
-void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool forceNonPMA)
+void RenderTexture::onSaveToFile(const std::string &filename, bool isRGBA, bool forceNonPMA)
 {
-    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](Image* image){
+    auto callbackFunc = [&, filename, isRGBA, forceNonPMA](Image* image)
+    {
         if (image)
         {
             if (forceNonPMA && image->hasPremultipliedAlpha())
@@ -448,7 +457,7 @@ void RenderTexture::onSaveToFile(const std::string& filename, bool isRGBA, bool 
             }
             image->saveToFile(filename, !isRGBA);
         }
-        if(_saveFileCallback)
+        if (_saveFileCallback)
         {
             _saveFileCallback(this, filename);
         }
@@ -464,44 +473,47 @@ void RenderTexture::newImage(std::function<void(Image*)> imageCallback, bool fli
 
     if ((nullptr == _texture2D))
     {
-        return ;
+        return;
     }
 
-    const Size& s = _texture2D->getContentSizeInPixels();
+    const Size &s = _texture2D->getContentSizeInPixels();
 
     // to get the image size to save
     //        if the saving image domain exceeds the buffer texture domain,
     //        it should be cut
     int savedBufferWidth = (int)s.width;
     int savedBufferHeight = (int)s.height;
-    
-    Image *image = new (std::nothrow) Image();
-    
-    auto initCallback = [&, savedBufferWidth, savedBufferHeight, imageCallback](Image* image, const unsigned char* tempData){
-        image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight, 8, _texture2D->hasPremultipliedAlpha());
+
+    Image* image = new(std::nothrow) Image();
+
+    auto initCallback = [&, savedBufferWidth, savedBufferHeight, imageCallback](Image* image,
+                                                                                const unsigned char* tempData)
+    {
+        image->initWithRawData(tempData, savedBufferWidth * savedBufferHeight * 4, savedBufferWidth, savedBufferHeight,
+                               8, _texture2D->hasPremultipliedAlpha());
         imageCallback(image);
     };
     auto callback = std::bind(initCallback, image, std::placeholders::_1);
-    
+
     _texture2D->getBackendTexture()->getBytes(0, 0, savedBufferWidth, savedBufferHeight, flipImage, callback);
-    
-//    do
-//    {
-////        // TODO: move this to configuration, so we don't check it every time
-////        /*  Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
-////         */
-////        if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
-////        {
-////            // -- bind a temporary texture so we can clear the render buffer without losing our texture
-////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
-////            CHECK_GL_ERROR_DEBUG();
-////            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
-////        }
-//    } while (0);
+
+    //    do
+    //    {
+    ////        // TODO: move this to configuration, so we don't check it every time
+    ////        /*  Certain Qualcomm Adreno GPU's will retain data in memory after a frame buffer switch which corrupts the render to the texture. The solution is to clear the frame buffer before rendering to the texture. However, calling glClear has the unintended result of clearing the current texture. Create a temporary texture to overcome this. At the end of RenderTexture::begin(), switch the attached texture to the second one, call glClear, and then switch back to the original texture. This solution is unnecessary for other devices as they don't have the same issue with switching frame buffers.
+    ////         */
+    ////        if (Configuration::getInstance()->checkForGLExtension("GL_QCOM"))
+    ////        {
+    ////            // -- bind a temporary texture so we can clear the render buffer without losing our texture
+    ////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureCopy->getName(), 0);
+    ////            CHECK_GL_ERROR_DEBUG();
+    ////            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ////            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture->getName(), 0);
+    ////        }
+    //    } while (0);
 }
 
-void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void RenderTexture::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
 {
     if (_autoDraw)
     {
@@ -509,12 +521,13 @@ void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t fla
         begin();
 
         //clear screen
-        Director::getInstance()->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil, _globalZOrder);
+        Director::getInstance()->getRenderer()->clear(_clearFlags, _clearColor, _clearDepth, _clearStencil,
+                                                      _globalZOrder);
 
         //! make sure all children are drawn
         sortAllChildren();
 
-        for(const auto &child: _children)
+        for (const auto &child: _children)
         {
             if (child != _sprite)
                 child->visit(renderer, transform, flags);
@@ -527,7 +540,7 @@ void RenderTexture::draw(Renderer *renderer, const Mat4 &transform, uint32_t fla
 
 void RenderTexture::onBegin()
 {
-    Director *director = Director::getInstance();
+    Director* director = Director::getInstance();
 
     _oldProjMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _projectionMatrix);
@@ -535,10 +548,10 @@ void RenderTexture::onBegin()
     _oldTransMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _transformMatrix);
 
-    if(!_keepMatrix)
+    if (!_keepMatrix)
     {
         director->setProjection(director->getProjection());
-        const Size& texSize = _texture2D->getContentSizeInPixels();
+        const Size &texSize = _texture2D->getContentSizeInPixels();
 
         // Calculate the adjustment ratios based on the old and new projections
         Size size = director->getWinSizeInPixels();
@@ -546,20 +559,21 @@ void RenderTexture::onBegin()
         float heightRatio = size.height / texSize.height;
 
         Mat4 orthoMatrix;
-        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
+        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio,
+                                          (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
         director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     Rect viewport;
     viewport.size.width = _fullviewPort.size.width;
     viewport.size.height = _fullviewPort.size.height;
-    float viewPortRectWidthRatio = float(viewport.size.width)/_fullRect.size.width;
-    float viewPortRectHeightRatio = float(viewport.size.height)/_fullRect.size.height;
+    float viewPortRectWidthRatio = float(viewport.size.width) / _fullRect.size.width;
+    float viewPortRectHeightRatio = float(viewport.size.height) / _fullRect.size.height;
     viewport.origin.x = (_fullRect.origin.x - _rtTextureRect.origin.x) * viewPortRectWidthRatio;
     viewport.origin.y = (_fullRect.origin.y - _rtTextureRect.origin.y) * viewPortRectHeightRatio;
 
-    Renderer *renderer =  director->getRenderer();
-    
+    Renderer* renderer = director->getRenderer();
+
     _oldViewport = renderer->getViewport();
     renderer->setViewPort(viewport.origin.x, viewport.origin.y, viewport.size.width, viewport.size.height);
 
@@ -573,11 +587,11 @@ void RenderTexture::onBegin()
 
 void RenderTexture::onEnd()
 {
-    Director *director = Director::getInstance();
+    Director* director = Director::getInstance();
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _oldProjMatrix);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _oldTransMatrix);
-    
-    Renderer *renderer =  Director::getInstance()->getRenderer();
+
+    Renderer* renderer = Director::getInstance()->getRenderer();
     renderer->setViewPort(_oldViewport.x, _oldViewport.y, _oldViewport.w, _oldViewport.h);
     renderer->setRenderTarget(_oldRenderTargetFlag, _oldColorAttachment, _oldDepthAttachment, _oldStencilAttachment);
 }
@@ -586,33 +600,34 @@ void RenderTexture::begin()
 {
     Director* director = Director::getInstance();
     CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    
+
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     _projectionMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
+
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     _transformMatrix = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    
-    if(!_keepMatrix)
+
+    if (!_keepMatrix)
     {
         director->setProjection(director->getProjection());
-        
-        const Size& texSize = _texture2D->getContentSizeInPixels();
-        
+
+        const Size &texSize = _texture2D->getContentSizeInPixels();
+
         // Calculate the adjustment ratios based on the old and new projections
         Size size = director->getWinSizeInPixels();
-        
+
         float widthRatio = size.width / texSize.width;
         float heightRatio = size.height / texSize.height;
-        
+
         Mat4 orthoMatrix;
-        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio, (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
+        Mat4::createOrthographicOffCenter((float)-1.0 / widthRatio, (float)1.0 / widthRatio, (float)-1.0 / heightRatio,
+                                          (float)1.0 / heightRatio, -1, 1, &orthoMatrix);
         director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, orthoMatrix);
     }
 
     _groupCommand.init(_globalZOrder);
 
-    Renderer *renderer =  Director::getInstance()->getRenderer();
+    Renderer* renderer = Director::getInstance()->getRenderer();
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
 
@@ -628,8 +643,8 @@ void RenderTexture::end()
 
     Director* director = Director::getInstance();
     CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-    
-    Renderer *renderer = director->getRenderer();
+
+    Renderer* renderer = director->getRenderer();
     renderer->addCommand(&_endCommand);
     renderer->popGroup();
 
@@ -640,8 +655,7 @@ void RenderTexture::end()
 void RenderTexture::setClearFlags(ClearFlag clearFlags)
 {
     _clearFlags = clearFlags;
-    if (_clearFlags != ClearFlag::NONE
-        && !_depthStencilTexture)
+    if (_clearFlags != ClearFlag::NONE && !_depthStencilTexture)
     {
         _clearFlags = ClearFlag::COLOR;
     }
@@ -650,7 +664,8 @@ void RenderTexture::setClearFlags(ClearFlag clearFlags)
 void RenderTexture::clearColorAttachment()
 {
     auto renderer = Director::getInstance()->getRenderer();
-    _beforeClearAttachmentCommand.func = [=]() -> void {
+    _beforeClearAttachmentCommand.func = [=]()->void
+    {
         _oldColorAttachment = renderer->getColorAttachment();
         renderer->setRenderTarget(RenderTargetFlag::COLOR, _texture2D, nullptr, nullptr);
     };
@@ -659,7 +674,8 @@ void RenderTexture::clearColorAttachment()
     Color4F color(0.f, 0.f, 0.f, 0.f);
     renderer->clear(ClearFlag::COLOR, color, 1, 0, _globalZOrder);
 
-    _afterClearAttachmentCommand.func = [=]() -> void {
+    _afterClearAttachmentCommand.func = [=]()->void
+    {
         renderer->setRenderTarget(RenderTargetFlag::COLOR, _oldColorAttachment, nullptr, nullptr);
     };
     renderer->addCommand(&_afterClearAttachmentCommand);

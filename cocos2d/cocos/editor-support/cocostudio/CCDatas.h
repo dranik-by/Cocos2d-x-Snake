@@ -36,7 +36,6 @@ THE SOFTWARE.
 #include "2d/CCTweenFunction.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-
 #define CC_CREATE_NO_PARAM_NO_INIT(varType)\
 public: \
     static inline varType *create(){ \
@@ -63,7 +62,8 @@ public: \
     return nullptr;\
 }
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 /**
  * The base node include a lot of attributes.
@@ -73,7 +73,8 @@ namespace cocostudio {
 class CC_STUDIO_DLL BaseData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(BaseData)
+CC_CREATE_NO_PARAM_NO_INIT(BaseData)
+
 public:
     /**
      * @js ctor
@@ -89,7 +90,7 @@ public:
     * Copy data from node
     * @param  node A BaseData to copy data
     */
-    virtual void copy(const BaseData *node);
+    virtual void copy(const BaseData* node);
 
     /*
     * Calculate two BaseData's between value(to - from) and set to self
@@ -97,7 +98,7 @@ public:
     * @param  from   from BaseData
     * @param  to     to BaseData
     */
-    virtual void subtract(BaseData *from, BaseData *to, bool limit);
+    virtual void subtract(BaseData* from, BaseData* to, bool limit);
 
     virtual void setColor(const cocos2d::Color4B &color);
     virtual cocos2d::Color4B getColor();
@@ -123,7 +124,6 @@ public:
 
 };
 
-
 /**
 * DisplayType distinguish which type your display is.
 */
@@ -142,26 +142,28 @@ enum DisplayType
 class CC_STUDIO_DLL DisplayData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(DisplayData)
+CC_CREATE_NO_PARAM_NO_INIT(DisplayData)
 
-    static std::string changeDisplayToTexture(const std::string& displayName);
+    static std::string changeDisplayToTexture(const std::string &displayName);
 public:
     /**
      * @js ctor
      */
     DisplayData();
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~DisplayData() {}
+    virtual ~DisplayData()
+    {
+    }
 
-    virtual void copy(DisplayData *displayData);
+    virtual void copy(DisplayData* displayData);
 
     DisplayType displayType;    //! mark which type your display is
     std::string displayName;
 };
-
 
 /**
  *  @js NA
@@ -170,19 +172,23 @@ public:
 class CC_STUDIO_DLL SpriteDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(SpriteDisplayData)
+CC_CREATE_NO_PARAM_NO_INIT(SpriteDisplayData)
+
 public:
     /**
      * @js ctor
      */
     SpriteDisplayData();
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~SpriteDisplayData() {};
+    virtual ~SpriteDisplayData()
+    {
+    };
 
-    void copy(DisplayData *displayData);
+    void copy(DisplayData* displayData);
 public:
     BaseData skinData;
 };
@@ -191,20 +197,24 @@ public:
  *  @js NA
  *  @lua NA
  */
-class CC_STUDIO_DLL ArmatureDisplayData  : public DisplayData
+class CC_STUDIO_DLL ArmatureDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(ArmatureDisplayData)
+CC_CREATE_NO_PARAM_NO_INIT(ArmatureDisplayData)
+
 public:
     /**
      * @js ctor
      */
     ArmatureDisplayData();
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ArmatureDisplayData() {}
+    virtual ~ArmatureDisplayData()
+    {
+    }
 };
 
 /**
@@ -214,20 +224,22 @@ public:
 class CC_STUDIO_DLL ParticleDisplayData : public DisplayData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(ParticleDisplayData)
+CC_CREATE_NO_PARAM_NO_INIT(ParticleDisplayData)
+
 public:
     /**
      * @js ctor
      */
     ParticleDisplayData();
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~ParticleDisplayData() {};
+    virtual ~ParticleDisplayData()
+    {
+    };
 };
-
-
 
 /**
 * BoneData used to init a Bone.
@@ -239,7 +251,8 @@ public:
 class CC_STUDIO_DLL BoneData : public BaseData
 {
 public:
-    CC_CREATE_NO_PARAM(BoneData)
+CC_CREATE_NO_PARAM(BoneData)
+
 public:
     /**
      * @js ctor
@@ -253,15 +266,14 @@ public:
 
     virtual bool init();
 
-    void addDisplayData(DisplayData *displayData);
-    DisplayData *getDisplayData(int index);
+    void addDisplayData(DisplayData* displayData);
+    DisplayData* getDisplayData(int index);
 public:
     std::string name;                //! the bone's name
     std::string parentName;     //! the bone parent's name
     cocos2d::Vector<DisplayData*> displayDataList;    //! save DisplayData informations for the Bone
     cocos2d::AffineTransform boneDataTransform;
 };
-
 
 /**
 * ArmatureData saved the Armature name and Bonedata needed for the CCBones in this Armature
@@ -273,7 +285,8 @@ public:
 class CC_STUDIO_DLL ArmatureData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(ArmatureData)
+CC_CREATE_NO_PARAM(ArmatureData)
+
 public:
     /**
      * @js ctor
@@ -286,8 +299,8 @@ public:
     ~ArmatureData();
 
     bool init();
-    void addBoneData(BoneData *boneData);
-    BoneData *getBoneData(const std::string& boneName);
+    void addBoneData(BoneData* boneData);
+    BoneData* getBoneData(const std::string &boneName);
 public:
     std::string name;
     cocos2d::Map<std::string, BoneData*> boneDataDic;
@@ -319,7 +332,8 @@ enum BlendType
 class CC_STUDIO_DLL FrameData : public BaseData
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(FrameData)
+CC_CREATE_NO_PARAM_NO_INIT(FrameData)
+
 public:
     /**
      * @js ctor
@@ -331,14 +345,14 @@ public:
      */
     ~FrameData();
 
-    virtual void copy(const BaseData *baseData);
+    virtual void copy(const BaseData* baseData);
 public:
     int frameID;
     int duration;                //! The frame will last duration frames
 
     cocos2d::tweenfunc::TweenType tweenEasing;     //! Every frame's tween easing effect
     int easingParamNumber;
-    float *easingParams;
+    float* easingParams;
 
     bool isTween;                //! Whether it's a tween key frame
 
@@ -366,7 +380,8 @@ public:
 class CC_STUDIO_DLL MovementBoneData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(MovementBoneData)
+CC_CREATE_NO_PARAM(MovementBoneData)
+
 public:
     /**
      * @js ctor
@@ -380,8 +395,8 @@ public:
 
     virtual bool init();
 
-    void addFrameData(FrameData *frameData);
-    FrameData *getFrameData(int index);
+    void addFrameData(FrameData* frameData);
+    FrameData* getFrameData(int index);
 public:
     float delay;             //! movement delay percent, this value can produce a delay effect
     float scale;             //! scale this movement
@@ -398,7 +413,8 @@ public:
 class CC_STUDIO_DLL MovementData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(MovementData)
+CC_CREATE_NO_PARAM_NO_INIT(MovementData)
+
 public:
     /**
      * @js ctor
@@ -410,8 +426,8 @@ public:
      */
     ~MovementData();
 
-    void addMovementBoneData(MovementBoneData *movBoneData);
-    MovementBoneData *getMovementBoneData(const std::string& boneName);
+    void addMovementBoneData(MovementBoneData* movBoneData);
+    MovementBoneData* getMovementBoneData(const std::string &boneName);
 public:
     std::string name;
     int duration;        //! the frames this movement will last
@@ -449,7 +465,6 @@ public:
     cocos2d::Map<std::string, MovementBoneData*> movBoneDataDic;
 };
 
-
 /**
 *  AnimationData include all movement information for the Armature
 *  The struct is AnimationData -> MovementData -> MovementBoneData -> FrameData
@@ -460,7 +475,8 @@ public:
 class CC_STUDIO_DLL AnimationData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM_NO_INIT(AnimationData)
+CC_CREATE_NO_PARAM_NO_INIT(AnimationData)
+
 public:
     /**
      * @js ctor
@@ -472,16 +488,14 @@ public:
      */
     ~AnimationData();
 
-    void addMovement(MovementData *movData);
-    MovementData *getMovement(const std::string& movementName);
+    void addMovement(MovementData* movData);
+    MovementData* getMovement(const std::string &movementName);
     ssize_t getMovementCount();
 public:
     std::string name;
     cocos2d::Map<std::string, MovementData*> movementDataDic;
     std::vector<std::string> movementNames;
 };
-
-
 
 /*
 * ContourData include a contour vertex information
@@ -491,7 +505,8 @@ public:
 class CC_STUDIO_DLL ContourData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(ContourData)
+CC_CREATE_NO_PARAM(ContourData)
+
 public:
     /**
      * @js ctor
@@ -509,9 +524,6 @@ public:
     std::vector<cocos2d::Vec2> vertexList;    //! Save contour vertex info, vertex saved in a Vec2
 };
 
-
-
-
 /*
 * TextureData include a texture's information
 * @js NA
@@ -520,7 +532,8 @@ public:
 class CC_STUDIO_DLL TextureData : public cocos2d::Ref
 {
 public:
-    CC_CREATE_NO_PARAM(TextureData)
+CC_CREATE_NO_PARAM(TextureData)
+
 public:
     /**
      * @js ctor
@@ -534,8 +547,8 @@ public:
 
     virtual bool init();
 
-    void addContourData(ContourData *contourData);
-    ContourData *getContourData(int index);
+    void addContourData(ContourData* contourData);
+    ContourData* getContourData(int index);
 public:
 
     float height;        //! The texture's width, height
@@ -548,7 +561,6 @@ public:
 
     cocos2d::Vector<ContourData*> contourDataList;
 };
-
 
 }
 

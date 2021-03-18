@@ -43,20 +43,20 @@ THE SOFTWARE.
     #endif
 #else
     #if defined(_SHARED_)
-    #define EXPORT_DLL     __attribute__((visibility("default")))
+        #define EXPORT_DLL     __attribute__((visibility("default")))
     #elif defined(IGNORE_EXPORT)
-    #define EXPORT_DLL
+        #define EXPORT_DLL
     #else
-    #define EXPORT_DLL
+        #define EXPORT_DLL
     #endif
 #endif
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#define CC_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
+    #define CC_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
 #elif _MSC_VER >= 1400 //vs 2005 or higher
-#define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated)
+    #define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated)
 #else
-#define CC_DEPRECATED_ATTRIBUTE
+    #define CC_DEPRECATED_ATTRIBUTE
 #endif
 
 /**
@@ -64,7 +64,8 @@ THE SOFTWARE.
 * @{
 */
 
-namespace CocosDenshion {
+namespace CocosDenshion
+{
 
 /**
  * @class SimpleAudioEngine
@@ -100,7 +101,7 @@ public:
      * @lua preloadMusic
      */
     virtual void preloadBackgroundMusic(const char* filePath);
-    
+
     /**
      * Play background music.
      * 
@@ -209,8 +210,8 @@ public:
      *       - pan
      *       - gain
      */
-    virtual unsigned int playEffect(const char* filePath, bool loop = false,
-                                    float pitch = 1.0f, float pan = 0.0f, float gain = 1.0f);
+    virtual unsigned int playEffect(const char* filePath, bool loop = false, float pitch = 1.0f, float pan = 0.0f,
+                                    float gain = 1.0f);
 
     /**
      * Pause playing sound effect.

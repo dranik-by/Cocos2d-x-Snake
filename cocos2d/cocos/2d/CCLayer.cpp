@@ -46,7 +46,7 @@ THE SOFTWARE.
 #include "renderer/backend/ProgramState.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
-#include "platform/desktop/CCGLViewImpl-desktop.h"
+    #include "platform/desktop/CCGLViewImpl-desktop.h"
 #endif
 
 NS_CC_BEGIN
@@ -73,14 +73,14 @@ Layer::~Layer()
 
 bool Layer::init()
 {
-    Director * director = Director::getInstance();
+    Director* director = Director::getInstance();
     setContentSize(director->getWinSize());
     return true;
 }
 
-Layer *Layer::create()
+Layer* Layer::create()
 {
-    Layer *ret = new (std::nothrow) Layer();
+    Layer* ret = new(std::nothrow) Layer();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -95,51 +95,51 @@ Layer *Layer::create()
 
 int Layer::executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         TouchScriptData data(eventType, this, touch, event);
         ScriptEvent scriptEvent(kTouchEvent, &data);
         return ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
     }
-#else
+    #else
     CC_UNUSED_PARAM(eventType);
     CC_UNUSED_PARAM(touch);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
     return 0;
 }
 
-int Layer::executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event)
+int Layer::executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*> &touches,
+                                       Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         TouchesScriptData data(eventType, this, touches, event);
         ScriptEvent scriptEvent(kTouchesEvent, &data);
         return ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&scriptEvent);
     }
-#else
+    #else
     CC_UNUSED_PARAM(eventType);
     CC_UNUSED_PARAM(touches);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
     return 0;
 }
 
-
 void Layer::onAcceleration(Acceleration* acc, Event* /*unused_event*/)
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if(kScriptTypeNone != _scriptType)
+    #if CC_ENABLE_SCRIPT_BINDING
+    if (kScriptTypeNone != _scriptType)
     {
-        BasicScriptData data(this,(void*)acc);
-        ScriptEvent event(kAccelerometerEvent,&data);
+        BasicScriptData data(this, (void*)acc);
+        ScriptEvent event(kAccelerometerEvent, &data);
         ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
     }
-#else
+    #else
     CC_UNUSED_PARAM(acc);
-#endif
+    #endif
 }
 
 void Layer::onKeyPressed(EventKeyboard::KeyCode /*keyCode*/, Event* /*unused_event*/)
@@ -148,131 +148,131 @@ void Layer::onKeyPressed(EventKeyboard::KeyCode /*keyCode*/, Event* /*unused_eve
 
 void Layer::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* /*unused_event*/)
 {
-#if CC_ENABLE_SCRIPT_BINDING
-    if(kScriptTypeNone != _scriptType)
+    #if CC_ENABLE_SCRIPT_BINDING
+    if (kScriptTypeNone != _scriptType)
     {
         KeypadScriptData data(keyCode, this);
-        ScriptEvent event(kKeypadEvent,&data);
+        ScriptEvent event(kKeypadEvent, &data);
         ScriptEngineManager::getInstance()->getScriptEngine()->sendEvent(&event);
     }
-#else
+    #else
     CC_UNUSED_PARAM(keyCode);
-#endif
+    #endif
 }
 
 /// Callbacks
 
-bool Layer::onTouchBegan(Touch *touch, Event *event)
+bool Layer::onTouchBegan(Touch* touch, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         return executeScriptTouchHandler(EventTouch::EventCode::BEGAN, touch, event) == 0 ? false : true;
     }
-#else
-    CC_UNUSED_PARAM(touch);
-    CC_UNUSED_PARAM(event);
-#endif
+    #else
+        CC_UNUSED_PARAM(touch);
+        CC_UNUSED_PARAM(event);
+    #endif
     CCASSERT(false, "Layer#ccTouchBegan override me");
     return true;
 }
 
-void Layer::onTouchMoved(Touch *touch, Event *event)
+void Layer::onTouchMoved(Touch* touch, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchHandler(EventTouch::EventCode::MOVED, touch, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touch);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
-void Layer::onTouchEnded(Touch *touch, Event *event)
+void Layer::onTouchEnded(Touch* touch, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchHandler(EventTouch::EventCode::ENDED, touch, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touch);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
-void Layer::onTouchCancelled(Touch *touch, Event *event)
+void Layer::onTouchCancelled(Touch* touch, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchHandler(EventTouch::EventCode::CANCELLED, touch, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touch);
     CC_UNUSED_PARAM(event);
-#endif
-}    
+    #endif
+}
 
-void Layer::onTouchesBegan(const std::vector<Touch*>& touches, Event *event)
+void Layer::onTouchesBegan(const std::vector<Touch*> &touches, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchesHandler(EventTouch::EventCode::BEGAN, touches, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touches);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
-void Layer::onTouchesMoved(const std::vector<Touch*>& touches, Event *event)
+void Layer::onTouchesMoved(const std::vector<Touch*> &touches, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchesHandler(EventTouch::EventCode::MOVED, touches, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touches);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
-void Layer::onTouchesEnded(const std::vector<Touch*>& touches, Event *event)
+void Layer::onTouchesEnded(const std::vector<Touch*> &touches, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchesHandler(EventTouch::EventCode::ENDED, touches, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touches);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
-void Layer::onTouchesCancelled(const std::vector<Touch*>& touches, Event *event)
+void Layer::onTouchesCancelled(const std::vector<Touch*> &touches, Event* event)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (kScriptTypeLua == _scriptType)
     {
         executeScriptTouchesHandler(EventTouch::EventCode::CANCELLED, touches, event);
         return;
     }
-#else
+    #else
     CC_UNUSED_PARAM(touches);
     CC_UNUSED_PARAM(event);
-#endif
+    #endif
 }
 
 std::string Layer::getDescription() const
@@ -286,38 +286,39 @@ LayerColor::LayerColor()
 {
     // default blend function
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
-    
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new(std::nothrow) backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
-    
+
     auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    const auto &attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT3, 0, false);
     }
     iter = attributeInfo.find("a_color");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
-        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4, sizeof(_vertexData[0].vertices), false);
+        vertexLayout->setAttribute("a_color", iter->second.location, backend::VertexFormat::FLOAT4,
+                                   sizeof(_vertexData[0].vertices), false);
     }
     vertexLayout->setLayout(sizeof(_vertexData[0]));
-    
+
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
-    
+
     _customCommand.createIndexBuffer(CustomCommand::IndexFormat::U_SHORT, 6, CustomCommand::BufferUsage::STATIC);
     unsigned short indices[] = {0, 1, 2, 2, 1, 3};
     _customCommand.updateIndexBuffer(indices, sizeof(indices));
-    
+
     _customCommand.createVertexBuffer(sizeof(_vertexData[0]), 4, CustomCommand::BufferUsage::DYNAMIC);
-    
+
     _customCommand.setDrawType(CustomCommand::DrawType::ELEMENT);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE);
 }
-    
+
 LayerColor::~LayerColor()
 {
 }
@@ -327,6 +328,7 @@ const BlendFunc &LayerColor::getBlendFunc() const
 {
     return _blendFunc;
 }
+
 /// blendFunc setter
 void LayerColor::setBlendFunc(const BlendFunc &var)
 {
@@ -335,7 +337,7 @@ void LayerColor::setBlendFunc(const BlendFunc &var)
 
 LayerColor* LayerColor::create()
 {
-    LayerColor* ret = new (std::nothrow) LayerColor();
+    LayerColor* ret = new(std::nothrow) LayerColor();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -347,10 +349,10 @@ LayerColor* LayerColor::create()
     return ret;
 }
 
-LayerColor * LayerColor::create(const Color4B& color, float width, float height)
+LayerColor* LayerColor::create(const Color4B &color, float width, float height)
 {
-    LayerColor * layer = new (std::nothrow) LayerColor();
-    if( layer && layer->initWithColor(color,width,height))
+    LayerColor* layer = new(std::nothrow) LayerColor();
+    if (layer && layer->initWithColor(color, width, height))
     {
         layer->autorelease();
         return layer;
@@ -359,10 +361,10 @@ LayerColor * LayerColor::create(const Color4B& color, float width, float height)
     return nullptr;
 }
 
-LayerColor * LayerColor::create(const Color4B& color)
+LayerColor* LayerColor::create(const Color4B &color)
 {
-    LayerColor * layer = new (std::nothrow) LayerColor();
-    if(layer && layer->initWithColor(color))
+    LayerColor* layer = new(std::nothrow) LayerColor();
+    if (layer && layer->initWithColor(color))
     {
         layer->autorelease();
         return layer;
@@ -374,10 +376,10 @@ LayerColor * LayerColor::create(const Color4B& color)
 bool LayerColor::init()
 {
     Size s = Director::getInstance()->getWinSize();
-    return initWithColor(Color4B(0,0,0,0), s.width, s.height);
+    return initWithColor(Color4B(0, 0, 0, 0), s.width, s.height);
 }
 
-bool LayerColor::initWithColor(const Color4B& color, float w, float h)
+bool LayerColor::initWithColor(const Color4B &color, float w, float h)
 {
     if (Layer::init())
     {
@@ -390,7 +392,7 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
         _displayedColor.b = _realColor.b = color.b;
         _displayedOpacity = _realOpacity = color.a;
 
-        for (size_t i = 0; i<sizeof(_squareVertices) / sizeof( _squareVertices[0]); i++ )
+        for (size_t i = 0; i < sizeof(_squareVertices) / sizeof(_squareVertices[0]); i++)
         {
             _squareVertices[i].x = 0.0f;
             _squareVertices[i].y = 0.0f;
@@ -404,14 +406,14 @@ bool LayerColor::initWithColor(const Color4B& color, float w, float h)
     return false;
 }
 
-bool LayerColor::initWithColor(const Color4B& color)
+bool LayerColor::initWithColor(const Color4B &color)
 {
     Size s = Director::getInstance()->getWinSize();
     return initWithColor(color, s.width, s.height);
 }
 
 /// override contentSize
-void LayerColor::setContentSize(const Size & size)
+void LayerColor::setContentSize(const Size &size)
 {
     _squareVertices[1].x = size.width;
     _squareVertices[2].y = size.height;
@@ -421,7 +423,7 @@ void LayerColor::setContentSize(const Size & size)
     Layer::setContentSize(size);
 }
 
-void LayerColor::changeWidthAndHeight(float w ,float h)
+void LayerColor::changeWidthAndHeight(float w, float h)
 {
     this->setContentSize(Size(w, h));
 }
@@ -438,7 +440,7 @@ void LayerColor::changeHeight(float h)
 
 void LayerColor::updateColor()
 {
-    for (int i = 0; i < 4; i++ )
+    for (int i = 0; i < 4; i++)
     {
         _vertexData[i].colors.r = _displayedColor.r / 255.0f;
         _vertexData[i].colors.g = _displayedColor.g / 255.0f;
@@ -447,22 +449,24 @@ void LayerColor::updateColor()
     }
 }
 
-void LayerColor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{    
+void LayerColor::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
+{
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
-    
+
     cocos2d::Mat4 projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
     pipelineDescriptor.programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    
-    for(int i = 0; i < 4; ++i)
+
+    for (int i = 0; i < 4; ++i)
     {
         Vec4 pos;
-        pos.x = _squareVertices[i].x; pos.y = _squareVertices[i].y; pos.z = _positionZ;
+        pos.x = _squareVertices[i].x;
+        pos.y = _squareVertices[i].y;
+        pos.z = _positionZ;
         pos.w = 1;
         _modelViewTransform.transformVector(&pos);
-        _vertexData[i].vertices = Vec3(pos.x,pos.y,pos.z)/pos.w;
+        _vertexData[i].vertices = Vec3(pos.x, pos.y, pos.z) / pos.w;
     }
     updateVertexBuffer();
 }
@@ -483,10 +487,10 @@ LayerGradient::~LayerGradient()
 {
 }
 
-LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
+LayerGradient* LayerGradient::create(const Color4B &start, const Color4B &end)
 {
-    LayerGradient * layer = new (std::nothrow) LayerGradient();
-    if( layer && layer->initWithColor(start, end))
+    LayerGradient* layer = new(std::nothrow) LayerGradient();
+    if (layer && layer->initWithColor(start, end))
     {
         layer->autorelease();
         return layer;
@@ -495,10 +499,10 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end)
     return nullptr;
 }
 
-LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, const Vec2& v)
+LayerGradient* LayerGradient::create(const Color4B &start, const Color4B &end, const Vec2 &v)
 {
-    LayerGradient * layer = new (std::nothrow) LayerGradient();
-    if( layer && layer->initWithColor(start, end, v))
+    LayerGradient* layer = new(std::nothrow) LayerGradient();
+    if (layer && layer->initWithColor(start, end, v))
     {
         layer->autorelease();
         return layer;
@@ -509,7 +513,7 @@ LayerGradient* LayerGradient::create(const Color4B& start, const Color4B& end, c
 
 LayerGradient* LayerGradient::create()
 {
-    LayerGradient* ret = new (std::nothrow) LayerGradient();
+    LayerGradient* ret = new(std::nothrow) LayerGradient();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -526,20 +530,20 @@ bool LayerGradient::init()
     return initWithColor(Color4B(0, 0, 0, 255), Color4B(0, 0, 0, 255));
 }
 
-bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end)
+bool LayerGradient::initWithColor(const Color4B &start, const Color4B &end)
 {
     return initWithColor(start, end, Vec2(0, -1));
 }
 
-bool LayerGradient::initWithColor(const Color4B& start, const Color4B& end, const Vec2& v)
+bool LayerGradient::initWithColor(const Color4B &start, const Color4B &end, const Vec2 &v)
 {
-    _endColor.r  = end.r;
-    _endColor.g  = end.g;
-    _endColor.b  = end.b;
+    _endColor.r = end.r;
+    _endColor.g = end.g;
+    _endColor.b = end.b;
 
-    _endOpacity     = end.a;
-    _startOpacity   = start.a;
-    _alongVector    = v;
+    _endOpacity = end.a;
+    _startOpacity = start.a;
+    _alongVector = v;
 
     _compressedInterpolation = true;
 
@@ -560,65 +564,56 @@ void LayerGradient::updateColor()
     // Compressed Interpolation mode
     if (_compressedInterpolation)
     {
-        float h2 = 1 / ( fabsf(u.x) + fabsf(u.y) );
+        float h2 = 1 / (fabsf(u.x) + fabsf(u.y));
         u = u * (h2 * (float)c);
     }
 
     float opacityf = (float)_displayedOpacity / 255.0f;
 
-    Color4F S(
-        _displayedColor.r / 255.0f,
-        _displayedColor.g / 255.0f,
-        _displayedColor.b / 255.0f,
-        _startOpacity * opacityf / 255.0f
-    );
+    Color4F S(_displayedColor.r / 255.0f, _displayedColor.g / 255.0f, _displayedColor.b / 255.0f,
+              _startOpacity * opacityf / 255.0f);
 
-    Color4F E(
-        _endColor.r / 255.0f,
-        _endColor.g / 255.0f,
-        _endColor.b / 255.0f,
-        _endOpacity * opacityf / 255.0f
-    );
+    Color4F E(_endColor.r / 255.0f, _endColor.g / 255.0f, _endColor.b / 255.0f, _endOpacity * opacityf / 255.0f);
 
     // (-1, -1)
-   _vertexData[0].colors.r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
-   _vertexData[0].colors.a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
-   // (1, -1)
-   _vertexData[1].colors.r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
-   _vertexData[1].colors.a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
-   // (-1, 1)
-   _vertexData[2].colors.r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
-   _vertexData[2].colors.a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
-   // (1, 1)
-   _vertexData[3].colors.r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
-   _vertexData[3].colors.a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[0].colors.r = E.r + (S.r - E.r) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.g = E.g + (S.g - E.g) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.b = E.b + (S.b - E.b) * ((c + u.x + u.y) / (2.0f * c));
+    _vertexData[0].colors.a = E.a + (S.a - E.a) * ((c + u.x + u.y) / (2.0f * c));
+    // (1, -1)
+    _vertexData[1].colors.r = E.r + (S.r - E.r) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.g = E.g + (S.g - E.g) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.b = E.b + (S.b - E.b) * ((c - u.x + u.y) / (2.0f * c));
+    _vertexData[1].colors.a = E.a + (S.a - E.a) * ((c - u.x + u.y) / (2.0f * c));
+    // (-1, 1)
+    _vertexData[2].colors.r = E.r + (S.r - E.r) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.g = E.g + (S.g - E.g) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.b = E.b + (S.b - E.b) * ((c + u.x - u.y) / (2.0f * c));
+    _vertexData[2].colors.a = E.a + (S.a - E.a) * ((c + u.x - u.y) / (2.0f * c));
+    // (1, 1)
+    _vertexData[3].colors.r = E.r + (S.r - E.r) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.g = E.g + (S.g - E.g) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.b = E.b + (S.b - E.b) * ((c - u.x - u.y) / (2.0f * c));
+    _vertexData[3].colors.a = E.a + (S.a - E.a) * ((c - u.x - u.y) / (2.0f * c));
 }
 
-const Color3B& LayerGradient::getStartColor() const
+const Color3B &LayerGradient::getStartColor() const
 {
     return _realColor;
 }
 
-void LayerGradient::setStartColor(const Color3B& color)
+void LayerGradient::setStartColor(const Color3B &color)
 {
     setColor(color);
 }
 
-void LayerGradient::setEndColor(const Color3B& color)
+void LayerGradient::setEndColor(const Color3B &color)
 {
     _endColor = color;
     updateColor();
 }
 
-const Color3B& LayerGradient::getEndColor() const
+const Color3B &LayerGradient::getEndColor() const
 {
     return _endColor;
 }
@@ -645,13 +640,13 @@ uint8_t LayerGradient::getEndOpacity() const
     return _endOpacity;
 }
 
-void LayerGradient::setVector(const Vec2& var)
+void LayerGradient::setVector(const Vec2 &var)
 {
     _alongVector = var;
     updateColor();
 }
 
-const Vec2& LayerGradient::getVector() const
+const Vec2 &LayerGradient::getVector() const
 {
     return _alongVector;
 }
@@ -675,7 +670,8 @@ std::string LayerGradient::getDescription() const
 /**
  * LayerRadialGradient
  */
-LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand)
+LayerRadialGradient* LayerRadialGradient::create(const Color4B &startColor, const Color4B &endColor, float radius,
+                                                 const Vec2 &center, float expand)
 {
     auto layerGradient = new LayerRadialGradient();
     if (layerGradient && layerGradient->initWithColor(startColor, endColor, radius, center, expand))
@@ -683,7 +679,7 @@ LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, cons
         layerGradient->autorelease();
         return layerGradient;
     }
-    
+
     delete layerGradient;
     return nullptr;
 }
@@ -691,21 +687,21 @@ LayerRadialGradient* LayerRadialGradient::create(const Color4B& startColor, cons
 LayerRadialGradient* LayerRadialGradient::create()
 {
     auto layerGradient = new LayerRadialGradient();
-    if (layerGradient && layerGradient->initWithColor(Color4B::BLACK, Color4B::BLACK, 0, Vec2(0,0), 0))
+    if (layerGradient && layerGradient->initWithColor(Color4B::BLACK, Color4B::BLACK, 0, Vec2(0, 0), 0))
     {
         layerGradient->autorelease();
         return layerGradient;
     }
-    
+
     delete layerGradient;
     return nullptr;
 }
 
 LayerRadialGradient::LayerRadialGradient()
 {
-    auto& pipelineDescriptor = _customCommand.getPipelineDescriptor();
+    auto &pipelineDescriptor = _customCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::LAYER_RADIA_GRADIENT);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new(std::nothrow) backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _startColorLocation = pipelineDescriptor.programState->getUniformLocation("u_startColor");
@@ -715,15 +711,16 @@ LayerRadialGradient::LayerRadialGradient()
     _expandLocation = pipelineDescriptor.programState->getUniformLocation("u_expand");
 
     auto vertexLayout = _programState->getVertexLayout();
-    const auto& attributeInfo = _programState->getProgram()->getActiveAttributes();
+    const auto &attributeInfo = _programState->getProgram()->getActiveAttributes();
     auto iter = attributeInfo.find("a_position");
-    if(iter != attributeInfo.end())
+    if (iter != attributeInfo.end())
     {
         vertexLayout->setAttribute("a_position", iter->second.location, backend::VertexFormat::FLOAT2, 0, false);
     }
     vertexLayout->setLayout(sizeof(_vertices[0]));
 
-    _customCommand.createVertexBuffer(sizeof(_vertices[0]), sizeof(_vertices) / sizeof(_vertices[0]), CustomCommand::BufferUsage::STATIC);
+    _customCommand.createVertexBuffer(sizeof(_vertices[0]), sizeof(_vertices) / sizeof(_vertices[0]),
+                                      CustomCommand::BufferUsage::STATIC);
     _customCommand.setDrawType(CustomCommand::DrawType::ARRAY);
     _customCommand.setPrimitiveType(CustomCommand::PrimitiveType::TRIANGLE_STRIP);
 }
@@ -732,37 +729,38 @@ LayerRadialGradient::~LayerRadialGradient()
 {
 }
 
-bool LayerRadialGradient::initWithColor(const cocos2d::Color4B &startColor, const cocos2d::Color4B &endColor, float radius, const Vec2& center, float expand)
+bool LayerRadialGradient::initWithColor(const cocos2d::Color4B &startColor, const cocos2d::Color4B &endColor,
+                                        float radius, const Vec2 &center, float expand)
 {
     // should do it before Layer::init()
     for (int i = 0; i < 4; ++i)
         _vertices[i] = {0.0f, 0.0f};
-    
+
     if (Layer::init())
     {
         convertColor4B24F(_startColorRend, startColor);
         _startColor = startColor;
-        
+
         convertColor4B24F(_endColorRend, endColor);
         _endColor = endColor;
-        
+
         _expand = expand;
-        
+
         setRadius(radius);
         setCenter(center);
-        
+
         return true;
     }
-    
+
     return false;
 }
 
-void LayerRadialGradient::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void LayerRadialGradient::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
 {
     _customCommand.init(_globalZOrder, _blendFunc);
     renderer->addCommand(&_customCommand);
 
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    const auto &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     auto programState = _customCommand.getPipelineDescriptor().programState;
     Mat4 finalMat = projectionMat * transform;
     programState->setUniform(_mvpMatrixLocation, finalMat.m, sizeof(finalMat.m));
@@ -774,7 +772,7 @@ void LayerRadialGradient::draw(Renderer *renderer, const Mat4 &transform, uint32
     programState->setUniform(_expandLocation, &_expand, sizeof(_expand));
 }
 
-void LayerRadialGradient::setContentSize(const Size& size)
+void LayerRadialGradient::setContentSize(const Size &size)
 {
     _vertices[1].x = size.width;
     _vertices[2].y = size.height;
@@ -817,7 +815,7 @@ float LayerRadialGradient::getRadius() const
     return _radius;
 }
 
-void LayerRadialGradient::setCenter(const Vec2& center)
+void LayerRadialGradient::setCenter(const Vec2 &center)
 {
     _center = center;
 }
@@ -837,7 +835,7 @@ float LayerRadialGradient::getExpand() const
     return _expand;
 }
 
-void LayerRadialGradient::setStartColor(const Color3B& color)
+void LayerRadialGradient::setStartColor(const Color3B &color)
 {
     setStartColor(Color4B(color));
 }
@@ -858,7 +856,7 @@ Color3B LayerRadialGradient::getStartColor3B() const
     return Color3B(_startColor);
 }
 
-void LayerRadialGradient::setEndColor(const Color3B& color)
+void LayerRadialGradient::setEndColor(const Color3B &color)
 {
     setEndColor(Color4B(color));
 }
@@ -879,7 +877,7 @@ Color3B LayerRadialGradient::getEndColor3B() const
     return Color3B(_endColor);
 }
 
-void LayerRadialGradient::setBlendFunc(const BlendFunc& blendFunc)
+void LayerRadialGradient::setBlendFunc(const BlendFunc &blendFunc)
 {
     _blendFunc = blendFunc;
 }
@@ -889,7 +887,7 @@ BlendFunc LayerRadialGradient::getBlendFunc() const
     return _blendFunc;
 }
 
-void LayerRadialGradient::convertColor4B24F(Color4F& outColor, const Color4B& inColor)
+void LayerRadialGradient::convertColor4B24F(Color4F &outColor, const Color4B &inColor)
 {
     outColor.r = inColor.r / 255.0f;
     outColor.g = inColor.g / 255.0f;
@@ -907,18 +905,19 @@ LayerMultiplex::LayerMultiplex()
 
 LayerMultiplex::~LayerMultiplex()
 {
-    for(const auto &layer : _layers) {
+    for (const auto &layer : _layers)
+    {
         layer->cleanup();
     }
 }
 
-LayerMultiplex * LayerMultiplex::create(Layer * layer, ...)
+LayerMultiplex* LayerMultiplex::create(Layer* layer, ...)
 {
     va_list args;
-    va_start(args,layer);
+    va_start(args, layer);
 
-    LayerMultiplex * multiplexLayer = new (std::nothrow) LayerMultiplex();
-    if(multiplexLayer && multiplexLayer->initWithLayers(layer, args))
+    LayerMultiplex* multiplexLayer = new(std::nothrow) LayerMultiplex();
+    if (multiplexLayer && multiplexLayer->initWithLayers(layer, args))
     {
         multiplexLayer->autorelease();
         va_end(args);
@@ -929,14 +928,14 @@ LayerMultiplex * LayerMultiplex::create(Layer * layer, ...)
     return nullptr;
 }
 
-LayerMultiplex * LayerMultiplex::createWithLayer(Layer* layer)
+LayerMultiplex* LayerMultiplex::createWithLayer(Layer* layer)
 {
     return LayerMultiplex::create(layer, nullptr);
 }
 
 LayerMultiplex* LayerMultiplex::create()
 {
-    LayerMultiplex* ret = new (std::nothrow) LayerMultiplex();
+    LayerMultiplex* ret = new(std::nothrow) LayerMultiplex();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -948,9 +947,9 @@ LayerMultiplex* LayerMultiplex::create()
     return ret;
 }
 
-LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Layer*>& arrayOfLayers)
+LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Layer*> &arrayOfLayers)
 {
-    LayerMultiplex* ret = new (std::nothrow) LayerMultiplex();
+    LayerMultiplex* ret = new(std::nothrow) LayerMultiplex();
     if (ret && ret->initWithArray(arrayOfLayers))
     {
         ret->autorelease();
@@ -964,13 +963,13 @@ LayerMultiplex* LayerMultiplex::createWithArray(const Vector<Layer*>& arrayOfLay
 
 void LayerMultiplex::addLayer(Layer* layer)
 {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->retainScriptObject(this, layer);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     _layers.pushBack(layer);
 }
 
@@ -984,30 +983,31 @@ bool LayerMultiplex::init()
     return false;
 }
 
-bool LayerMultiplex::initWithLayers(Layer *layer, va_list params)
+bool LayerMultiplex::initWithLayers(Layer* layer, va_list params)
 {
     if (Layer::init())
     {
         _layers.reserve(5);
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+        #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
             sEngine->retainScriptObject(this, layer);
         }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+        #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.pushBack(layer);
 
-        Layer *l = va_arg(params,Layer*);
-        while( l ) {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+        Layer* l = va_arg(params, Layer*);
+        while (l)
+        {
+            #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             if (sEngine)
             {
                 sEngine->retainScriptObject(this, l);
             }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+            #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
             _layers.pushBack(l);
-            l = va_arg(params,Layer*);
+            l = va_arg(params, Layer*);
         }
 
         _enabledLayer = 0;
@@ -1018,11 +1018,11 @@ bool LayerMultiplex::initWithLayers(Layer *layer, va_list params)
     return false;
 }
 
-bool LayerMultiplex::initWithArray(const Vector<Layer*>& arrayOfLayers)
+bool LayerMultiplex::initWithArray(const Vector<Layer*> &arrayOfLayers)
 {
     if (Layer::init())
     {
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+        #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (sEngine)
         {
@@ -1034,7 +1034,7 @@ bool LayerMultiplex::initWithArray(const Vector<Layer*>& arrayOfLayers)
                 }
             }
         }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+        #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
         _layers.reserve(arrayOfLayers.size());
         _layers.pushBack(arrayOfLayers);
 
@@ -1047,34 +1047,34 @@ bool LayerMultiplex::initWithArray(const Vector<Layer*>& arrayOfLayers)
 
 void LayerMultiplex::switchTo(int n)
 {
-    
+
     switchTo(n, true);
 }
 
 void LayerMultiplex::switchTo(int n, bool cleanup)
 {
-    CCASSERT( n < _layers.size(), "Invalid index in MultiplexLayer switchTo message" );
-    
+    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
+
     this->removeChild(_layers.at(_enabledLayer), cleanup);
-    
+
     _enabledLayer = n;
-    
+
     this->addChild(_layers.at(n));
 }
 
 void LayerMultiplex::switchToAndReleaseMe(int n)
 {
-    CCASSERT( n < _layers.size(), "Invalid index in MultiplexLayer switchTo message" );
+    CCASSERT(n < _layers.size(), "Invalid index in MultiplexLayer switchTo message");
 
     this->removeChild(_layers.at(_enabledLayer), true);
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
         sEngine->releaseScriptObject(this, _layers.at(_enabledLayer));
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-    
+    #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+
     _layers.replace(_enabledLayer, nullptr);
 
     _enabledLayer = n;

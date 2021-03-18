@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "audio/android/mp3reader.h"
 #include "platform/CCFileUtils.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 AudioDecoderMp3::AudioDecoderMp3()
 {
@@ -58,9 +59,9 @@ bool AudioDecoderMp3::decodeToPcm()
     int numChannels = 0;
     int sampleRate = 0;
     int numFrames = 0;
-    
-    if (EXIT_SUCCESS == decodeMP3(&callbacks, this, *_result.pcmBuffer, &numChannels, &sampleRate, &numFrames)
-        && numChannels > 0 && sampleRate > 0 && numFrames > 0)
+
+    if (EXIT_SUCCESS == decodeMP3(&callbacks, this, *_result.pcmBuffer, &numChannels, &sampleRate,
+                                  &numFrames) && numChannels > 0 && sampleRate > 0 && numFrames > 0)
     {
         _result.numChannels = numChannels;
         _result.sampleRate = sampleRate;
@@ -76,7 +77,8 @@ bool AudioDecoderMp3::decodeToPcm()
         return true;
     }
 
-    ALOGE("Decode MP3 (%s) failed, channels: %d, rate: %d, frames: %d", _url.c_str(), numChannels, sampleRate, numFrames);
+    ALOGE("Decode MP3 (%s) failed, channels: %d, rate: %d, frames: %d", _url.c_str(), numChannels, sampleRate,
+          numFrames);
     return false;
 }
 

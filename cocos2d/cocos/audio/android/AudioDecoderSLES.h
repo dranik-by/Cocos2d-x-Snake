@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include <mutex>
 #include <condition_variable>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoderSLES : public AudioDecoder
 {
@@ -37,7 +38,8 @@ protected:
     AudioDecoderSLES();
     virtual ~AudioDecoderSLES();
 
-    bool init(SLEngineItf engineItf, const std::string &url, int bufferSizeInFrames, int sampleRate, const FdGetterCallback &fdGetterCallback);
+    bool init(SLEngineItf engineItf, const std::string &url, int bufferSizeInFrames, int sampleRate,
+              const FdGetterCallback &fdGetterCallback);
     virtual bool decodeToPcm() override;
 
 private:
@@ -80,8 +82,8 @@ private:
         SLPlayItf playItf;
         SLMetadataExtractionItf metaItf;
         SLuint32 size;
-        SLint8 *pDataBase;    // Base address of local audio data storage
-        SLint8 *pData;        // Current address of local audio data storage
+        SLint8* pDataBase;    // Base address of local audio data storage
+        SLint8* pData;        // Current address of local audio data storage
     } CallbackCntxt;
 
     CallbackCntxt _decContext;

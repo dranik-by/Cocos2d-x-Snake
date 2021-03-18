@@ -32,21 +32,21 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCTransformHelp.h"
 #include "editor-support/cocostudio/CCArmature.h"
 
-
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 #if CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
-#define RENDER_IN_SUBPIXEL
+    #define RENDER_IN_SUBPIXEL
 #else
-#define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
+    #define RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
 #endif
 
-Skin *Skin::create()
+Skin* Skin::create()
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->init())
+    Skin* skin = new(std::nothrow) Skin();
+    if (skin && skin->init())
     {
         skin->autorelease();
         return skin;
@@ -55,10 +55,10 @@ Skin *Skin::create()
     return nullptr;
 }
 
-Skin *Skin::createWithSpriteFrameName(const std::string& pszSpriteFrameName)
+Skin* Skin::createWithSpriteFrameName(const std::string &pszSpriteFrameName)
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->initWithSpriteFrameName(pszSpriteFrameName))
+    Skin* skin = new(std::nothrow) Skin();
+    if (skin && skin->initWithSpriteFrameName(pszSpriteFrameName))
     {
         skin->autorelease();
         return skin;
@@ -67,10 +67,10 @@ Skin *Skin::createWithSpriteFrameName(const std::string& pszSpriteFrameName)
     return nullptr;
 }
 
-Skin *Skin::create(const std::string& pszFileName)
+Skin* Skin::create(const std::string &pszFileName)
 {
-    Skin *skin = new (std::nothrow) Skin();
-    if(skin && skin->initWithFile(pszFileName))
+    Skin* skin = new(std::nothrow) Skin();
+    if (skin && skin->initWithFile(pszFileName))
     {
         skin->autorelease();
         return skin;
@@ -80,18 +80,18 @@ Skin *Skin::create(const std::string& pszFileName)
 }
 
 Skin::Skin()
-    : _bone(nullptr)
-    , _armature(nullptr)
-    , _displayName("")
+: _bone(nullptr)
+, _armature(nullptr)
+, _displayName("")
 {
     _skinTransform = Mat4::IDENTITY;
 }
 
-bool Skin::initWithSpriteFrameName(const std::string& spriteFrameName)
+bool Skin::initWithSpriteFrameName(const std::string &spriteFrameName)
 {
     CCAssert(spriteFrameName != "", "");
 
-    SpriteFrame *pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
+    SpriteFrame* pFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(spriteFrameName);
     bool ret = true;
 
     if (pFrame != nullptr)
@@ -109,7 +109,7 @@ bool Skin::initWithSpriteFrameName(const std::string& spriteFrameName)
     return ret;
 }
 
-bool Skin::initWithFile(const std::string& filename)
+bool Skin::initWithFile(const std::string &filename)
 {
     bool ret = Sprite::initWithFile(filename);
 
@@ -140,16 +140,16 @@ const BaseData &Skin::getSkinData() const
 void Skin::updateArmatureTransform()
 {
     _transform = TransformConcat(_bone->getNodeToArmatureTransform(), _skinTransform);
-//    if(_armature && _armature->getBatchNode())
-//    {
-//        _transform = TransformConcat(_transform, _armature->getNodeToParentTransform());
-//    }
+    //    if(_armature && _armature->getBatchNode())
+    //    {
+    //        _transform = TransformConcat(_transform, _armature->getNodeToParentTransform());
+    //    }
 }
 
 void Skin::updateTransform()
 {
     // If it is not visible, or one of its ancestors is not visible, then do nothing:
-    if( !_visible)
+    if (!_visible)
     {
         _quad.br.vertices.setZero();
         _quad.tl.vertices.setZero();
@@ -179,7 +179,7 @@ void Skin::updateTransform()
         {
             std::swap(y1, y2);
         }
-        
+
         float x = transform.m[12];
         float y = transform.m[13];
 
@@ -214,48 +214,42 @@ void Skin::updateTransform()
 
 Mat4 Skin::getNodeToWorldTransform() const
 {
-    return TransformConcat( _bone->getArmature()->getNodeToWorldTransform(), _transform);
+    return TransformConcat(_bone->getArmature()->getNodeToWorldTransform(), _transform);
 }
 
 Mat4 Skin::getNodeToWorldTransformAR() const
 {
     Mat4 displayTransform = _transform;
-    Vec2 anchorPoint =  _anchorPointInPoints;
+    Vec2 anchorPoint = _anchorPointInPoints;
 
     anchorPoint = PointApplyTransform(anchorPoint, displayTransform);
 
     displayTransform.m[12] = anchorPoint.x;
     displayTransform.m[13] = anchorPoint.y;
 
-    return TransformConcat( _bone->getArmature()->getNodeToWorldTransform(),displayTransform);
+    return TransformConcat(_bone->getArmature()->getNodeToWorldTransform(), displayTransform);
 }
 
-void Skin::draw(Renderer *renderer, const Mat4 &/*transform*/, uint32_t flags)
+void Skin::draw(Renderer* renderer, const Mat4 &/*transform*/, uint32_t flags)
 {
     auto mv = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
     // TODO: implement z order
-    _quadCommand.init(_globalZOrder, 
-        _texture, 
-        _blendFunc, 
-        &_quad, 
-        1,
-        mv, 
-        flags);
+    _quadCommand.init(_globalZOrder, _texture, _blendFunc, &_quad, 1, mv, flags);
 
     renderer->addCommand(&_quadCommand);
 }
 
-void Skin::setBone(Bone *bone)
+void Skin::setBone(Bone* bone)
 {
     _bone = bone;
-    if(Armature *armature = _bone->getArmature())
+    if (Armature* armature = _bone->getArmature())
     {
         _armature = armature;
     }
 }
 
-Bone *Skin::getBone() const
+Bone* Skin::getBone() const
 {
     return _bone;
 }

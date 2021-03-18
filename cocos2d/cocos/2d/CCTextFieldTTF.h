@@ -38,7 +38,6 @@ NS_CC_BEGIN
 
 class TextFieldTTF;
 
-
 /**
  * A input protocol for TextField.
  */
@@ -49,7 +48,9 @@ public:
      * Destructor for TextFieldDelegate.
      * @js NA
      */
-    virtual ~TextFieldDelegate() {}
+    virtual ~TextFieldDelegate()
+    {
+    }
 
     /**
      *@brief    If the sender doesn't want to attach to the IME, return true.
@@ -74,7 +75,7 @@ public:
      *@brief    If the sender doesn't want to draw, return true.
      * @js NA
      */
-    virtual bool onVisit(TextFieldTTF* sender, Renderer* renderer, const Mat4& transform, uint32_t flags);
+    virtual bool onVisit(TextFieldTTF* sender, Renderer* renderer, const Mat4 &transform, uint32_t flags);
 };
 
 /**
@@ -88,7 +89,7 @@ public:
      * @js ctor
      */
     TextFieldTTF();
-    
+
     /**
      * Default destructor.
      * @js NA
@@ -99,18 +100,22 @@ public:
     /** Creates a TextFieldTTF from a fontname, alignment, dimension and font size.
     * @js NA
     */
-    static TextFieldTTF * textFieldWithPlaceHolder(const std::string& placeholder, const Size& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize);
-    
+    static TextFieldTTF* textFieldWithPlaceHolder(const std::string &placeholder, const Size &dimensions,
+                                                  TextHAlignment alignment, const std::string &fontName,
+                                                  float fontSize);
+
     /** Creates a TextFieldTTF from a fontname and font size.
     * @js NA
     */
-    static TextFieldTTF * textFieldWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize);
-    
+    static TextFieldTTF* textFieldWithPlaceHolder(const std::string &placeholder, const std::string &fontName,
+                                                  float fontSize);
+
     /** Initializes the TextFieldTTF with a font name, alignment, dimension and font size. */
-    bool initWithPlaceHolder(const std::string& placeholder, const Size& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize);
-    
+    bool initWithPlaceHolder(const std::string &placeholder, const Size &dimensions, TextHAlignment alignment,
+                             const std::string &fontName, float fontSize);
+
     /** Initializes the TextFieldTTF with a font name and font size. */
-    bool initWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize);
+    bool initWithPlaceHolder(const std::string &placeholder, const std::string &fontName, float fontSize);
 
     /**
      *@brief    Open keyboard and receive input text.
@@ -128,72 +133,82 @@ public:
     /**
      * @lua NA
      */
-    TextFieldDelegate* getDelegate() const { return _delegate; }
+    TextFieldDelegate* getDelegate() const
+    {
+        return _delegate;
+    }
+
     /**
      * @lua NA
      */
-    void setDelegate(TextFieldDelegate* delegate) { _delegate = delegate; }
+    void setDelegate(TextFieldDelegate* delegate)
+    {
+        _delegate = delegate;
+    }
 
     /**
      * Query the currently inputed character count.
      *@return The total input character count.
      */
-    std::size_t getCharCount() const { return _charCount; }
-    
+    std::size_t getCharCount() const
+    {
+        return _charCount;
+    }
+
     /**
      * Query the color of place holder.
      *@return The place holder color.
      */
-    virtual const Color4B& getColorSpaceHolder();
+    virtual const Color4B &getColorSpaceHolder();
 
     /**
      *@brief Change input placeholder color.
      *@param color A color value in `Color3B`.
      */
-    virtual void setColorSpaceHolder(const Color3B& color);
+    virtual void setColorSpaceHolder(const Color3B &color);
 
     /**
      * Change the placeholder color.
      *@param color The placeholder color in Color4B.
      */
-    virtual void setColorSpaceHolder(const Color4B& color);
+    virtual void setColorSpaceHolder(const Color4B &color);
 
     /**
      * Change the color of input text.
      *@param textColor The text color in Color4B.
      */
-    virtual void setTextColor(const Color4B& textColor) override;
+    virtual void setTextColor(const Color4B &textColor) override;
 
     /**
      * Change input text of TextField.
      *@param text The input text of TextField.
      */
-    virtual void setString(const std::string& text) override;
+    virtual void setString(const std::string &text) override;
 
     /**
     * Append to input text of TextField.
     *@param text The append text of TextField.
     */
-    virtual void appendString(const std::string& text);
+    virtual void appendString(const std::string &text);
 
     /**
      * Query the input text of TextField.
      *@return Get the input text of TextField.
      */
-    virtual const std::string& getString() const override;
+    virtual const std::string &getString() const override;
 
     /**
      * Change placeholder text.
      * place holder text displayed when there is no text in the text field.
      *@param text  The placeholder string.
      */
-    virtual void setPlaceHolder(const std::string& text);
+    virtual void setPlaceHolder(const std::string &text);
 
     /**
      * Query the placeholder string.
      *@return The placeholder string.
      */
-    virtual const std::string& getPlaceHolder() const;
+    virtual const std::string &getPlaceHolder() const;
 
     /**
      * Set enable secure text entry representation.
@@ -202,17 +217,17 @@ public:
      * @js NA
      */
     virtual void setSecureTextEntry(bool value);
-    virtual void setPasswordTextStyle(const std::string& text);
-    const std::string& getPasswordTextStyle() const;
+    virtual void setPasswordTextStyle(const std::string &text);
+    const std::string &getPasswordTextStyle() const;
 
     /**
      * Query whether the currently display mode is secure text entry or not.
      *@return Whether current text is displayed as secure text entry.
      * @js NA
      */
-    virtual bool isSecureTextEntry()const;
+    virtual bool isSecureTextEntry() const;
 
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
 
     virtual void update(float delta) override;
 
@@ -249,12 +264,12 @@ protected:
     virtual bool canDetachWithIME() override;
     virtual void didAttachWithIME() override;
     virtual void didDetachWithIME() override;
-    virtual void insertText(const char * text, size_t len) override;
+    virtual void insertText(const char* text, size_t len) override;
     virtual void deleteBackward() override;
-    virtual const std::string& getContentText() override;
+    virtual const std::string &getContentText() override;
     virtual void controlKey(EventKeyboard::KeyCode keyCode) override;
 
-    TextFieldDelegate * _delegate;
+    TextFieldDelegate* _delegate;
     std::size_t _charCount;
 
     std::string _inputText;
@@ -277,14 +292,14 @@ protected:
 
     bool _isAttachWithIME;
 
-    void makeStringSupportCursor(std::string& displayText);
+    void makeStringSupportCursor(std::string &displayText);
     void updateCursorDisplayText();
     void setAttachWithIME(bool isAttachWithIME);
-    void setTextColorInternally(const Color4B& color);
+    void setTextColorInternally(const Color4B &color);
 
 private:
     class LengthStack;
-    LengthStack * _lens;
+    LengthStack* _lens;
 };
 
 NS_CC_END

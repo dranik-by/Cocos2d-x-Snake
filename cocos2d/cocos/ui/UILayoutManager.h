@@ -36,8 +36,9 @@
  */
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 class LayoutProtocol;
 class Widget;
 class RelativeLayoutParameter;
@@ -49,14 +50,19 @@ class RelativeLayoutParameter;
 class CC_GUI_DLL LayoutManager : public Ref
 {
 public:
-    virtual ~LayoutManager(){};
-    LayoutManager(){};
-    
+    virtual ~LayoutManager()
+    {
+    };
+
+    LayoutManager()
+    {
+    };
+
     /**
      * The interface does the actual layouting work.
      */
-    virtual void doLayout(LayoutProtocol *layout) = 0;
-    
+    virtual void doLayout(LayoutProtocol* layout) = 0;
+
     friend class Layout;
 };
 
@@ -69,11 +75,16 @@ public:
 class CC_GUI_DLL LinearVerticalLayoutManager : public LayoutManager
 {
 private:
-    LinearVerticalLayoutManager(){};
-    virtual ~LinearVerticalLayoutManager(){};
+    LinearVerticalLayoutManager()
+    {
+    };
+
+    virtual ~LinearVerticalLayoutManager()
+    {
+    };
     static LinearVerticalLayoutManager* create();
-    virtual void doLayout(LayoutProtocol *layout) override;
-    
+    virtual void doLayout(LayoutProtocol* layout) override;
+
     friend class Layout;
 };
 
@@ -86,11 +97,16 @@ private:
 class CC_GUI_DLL LinearHorizontalLayoutManager : public LayoutManager
 {
 private:
-    LinearHorizontalLayoutManager(){};
-    virtual ~LinearHorizontalLayoutManager(){};
+    LinearHorizontalLayoutManager()
+    {
+    };
+
+    virtual ~LinearHorizontalLayoutManager()
+    {
+    };
     static LinearHorizontalLayoutManager* create();
-    virtual void doLayout(LayoutProtocol *layout) override;
-    
+    virtual void doLayout(LayoutProtocol* layout) override;
+
     friend class Layout;
 };
 
@@ -104,19 +120,23 @@ class CC_GUI_DLL RelativeLayoutManager : public LayoutManager
 {
 private:
     RelativeLayoutManager()
-    :_unlayoutChildCount(0),
-    _widget(nullptr),
-    _finalPositionX(0.0f),
-    _finalPositionY(0.0f),
-    _relativeWidgetLP(nullptr)
-    {}
-    virtual ~RelativeLayoutManager(){};
+    : _unlayoutChildCount(0)
+    , _widget(nullptr)
+    , _finalPositionX(0.0f)
+    , _finalPositionY(0.0f)
+    , _relativeWidgetLP(nullptr)
+    {
+    }
+
+    virtual ~RelativeLayoutManager()
+    {
+    };
     static RelativeLayoutManager* create();
-    virtual void doLayout(LayoutProtocol *layout) override;
-    
-    Vector<Widget*> getAllWidgets(LayoutProtocol *layout);
+    virtual void doLayout(LayoutProtocol* layout) override;
+
+    Vector<Widget*> getAllWidgets(LayoutProtocol* layout);
     Widget* getRelativeWidget(Widget* widget);
-    bool calculateFinalPositionWithRelativeWidget(LayoutProtocol *layout);
+    bool calculateFinalPositionWithRelativeWidget(LayoutProtocol* layout);
     void calculateFinalPositionWithRelativeAlign();
 
     ssize_t _unlayoutChildCount;
@@ -124,9 +144,9 @@ private:
     Widget* _widget;
     float _finalPositionX;
     float _finalPositionY;
-    
+
     RelativeLayoutParameter* _relativeWidgetLP;
-    
+
     friend class Layout;
 };
 

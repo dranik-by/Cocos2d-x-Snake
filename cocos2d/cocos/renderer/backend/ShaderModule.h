@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -71,13 +71,20 @@ public:
      */
     ShaderStage getShaderStage() const;
 
-    std::size_t getHashValue() const { return _hash; }
-    
+    std::size_t getHashValue() const
+    {
+        return _hash;
+    }
+
 protected:
     ShaderModule(ShaderStage stage);
     virtual ~ShaderModule();
-    void setHashValue(std::size_t hash) { _hash = hash; }
-    
+
+    void setHashValue(std::size_t hash)
+    {
+        _hash = hash;
+    }
+
     friend class ShaderCache;
     ShaderStage _stage = ShaderStage::VERTEX;
     std::size_t _hash = 0;

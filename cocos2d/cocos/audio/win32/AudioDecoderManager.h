@@ -25,7 +25,8 @@ THE SOFTWARE.
 
 #pragma once
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoder;
 

@@ -57,12 +57,12 @@ public:
     /**
      * Copy constructor of Data.
      */
-    Data(const Data& other);
+    Data(const Data &other);
 
     /**
      * Copy constructor of Data.
      */
-    Data(Data&& other);
+    Data(Data &&other);
 
     /**
      * Destructor of Data.
@@ -72,12 +72,12 @@ public:
     /**
      * Overloads of operator=.
      */
-    Data& operator= (const Data& other);
+    Data &operator=(const Data &other);
 
     /**
      * Overloads of operator=.
      */
-    Data& operator= (Data&& other);
+    Data &operator=(Data &&other);
 
     /**
      * Gets internal bytes of Data. It will return the pointer directly used in Data, so don't delete it.
@@ -144,13 +144,12 @@ public:
      */
     unsigned char* takeBuffer(ssize_t* size);
 private:
-    void move(Data& other);
+    void move(Data &other);
 
 private:
     unsigned char* _bytes;
     ssize_t _size;
 };
-
 
 NS_CC_END
 

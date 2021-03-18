@@ -23,11 +23,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMeshUtils.h"
+
 #if CC_USE_NAVMESH
 
-#include "recast/Detour/DetourCommon.h"
-#include "recast/Detour/DetourNavMeshBuilder.h"
-#include "recast/fastlz/fastlz.h"
+    #include "recast/Detour/DetourCommon.h"
+    #include "recast/Detour/DetourNavMeshBuilder.h"
+    #include "recast/fastlz/fastlz.h"
 
 NS_CC_BEGIN
 
@@ -69,32 +70,34 @@ void LinearAllocator::reset()
 
 void LinearAllocator::resize(const int cap)
 {
-    if (buffer) dtFree(buffer);
+    if (buffer)
+        dtFree(buffer);
     buffer = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
     capacity = cap;
 }
 
 int FastLZCompressor::maxCompressedSize(const int bufferSize)
 {
-    return (int)(bufferSize* 1.05f);
+    return (int)(bufferSize * 1.05f);
 }
 
-dtStatus cocos2d::FastLZCompressor::decompress(const unsigned char* compressed, const int compressedSize
-                                             , unsigned char* buffer, const int maxBufferSize, int* bufferSize)
+dtStatus cocos2d::FastLZCompressor::decompress(const unsigned char* compressed, const int compressedSize,
+                                               unsigned char* buffer, const int maxBufferSize, int* bufferSize)
 {
     *bufferSize = fastlz_decompress(compressed, compressedSize, buffer, maxBufferSize);
     return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
 }
 
-dtStatus cocos2d::FastLZCompressor::compress(const unsigned char* buffer, const int bufferSize
-    , unsigned char* compressed, const int /*maxCompressedSize*/, int* compressedSize)
+dtStatus cocos2d::FastLZCompressor::compress(const unsigned char* buffer, const int bufferSize,
+                                             unsigned char* compressed, const int /*maxCompressedSize*/,
+                                             int* compressedSize)
 {
-    *compressedSize = fastlz_compress((const void *const)buffer, bufferSize, compressed);
+    *compressedSize = fastlz_compress((const void* const)buffer, bufferSize, compressed);
     return DT_SUCCESS;
 }
 
-MeshProcess::MeshProcess(const GeomData *geom)
-    : data(geom)
+MeshProcess::MeshProcess(const GeomData* geom)
+: data(geom)
 {
 }
 
@@ -103,8 +106,7 @@ MeshProcess::~MeshProcess()
 
 }
 
-void MeshProcess::process(struct dtNavMeshCreateParams* params
-    , unsigned char* polyAreas, unsigned short* polyFlags)
+void MeshProcess::process(struct dtNavMeshCreateParams* params, unsigned char* polyAreas, unsigned short* polyFlags)
 {
     // Update poly flags from areas.
     for (int i = 0; i < params->polyCount; ++i)
@@ -141,7 +143,9 @@ void MeshProcess::process(struct dtNavMeshCreateParams* params
     params->offMeshConCount = data->offMeshConCount;
 }
 
-bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float* endPos, const float minTargetDist, const dtPolyRef* path, const int pathSize, float* steerPos, unsigned char& steerPosFlag, dtPolyRef& steerPosRef, float* outPoints /*= 0*/, int* outPointCount /*= 0*/)
+bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float* endPos, const float minTargetDist,
+                    const dtPolyRef* path, const int pathSize, float* steerPos, unsigned char &steerPosFlag,
+                    dtPolyRef &steerPosRef, float* outPoints /*= 0*/, int* outPointCount /*= 0*/)
 {
     // Find steer target.
     static const int MAX_STEER_POINTS = 3;
@@ -149,8 +153,8 @@ bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float
     unsigned char steerPathFlags[MAX_STEER_POINTS];
     dtPolyRef steerPathPolys[MAX_STEER_POINTS];
     int nsteerPath = 0;
-    navQuery->findStraightPath(startPos, endPos, path, pathSize,
-        steerPath, steerPathFlags, steerPathPolys, &nsteerPath, MAX_STEER_POINTS);
+    navQuery->findStraightPath(startPos, endPos, path, pathSize, steerPath, steerPathFlags, steerPathPolys, &nsteerPath,
+                               MAX_STEER_POINTS);
     if (!nsteerPath)
         return false;
 
@@ -167,8 +171,8 @@ bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float
     while (ns < nsteerPath)
     {
         // Stop at Off-Mesh link or when point is further than slop away.
-        if ((steerPathFlags[ns] & DT_STRAIGHTPATH_OFFMESH_CONNECTION) ||
-            !inRange(&steerPath[ns * 3], startPos, minTargetDist, 1000.0f))
+        if ((steerPathFlags[ns] & DT_STRAIGHTPATH_OFFMESH_CONNECTION) || !inRange(&steerPath[ns * 3], startPos,
+                                                                                  minTargetDist, 1000.0f))
             break;
         ns++;
     }
@@ -213,10 +217,12 @@ int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
     // in the path, short cut to that polygon directly.
     static const int maxLookAhead = 6;
     int cut = 0;
-    for (int i = dtMin(maxLookAhead, npath) - 1; i > 1 && cut == 0; i--) {
+    for (int i = dtMin(maxLookAhead, npath) - 1; i > 1 && cut == 0; i--)
+    {
         for (int j = 0; j < nneis; j++)
         {
-            if (path[i] == neis[j]) {
+            if (path[i] == neis[j])
+            {
                 cut = i;
                 break;
             }
@@ -268,7 +274,7 @@ int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath, const dtP
     if (req + size > maxPath)
         size = maxPath - req;
     if (size)
-        memmove(path + req, path + orig, size*sizeof(dtPolyRef));
+        memmove(path + req, path + orig, size * sizeof(dtPolyRef));
 
     // Store visited
     for (int i = 0; i < req; ++i)
@@ -282,7 +288,7 @@ bool inRange(const float* v1, const float* v2, const float r, const float h)
     const float dx = v2[0] - v1[0];
     const float dy = v2[1] - v1[1];
     const float dz = v2[2] - v1[2];
-    return (dx*dx + dz*dz) < r*r && fabsf(dy) < h;
+    return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
 NS_CC_END

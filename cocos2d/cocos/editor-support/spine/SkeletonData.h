@@ -45,69 +45,72 @@
 extern "C" {
 #endif
 
-typedef struct spSkeletonData {
-	const char* version;
-	const char* hash;
-	float width, height;
+typedef struct spSkeletonData
+{
+    const char* version;
+    const char* hash;
+    float width, height;
 
-	int bonesCount;
-	spBoneData** bones;
+    int bonesCount;
+    spBoneData** bones;
 
-	int slotsCount;
-	spSlotData** slots;
+    int slotsCount;
+    spSlotData** slots;
 
-	int skinsCount;
-	spSkin** skins;
-	spSkin* defaultSkin;
+    int skinsCount;
+    spSkin** skins;
+    spSkin* defaultSkin;
 
-	int eventsCount;
-	spEventData** events;
+    int eventsCount;
+    spEventData** events;
 
-	int animationsCount;
-	spAnimation** animations;
+    int animationsCount;
+    spAnimation** animations;
 
-	int ikConstraintsCount;
-	spIkConstraintData** ikConstraints;
+    int ikConstraintsCount;
+    spIkConstraintData** ikConstraints;
 
-	int transformConstraintsCount;
-	spTransformConstraintData** transformConstraints;
+    int transformConstraintsCount;
+    spTransformConstraintData** transformConstraints;
 
-	int pathConstraintsCount;
-	spPathConstraintData** pathConstraints;
+    int pathConstraintsCount;
+    spPathConstraintData** pathConstraints;
 } spSkeletonData;
 
-SP_API spSkeletonData* spSkeletonData_create ();
-SP_API void spSkeletonData_dispose (spSkeletonData* self);
+SP_API spSkeletonData* spSkeletonData_create(); SP_API void spSkeletonData_dispose(spSkeletonData* self);
 
-SP_API spBoneData* spSkeletonData_findBone (const spSkeletonData* self, const char* boneName);
-SP_API int spSkeletonData_findBoneIndex (const spSkeletonData* self, const char* boneName);
+SP_API spBoneData* spSkeletonData_findBone(const spSkeletonData* self,
+                                           const char* boneName); SP_API int spSkeletonData_findBoneIndex(
+const spSkeletonData* self, const char* boneName);
 
-SP_API spSlotData* spSkeletonData_findSlot (const spSkeletonData* self, const char* slotName);
-SP_API int spSkeletonData_findSlotIndex (const spSkeletonData* self, const char* slotName);
+SP_API spSlotData* spSkeletonData_findSlot(const spSkeletonData* self,
+                                           const char* slotName); SP_API int spSkeletonData_findSlotIndex(
+const spSkeletonData* self, const char* slotName);
 
-SP_API spSkin* spSkeletonData_findSkin (const spSkeletonData* self, const char* skinName);
+SP_API spSkin* spSkeletonData_findSkin(const spSkeletonData* self, const char* skinName);
 
-SP_API spEventData* spSkeletonData_findEvent (const spSkeletonData* self, const char* eventName);
+SP_API spEventData* spSkeletonData_findEvent(const spSkeletonData* self, const char* eventName);
 
-SP_API spAnimation* spSkeletonData_findAnimation (const spSkeletonData* self, const char* animationName);
+SP_API spAnimation* spSkeletonData_findAnimation(const spSkeletonData* self, const char* animationName);
 
-SP_API spIkConstraintData* spSkeletonData_findIkConstraint (const spSkeletonData* self, const char* constraintName);
+SP_API spIkConstraintData* spSkeletonData_findIkConstraint(const spSkeletonData* self, const char* constraintName);
 
-SP_API spTransformConstraintData* spSkeletonData_findTransformConstraint (const spSkeletonData* self, const char* constraintName);
+SP_API spTransformConstraintData* spSkeletonData_findTransformConstraint(const spSkeletonData* self,
+                                                                         const char* constraintName);
 
-SP_API spPathConstraintData* spSkeletonData_findPathConstraint (const spSkeletonData* self, const char* constraintName);
+SP_API spPathConstraintData* spSkeletonData_findPathConstraint(const spSkeletonData* self, const char* constraintName);
 
 #ifdef SPINE_SHORT_NAMES
 typedef spSkeletonData SkeletonData;
-#define SkeletonData_create(...) spSkeletonData_create(__VA_ARGS__)
-#define SkeletonData_dispose(...) spSkeletonData_dispose(__VA_ARGS__)
-#define SkeletonData_findBone(...) spSkeletonData_findBone(__VA_ARGS__)
-#define SkeletonData_findBoneIndex(...) spSkeletonData_findBoneIndex(__VA_ARGS__)
-#define SkeletonData_findSlot(...) spSkeletonData_findSlot(__VA_ARGS__)
-#define SkeletonData_findSlotIndex(...) spSkeletonData_findSlotIndex(__VA_ARGS__)
-#define SkeletonData_findSkin(...) spSkeletonData_findSkin(__VA_ARGS__)
-#define SkeletonData_findEvent(...) spSkeletonData_findEvent(__VA_ARGS__)
-#define SkeletonData_findAnimation(...) spSkeletonData_findAnimation(__VA_ARGS__)
+    #define SkeletonData_create(...) spSkeletonData_create(__VA_ARGS__)
+    #define SkeletonData_dispose(...) spSkeletonData_dispose(__VA_ARGS__)
+    #define SkeletonData_findBone(...) spSkeletonData_findBone(__VA_ARGS__)
+    #define SkeletonData_findBoneIndex(...) spSkeletonData_findBoneIndex(__VA_ARGS__)
+    #define SkeletonData_findSlot(...) spSkeletonData_findSlot(__VA_ARGS__)
+    #define SkeletonData_findSlotIndex(...) spSkeletonData_findSlotIndex(__VA_ARGS__)
+    #define SkeletonData_findSkin(...) spSkeletonData_findSkin(__VA_ARGS__)
+    #define SkeletonData_findEvent(...) spSkeletonData_findEvent(__VA_ARGS__)
+    #define SkeletonData_findAnimation(...) spSkeletonData_findAnimation(__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

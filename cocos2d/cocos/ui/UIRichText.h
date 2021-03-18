@@ -38,7 +38,8 @@ NS_CC_BEGIN
 
 class Label;
 
-namespace ui {
+namespace ui
+{
 
 /**
  *@brief Rich text element base class.
@@ -57,22 +58,25 @@ public:
         CUSTOM, /*!< RichElementCustomNode */
         NEWLINE /*!< RichElementNewLine */
     };
-    
+
     /**
      * @brief Default constructor.
      * @js ctor
      * @lua new
      */
-    RichElement(){};
-    
+    RichElement()
+    {
+    };
+
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElement(){};
+    virtual ~RichElement()
+    {
+    };
 
-    
     /**
      * @brief Initialize a rich element with different arguments.
      *
@@ -81,10 +85,10 @@ public:
      * @param opacity A opacity value in `GLubyte`.
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity);
-    
+    bool init(int tag, const Color3B &color, uint8_t opacity);
+
     bool equalType(Type type);
-    void setColor(const Color3B& color);
+    void setColor(const Color3B &color);
 protected:
     Type _type;             /*!< Rich element type. */
     int _tag;               /*!< A integer tag value. */
@@ -92,23 +96,26 @@ protected:
     uint8_t _opacity;       /*!< A opacity value in `GLubyte`. */
     friend class RichText;
 };
-    
+
 /**
  *@brief Rich element for displaying text.
  */
 class CC_GUI_DLL RichElementText : public RichElement
 {
 public:
-    
+
     /**
      *@brief Default constructor.
      * @js ctor
      * @lua new
      */
     RichElementText()
-    {_type = Type::TEXT;};
+    {
+        _type = Type::TEXT;
+    };
 
-    enum {
+    enum
+    {
         ITALICS_FLAG = 1 << 0,          /*!< italic text */
         BOLD_FLAG = 1 << 1,             /*!< bold text */
         UNDERLINE_FLAG = 1 << 2,        /*!< underline */
@@ -118,14 +125,16 @@ public:
         SHADOW_FLAG = 1 << 6,           /*!< shadow effect */
         GLOW_FLAG = 1 << 7              /*!< glow effect */
     };
-    
+
     /**
      *@brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementText(){};
-    
+    virtual ~RichElementText()
+    {
+    };
+
     /**
      * @brief Initialize a RichElementText with various arguments.
      *
@@ -145,12 +154,12 @@ public:
      * @param glowColor glow color
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity, const std::string& text,
-              const std::string& fontName, float fontSize, uint32_t flags, const std::string& url,
-              const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1,
-              const Color3B& shadowColor = Color3B::BLACK, const cocos2d::Size& shadowOffset = Size(2.0, -2.0), int shadowBlurRadius = 0,
-              const Color3B& glowColor = Color3B::WHITE);
-    
+    bool init(int tag, const Color3B &color, uint8_t opacity, const std::string &text, const std::string &fontName,
+              float fontSize, uint32_t flags, const std::string &url, const Color3B &outlineColor = Color3B::WHITE,
+              int outlineSize = -1, const Color3B &shadowColor = Color3B::BLACK,
+              const cocos2d::Size &shadowOffset = Size(2.0, -2.0), int shadowBlurRadius = 0,
+              const Color3B &glowColor = Color3B::WHITE);
+
     /**
      * @brief Create a RichElementText with various arguments.
      *
@@ -170,11 +179,12 @@ public:
      * @param glowColor glow color
      * @return RichElementText instance.
      */
-    static RichElementText* create(int tag, const Color3B& color, uint8_t opacity, const std::string& text,
-                                   const std::string& fontName, float fontSize, uint32_t flags=0, const std::string& url="",
-                                   const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1,
-                                   const Color3B& shadowColor = Color3B::BLACK, const cocos2d::Size& shadowOffset = Size(2.0, -2.0), int shadowBlurRadius = 0,
-                                   const Color3B& glowColor = Color3B::WHITE);
+    static RichElementText* create(int tag, const Color3B &color, uint8_t opacity, const std::string &text,
+                                   const std::string &fontName, float fontSize, uint32_t flags = 0,
+                                   const std::string &url = "", const Color3B &outlineColor = Color3B::WHITE,
+                                   int outlineSize = -1, const Color3B &shadowColor = Color3B::BLACK,
+                                   const cocos2d::Size &shadowOffset = Size(2.0, -2.0), int shadowBlurRadius = 0,
+                                   const Color3B &glowColor = Color3B::WHITE);
 protected:
     std::string _text;
     std::string _fontName;
@@ -189,31 +199,34 @@ protected:
     Color3B _glowColor;                     /*!< attributes of glow tag */
     friend class RichText;
 };
-    
+
 /**
  *@brief Rich element for displaying images.
  */
 class CC_GUI_DLL RichElementImage : public RichElement
 {
 public:
-    
+
     /**
      * @brief Default constructor.
      * @js ctor
      * @lua new
      *
      */
-    RichElementImage(){_type = Type::IMAGE;};
+    RichElementImage()
+    {
+        _type = Type::IMAGE;
+    };
 
-    
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementImage(){};
+    virtual ~RichElementImage()
+    {
+    };
 
-    
     /**
      * @brief Initialize a RichElementImage with various arguments.
      *
@@ -225,9 +238,9 @@ public:
      * @param texType texture type, may be a valid file path, or a sprite frame name
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity, const std::string& filePath, const std::string& url = "", Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+    bool init(int tag, const Color3B &color, uint8_t opacity, const std::string &filePath, const std::string &url = "",
+              Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
-    
     /**
      * @brief Create a RichElementImage with various arguments.
      *
@@ -239,11 +252,13 @@ public:
      * @param texType texture type, may be a valid file path, or a sprite frame name
      * @return A RichElementImage instance.
      */
-    static RichElementImage* create(int tag, const Color3B& color, uint8_t opacity, const std::string& filePath, const std::string& url = "", Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+    static RichElementImage* create(int tag, const Color3B &color, uint8_t opacity, const std::string &filePath,
+                                    const std::string &url = "",
+                                    Widget::TextureResType texType = Widget::TextureResType::LOCAL);
 
     void setWidth(int width);
     void setHeight(int height);
-    void setUrl(const std::string& url);
+    void setUrl(const std::string &url);
 protected:
     std::string _filePath;
     Rect _textureRect;
@@ -253,30 +268,34 @@ protected:
     int _height;
     std::string _url;   /*!< attributes of anchor tag */
 };
-    
+
 /**
  *@brief Rich element for displaying custom node type.
  */
 class CC_GUI_DLL RichElementCustomNode : public RichElement
 {
 public:
-    
+
     /**
      * @brief Default constructor.
      * @js ctor
      * @lua new
      */
-    RichElementCustomNode(){_type = Type::CUSTOM;};
+    RichElementCustomNode()
+    {
+        _type = Type::CUSTOM;
+    };
 
-    
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementCustomNode(){CC_SAFE_RELEASE(_customNode);};
+    virtual ~RichElementCustomNode()
+    {
+        CC_SAFE_RELEASE(_customNode);
+    };
 
-    
     /**
      * @brief Initialize a RichElementCustomNode with various arguments.
      *
@@ -286,8 +305,8 @@ public:
      * @param customNode A custom node pointer.
      * @return True if initialize success, false otherwise.
      */
-    bool init(int tag, const Color3B& color, uint8_t opacity, Node* customNode);
-    
+    bool init(int tag, const Color3B &color, uint8_t opacity, Node* customNode);
+
     /**
      * @brief Create a RichElementCustomNode with various arguments.
      *
@@ -297,34 +316,39 @@ public:
      * @param customNode A custom node pointer.
      * @return A RichElementCustomNode instance.
      */
-    static RichElementCustomNode* create(int tag, const Color3B& color, uint8_t opacity, Node* customNode);
+    static RichElementCustomNode* create(int tag, const Color3B &color, uint8_t opacity, Node* customNode);
 protected:
     Node* _customNode;
     friend class RichText;
 };
-    
+
 /**
  *@brief Rich element for new line.
  */
 class CC_GUI_DLL RichElementNewLine : public RichElement
 {
 public:
-    
+
     /**
      * @brief Default constructor.
      * @js ctor
      * @lua new
      *
      */
-    RichElementNewLine(){_type = Type::NEWLINE;};
-    
+    RichElementNewLine()
+    {
+        _type = Type::NEWLINE;
+    };
+
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
-    virtual ~RichElementNewLine(){};
-    
+    virtual ~RichElementNewLine()
+    {
+    };
+
     /**
      * @brief Create a RichElementNewLine with various arguments.
      *
@@ -333,7 +357,7 @@ public:
      * @param opacity A opacity in GLubyte.
      * @return A RichElementNewLine instance.
      */
-    static RichElementNewLine* create(int tag, const Color3B& color, uint8_t opacity);
+    static RichElementNewLine* create(int tag, const Color3B &color, uint8_t opacity);
 protected:
     friend class RichText;
 };
@@ -346,30 +370,32 @@ class CC_GUI_DLL RichText : public Widget
 {
 public:
 
-    enum WrapMode {
+    enum WrapMode
+    {
         WRAP_PER_WORD,
         WRAP_PER_CHAR
     };
-    
-    enum class HorizontalAlignment {
+
+    enum class HorizontalAlignment
+    {
         LEFT,
         CENTER,
         RIGHT,
     };
-    
+
     /**
      * @brief call to open a resource specified by a URL
      * @param url a URL
      */
-    typedef std::function<void(const std::string& url)> OpenUrlHandler;
-    
+    typedef std::function<void(const std::string &url)> OpenUrlHandler;
+
     /**
      * @brief called on the specified tag
      * @param tagAttrValueMap the attributes of a tag
      * @result text attributes and RichElement
      */
-    typedef std::function<std::pair<ValueMap, RichElement*>(const ValueMap& tagAttrValueMap)> VisitEnterHandler;
-    
+    typedef std::function<std::pair<ValueMap, RichElement*>(const ValueMap &tagAttrValueMap)> VisitEnterHandler;
+
     static const std::string KEY_VERTICAL_SPACE;                    /*!< key of vertical space */
     static const std::string KEY_WRAP_MODE;                         /*!< key of per word, or per char */
     static const std::string KEY_HORIZONTAL_ALIGNMENT;              /*!< key of left, right, or center */
@@ -409,21 +435,21 @@ public:
     static const std::string KEY_ANCHOR_TEXT_SHADOW_OFFSET_HEIGHT;  /*!< key of shadow offset (height) of anchor tag */
     static const std::string KEY_ANCHOR_TEXT_SHADOW_BLUR_RADIUS;    /*!< key of shadow blur radius of anchor tag */
     static const std::string KEY_ANCHOR_TEXT_GLOW_COLOR;            /*!< key of glow color of anchor tag */
-    
+
     /**
      * @brief Default constructor.
      * @js ctor
      * @lua new
      */
     RichText();
-    
+
     /**
      * @brief Default destructor.
      * @js NA
      * @lua NA
      */
     virtual ~RichText();
-    
+
     /**
      * @brief Create a empty RichText.
      *
@@ -436,7 +462,8 @@ public:
      *
      * @return RichText instance.
      */
-    static RichText* createWithXML(const std::string& xml, const ValueMap& defaults = ValueMap(), const OpenUrlHandler& handleOpenUrl = nullptr);
+    static RichText* createWithXML(const std::string &xml, const ValueMap &defaults = ValueMap(),
+                                   const OpenUrlHandler &handleOpenUrl = nullptr);
 
     /**
      * @brief Insert a RichElement at a given index.
@@ -445,35 +472,35 @@ public:
      * @param index A given index.
      */
     void insertElement(RichElement* element, int index);
-    
+
     /**
      * @brief Add a RichElement at the end of RichText.
      *
      * @param element A RichElement instance.
      */
     void pushBackElement(RichElement* element);
-    
+
     /**
      * @brief Remove a RichElement at a given index.
      *
      * @param index A integer index value.
      */
     void removeElement(int index);
-    
+
     /**
      * @brief Remove specific RichElement.
      *
      * @param element A RichElement type.
      */
     void removeElement(RichElement* element);
-    
+
     /**
      * @brief Set vertical space between each RichElement.
      *
      * @param space Point in float.
      */
     void setVerticalSpace(float space);
-    
+
     /**
      * @brief Rearrange all RichElement in the RichText.
      * It's usually called internally.
@@ -486,16 +513,18 @@ public:
 
     void setWrapMode(WrapMode wrapMode);                /*!< sets the wrapping mode: WRAP_PER_CHAR or WRAP_PER_WORD */
     WrapMode getWrapMode() const;                       /*!< returns the current wrapping mode */
-    void setHorizontalAlignment(HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
+    void setHorizontalAlignment(
+    HorizontalAlignment a); /*!< sets the horizontal alignment mode: LEFT, CENTER, or RIGHT */
     HorizontalAlignment getHorizontalAlignment() const; /*!< returns the current horizontal alignment mode */
-    void setFontColor(const std::string& color);        /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
+    void setFontColor(
+    const std::string &color);        /*!< Set the font color. @param color the #RRGGBB hexadecimal notation. */
     std::string getFontColor();                         /*!< return the current font color */
     Color3B getFontColor3B();                           /*!< return the current font color */
     void setFontSize(float size);                       /*!< Set the font size. @param size the font size. */
     float getFontSize();                                /*!< return the current font size */
-    void setFontFace(const std::string& face);          /*!< Set the font face. @param face the font face. */
+    void setFontFace(const std::string &face);          /*!< Set the font face. @param face the font face. */
     std::string getFontFace();                          /*!< return the current font face */
-    void setAnchorFontColor(const std::string& color);  /*!< Set the font color of a-tag. @param face the font color. */
+    void setAnchorFontColor(const std::string &color);  /*!< Set the font color of a-tag. @param face the font color. */
     std::string getAnchorFontColor();                   /*!< return the current font color of a-tag */
     cocos2d::Color3B getAnchorFontColor3B();            /*!< return the current font color of a-tag */
     void setAnchorTextBold(bool enable);                /*!< enable bold text of a-tag */
@@ -507,25 +536,26 @@ public:
     void setAnchorTextUnderline(bool enable);           /*!< enable the underline of a-tag */
     bool isAnchorTextUnderlineEnabled();                /*!< valid underline of a-tag? */
     /** @brief enable the outline of a-tag */
-    void setAnchorTextOutline(bool enable, const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1);
+    void setAnchorTextOutline(bool enable, const Color3B &outlineColor = Color3B::WHITE, int outlineSize = -1);
     bool isAnchorTextOutlineEnabled();                  /*!< valid outline of a-tag? */
     Color3B getAnchorTextOutlineColor3B();              /*!< return the current text outline color of a-tag */
     int getAnchorTextOutlineSize();                     /*!< return the current text outline size of a-tag */
     /** @brief enable the shadow of a-tag */
-    void setAnchorTextShadow(bool enable, const Color3B& shadowColor = Color3B::BLACK, const Size& offset = Size(2.0, -2.0), int blurRadius = 0);
+    void setAnchorTextShadow(bool enable, const Color3B &shadowColor = Color3B::BLACK,
+                             const Size &offset = Size(2.0, -2.0), int blurRadius = 0);
     bool isAnchorTextShadowEnabled();                   /*!< valid shadow of a-tag? */
     Color3B getAnchorTextShadowColor3B();               /*!< return the current text shadow color of a-tag */
     Size getAnchorTextShadowOffset();                   /*!< return the current text shadow offset of a-tag */
     int getAnchorTextShadowBlurRadius();                /*!< return the current text shadow blur radius of a-tag */
-    void setAnchorTextGlow(bool enable, const Color3B& glowColor = Color3B::WHITE); /*!< enable the glow of a-tag */
+    void setAnchorTextGlow(bool enable, const Color3B &glowColor = Color3B::WHITE); /*!< enable the glow of a-tag */
     bool isAnchorTextGlowEnabled();                     /*!< valid glow of a-tag? */
     Color3B getAnchorTextGlowColor3B();                 /*!< return the current text glow color of a-tag */
-    void setDefaults(const ValueMap& defaults);         /*!< set the default values */
+    void setDefaults(const ValueMap &defaults);         /*!< set the default values */
     ValueMap getDefaults() const;                       /*!< returns the default values */
 
-    cocos2d::Color3B color3BWithString(const std::string& color);   /*!< convert a color string into a Color3B. */
-    std::string stringWithColor3B(const cocos2d::Color3B& color3b); /*!< convert a Color3B into a color string. */
-    std::string stringWithColor4B(const cocos2d::Color4B& color4b); /*!< convert a Color4B into a color string. */
+    cocos2d::Color3B color3BWithString(const std::string &color);   /*!< convert a color string into a Color3B. */
+    std::string stringWithColor3B(const cocos2d::Color3B &color3b); /*!< convert a Color3B into a color string. */
+    std::string stringWithColor4B(const cocos2d::Color4B &color4b); /*!< convert a Color4B into a color string. */
 
     /**
      * @brief add a callback to own tag.
@@ -533,55 +563,57 @@ public:
      * @param isFontElement use attributes of text tag
      * @param handleVisitEnter callback
      */
-    static void setTagDescription(const std::string& tag, bool isFontElement, VisitEnterHandler handleVisitEnter);
+    static void setTagDescription(const std::string &tag, bool isFontElement, VisitEnterHandler handleVisitEnter);
 
     /**
      * @brief remove a callback to own tag.
      * @param tag tag's name
      */
-    static void removeTagDescription(const std::string& tag);
-    
-    void openUrl(const std::string& url);
+    static void removeTagDescription(const std::string &tag);
+
+    void openUrl(const std::string &url);
 
     /**
      * @brief Asks the callback to open a resource specified by a URL.
      * @discussion If you set up your own URL in the anchor tag, it is used to intercept the URL open.
      * @param handleOpenUrl the callback
      */
-    void setOpenUrlHandler(const OpenUrlHandler& handleOpenUrl);
+    void setOpenUrlHandler(const OpenUrlHandler &handleOpenUrl);
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
 
-    bool initWithXML(const std::string& xml, const ValueMap& defaults = ValueMap(), const OpenUrlHandler& handleOpenUrl = nullptr);
+    bool initWithXML(const std::string &xml, const ValueMap &defaults = ValueMap(),
+                     const OpenUrlHandler &handleOpenUrl = nullptr);
 
 protected:
     virtual void adaptRenderers() override;
 
     virtual void initRenderer() override;
     void pushToContainer(Node* renderer);
-    void handleTextRenderer(const std::string& text, const std::string& fontName, float fontSize, const Color3B& color,
-                            uint8_t opacity, uint32_t flags, const std::string& url = "",
-                            const Color3B& outlineColor = Color3B::WHITE, int outlineSize = -1,
-                            const Color3B& shadowColor = Color3B::BLACK, const Size& shadowOffset = Size(2.0, -2.0), int shadowBlurRadius = 0,
-                            const Color3B& glowColor = Color3B::WHITE);
-    void handleImageRenderer(const std::string& filePath, const Color3B& color, uint8_t opacity, int width, int height, const std::string& url);
+    void handleTextRenderer(const std::string &text, const std::string &fontName, float fontSize, const Color3B &color,
+                            uint8_t opacity, uint32_t flags, const std::string &url = "",
+                            const Color3B &outlineColor = Color3B::WHITE, int outlineSize = -1,
+                            const Color3B &shadowColor = Color3B::BLACK, const Size &shadowOffset = Size(2.0, -2.0),
+                            int shadowBlurRadius = 0, const Color3B &glowColor = Color3B::WHITE);
+    void handleImageRenderer(const std::string &filePath, const Color3B &color, uint8_t opacity, int width, int height,
+                             const std::string &url);
     void handleCustomRenderer(Node* renderer);
     void formatRenderers();
     void addNewLine();
-	void doHorizontalAlignment(const Vector<Node*>& row, float rowWidth);
-	float stripTrailingWhitespace(const Vector<Node*>& row);
+    void doHorizontalAlignment(const Vector<Node*> &row, float rowWidth);
+    float stripTrailingWhitespace(const Vector<Node*> &row);
 
     bool _formatTextDirty;
     Vector<RichElement*> _richElements;
-    std::vector<Vector<Node*>> _elementRenders;
+    std::vector<Vector < Node * >> _elementRenders;
     std::vector<float> _lineHeights;
     float _leftSpaceWidth;
 
     ValueMap _defaults;             /*!< default values */
     OpenUrlHandler _handleOpenUrl;  /*!< the callback for open URL */
 };
-    
+
 }
 
 // end of ui group

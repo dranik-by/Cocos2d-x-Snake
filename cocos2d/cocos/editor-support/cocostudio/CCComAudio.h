@@ -31,11 +31,12 @@ THE SOFTWARE.
 #include "2d/CCComponent.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
-
-    class CC_STUDIO_DLL ComAudio : public cocos2d::Component, public cocos2d::PlayableProtocol
+namespace cocostudio
 {
-    DECLARE_CLASS_COMPONENT_INFO
+
+class CC_STUDIO_DLL ComAudio : public cocos2d::Component, public cocos2d::PlayableProtocol
+{
+DECLARE_CLASS_COMPONENT_INFO
 public:
     const static std::string COMPONENT_NAME;
 
@@ -48,7 +49,7 @@ public:
      * @lua NA
      */
     virtual ~ComAudio();
-    
+
 public:
     static ComAudio* create();
 
@@ -110,7 +111,7 @@ public:
     const char* getFile();
     void setLoop(bool bLoop);
     bool isLoop();
-    
+
     /// @{
     /// @name implement Playable Protocol
     // play the effect sound path in _filePath

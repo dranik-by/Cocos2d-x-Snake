@@ -31,24 +31,24 @@ NS_CC_BEGIN
 
 const Data Data::Null;
 
-Data::Data() :
-_bytes(nullptr),
-_size(0)
+Data::Data()
+: _bytes(nullptr)
+, _size(0)
 {
     CCLOGINFO("In the empty constructor of Data.");
 }
 
-Data::Data(Data&& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(Data &&other)
+: _bytes(nullptr)
+, _size(0)
 {
     CCLOGINFO("In the move constructor of Data.");
     move(other);
 }
 
-Data::Data(const Data& other) :
-_bytes(nullptr),
-_size(0)
+Data::Data(const Data &other)
+: _bytes(nullptr)
+, _size(0)
 {
     CCLOGINFO("In the copy constructor of Data.");
     if (other._bytes && other._size)
@@ -63,7 +63,7 @@ Data::~Data()
     clear();
 }
 
-Data& Data::operator= (const Data& other)
+Data &Data::operator=(const Data &other)
 {
     if (this != &other)
     {
@@ -73,7 +73,7 @@ Data& Data::operator= (const Data& other)
     return *this;
 }
 
-Data& Data::operator= (Data&& other)
+Data &Data::operator=(Data &&other)
 {
     if (this != &other)
     {
@@ -83,10 +83,11 @@ Data& Data::operator= (Data&& other)
     return *this;
 }
 
-void Data::move(Data& other)
+void Data::move(Data &other)
 {
-    if(_bytes != other._bytes) clear();
-    
+    if (_bytes != other._bytes)
+        clear();
+
     _bytes = other._bytes;
     _size = other._size;
 
@@ -114,7 +115,8 @@ ssize_t Data::copy(const unsigned char* bytes, const ssize_t size)
     CCASSERT(size >= 0, "copy size should be non-negative");
     CCASSERT(bytes, "bytes should not be nullptr");
 
-    if (size <= 0) return 0;
+    if (size <= 0)
+        return 0;
 
     if (bytes != _bytes)
     {
@@ -137,7 +139,8 @@ void Data::fastSet(unsigned char* bytes, const ssize_t size)
 
 void Data::clear()
 {
-    if(_bytes) free(_bytes);
+    if (_bytes)
+        free(_bytes);
     _bytes = nullptr;
     _size = 0;
 }

@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../RenderPipeline.h"
@@ -47,28 +47,31 @@ public:
      * @param mtlDevice The device for which MTLRenderPipelineState object was created.
      * @param descriptor Specify the render pipeline description.
      */
-    RenderPipelineMTL(id<MTLDevice> mtlDevice);
+    RenderPipelineMTL(id <MTLDevice> mtlDevice);
     ~RenderPipelineMTL();
-    virtual void update(const PipelineDescriptor&, const RenderPassDescriptor&) override;
-    
+    virtual void update(const PipelineDescriptor &, const RenderPassDescriptor &) override;
+
     /**
      * Get a MTLRenderPipelineState object.
      * @return A MTLRenderPipelineState object.
      */
-    inline id<MTLRenderPipelineState> getMTLRenderPipelineState() const { return _mtlRenderPipelineState; }
-   
+    inline id <MTLRenderPipelineState> getMTLRenderPipelineState() const
+    {
+        return _mtlRenderPipelineState;
+    }
+
 private:
-    void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDescriptor&);
-    void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor&);
-    void setShaderModules(const PipelineDescriptor&);
-    void setBlendStateAndFormat(const BlendDescriptor&, const RenderPassDescriptor&);
-    void getAttachmentFormat(const RenderPassDescriptor&, PixelFormat&, PixelFormat&, PixelFormat&);
-    
-    id<MTLRenderPipelineState> _mtlRenderPipelineState = nil;
-    id<MTLDevice> _mtlDevice = nil;
-   
+    void setVertexLayout(MTLRenderPipelineDescriptor*, const PipelineDescriptor &);
+    void setBlendState(MTLRenderPipelineColorAttachmentDescriptor*, const BlendDescriptor &);
+    void setShaderModules(const PipelineDescriptor &);
+    void setBlendStateAndFormat(const BlendDescriptor &, const RenderPassDescriptor &);
+    void getAttachmentFormat(const RenderPassDescriptor &, PixelFormat &, PixelFormat &, PixelFormat &);
+
+    id <MTLRenderPipelineState> _mtlRenderPipelineState = nil;
+    id <MTLDevice> _mtlDevice = nil;
+
     MTLRenderPipelineDescriptor* _mtlRenderPipelineDescriptor = nil;
-    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::DEFAULT };
+    PixelFormat _colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::DEFAULT};
     PixelFormat _depthAttachmentFormat = PixelFormat::NONE;
     PixelFormat _stencilAttachmentFormat = PixelFormat::NONE;
     NSMutableDictionary* _mtlRenderPipelineStateCache = nil;

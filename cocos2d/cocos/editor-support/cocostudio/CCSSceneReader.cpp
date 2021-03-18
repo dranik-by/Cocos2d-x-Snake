@@ -33,7 +33,8 @@ THE SOFTWARE.
 using namespace cocos2d;
 using namespace ui;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 SceneReader* SceneReader::s_sharedReader = nullptr;
 
@@ -57,24 +58,27 @@ const char* SceneReader::sceneReaderVersion()
     return "1.0.0.0";
 }
 
-cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName, AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
+cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
+                                                    AttachComponentType attachComponent /*= AttachComponentType::EMPTY_NODE*/)
 {
     std::string fileExtension = cocos2d::FileUtils::getInstance()->getFileExtension(fileName);
     if (fileExtension == ".json")
     {
         _node = nullptr;
         rapidjson::Document jsonDict;
-        do {
+        do
+        {
             CC_BREAK_IF(!readJson(fileName, jsonDict));
             _node = createObject(jsonDict, nullptr, attachComponent);
             TriggerMng::getInstance()->parse(jsonDict);
         } while (0);
-        
+
         return _node;
     }
-    else if(fileExtension == ".csb")
+    else if (fileExtension == ".csb")
     {
-        do {
+        do
+        {
             std::string binaryFilePath = FileUtils::getInstance()->fullPathForFilename(fileName);
             auto fileData = FileUtils::getInstance()->getDataFromFile(binaryFilePath);
             auto fileDataBytes = fileData.getBytes();
@@ -82,33 +86,33 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
             CocoLoader tCocoLoader;
             if (tCocoLoader.ReadCocoBinBuff((char*)fileDataBytes))
             {
-                stExpCocoNode *tpRootCocoNode = tCocoLoader.GetRootCocoNode();
+                stExpCocoNode* tpRootCocoNode = tCocoLoader.GetRootCocoNode();
                 rapidjson::Type tType = tpRootCocoNode->GetType(&tCocoLoader);
-                if (rapidjson::kObjectType  == tType)
+                if (rapidjson::kObjectType == tType)
                 {
-                    stExpCocoNode *tpChildArray = tpRootCocoNode->GetChildArray(&tCocoLoader);
+                    stExpCocoNode* tpChildArray = tpRootCocoNode->GetChildArray(&tCocoLoader);
                     CC_BREAK_IF(tpRootCocoNode->GetChildNum() == 0);
                     _node = Node::create();
-                    int  nCount = 0;
+                    int nCount = 0;
                     std::vector<Component*> _vecComs;
-                    ComRender *pRender = nullptr;
+                    ComRender* pRender = nullptr;
                     std::string key = tpChildArray[15].GetName(&tCocoLoader);
                     if (key == "components")
                     {
                         nCount = tpChildArray[15].GetChildNum();
                     }
-                    stExpCocoNode *pComponents = tpChildArray[15].GetChildArray(&tCocoLoader);
-                    SerData *data = new (std::nothrow) SerData();
+                    stExpCocoNode* pComponents = tpChildArray[15].GetChildArray(&tCocoLoader);
+                    SerData* data = new(std::nothrow) SerData();
                     for (int i = 0; i < nCount; i++)
                     {
-                        stExpCocoNode *subDict = pComponents[i].GetChildArray(&tCocoLoader);
+                        stExpCocoNode* subDict = pComponents[i].GetChildArray(&tCocoLoader);
                         if (subDict == nullptr)
                         {
                             continue;
                         }
                         std::string key1 = subDict[1].GetName(&tCocoLoader);
-                        const char *comName = subDict[1].GetValue(&tCocoLoader);
-                        Component *pCom = nullptr;
+                        const char* comName = subDict[1].GetValue(&tCocoLoader);
+                        Component* pCom = nullptr;
                         if (key1 == "classname" && comName != nullptr)
                         {
                             pCom = createComponent(comName);
@@ -120,7 +124,7 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
                             data->_cocoLoader = &tCocoLoader;
                             if (pCom->serialize(data))
                             {
-                                ComRender *pTRender = dynamic_cast<ComRender*>(pCom);
+                                ComRender* pTRender = dynamic_cast<ComRender*>(pCom);
                                 if (pTRender != nullptr)
                                 {
                                     pRender = pTRender;
@@ -135,19 +139,19 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
                                 CC_SAFE_RELEASE_NULL(pCom);
                             }
                         }
-                        if(_fnSelector != nullptr)
+                        if (_fnSelector != nullptr)
                         {
                             _fnSelector(pCom, (void*)(data));
                         }
                     }
-                    
+
                     setPropertyFromJsonDict(&tCocoLoader, tpRootCocoNode, _node);
                     for (std::vector<Component*>::iterator iter = _vecComs.begin(); iter != _vecComs.end(); ++iter)
                     {
                         _node->addComponent(*iter);
                     }
-                    
-                    stExpCocoNode *pGameObjects = tpChildArray[11].GetChildArray(&tCocoLoader);
+
+                    stExpCocoNode* pGameObjects = tpChildArray[11].GetChildArray(&tCocoLoader);
                     int length = tpChildArray[11].GetChildNum();
                     for (int i = 0; i < length; ++i)
                     {
@@ -155,9 +159,9 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
                     }
                     TriggerMng::getInstance()->parse(&tCocoLoader, tpChildArray);
                 }
-                
+
             }
-        }while (0);
+        } while (0);
         return _node;
     }
     else
@@ -170,7 +174,8 @@ cocos2d::Node* SceneReader::createNodeWithSceneFile(const std::string &fileName,
 bool SceneReader::readJson(const std::string &fileName, rapidjson::Document &doc)
 {
     bool ret = false;
-    do {
+    do
+    {
         std::string jsonpath = FileUtils::getInstance()->fullPathForFilename(fileName);
         std::string contentStr = FileUtils::getInstance()->getStringFromFile(jsonpath);
         doc.Parse<0>(contentStr.c_str());
@@ -180,21 +185,21 @@ bool SceneReader::readJson(const std::string &fileName, rapidjson::Document &doc
     return ret;
 }
 
-Node* SceneReader::nodeByTag(Node *parent, int tag)
-{		
+Node* SceneReader::nodeByTag(Node* parent, int tag)
+{
     if (parent == nullptr)
     {
         return nullptr;
     }
-    Node *_retNode = nullptr;
-    Vector<Node*>& Children = parent->getChildren();
+    Node* _retNode = nullptr;
+    Vector<Node*> &Children = parent->getChildren();
     Vector<Node*>::iterator iter = Children.begin();
     while (iter != Children.end())
     {
         Node* pNode = *iter;
-        if(pNode != nullptr && pNode->getTag() == tag)
+        if (pNode != nullptr && pNode->getTag() == tag)
         {
-            _retNode =  pNode;
+            _retNode = pNode;
             break;
         }
         else
@@ -210,14 +215,15 @@ Node* SceneReader::nodeByTag(Node *parent, int tag)
     }
     return _retNode;
 }
-    
+
 cocos2d::Component* SceneReader::createComponent(const std::string classname)
 {
     std::string name = this->getComponentClassName(classname);
-    Ref *object = ObjectFactory::getInstance()->createObject(name);
-    
+    Ref* object = ObjectFactory::getInstance()->createObject(name);
+
     return dynamic_cast<Component*>(object);
 }
+
 std::string SceneReader::getComponentClassName(const std::string &name)
 {
     std::string comName;
@@ -245,23 +251,24 @@ std::string SceneReader::getComponentClassName(const std::string &name)
     {
         CCASSERT(false, "Unregistered Component!");
     }
-    
+
     return comName;
 }
 
-Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* parent, AttachComponentType attachComponent)
+Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* parent,
+                                AttachComponentType attachComponent)
 {
-    const char *className = DICTOOL->getStringValue_json(dict, "classname");
-    if(strcmp(className, "CCNode") == 0)
+    const char* className = DICTOOL->getStringValue_json(dict, "classname");
+    if (strcmp(className, "CCNode") == 0)
     {
         Node* gb = nullptr;
-        if(nullptr == parent)
+        if (nullptr == parent)
         {
             gb = Node::create();
         }
 
         std::vector<Component*> vecComs;
-        ComRender *render = nullptr;
+        ComRender* render = nullptr;
         int count = DICTOOL->getArrayCount_json(dict, "components");
         for (int i = 0; i < count; i++)
         {
@@ -270,9 +277,9 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
             {
                 break;
             }
-            const char *comName = DICTOOL->getStringValue_json(subDict, "classname");
-            Component *com = this->createComponent(comName);
-            SerData *data = new (std::nothrow) SerData();
+            const char* comName = DICTOOL->getStringValue_json(subDict, "classname");
+            Component* com = this->createComponent(comName);
+            SerData* data = new(std::nothrow) SerData();
             if (com != nullptr)
             {
                 data->_rData = &subDict;
@@ -280,7 +287,7 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
                 data->_cocoLoader = nullptr;
                 if (com->serialize(data))
                 {
-                    ComRender *tRender = dynamic_cast<ComRender*>(com);
+                    ComRender* tRender = dynamic_cast<ComRender*>(com);
                     if (tRender == nullptr)
                     {
                         vecComs.push_back(com);
@@ -292,7 +299,7 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
                 }
             }
             CC_SAFE_DELETE(data);
-            if(_fnSelector != nullptr)
+            if (_fnSelector != nullptr)
             {
                 _fnSelector(com, data);
             }
@@ -320,7 +327,7 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
         setPropertyFromJsonDict(dict, gb);
         for (std::vector<Component*>::iterator iter = vecComs.begin(); iter != vecComs.end(); ++iter)
         {
-              gb->addComponent(*iter);
+            gb->addComponent(*iter);
         }
 
         int length = DICTOOL->getArrayCount_json(dict, "gameobjects");
@@ -333,8 +340,8 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
             }
             createObject(subDict, gb, attachComponent);
         }
-        
-        if(dict.HasMember("CanvasSize"))
+
+        if (dict.HasMember("CanvasSize"))
         {
             const rapidjson::Value &canvasSizeDict = DICTOOL->getSubDictionary_json(dict, "CanvasSize");
             if (DICTOOL->checkObjectExist_json(canvasSizeDict))
@@ -345,46 +352,46 @@ Node* SceneReader::createObject(const rapidjson::Value &dict, cocos2d::Node* par
             }
 
         }
-        
+
         return gb;
     }
-    
+
     return nullptr;
 }
-    
-    
-cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node* parent, AttachComponentType attachComponent)
+
+cocos2d::Node* SceneReader::createObject(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Node* parent,
+                                         AttachComponentType attachComponent)
 {
-    const char *className = nullptr;
-    stExpCocoNode *pNodeArray = cocoNode->GetChildArray(cocoLoader);
+    const char* className = nullptr;
+    stExpCocoNode* pNodeArray = cocoNode->GetChildArray(cocoLoader);
     std::string Key = pNodeArray[1].GetName(cocoLoader);
     if (Key == "classname")
     {
         className = pNodeArray[1].GetValue(cocoLoader);
     }
-    if(strcmp(className, "CCNode") == 0)
+    if (strcmp(className, "CCNode") == 0)
     {
         Node* gb = nullptr;
         std::vector<Component*> _vecComs;
-        ComRender *pRender = nullptr;
+        ComRender* pRender = nullptr;
         int count = 0;
         std::string key = pNodeArray[13].GetName(cocoLoader);
         if (key == "components")
         {
             count = pNodeArray[13].GetChildNum();
         }
-        stExpCocoNode *pComponents = pNodeArray[13].GetChildArray(cocoLoader);
-        SerData *data = new (std::nothrow) SerData();
+        stExpCocoNode* pComponents = pNodeArray[13].GetChildArray(cocoLoader);
+        SerData* data = new(std::nothrow) SerData();
         for (int i = 0; i < count; ++i)
         {
-            stExpCocoNode *subDict = pComponents[i].GetChildArray(cocoLoader);
+            stExpCocoNode* subDict = pComponents[i].GetChildArray(cocoLoader);
             if (subDict == nullptr)
             {
                 continue;
             }
             std::string key1 = subDict[1].GetName(cocoLoader);
-            const char *comName = subDict[1].GetValue(cocoLoader);
-            Component *pCom = nullptr;
+            const char* comName = subDict[1].GetValue(cocoLoader);
+            Component* pCom = nullptr;
             if (key1 == "classname" && comName != nullptr)
             {
                 pCom = createComponent(comName);
@@ -396,7 +403,7 @@ cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *
                 data->_cocoLoader = cocoLoader;
                 if (pCom->serialize(data))
                 {
-                    ComRender *pTRender = dynamic_cast<ComRender*>(pCom);
+                    ComRender* pTRender = dynamic_cast<ComRender*>(pCom);
                     if (pTRender != nullptr)
                     {
                         pRender = pTRender;
@@ -411,13 +418,13 @@ cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *
                     CC_SAFE_RELEASE_NULL(pCom);
                 }
             }
-            if(_fnSelector != nullptr)
+            if (_fnSelector != nullptr)
             {
                 _fnSelector(pCom, (void*)(data));
             }
         }
         CC_SAFE_DELETE(data);
-        
+
         if (parent != nullptr)
         {
             if (pRender == nullptr || attachComponent == AttachComponentType::EMPTY_NODE)
@@ -442,8 +449,8 @@ cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *
         {
             gb->addComponent(*iter);
         }
-        
-        stExpCocoNode *pGameObjects = pNodeArray[12].GetChildArray(cocoLoader);
+
+        stExpCocoNode* pGameObjects = pNodeArray[12].GetChildArray(cocoLoader);
         if (pGameObjects != nullptr)
         {
             int length = pNodeArray[12].GetChildNum();
@@ -457,7 +464,7 @@ cocos2d::Node* SceneReader::createObject(CocoLoader *cocoLoader, stExpCocoNode *
     return nullptr;
 }
 
-void SceneReader::setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)>& selector)
+void SceneReader::setTarget(const std::function<void(cocos2d::Ref* obj, void* doc)> &selector)
 {
     _fnSelector = selector;
 }
@@ -475,47 +482,46 @@ Node* SceneReader::getNodeByTag(int nTag)
     return nodeByTag(_node, nTag);
 }
 
-void SceneReader::setPropertyFromJsonDict(const rapidjson::Value &root, cocos2d::Node *node)
+void SceneReader::setPropertyFromJsonDict(const rapidjson::Value &root, cocos2d::Node* node)
 {
     float x = DICTOOL->getFloatValue_json(root, "x");
     float y = DICTOOL->getFloatValue_json(root, "y");
     node->setPosition(x, y);
-    
+
     const bool bVisible = (DICTOOL->getIntValue_json(root, "visible", 1) != 0);
     node->setVisible(bVisible);
-    
+
     int nTag = DICTOOL->getIntValue_json(root, "objecttag", -1);
     node->setTag(nTag);
-    
+
     int nZorder = DICTOOL->getIntValue_json(root, "zorder");
     node->setLocalZOrder(nZorder);
-    
+
     float fScaleX = DICTOOL->getFloatValue_json(root, "scalex", 1.0);
     float fScaleY = DICTOOL->getFloatValue_json(root, "scaley", 1.0);
     node->setScaleX(fScaleX);
     node->setScaleY(fScaleY);
-    
-    float fRotationZ = DICTOOL->getFloatValue_json(root, "rotation"); 
+
+    float fRotationZ = DICTOOL->getFloatValue_json(root, "rotation");
     node->setRotation(fRotationZ);
-    
-    const char *sName = DICTOOL->getStringValue_json(root, "name", "");
+
+    const char* sName = DICTOOL->getStringValue_json(root, "name", "");
     node->setName(sName);
 }
-    
-    
-void SceneReader::setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode *cocoNode, cocos2d::Node *node)
+
+void SceneReader::setPropertyFromJsonDict(CocoLoader* cocoLoader, stExpCocoNode* cocoNode, cocos2d::Node* node)
 {
-    stExpCocoNode *stChildArray = cocoNode->GetChildArray(cocoLoader);
+    stExpCocoNode* stChildArray = cocoNode->GetChildArray(cocoLoader);
     float x = 0.0f, y = 0.0f, fScaleX = 1.0f, fScaleY = 1.0f, fRotationZ = 1.0f;
     bool bVisible = false;
-    const char *sName = "";
+    const char* sName = "";
     int nTag = 0, nZorder = -1;
-    
+
     for (int i = 0; i < cocoNode->GetChildNum(); ++i)
     {
         std::string key = stChildArray[i].GetName(cocoLoader);
         std::string value = stChildArray[i].GetValue(cocoLoader);
-        
+
         if (key == "x")
         {
             x = utils::atof(value.c_str());
@@ -541,22 +547,22 @@ void SceneReader::setPropertyFromJsonDict(CocoLoader *cocoLoader, stExpCocoNode 
             nZorder = atoi(value.c_str());
             node->setLocalZOrder(nZorder);
         }
-        else if(key == "scalex")
+        else if (key == "scalex")
         {
             fScaleX = utils::atof(value.c_str());
             node->setScaleX(fScaleX);
         }
-        else if(key == "scaley")
+        else if (key == "scaley")
         {
             fScaleY = atof(value.c_str());
             node->setScaleY(fScaleY);
         }
-        else if(key == "rotation")
+        else if (key == "rotation")
         {
             fRotationZ = utils::atof(value.c_str());
             node->setRotation(fRotationZ);
         }
-        else if(key == "name")
+        else if (key == "name")
         {
             sName = value.c_str();
             node->setName(sName);
@@ -568,7 +574,7 @@ SceneReader* SceneReader::getInstance()
 {
     if (s_sharedReader == nullptr)
     {
-        s_sharedReader = new (std::nothrow) SceneReader();
+        s_sharedReader = new(std::nothrow) SceneReader();
     }
     return s_sharedReader;
 }

@@ -31,6 +31,6 @@
     int _maximumLength;
 }
 
-@property (nonatomic, assign) int maximumLength;
+@property(nonatomic, assign) int maximumLength;
 
 @end

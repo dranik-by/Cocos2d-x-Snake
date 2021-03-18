@@ -55,7 +55,7 @@ enum
 
     /** Isometric orientation. */
     TMXOrientationIso,
-    
+
     /** Isometric staggered orientation. */
     TMXOrientationStaggered,
 };
@@ -65,7 +65,7 @@ enum
 {
     /** Stagger Axis x. */
     TMXStaggerAxis_X,
-    
+
     /** Stagger Axis y. */
     TMXStaggerAxis_Y,
 };
@@ -139,7 +139,7 @@ public:
      * @param tmxFile A TMX file.
      * @return An autorelease object.
      */
-    static TMXTiledMap* create(const std::string& tmxFile);
+    static TMXTiledMap* create(const std::string &tmxFile);
 
     /** Initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources. 
      *
@@ -148,28 +148,28 @@ public:
      * @return An autorelease object.
      * @js NA
      */
-    static TMXTiledMap* createWithXML(const std::string& tmxString, const std::string& resourcePath);
+    static TMXTiledMap* createWithXML(const std::string &tmxString, const std::string &resourcePath);
 
     /** Return the TMXLayer for the specific layer. 
      *
      * @param layerName A specific layer.
      * @return The TMXLayer for the specific layer.
      */
-    TMXLayer* getLayer(const std::string& layerName) const;
+    TMXLayer* getLayer(const std::string &layerName) const;
 
     /** Return the TMXObjectGroup for the specific group. 
      *
      * @param groupName The group Name.
      * @return A Type of TMXObjectGroup.
      */
-    TMXObjectGroup* getObjectGroup(const std::string& groupName) const;
+    TMXObjectGroup* getObjectGroup(const std::string &groupName) const;
 
     /** Return the value for the specific property name. 
      *
      * @param propertyName The specific property name.
      * @return Return the value for the specific property name.
      */
-    Value getProperty(const std::string& propertyName) const;
+    Value getProperty(const std::string &propertyName) const;
 
     /** Return properties dictionary for tile GID. 
      *
@@ -191,74 +191,108 @@ public:
      *
      * @return The map's size property measured in tiles.
      */
-    const Size& getMapSize() const { return _mapSize; }
-    
+    const Size &getMapSize() const
+    {
+        return _mapSize;
+    }
+
     /** Set the map's size property measured in tiles. 
      *
      * @param mapSize The map's size property measured in tiles.
      */
-    void setMapSize(const Size& mapSize) { _mapSize = mapSize; }
+    void setMapSize(const Size &mapSize)
+    {
+        _mapSize = mapSize;
+    }
 
     /** The tiles's size property measured in pixels. 
      *
      * @return The tiles's size property measured in pixels.
      */
-    const Size& getTileSize() const { return _tileSize; }
-    
+    const Size &getTileSize() const
+    {
+        return _tileSize;
+    }
+
     /** Set the tiles's size property measured in pixels. 
      *
      * @param tileSize The tiles's size property measured in pixels.
      */
-    void setTileSize(const Size& tileSize) { _tileSize = tileSize; }
+    void setTileSize(const Size &tileSize)
+    {
+        _tileSize = tileSize;
+    }
 
     /** Map orientation. 
      *
      * @return Map orientation.
      */
-    int getMapOrientation() const { return _mapOrientation; }
-    
+    int getMapOrientation() const
+    {
+        return _mapOrientation;
+    }
+
     /** Set map orientation. 
      *
      * @param mapOrientation The map orientation.
      */
-    void setMapOrientation(int mapOrientation) { _mapOrientation = mapOrientation; }
+    void setMapOrientation(int mapOrientation)
+    {
+        _mapOrientation = mapOrientation;
+    }
 
     /** Get the Object groups. 
      *
      * @return The object groups.
      */
-    const Vector<TMXObjectGroup*>& getObjectGroups() const { return _objectGroups; }
-    Vector<TMXObjectGroup*>& getObjectGroups() { return _objectGroups; }
-    
+    const Vector<TMXObjectGroup*> &getObjectGroups() const
+    {
+        return _objectGroups;
+    }
+
+    Vector<TMXObjectGroup*> &getObjectGroups()
+    {
+        return _objectGroups;
+    }
+
     /** Set the object groups. 
      *
      * @param groups The object groups.
      */
-    void setObjectGroups(const Vector<TMXObjectGroup*>& groups) {
+    void setObjectGroups(const Vector<TMXObjectGroup*> &groups)
+    {
         _objectGroups = groups;
     }
-    
+
     /** Properties. 
      *
      * @return Properties.
      */
-    ValueMap& getProperties() { return _properties; }
-    
+    ValueMap &getProperties()
+    {
+        return _properties;
+    }
+
     /** Set the properties.
      *
      * @param properties A  Type of ValueMap to set the properties.
      */
-    void setProperties(const ValueMap& properties) {
+    void setProperties(const ValueMap &properties)
+    {
         _properties = properties;
     }
-    
+
     /** Get the description.
      * @js NA
      */
     virtual std::string getDescription() const override;
 
-    int  getLayerNum();
-    const std::string& getResourceFile() const { return _tmxFile; }
+    int getLayerNum();
+
+    const std::string &getResourceFile() const
+    {
+        return _tmxFile;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
     /**
@@ -270,16 +304,16 @@ CC_CONSTRUCTOR_ACCESS:
      * @lua NA
      */
     virtual ~TMXTiledMap();
-    
+
     /** initializes a TMX Tiled Map with a TMX file */
-    bool initWithTMXFile(const std::string& tmxFile);
-    
+    bool initWithTMXFile(const std::string &tmxFile);
+
     /** initializes a TMX Tiled Map with a TMX formatted XML string and a path to TMX resources */
-    bool initWithXML(const std::string& tmxString, const std::string& resourcePath);
+    bool initWithXML(const std::string &tmxString, const std::string &resourcePath);
 
 protected:
-    TMXLayer * parseLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
-    TMXTilesetInfo * tilesetForLayer(TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+    TMXLayer* parseLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
+    TMXTilesetInfo* tilesetForLayer(TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     void buildWithMapInfo(TMXMapInfo* mapInfo);
 
     /** the map's size property measured in tiles */
@@ -292,7 +326,7 @@ protected:
     Vector<TMXObjectGroup*> _objectGroups;
     /** properties */
     ValueMap _properties;
-    
+
     //! tile properties
     ValueMapIntKey _tileProperties;
 
@@ -301,8 +335,7 @@ protected:
 
     static const int TMXLayerTag = 32768;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TMXTiledMap);
+private: CC_DISALLOW_COPY_AND_ASSIGN(TMXTiledMap);
 
 };
 

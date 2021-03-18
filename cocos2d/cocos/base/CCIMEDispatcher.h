@@ -35,7 +35,6 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-
 /**
 @brief    Input Method Edit Message Dispatcher.
 */
@@ -59,7 +58,7 @@ public:
      * @brief Dispatches the input text from IME.
      * @lua NA
      */
-    void dispatchInsertText(const char * text, size_t len);
+    void dispatchInsertText(const char* text, size_t len);
 
     /**
      * @brief Dispatches the delete-backward operation.
@@ -77,7 +76,7 @@ public:
      * @brief Get the content text from IMEDelegate, retrieved previously from IME.
      * @lua NA
      */
-    const std::string& getContentText();
+    const std::string &getContentText();
 
     //////////////////////////////////////////////////////////////////////////
     // dispatch keyboard notification
@@ -85,19 +84,19 @@ public:
     /**
      * @lua NA
      */
-    void dispatchKeyboardWillShow(IMEKeyboardNotificationInfo& info);
+    void dispatchKeyboardWillShow(IMEKeyboardNotificationInfo &info);
     /**
      * @lua NA
      */
-    void dispatchKeyboardDidShow(IMEKeyboardNotificationInfo& info);
+    void dispatchKeyboardDidShow(IMEKeyboardNotificationInfo &info);
     /**
      * @lua NA
      */
-    void dispatchKeyboardWillHide(IMEKeyboardNotificationInfo& info);
+    void dispatchKeyboardWillHide(IMEKeyboardNotificationInfo &info);
     /**
      * @lua NA
      */
-    void dispatchKeyboardDidHide(IMEKeyboardNotificationInfo& info);
+    void dispatchKeyboardDidHide(IMEKeyboardNotificationInfo &info);
 
 protected:
     friend class IMEDelegate;
@@ -106,7 +105,7 @@ protected:
      *@brief Add delegate to receive IME messages.
      *@param delegate A instance implements IMEDelegate delegate.
      */
-    void addDelegate(IMEDelegate * delegate);
+    void addDelegate(IMEDelegate* delegate);
 
     /**
      *@brief Attach the Delegate to the IME.
@@ -114,7 +113,7 @@ protected:
      *@return If the old delegate can detach from the IME, and the new delegate 
      *       can attach to the IME, return true, otherwise false.
      */
-    bool attachDelegateWithIME(IMEDelegate * delegate);
+    bool attachDelegateWithIME(IMEDelegate* delegate);
 
     /**
      * Detach the delegate to the IME
@@ -122,21 +121,20 @@ protected:
      *@param delegate  A instance implements IMEDelegate delegate.
      *@return Whether the IME is detached or not.
      */
-    bool detachDelegateWithIME(IMEDelegate * delegate);
+    bool detachDelegateWithIME(IMEDelegate* delegate);
 
     /**
      *@brief Remove the delegate from the delegates which receive IME messages.
      *@param delegate A instance implements the IMEDelegate delegate.
      */
-    void removeDelegate(IMEDelegate * delegate);
+    void removeDelegate(IMEDelegate* delegate);
 
 private:
     IMEDispatcher();
-    
-    class Impl;
-    Impl * _impl;
-};
 
+    class Impl;
+    Impl* _impl;
+};
 
 NS_CC_END
 // end of base group

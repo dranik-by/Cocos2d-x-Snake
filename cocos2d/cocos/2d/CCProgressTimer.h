@@ -58,7 +58,7 @@ public:
         RADIAL,/** Radial Counter-Clockwise. */
         BAR,/** Bar. */
     };
-    
+
     /** Creates a progress timer with the sprite as the shape the timer goes through.
      *
      * @param sp The sprite as the shape the timer goes through.
@@ -70,44 +70,56 @@ public:
      *
      * @return A Type
      */
-    Type getType() const { return _type; }
+    Type getType() const
+    {
+        return _type;
+    }
 
     /** Percentages are from 0 to 100.
      *
      * @return Percentages.
      */
-    float getPercentage() const { return _percentage; }
+    float getPercentage() const
+    {
+        return _percentage;
+    }
 
     /** The image to show the progress percentage, retain. 
      *
      * @return A sprite.
      */
-    Sprite* getSprite() const { return _sprite; }
-    
+    Sprite* getSprite() const
+    {
+        return _sprite;
+    }
+
     /** Set the initial percentage values. 
      *
      * @param percentage The initial percentage values.
      */
     void setPercentage(float percentage);
-    
+
     /** Set the sprite as the shape. 
      *
      * @param sprite The sprite as the shape.
      */
-    void setSprite(Sprite *sprite);
-    
+    void setSprite(Sprite* sprite);
+
     /** Set the ProgressTimer type. 
      *
      * @param type Is an Type.
      */
     void setType(Type type);
-    
+
     /** Return the Reverse direction.
      *
      * @return If the direction is Anti-clockwise,it will return true.
      */
-    bool isReverseDirection() { return _reverseDirection; };
-    
+    bool isReverseDirection()
+    {
+        return _reverseDirection;
+    };
+
     /** Set the Reverse direction.
      *
      * @param value If value is false it will clockwise,if is true it will Anti-clockwise.
@@ -125,8 +137,8 @@ public:
      *        you want a top to bottom then set the midpoint all the way to Vec2(x,1).
      * @param point A Vec2 point.
      */
-    void setMidpoint(const Vec2& point);
-    
+    void setMidpoint(const Vec2 &point);
+
     /** Returns the Midpoint. 
      *
      * @return A Vec2.
@@ -140,22 +152,28 @@ public:
      *    Set the rate to be Vec2(0,1); and set the midpoint to = Vec2(0,.5f).
      * @param barChangeRate A Vec2.
      */
-    void setBarChangeRate(const Vec2& barChangeRate ) { _barChangeRate = barChangeRate; }
-    
+    void setBarChangeRate(const Vec2 &barChangeRate)
+    {
+        _barChangeRate = barChangeRate;
+    }
+
     /** Returns the BarChangeRate.
      *
      * @return A barChangeRate.
      */
-    Vec2 getBarChangeRate() const { return _barChangeRate; }
+    Vec2 getBarChangeRate() const
+    {
+        return _barChangeRate;
+    }
 
     // Overrides
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-    virtual void setAnchorPoint(const Vec2& anchorPoint) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void setAnchorPoint(const Vec2 &anchorPoint) override;
     virtual void setColor(const Color3B &color) override;
-    virtual const Color3B& getColor() const override;
+    virtual const Color3B &getColor() const override;
     virtual void setOpacity(uint8_t opacity) override;
     virtual uint8_t getOpacity() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     /**
      * @js ctor
@@ -166,10 +184,10 @@ CC_CONSTRUCTOR_ACCESS:
      * @lua NA
      */
     virtual ~ProgressTimer();
-    
+
     /** Initializes a progress timer with the sprite as the shape the timer goes through */
     bool initWithSprite(Sprite* sp);
-    
+
 protected:
     Tex2F textureCoordFromAlphaPoint(Vec2 alpha);
     Vec2 vertexFromAlphaPoint(Vec2 alpha);
@@ -183,14 +201,14 @@ protected:
     Vec2 _midpoint;
     Vec2 _barChangeRate;
     float _percentage = 0.0f;
-    Sprite *_sprite = nullptr;
+    Sprite* _sprite = nullptr;
     std::vector<V2F_C4B_T2F> _vertexData;
     std::vector<unsigned short> _indexData;
     bool _reverseDirection = false;
-    
+
     CustomCommand _customCommand;
     CustomCommand _customCommand2;
-    
+
     backend::ProgramState* _programState = nullptr;
     backend::ProgramState* _programState2 = nullptr;
 
@@ -200,8 +218,7 @@ protected:
     backend::UniformLocation _locMVP2;
     backend::UniformLocation _locTex2;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTimer);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ProgressTimer);
 };
 
 // end of misc_nodes group

@@ -50,28 +50,28 @@ public:
      *
      * @lua NA
      */
-    OBB(const AABB& aabb);
-    
+    OBB(const AABB &aabb);
+
     /*
      * Construct obb from points
      *
      * @lua NA
      */
     OBB(const Vec3* verts, int num);
-    
+
     /*
      * Check point in
      */
-    bool containPoint(const Vec3& point) const;
+    bool containPoint(const Vec3 &point) const;
 
     /*
      * Specify obb values
      */
-    void set(const Vec3& center, const Vec3& _xAxis, const Vec3& _yAxis, const Vec3& _zAxis, const Vec3& _extents);
-    
+    void set(const Vec3 &center, const Vec3 &_xAxis, const Vec3 &_yAxis, const Vec3 &_zAxis, const Vec3 &_extents);
+
     /*
      * Clear obb
-     */ 
+     */
     void reset();
 
     /* face to the obb's -z direction
@@ -87,17 +87,17 @@ public:
      * verts[7] : left top back
      */
     void getCorners(Vec3* verts) const;
-    
+
     /*
      * Check intersect with other
      */
-    bool intersects(const OBB& box) const;
-    
-	/**
+    bool intersects(const OBB &box) const;
+
+    /**
      * Transforms the obb by the given transformation matrix.
      */
-    void transform(const Mat4& mat);
-    
+    void transform(const Mat4 &mat);
+
 protected:
     /*
     * compute extX, extY, extZ
@@ -108,22 +108,22 @@ protected:
         _extentY = _yAxis * _extents.y;
         _extentZ = _zAxis * _extents.z;
     }
-    
+
     /*
      * Project point to the target axis
      */
-    float projectPoint(const Vec3& point, const Vec3& axis) const;
-    
+    float projectPoint(const Vec3 &point, const Vec3 &axis) const;
+
     /*
      * Calculate the min and max project value of through the box's corners
      */
-    void getInterval(const OBB& box, const Vec3& axis, float &min, float &max) const;
-    
+    void getInterval(const OBB &box, const Vec3 &axis, float &min, float &max) const;
+
     /*
      * Get the edge of x y z axis direction
      */
     Vec3 getEdgeDirection(int index) const;
-    
+
     /*
      * Get the face of x y z axis direction
      */

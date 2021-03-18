@@ -37,7 +37,7 @@ GroupCommandManager::GroupCommandManager()
 
 GroupCommandManager::~GroupCommandManager()
 {
-    
+
 }
 
 bool GroupCommandManager::init()
@@ -59,7 +59,7 @@ int GroupCommandManager::getGroupID()
     }
 
     //Create new ID
-//    int newID = _groupMapping.size();
+    //    int newID = _groupMapping.size();
     int newID = Director::getInstance()->getRenderer()->createRenderQueue();
     _groupMapping[newID] = true;
 

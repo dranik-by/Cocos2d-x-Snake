@@ -28,10 +28,10 @@
 
 #if CC_ENABLE_SCRIPT_BINDING
 
-#include "base/CCScheduler.h"
-#include "2d/CCNode.h"
+    #include "base/CCScheduler.h"
+    #include "2d/CCNode.h"
 
-bool CC_DLL cc_assert_script_compatible(const char *msg)
+bool CC_DLL cc_assert_script_compatible(const char* msg)
 {
     cocos2d::ScriptEngineProtocol* engine = cocos2d::ScriptEngineManager::getInstance()->getScriptEngine();
     if (engine && engine->handleAssert(msg))
@@ -48,14 +48,14 @@ NS_CC_BEGIN
 
 ScriptHandlerEntry* ScriptHandlerEntry::create(int handler)
 {
-    ScriptHandlerEntry* entry = new (std::nothrow) ScriptHandlerEntry(handler);
+    ScriptHandlerEntry* entry = new(std::nothrow) ScriptHandlerEntry(handler);
     entry->autorelease();
     return entry;
 }
 
 ScriptHandlerEntry::~ScriptHandlerEntry()
 {
-    if (_handler != 0 )
+    if (_handler != 0)
     {
         ScriptEngineManager::getInstance()->getScriptEngine()->removeScriptHandler(_handler);
         LUALOG("[LUA] Remove event handler: %d", _handler);
@@ -68,7 +68,7 @@ ScriptHandlerEntry::~ScriptHandlerEntry()
 
 SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, float interval, bool paused)
 {
-    SchedulerScriptHandlerEntry* entry = new (std::nothrow) SchedulerScriptHandlerEntry(handler);
+    SchedulerScriptHandlerEntry* entry = new(std::nothrow) SchedulerScriptHandlerEntry(handler);
     entry->init(interval, paused);
     entry->autorelease();
     return entry;
@@ -76,7 +76,7 @@ SchedulerScriptHandlerEntry* SchedulerScriptHandlerEntry::create(int handler, fl
 
 bool SchedulerScriptHandlerEntry::init(float interval, bool paused)
 {
-    _timer = new (std::nothrow) TimerScriptHandler();
+    _timer = new(std::nothrow) TimerScriptHandler();
     _timer->initWithScriptHandler(_handler, interval);
     _paused = paused;
     LUALOG("[LUA] ADD script schedule: %d, entryID: %d", _handler, _entryId);
@@ -93,12 +93,10 @@ SchedulerScriptHandlerEntry::~SchedulerScriptHandlerEntry()
 // 
 // // TouchScriptHandlerEntry
 
-TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler,
-                                                             bool isMultiTouches,
-                                                             int priority,
-                                                             bool swallowsTouches)
+TouchScriptHandlerEntry* TouchScriptHandlerEntry::create(int handler, bool isMultiTouches, int priority,
+                                                         bool swallowsTouches)
 {
-    TouchScriptHandlerEntry* entry = new (std::nothrow) TouchScriptHandlerEntry(handler);
+    TouchScriptHandlerEntry* entry = new(std::nothrow) TouchScriptHandlerEntry(handler);
     entry->init(isMultiTouches, priority, swallowsTouches);
     entry->autorelease();
     return entry;
@@ -113,7 +111,7 @@ bool TouchScriptHandlerEntry::init(bool isMultiTouches, int priority, bool swall
     _isMultiTouches = isMultiTouches;
     _priority = priority;
     _swallowsTouches = swallowsTouches;
-    
+
     return true;
 }
 
@@ -122,19 +120,18 @@ bool TouchScriptHandlerEntry::init(bool isMultiTouches, int priority, bool swall
 
 static ScriptEngineManager* s_pSharedScriptEngineManager = nullptr;
 
-
 ScriptEngineManager::~ScriptEngineManager()
 {
     removeScriptEngine();
 }
 
-void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol *scriptEngine)
+void ScriptEngineManager::setScriptEngine(ScriptEngineProtocol* scriptEngine)
 {
-	if (_scriptEngine != scriptEngine)
-	{
-		removeScriptEngine();
-		_scriptEngine = scriptEngine;
-	}
+    if (_scriptEngine != scriptEngine)
+    {
+        removeScriptEngine();
+        _scriptEngine = scriptEngine;
+    }
 }
 
 void ScriptEngineManager::removeScriptEngine()
@@ -150,7 +147,7 @@ ScriptEngineManager* ScriptEngineManager::getInstance()
 {
     if (!s_pSharedScriptEngineManager)
     {
-        s_pSharedScriptEngineManager = new (std::nothrow) ScriptEngineManager();
+        s_pSharedScriptEngineManager = new(std::nothrow) ScriptEngineManager();
     }
     return s_pSharedScriptEngineManager;
 }
@@ -167,19 +164,19 @@ void ScriptEngineManager::destroyInstance()
 bool ScriptEngineManager::sendActionEventToJS(Action* actionObject, int eventType, void* param)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    
-    ActionObjectScriptData data(actionObject,(int*)&eventType, param);
-    ScriptEvent scriptEvent(kScriptActionEvent,(void*)&data);
+
+    ActionObjectScriptData data(actionObject, (int*)&eventType, param);
+    ScriptEvent scriptEvent(kScriptActionEvent, (void*)&data);
     if (scriptEngine->sendEvent(&scriptEvent))
         return true;
-    
+
     return false;
 }
 
 bool ScriptEngineManager::sendNodeEventToJS(Node* node, int action)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    
+
     if (scriptEngine->isCalledFromScript())
     {
         // Should only be invoked at root class Node
@@ -187,37 +184,37 @@ bool ScriptEngineManager::sendNodeEventToJS(Node* node, int action)
     }
     else
     {
-        BasicScriptData data(node,(void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
+        BasicScriptData data(node, (void*)&action);
+        ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
         if (scriptEngine->sendEvent(&scriptEvent))
             return true;
     }
-    
+
     return false;
 }
 
 bool ScriptEngineManager::sendNodeEventToJSExtended(Node* node, int action)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    
+
     if (!scriptEngine->isCalledFromScript())
     {
-        BasicScriptData data(node,(void*)&action);
-        ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
+        BasicScriptData data(node, (void*)&action);
+        ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
         if (scriptEngine->sendEvent(&scriptEvent))
             return true;
     }
-    
+
     return false;
 }
 
 void ScriptEngineManager::sendNodeEventToLua(Node* node, int action)
 {
     auto scriptEngine = getInstance()->getScriptEngine();
-    
-    BasicScriptData data(node,(void*)&action);
-    ScriptEvent scriptEvent(kNodeEvent,(void*)&data);
-    
+
+    BasicScriptData data(node, (void*)&action);
+    ScriptEvent scriptEvent(kNodeEvent, (void*)&data);
+
     scriptEngine->sendEvent(&scriptEvent);
 }
 

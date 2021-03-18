@@ -30,8 +30,8 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCDatas.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
-
+namespace cocostudio
+{
 
 enum AnimationType
 {
@@ -52,7 +52,7 @@ enum AnimationType
  *  @js NA
  *  @lua NA
  */
-class  CC_STUDIO_DLL ProcessBase : public cocos2d::Ref
+class CC_STUDIO_DLL ProcessBase : public cocos2d::Ref
 {
 public:
     ProcessBase();
@@ -85,7 +85,7 @@ public:
      *         2  : fade in and out
      *
      */
-    virtual void play(int durationTo, int durationTween,  int loop, int tweenEasing);
+    virtual void play(int durationTo, int durationTween, int loop, int tweenEasing);
 
     /**
      * Pause the Process
@@ -100,7 +100,6 @@ public:
      */
     virtual void stop();
 
-
     /**
      * You should never call this function, unless you know what you do
      * Update the Process, include current process, current frame and son on
@@ -111,20 +110,55 @@ public:
 
     virtual int getCurrentFrameIndex();
 
-    virtual void setProcessScale(float processScale) { _processScale = processScale; }
-    virtual float getProcessScale() const { return _processScale; }
+    virtual void setProcessScale(float processScale)
+    {
+        _processScale = processScale;
+    }
 
-    virtual void setIsPause(bool pause) { _isPause = pause; }
-    virtual bool isPause() const { return _isPause; }
+    virtual float getProcessScale() const
+    {
+        return _processScale;
+    }
 
-    virtual void setIsComplete(bool complete) { _isComplete = complete; }
-    virtual bool isComplete() const { return _isComplete; }
+    virtual void setIsPause(bool pause)
+    {
+        _isPause = pause;
+    }
 
-    virtual void setIsPlaying(bool playing) { _isPlaying = playing; }
-    virtual bool isPlaying() const { return _isPlaying; }
+    virtual bool isPause() const
+    {
+        return _isPause;
+    }
 
-    virtual float getCurrentPercent() const { return _currentPercent; }
-    virtual int getRawDuration() const { return _rawDuration; }
+    virtual void setIsComplete(bool complete)
+    {
+        _isComplete = complete;
+    }
+
+    virtual bool isComplete() const
+    {
+        return _isComplete;
+    }
+
+    virtual void setIsPlaying(bool playing)
+    {
+        _isPlaying = playing;
+    }
+
+    virtual bool isPlaying() const
+    {
+        return _isPlaying;
+    }
+
+    virtual float getCurrentPercent() const
+    {
+        return _currentPercent;
+    }
+
+    virtual int getRawDuration() const
+    {
+        return _rawDuration;
+    }
 
 protected:
 
@@ -133,7 +167,9 @@ protected:
     /**
      * Update(float dt) will call this handler, you can handle your logic here
      */
-    virtual void updateHandler() {};
+    virtual void updateHandler()
+    {
+    };
 
 protected:
     //! Scale the process speed
@@ -163,7 +199,6 @@ protected:
     //! The animation update speed
     float _animationInternal;
 
-
 protected:
     //! The duration frame count will run
     int _durationTween;
@@ -175,7 +210,6 @@ protected:
 
     //! Next frame this process need run to
     int _nextFrameIndex;
-
 
     bool _isLoopBack;
 };

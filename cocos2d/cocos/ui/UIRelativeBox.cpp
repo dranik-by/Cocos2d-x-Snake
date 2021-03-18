@@ -27,8 +27,9 @@
 
 NS_CC_BEGIN
 
-namespace ui{
-    
+namespace ui
+{
+
 RelativeBox::RelativeBox()
 {
 }
@@ -39,7 +40,7 @@ RelativeBox::~RelativeBox()
 
 RelativeBox* RelativeBox::create()
 {
-    RelativeBox* widget = new (std::nothrow) RelativeBox();
+    RelativeBox* widget = new(std::nothrow) RelativeBox();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -51,7 +52,7 @@ RelativeBox* RelativeBox::create()
 
 RelativeBox* RelativeBox::create(const cocos2d::Size &size)
 {
-    RelativeBox* widget = new (std::nothrow) RelativeBox();
+    RelativeBox* widget = new(std::nothrow) RelativeBox();
     if (widget && widget->initWithSize(size))
     {
         widget->autorelease();
@@ -71,7 +72,7 @@ bool RelativeBox::init()
     return false;
 }
 
-bool RelativeBox::initWithSize(const Size& size)
+bool RelativeBox::initWithSize(const Size &size)
 {
     if (init())
     {
@@ -80,7 +81,7 @@ bool RelativeBox::initWithSize(const Size& size)
     }
     return false;
 }
-    
+
 }
 
 NS_CC_END

@@ -54,12 +54,15 @@ public:
     AudioCache();
     ~AudioCache();
 
-    void addPlayCallback(const std::function<void()>& callback);
+    void addPlayCallback(const std::function<void()> &callback);
 
-    void addLoadCallback(const std::function<void(bool)>& callback);
+    void addLoadCallback(const std::function<void(bool)> &callback);
 
 protected:
-    void setSkipReadDataTask(bool isSkip) { _isSkipReadDataTask = isSkip; };
+    void setSkipReadDataTask(bool isSkip)
+    {
+        _isSkipReadDataTask = isSkip;
+    };
     void readDataTask(unsigned int selfId);
 
     void invokingPlayCallbacks();
@@ -87,10 +90,10 @@ protected:
     uint32_t _queBufferFrames;
 
     std::mutex _playCallbackMutex;
-    std::vector< std::function<void()> > _playCallbacks;
+    std::vector <std::function<void()>> _playCallbacks;
 
     // loadCallbacks doesn't need mutex since it's invoked only in Cocos thread.
-    std::vector< std::function<void(bool)> > _loadCallbacks;
+    std::vector <std::function<void(bool)>> _loadCallbacks;
 
     std::mutex _readDataTaskMutex;
 

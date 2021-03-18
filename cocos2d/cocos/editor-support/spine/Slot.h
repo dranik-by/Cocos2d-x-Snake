@@ -40,50 +40,53 @@
 extern "C" {
 #endif
 
-typedef struct spSlot {
-	spSlotData* const data;
-	spBone* const bone;
-	spColor color;
-	spColor* darkColor;
-	spAttachment* const attachment;
+typedef struct spSlot
+{
+    spSlotData* const data;
+    spBone* const bone;
+    spColor color;
+    spColor* darkColor;
+    spAttachment* const attachment;
 
-	int attachmentVerticesCapacity;
-	int attachmentVerticesCount;
-	float* attachmentVertices;
+    int attachmentVerticesCapacity;
+    int attachmentVerticesCount;
+    float* attachmentVertices;
 
-#ifdef __cplusplus
-	spSlot() :
-		data(0),
-		bone(0),
-		color(),
-		darkColor(0),
-		attachment(0),
-		attachmentVerticesCapacity(0),
-		attachmentVerticesCount(0),
-		attachmentVertices(0) {
-	}
-#endif
+        #ifdef __cplusplus
+
+    spSlot()
+    : data(0)
+    , bone(0)
+    , color()
+    , darkColor(0)
+    , attachment(0)
+    , attachmentVerticesCapacity(0)
+    , attachmentVerticesCount(0)
+    , attachmentVertices(0)
+    {
+    }
+
+        #endif
 } spSlot;
 
-SP_API spSlot* spSlot_create (spSlotData* data, spBone* bone);
-SP_API void spSlot_dispose (spSlot* self);
+SP_API spSlot* spSlot_create(spSlotData* data, spBone* bone); SP_API void spSlot_dispose(spSlot* self);
 
 /* @param attachment May be 0 to clear the attachment for the slot. */
-SP_API void spSlot_setAttachment (spSlot* self, spAttachment* attachment);
+SP_API void spSlot_setAttachment(spSlot* self, spAttachment* attachment);
 
-SP_API void spSlot_setAttachmentTime (spSlot* self, float time);
-SP_API float spSlot_getAttachmentTime (const spSlot* self);
+SP_API void spSlot_setAttachmentTime(spSlot* self, float time); SP_API float spSlot_getAttachmentTime(
+const spSlot* self);
 
-SP_API void spSlot_setToSetupPose (spSlot* self);
+SP_API void spSlot_setToSetupPose(spSlot* self);
 
 #ifdef SPINE_SHORT_NAMES
 typedef spSlot Slot;
-#define Slot_create(...) spSlot_create(__VA_ARGS__)
-#define Slot_dispose(...) spSlot_dispose(__VA_ARGS__)
-#define Slot_setAttachment(...) spSlot_setAttachment(__VA_ARGS__)
-#define Slot_setAttachmentTime(...) spSlot_setAttachmentTime(__VA_ARGS__)
-#define Slot_getAttachmentTime(...) spSlot_getAttachmentTime(__VA_ARGS__)
-#define Slot_setToSetupPose(...) spSlot_setToSetupPose(__VA_ARGS__)
+    #define Slot_create(...) spSlot_create(__VA_ARGS__)
+    #define Slot_dispose(...) spSlot_dispose(__VA_ARGS__)
+    #define Slot_setAttachment(...) spSlot_setAttachment(__VA_ARGS__)
+    #define Slot_setAttachmentTime(...) spSlot_setAttachmentTime(__VA_ARGS__)
+    #define Slot_getAttachmentTime(...) spSlot_getAttachmentTime(__VA_ARGS__)
+    #define Slot_setToSetupPose(...) spSlot_setToSetupPose(__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

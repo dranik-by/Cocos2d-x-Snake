@@ -41,12 +41,12 @@ THE SOFTWARE.
     #endif
 #else
     #if defined(_SHARED_)
-    #define EXPORT_DLL     __attribute__((visibility("default")))
+        #define EXPORT_DLL     __attribute__((visibility("default")))
     #elif defined(IGNORE_EXPORT)
-    #define EXPORT_DLL
+        #define EXPORT_DLL
     #else
-    #define EXPORT_DLL
+        #define EXPORT_DLL
     #endif
-#endif 
+#endif
 
 #endif    // end of __EXPORT_COMMON__

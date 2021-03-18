@@ -63,39 +63,40 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~DataVisitor() {}
+    virtual ~DataVisitor()
+    {
+    }
 
     /** default method, called from non-overloaded methods and for unrecognized objects */
-    virtual void visitObject(const Ref *p) = 0;
+    virtual void visitObject(const Ref* p) = 0;
 
-    virtual void visit(const __Bool *p);
-    virtual void visit(const __Integer *p);
-    virtual void visit(const __Float *p);
-    virtual void visit(const __Double *p);
-    virtual void visit(const __String *p);
-    virtual void visit(const __Array *p);
-    virtual void visit(const __Dictionary *p);
-    virtual void visit(const __Set *p);
+    virtual void visit(const __Bool* p);
+    virtual void visit(const __Integer* p);
+    virtual void visit(const __Float* p);
+    virtual void visit(const __Double* p);
+    virtual void visit(const __String* p);
+    virtual void visit(const __Array* p);
+    virtual void visit(const __Dictionary* p);
+    virtual void visit(const __Set* p);
 };
-
 
 class CC_DLL PrettyPrinter : public DataVisitor
 {
 public:
     PrettyPrinter(int indentLevel = 0);
-    
+
     virtual void clear();
     virtual std::string getResult();
-    
-    virtual void visitObject(const Ref *p);
-    virtual void visit(const __Bool * p);
-    virtual void visit(const __Integer *p);
-    virtual void visit(const __Float *p);
-    virtual void visit(const __Double *p);
-    virtual void visit(const __String *p);
-    virtual void visit(const __Array *p);
-    virtual void visit(const __Dictionary *p);
-    virtual void visit(const __Set *p);
+
+    virtual void visitObject(const Ref* p);
+    virtual void visit(const __Bool* p);
+    virtual void visit(const __Integer* p);
+    virtual void visit(const __Float* p);
+    virtual void visit(const __Double* p);
+    virtual void visit(const __String* p);
+    virtual void visit(const __Array* p);
+    virtual void visit(const __Dictionary* p);
+    virtual void visit(const __Set* p);
 private:
     void setIndentLevel(int indentLevel);
     int _indentLevel;

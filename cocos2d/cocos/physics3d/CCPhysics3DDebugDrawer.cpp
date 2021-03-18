@@ -36,11 +36,11 @@
 
 #if CC_USE_3D_PHYSICS
 
-#if (CC_ENABLE_BULLET_INTEGRATION)
+    #if (CC_ENABLE_BULLET_INTEGRATION)
 
 NS_CC_BEGIN
 
-void Physics3DDebugDrawer::drawLine( const btVector3& from,const btVector3& to,const btVector3& color )
+void Physics3DDebugDrawer::drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color)
 {
     Vec3 col = convertbtVector3ToVec3(color);
 
@@ -56,34 +56,35 @@ void Physics3DDebugDrawer::drawLine( const btVector3& from,const btVector3& to,c
     _dirty = true;
 }
 
-void Physics3DDebugDrawer::drawContactPoint( const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int /*lifeTime*/,const btVector3& color )
+void Physics3DDebugDrawer::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance,
+                                            int /*lifeTime*/, const btVector3 &color)
 {
     drawLine(PointOnB, PointOnB + normalOnB * distance, color);
 }
 
-void Physics3DDebugDrawer::reportErrorWarning( const char* warningString )
+void Physics3DDebugDrawer::reportErrorWarning(const char* warningString)
 {
     CCLOG("%s", warningString);
 }
 
-void Physics3DDebugDrawer::draw3dText( const btVector3& /*location*/,const char* /*textString*/ )
+void Physics3DDebugDrawer::draw3dText(const btVector3 & /*location*/, const char* /*textString*/ )
 {
 
 }
 
-void Physics3DDebugDrawer::setDebugMode( int debugMode )
+void Physics3DDebugDrawer::setDebugMode(int debugMode)
 {
     _debugMode = debugMode;
 }
 
-int Physics3DDebugDrawer::getDebugMode() const 
+int Physics3DDebugDrawer::getDebugMode() const
 {
     return _debugMode;
 }
 
-void Physics3DDebugDrawer::draw( Renderer *renderer)
+void Physics3DDebugDrawer::draw(Renderer* renderer)
 {
-    
+
     auto &transform = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 
     _programState->setUniform(_locMVP, transform.m, sizeof(transform.m));
@@ -93,7 +94,6 @@ void Physics3DDebugDrawer::draw( Renderer *renderer)
     blend.blendEnabled = true;
     blend.sourceAlphaBlendFactor = blend.sourceRGBBlendFactor = _blendFunc.src;
     blend.destinationAlphaBlendFactor = blend.destinationRGBBlendFactor = _blendFunc.dst;
-
 
     if (_customCommand.getVertexBuffer() == nullptr || _customCommand.getVertexBuffer()->getSize() < _buffer.size() * sizeof(_buffer[0]))
     {
@@ -131,14 +131,16 @@ void Physics3DDebugDrawer::init()
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_COLOR);
     _programState = new backend::ProgramState(program);
     _locMVP = _programState->getUniformLocation("u_MVPMatrix");
-    
+
     auto attributes = _programState->getProgram()->getActiveAttributes();
     auto locPosition = attributes["a_position"];
     auto locColor = attributes["a_color"];
-    
+
     auto layout = _programState->getVertexLayout();
-    layout->setAttribute(locPosition.attributeName.c_str(), locPosition.location, backend::VertexFormat::FLOAT3, offsetof(V3F_V4F, vertex), false);
-    layout->setAttribute(locColor.attributeName.c_str(), locColor.location, backend::VertexFormat::FLOAT4, offsetof(V3F_V4F, color), false);
+    layout->setAttribute(locPosition.attributeName.c_str(), locPosition.location, backend::VertexFormat::FLOAT3,
+                         offsetof(V3F_V4F, vertex), false);
+    layout->setAttribute(locColor.attributeName.c_str(), locColor.location, backend::VertexFormat::FLOAT4,
+                         offsetof(V3F_V4F, color), false);
     layout->setLayout(sizeof(V3F_V4F));
 
     _buffer.reserve(512);
@@ -152,14 +154,14 @@ void Physics3DDebugDrawer::init()
 
 void Physics3DDebugDrawer::onBeforeDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     _oldDepthTestEnabled = renderer->getDepthTest();
     renderer->setDepthTest(true);
 }
 
 void Physics3DDebugDrawer::onAfterDraw()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setDepthTest(_oldDepthTestEnabled);
 }
 
@@ -170,6 +172,6 @@ void Physics3DDebugDrawer::clear()
 
 NS_CC_END
 
-#endif // CC_ENABLE_BULLET_INTEGRATION
+    #endif // CC_ENABLE_BULLET_INTEGRATION
 
 #endif //CC_USE_3D_PHYSICS

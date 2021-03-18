@@ -26,7 +26,6 @@
 #include "2d/CCCamera.h"
 #include "2d/CCNode.h"
 
-
 NS_CC_BEGIN
 
 RenderCommand::RenderCommand()
@@ -44,7 +43,7 @@ void RenderCommand::init(float globalZOrder, const cocos2d::Mat4 &transform, uns
     {
         if (Camera::getVisitingCamera())
             _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-        
+
         set3D(true);
     }
     else

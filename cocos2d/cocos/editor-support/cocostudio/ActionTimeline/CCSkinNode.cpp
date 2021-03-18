@@ -24,8 +24,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "editor-support/cocostudio/ActionTimeline/CCSkinNode.h"
-using namespace cocos2d;
 
+using namespace cocos2d;
 
 NS_TIMELINE_BEGIN
 

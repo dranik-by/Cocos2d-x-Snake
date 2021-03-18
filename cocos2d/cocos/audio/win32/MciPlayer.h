@@ -28,10 +28,11 @@
 #include "platform/CCStdC.h"
 #include <mmsystem.h>
 #include <string>
+
 using namespace std;
 
-
-namespace CocosDenshion {
+namespace CocosDenshion
+{
 
 class MciPlayer
 {
@@ -86,15 +87,21 @@ public:
     UINT GetSoundID();
 
 private:
-    friend LRESULT WINAPI _SoundPlayProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+    friend LRESULT WINAPI
+    _SoundPlayProc(HWND
+    hWnd,
+    UINT Msg, WPARAM
+    wParam,
+    LPARAM lParam
+    );
 
     void _SendGenericCommand(int nCommand, DWORD_PTR param1 = 0, DWORD_PTR parma2 = 0);
 
-    HWND        _wnd;
+    HWND _wnd;
     MCIDEVICEID _dev;
-    UINT        _soundID;
-    UINT        _times;
-    bool        _playing;
+    UINT _soundID;
+    UINT _times;
+    bool _playing;
     std::string strExt;
 };
 

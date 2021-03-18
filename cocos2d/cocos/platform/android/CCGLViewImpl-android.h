@@ -37,8 +37,8 @@ public:
 
     // static function
     static GLViewImpl* create(const std::string &viewname);
-    static GLViewImpl* createWithRect(const std::string& viewName, Rect rect, float frameZoomFactor = 1.0f);
-    static GLViewImpl* createWithFullScreen(const std::string& viewName);
+    static GLViewImpl* createWithRect(const std::string &viewName, Rect rect, float frameZoomFactor = 1.0f);
+    static GLViewImpl* createWithFullScreen(const std::string &viewName);
 
     bool isOpenGLReady() override;
     void end() override;
@@ -50,8 +50,8 @@ protected:
     GLViewImpl();
     virtual ~GLViewImpl();
 
-    bool initWithRect(const std::string& viewName, Rect rect, float frameZoomFactor);
-    bool initWithFullScreen(const std::string& viewName);
+    bool initWithRect(const std::string &viewName, Rect rect, float frameZoomFactor);
+    bool initWithFullScreen(const std::string &viewName);
 };
 
 NS_CC_END

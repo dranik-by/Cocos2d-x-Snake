@@ -53,17 +53,17 @@ struct CC_DLL Color3B
 {
     Color3B();
     Color3B(uint8_t _r, uint8_t _g, uint8_t _b);
-    explicit Color3B(const Color4B& color);
-    explicit Color3B(const Color4F& color);
+    explicit Color3B(const Color4B &color);
+    explicit Color3B(const Color4F &color);
 
-    bool operator==(const Color3B& right) const;
-    bool operator==(const Color4B& right) const;
-    bool operator==(const Color4F& right) const;
-    bool operator!=(const Color3B& right) const;
-    bool operator!=(const Color4B& right) const;
-    bool operator!=(const Color4F& right) const;
+    bool operator==(const Color3B &right) const;
+    bool operator==(const Color4B &right) const;
+    bool operator==(const Color4F &right) const;
+    bool operator!=(const Color3B &right) const;
+    bool operator!=(const Color4B &right) const;
+    bool operator!=(const Color4F &right) const;
 
-    bool equals(const Color3B& other) const
+    bool equals(const Color3B &other) const
     {
         return (*this == other);
     }
@@ -91,9 +91,9 @@ struct CC_DLL Color4B
 {
     Color4B();
     Color4B(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a);
-    explicit Color4B(const Color3B& color, uint8_t _a = 255);
-    explicit Color4B(const Color4F& color);
-    
+    explicit Color4B(const Color3B &color, uint8_t _a = 255);
+    explicit Color4B(const Color4F &color);
+
     inline void set(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a)
     {
         r = _r;
@@ -102,12 +102,12 @@ struct CC_DLL Color4B
         a = _a;
     }
 
-    bool operator==(const Color4B& right) const;
-    bool operator==(const Color3B& right) const;
-    bool operator==(const Color4F& right) const;
-    bool operator!=(const Color4B& right) const;
-    bool operator!=(const Color3B& right) const;
-    bool operator!=(const Color4F& right) const;
+    bool operator==(const Color4B &right) const;
+    bool operator==(const Color3B &right) const;
+    bool operator==(const Color4F &right) const;
+    bool operator!=(const Color4B &right) const;
+    bool operator!=(const Color3B &right) const;
+    bool operator!=(const Color4F &right) const;
 
     uint8_t r = 0;
     uint8_t g = 0;
@@ -125,7 +125,6 @@ struct CC_DLL Color4B
     static const Color4B GRAY;
 };
 
-
 /**
  * RGBA color composed of 4 floats.
  * @since v3.0
@@ -134,15 +133,15 @@ struct CC_DLL Color4F
 {
     Color4F();
     Color4F(float _r, float _g, float _b, float _a);
-    explicit Color4F(const Color3B& color, float _a = 1.0f);
-    explicit Color4F(const Color4B& color);
+    explicit Color4F(const Color3B &color, float _a = 1.0f);
+    explicit Color4F(const Color4B &color);
 
-    bool operator==(const Color4F& right) const;
-    bool operator==(const Color3B& right) const;
-    bool operator==(const Color4B& right) const;
-    bool operator!=(const Color4F& right) const;
-    bool operator!=(const Color3B& right) const;
-    bool operator!=(const Color4B& right) const;
+    bool operator==(const Color4F &right) const;
+    bool operator==(const Color3B &right) const;
+    bool operator==(const Color4B &right) const;
+    bool operator!=(const Color4F &right) const;
+    bool operator!=(const Color3B &right) const;
+    bool operator!=(const Color4B &right) const;
 
     bool equals(const Color4F &other) const
     {
@@ -165,20 +164,20 @@ struct CC_DLL Color4F
     static const Color4F GRAY;
 };
 
-Color4F& operator+=(Color4F& lhs, const Color4F& rhs);
-Color4F operator+(Color4F lhs, const Color4F& rhs);
+Color4F &operator+=(Color4F &lhs, const Color4F &rhs);
+Color4F operator+(Color4F lhs, const Color4F &rhs);
 
-Color4F& operator-=(Color4F& lhs, const Color4F& rhs);
-Color4F operator-(Color4F lhs, const Color4F& rhs);
+Color4F &operator-=(Color4F &lhs, const Color4F &rhs);
+Color4F operator-(Color4F lhs, const Color4F &rhs);
 
-Color4F& operator*=(Color4F& lhs, const Color4F& rhs);
-Color4F operator*(Color4F lhs, const Color4F& rhs);
-Color4F& operator*=(Color4F& lhs, float rhs);
+Color4F &operator*=(Color4F &lhs, const Color4F &rhs);
+Color4F operator*(Color4F lhs, const Color4F &rhs);
+Color4F &operator*=(Color4F &lhs, float rhs);
 Color4F operator*(Color4F lhs, float rhs);
 
-Color4F& operator/=(Color4F& lhs, const Color4F& rhs);
-Color4F operator/(Color4F lhs, const Color4F& rhs);
-Color4F& operator/=(Color4F& lhs, float rhs);
+Color4F &operator/=(Color4F &lhs, const Color4F &rhs);
+Color4F operator/(Color4F lhs, const Color4F &rhs);
+Color4F &operator/=(Color4F &lhs, float rhs);
 Color4F operator/(Color4F lhs, float rhs);
 
 
@@ -218,10 +217,17 @@ Color4F operator/(Color4F lhs, float rhs);
  * A TEXCOORD composed of 2 floats: u, y
  * @since v3.0
  */
-struct CC_DLL Tex2F {
-    Tex2F(float _u, float _v): u(_u), v(_v) {}
+struct CC_DLL Tex2F
+{
+    Tex2F(float _u, float _v)
+    : u(_u)
+    , v(_v)
+    {
+    }
 
-    Tex2F() {}
+    Tex2F()
+    {
+    }
 
     float u = 0.f;
     float v = 0.f;
@@ -232,9 +238,9 @@ struct CC_DLL Tex2F {
  */
 struct CC_DLL PointSprite
 {
-    Vec2       pos;        // 8 bytes
-    Color4B    color;      // 4 bytes
-    float      size = 0.f;       // 4 bytes
+    Vec2 pos;        // 8 bytes
+    Color4B color;      // 4 bytes
+    float size = 0.f;       // 4 bytes
 };
 
 /** @struct Quad2
@@ -242,20 +248,21 @@ struct CC_DLL PointSprite
  */
 struct CC_DLL Quad2
 {
-    Vec2        tl;
-    Vec2        tr;
-    Vec2        bl;
-    Vec2        br;
+    Vec2 tl;
+    Vec2 tr;
+    Vec2 bl;
+    Vec2 br;
 };
 
 /** @struct Quad3
  * A 3D Quad. 4 * 3 floats.
  */
-struct CC_DLL Quad3 {
-    Vec3        bl;
-    Vec3        br;
-    Vec3        tl;
-    Vec3        tr;
+struct CC_DLL Quad3
+{
+    Vec3 bl;
+    Vec3 br;
+    Vec3 tl;
+    Vec3 tr;
 };
 
 /** @struct V2F_C4B_T2F
@@ -264,11 +271,11 @@ struct CC_DLL Quad3 {
 struct V2F_C4B_T2F
 {
     /// vertices (2F)
-    Vec2       vertices;
+    Vec2 vertices;
     /// colors (4B)
-    Color4B        colors;
+    Color4B colors;
     /// tex coords (2F)
-    Tex2F          texCoords;
+    Tex2F texCoords;
 };
 
 /** @struct V2F_C4B_PF
@@ -277,11 +284,11 @@ struct V2F_C4B_T2F
 struct V2F_C4B_PF
 {
     /// vertices (2F)
-    Vec2       vertices;
+    Vec2 vertices;
     /// colors (4B)
-    Color4B        colors;
+    Color4B colors;
     /// pointsize
-    float      pointSize = 0.f;
+    float pointSize = 0.f;
 };
 
 /** @struct V2F_C4F_T2F
@@ -290,11 +297,11 @@ struct V2F_C4B_PF
 struct CC_DLL V2F_C4F_T2F
 {
     /// vertices (2F)
-    Vec2       vertices;
+    Vec2 vertices;
     /// colors (4F)
-    Color4F        colors;
+    Color4F colors;
     /// tex coords (2F)
-    Tex2F          texCoords;
+    Tex2F texCoords;
 };
 
 /** @struct V3F_C4B_T2F
@@ -303,13 +310,13 @@ struct CC_DLL V2F_C4F_T2F
 struct CC_DLL V3F_C4B_T2F
 {
     /// vertices (3F)
-    Vec3     vertices;            // 12 bytes
+    Vec3 vertices;            // 12 bytes
 
     /// colors (4B)
-    Color4B      colors;              // 4 bytes
+    Color4B colors;              // 4 bytes
 
     // tex coords (2F)
-    Tex2F        texCoords;           // 8 bytes
+    Tex2F texCoords;           // 8 bytes
 };
 
 /** @struct V3F_T2F
@@ -318,15 +325,15 @@ struct CC_DLL V3F_C4B_T2F
 struct CC_DLL V3F_T2F
 {
     /// vertices (2F)
-    Vec3       vertices;
+    Vec3 vertices;
     /// tex coords (2F)
-    Tex2F          texCoords;
+    Tex2F texCoords;
 };
 
 /** @struct V3F_C4F
 * A Vec3 with a vertex point, a color.
 */
-struct CC_DLL V3F_C4F 
+struct CC_DLL V3F_C4F
 {
     /// vertices (3F)
     Vec3 vertices;
@@ -350,13 +357,13 @@ struct CC_DLL V2F_C4B_T2F_Triangle
 struct CC_DLL V2F_C4B_T2F_Quad
 {
     /// bottom left
-    V2F_C4B_T2F    bl;
+    V2F_C4B_T2F bl;
     /// bottom right
-    V2F_C4B_T2F    br;
+    V2F_C4B_T2F br;
     /// top left
-    V2F_C4B_T2F    tl;
+    V2F_C4B_T2F tl;
     /// top right
-    V2F_C4B_T2F    tr;
+    V2F_C4B_T2F tr;
 };
 
 /** @struct V3F_C4B_T2F_Quad
@@ -365,13 +372,13 @@ struct CC_DLL V2F_C4B_T2F_Quad
 struct CC_DLL V3F_C4B_T2F_Quad
 {
     /// top left
-    V3F_C4B_T2F    tl;
+    V3F_C4B_T2F tl;
     /// bottom left
-    V3F_C4B_T2F    bl;
+    V3F_C4B_T2F bl;
     /// top right
-    V3F_C4B_T2F    tr;
+    V3F_C4B_T2F tr;
     /// bottom right
-    V3F_C4B_T2F    br;
+    V3F_C4B_T2F br;
 };
 
 /** @struct V2F_C4F_T2F_Quad
@@ -380,13 +387,13 @@ struct CC_DLL V3F_C4B_T2F_Quad
 struct CC_DLL V2F_C4F_T2F_Quad
 {
     /// bottom left
-    V2F_C4F_T2F    bl;
+    V2F_C4F_T2F bl;
     /// bottom right
-    V2F_C4F_T2F    br;
+    V2F_C4F_T2F br;
     /// top left
-    V2F_C4F_T2F    tl;
+    V2F_C4F_T2F tl;
     /// top right
-    V2F_C4F_T2F    tr;
+    V2F_C4F_T2F tr;
 };
 
 /** @struct V3F_T2F_Quad
@@ -395,18 +402,18 @@ struct CC_DLL V2F_C4F_T2F_Quad
 struct CC_DLL V3F_T2F_Quad
 {
     /// bottom left
-    V3F_T2F    bl;
+    V3F_T2F bl;
     /// bottom right
-    V3F_T2F    br;
+    V3F_T2F br;
     /// top left
-    V3F_T2F    tl;
+    V3F_T2F tl;
     /// top right
-    V3F_T2F    tr;
+    V3F_T2F tr;
 };
 
-
-namespace backend {
-    enum class BlendFactor: uint32_t;
+namespace backend
+{
+enum class BlendFactor : uint32_t;
 }
 
 /** @struct BlendFunc
@@ -474,7 +481,8 @@ enum class CC_DLL TextHAlignment
 * Specify a collections of characters to be load when Label created.
 * Consider using DYNAMIC.
 */
-enum class GlyphCollection {
+enum class GlyphCollection
+{
     DYNAMIC,
     NEHE,
     ASCII,
@@ -489,13 +497,13 @@ enum class GlyphCollection {
 struct CC_DLL T2F_Quad
 {
     /// bottom left
-    Tex2F    bl;
+    Tex2F bl;
     /// bottom right
-    Tex2F    br;
+    Tex2F br;
     /// top left
-    Tex2F    tl;
+    Tex2F tl;
     /// top right
-    Tex2F    tr;
+    Tex2F tr;
 };
 
 /** @struct AnimationFrameData
@@ -518,13 +526,13 @@ struct CC_DLL AnimationFrameData
 struct CC_DLL FontShadow
 {
     /// shadow x and y offset
-    Size   _shadowOffset;
+    Size _shadowOffset;
     /// shadow blurriness
-    float  _shadowBlur = 0.f;
+    float _shadowBlur = 0.f;
     /// shadow opacity
-    float  _shadowOpacity = 0.f;
+    float _shadowOpacity = 0.f;
     /// true if shadow enabled
-    bool   _shadowEnabled = false;
+    bool _shadowEnabled = false;
 };
 
 /** @struct FontStroke
@@ -533,14 +541,13 @@ struct CC_DLL FontShadow
 struct CC_DLL FontStroke
 {
     /// stroke color
-    Color3B   _strokeColor = Color3B::BLACK;
+    Color3B _strokeColor = Color3B::BLACK;
     /// stroke size
-    float     _strokeSize = 0.f;
+    float _strokeSize = 0.f;
     /// true if stroke enabled
-    bool      _strokeEnabled = false;
+    bool _strokeEnabled = false;
     /// stroke alpha
-    uint8_t   _strokeAlpha = 255;
-
+    uint8_t _strokeAlpha = 255;
 
 };
 
@@ -550,37 +557,38 @@ struct CC_DLL FontStroke
 struct CC_DLL FontDefinition
 {
     /// font name
-    std::string           _fontName;
+    std::string _fontName;
     /// font size
-    int                   _fontSize = 0;
+    int _fontSize = 0;
     /// horizontal alignment
-    TextHAlignment        _alignment = TextHAlignment::CENTER;
+    TextHAlignment _alignment = TextHAlignment::CENTER;
     /// vertical alignment
     TextVAlignment _vertAlignment = TextVAlignment::TOP;
     /// rendering box
-    Size                  _dimensions = Size::ZERO;
+    Size _dimensions = Size::ZERO;
     /// font color
-    Color3B               _fontFillColor = Color3B::WHITE;
+    Color3B _fontFillColor = Color3B::WHITE;
     /// font alpha
-    uint8_t               _fontAlpha = 255;
+    uint8_t _fontAlpha = 255;
     /// font shadow
-    FontShadow            _shadow;
+    FontShadow _shadow;
     /// font stroke
-    FontStroke            _stroke;
+    FontStroke _stroke;
     /// enable text wrap
-    bool                  _enableWrap = true;
+    bool _enableWrap = true;
     /** There are 4 overflows: none, clamp, shrink and resize_height.
      *  The corresponding integer values are 0, 1, 2, 3 respectively
      * For more information, please refer to Label::Overflow enum class.
      */
-    int                  _overflow = 0;
+    int _overflow = 0;
 };
 
 /**
  * @brief Effects used by `Label`
  *
  */
-enum class LabelEffect {
+enum class LabelEffect
+{
     // FIXME: Covert them to bitwise. More than one effect should be supported
     NORMAL,
     OUTLINE,
@@ -596,7 +604,7 @@ enum class LabelEffect {
 /** @struct Acceleration
  * The device accelerometer reports values for each axis in units of g-force.
  */
-class CC_DLL Acceleration: public Ref
+class CC_DLL Acceleration : public Ref
 {
 public:
     double x = 0;
@@ -625,7 +633,7 @@ struct CC_DLL Viewport
     unsigned int w = 0;
     unsigned int h = 0;
 };
-    
+
 struct CC_DLL ScissorRect
 {
     float x = 0;

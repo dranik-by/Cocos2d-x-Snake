@@ -36,8 +36,9 @@
 
 NS_CC_BEGIN
 
-namespace ui {
-    class Widget;
+namespace ui
+{
+class Widget;
 }
 
 /** @class EventListenerFocus
@@ -47,30 +48,30 @@ class CC_DLL EventListenerFocus : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a focus event listener.
      *
      * @return An autoreleased EventListenerFocus object.
      */
     static EventListenerFocus* create();
-    
+
     /** Destructor.
      * @js NA
      */
     virtual ~EventListenerFocus();
-    
+
     /// Overrides
     virtual EventListenerFocus* clone() override;
     virtual bool checkAvailable() override;
     //
-    
+
 public:
     std::function<void(ui::Widget*, ui::Widget*)> onFocusChanged;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     EventListenerFocus();
     bool init();
-    
+
     friend class EventDispatcher;
 };
 

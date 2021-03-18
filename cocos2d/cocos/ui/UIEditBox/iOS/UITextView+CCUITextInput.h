@@ -26,10 +26,8 @@
 #import <UIKit/UIKit.h>
 #import "ui/UIEditBox/iOS/CCUITextInput.h"
 
-
 @interface UITextView (CCUITextInput) <CCUITextInput>
 @end
-
 
 /** Trick to load category objects without using -ObjC flag
  *  http://stackoverflow.com/questions/2567498/objective-c-categories-in-static-library

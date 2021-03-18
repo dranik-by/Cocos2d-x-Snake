@@ -27,14 +27,15 @@
 #define __CCNAV_MESH_OBSTACLE_H__
 
 #include "base/ccConfig.h"
+
 #if CC_USE_NAVMESH
 
-#include "2d/CCComponent.h"
+    #include "2d/CCComponent.h"
 
-#include "base/CCRef.h"
-#include "math/Vec3.h"
-#include "recast/Detour/DetourNavMesh.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
+    #include "base/CCRef.h"
+    #include "math/Vec3.h"
+    #include "recast/Detour/DetourNavMesh.h"
+    #include "recast/DetourTileCache/DetourTileCache.h"
 
 NS_CC_BEGIN
 
@@ -64,7 +65,7 @@ public:
     @param height The height of obstacle.
     */
     static NavMeshObstacle* create(float radius, float height);
-    static const std::string& getNavMeshObstacleComponentName();
+    static const std::string &getNavMeshObstacleComponentName();
 
     virtual void onEnter() override;
     virtual void onExit() override;
@@ -73,19 +74,32 @@ public:
     void setRadius(float radius);
 
     /** Get radius of obstacle */
-    float getRadius() const { return _radius; }
+    float getRadius() const
+    {
+        return _radius;
+    }
 
     /** Set height of obstacle */
     void setHeight(float height);
 
     /** Get height of obstacle */
-    float getHeight() const { return _height; }
+    float getHeight() const
+    {
+        return _height;
+    }
 
     /**
     * synchronization between node and obstacle is time consuming, you can skip some synchronization using this function
     */
-    void setSyncFlag(const NavMeshObstacleSyncFlag &flag) { _syncFlag = flag; }
-    NavMeshObstacleSyncFlag getSyncFlag() const { return _syncFlag; }
+    void setSyncFlag(const NavMeshObstacleSyncFlag &flag)
+    {
+        _syncFlag = flag;
+    }
+
+    NavMeshObstacleSyncFlag getSyncFlag() const
+    {
+        return _syncFlag;
+    }
 
     /** synchronize parameter to obstacle. */
     void syncToObstacle();
@@ -101,8 +115,8 @@ CC_CONSTRUCTOR_ACCESS:
 
 private:
 
-    void addTo(dtTileCache *tileCache);
-    void removeFrom(dtTileCache *tileCache);
+    void addTo(dtTileCache* tileCache);
+    void removeFrom(dtTileCache* tileCache);
     void preUpdate(float delta);
     void postUpdate(float delta);
 
@@ -112,7 +126,7 @@ private:
     float _height;
     NavMeshObstacleSyncFlag _syncFlag;
     dtObstacleRef _obstacleID;
-    dtTileCache *_tileCache;
+    dtTileCache* _tileCache;
 };
 
 /** @} */

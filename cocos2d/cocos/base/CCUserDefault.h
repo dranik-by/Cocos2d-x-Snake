@@ -36,7 +36,6 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-
 /**
  * UserDefault acts as a tiny database. You can save and get base type values by it.
  * For example, setBoolForKey("played", true) will add a bool value true into the database.
@@ -60,8 +59,8 @@ public:
      * @return Bool value by `key`.
      * @js NA
      */
-    bool    getBoolForKey(const char* key);
-    
+    bool getBoolForKey(const char* key);
+
     /**
      * Get bool value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -69,7 +68,7 @@ public:
      * @js NA
      */
     virtual bool getBoolForKey(const char* key, bool defaultValue);
-    
+
     /**
      * Get integer value by key, if the key doesn't exist, will return 0.
      * You can set the default value, or it is 0.
@@ -77,8 +76,8 @@ public:
      * @return Integer value of the key.
      * @js NA
      */
-    int     getIntegerForKey(const char* key);
-    
+    int getIntegerForKey(const char* key);
+
     /**
      * Get bool value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -87,15 +86,15 @@ public:
      * @js NA
      */
     virtual int getIntegerForKey(const char* key, int defaultValue);
-    
+
     /**
      * Get float value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Float value of the key.
      * @js NA
      */
-    float    getFloatForKey(const char* key);
-    
+    float getFloatForKey(const char* key);
+
     /**
      * Get float value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -104,15 +103,15 @@ public:
      * @js NA
      */
     virtual float getFloatForKey(const char* key, float defaultValue);
-    
+
     /**
      * Get double value by key, if the key doesn't exist, will return 0.0.
      * @param key The key to get value.
      * @return Double value of the key.
      * @js NA
      */
-    double  getDoubleForKey(const char* key);
-    
+    double getDoubleForKey(const char* key);
+
     /**
      * Get double value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -121,7 +120,7 @@ public:
      * @js NA
      */
     virtual double getDoubleForKey(const char* key, double defaultValue);
-    
+
     /**
      * Get string value by key, if the key doesn't exist, will return an empty string.
      * @param key The key to get value.
@@ -129,7 +128,7 @@ public:
      * @js NA
      */
     std::string getStringForKey(const char* key);
-    
+
     /**
      * Get string value by key, if the key doesn't exist, will return passed default value.
      * @param key The key to get value.
@@ -137,8 +136,8 @@ public:
      * @return String value of the key.
      * @js NA
      */
-    virtual std::string getStringForKey(const char* key, const std::string & defaultValue);
-    
+    virtual std::string getStringForKey(const char* key, const std::string &defaultValue);
+
     /**
      * Get Data value by key, if the key doesn't exist, will return an empty Data.
      * @param key The key to get value.
@@ -146,7 +145,7 @@ public:
      * @js NA
      */
     Data getDataForKey(const char* key);
-    
+
     /**
      * Get Data value by key, if the key doesn't exist, will return an empty Data.
      * @param key The key to get value.
@@ -154,7 +153,7 @@ public:
      * @return Data value of the key.
      * @js NA
      */
-    virtual Data getDataForKey(const char* key, const Data& defaultValue);
+    virtual Data getDataForKey(const char* key, const Data &defaultValue);
 
     // set value methods
 
@@ -192,14 +191,14 @@ public:
      * @param value A string value to set to the key.
      * @js NA
      */
-    virtual void setStringForKey(const char* key, const std::string & value);
+    virtual void setStringForKey(const char* key, const std::string &value);
     /**
      * Set Data value by key.
      * @param key The key to set.
      * @param value A Data value to set to the key.
      * @js NA
      */
-    virtual void setDataForKey(const char* key, const Data& value);
+    virtual void setDataForKey(const char* key, const Data &value);
     /**
      * You should invoke this function to save values set by setXXXForKey().
      * @js NA
@@ -212,7 +211,7 @@ public:
     * @js NA
     */
     virtual void deleteValueForKey(const char* key);
-    
+
     /** Returns the singleton.
      * @js NA
      * @lua NA
@@ -233,12 +232,12 @@ public:
     *
     * @warning It will delete previous delegate
     */
-    static void setDelegate(UserDefault *delegate);
+    static void setDelegate(UserDefault* delegate);
 
     /** All supported platforms other iOS & Android use xml file to save values. This function is return the file path of the xml path.
      * @js NA
      */
-    static const std::string& getXMLFilePath();
+    static const std::string &getXMLFilePath();
     /** All supported platforms other iOS & Android use xml file to save values. This function checks whether the xml file exists or not.
      * @return True if the xml file exists, false if not.
      * @js NA
@@ -248,17 +247,16 @@ public:
 protected:
     UserDefault();
     virtual ~UserDefault();
-    
+
 private:
-    
+
     static bool createXMLFile();
     static void initXMLFilePath();
-    
+
     static UserDefault* _userDefault;
     static std::string _filePath;
     static bool _isFilePathInitialized;
 };
-
 
 NS_CC_END
 // end of base group

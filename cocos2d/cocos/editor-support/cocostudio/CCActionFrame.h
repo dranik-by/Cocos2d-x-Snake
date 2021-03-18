@@ -30,8 +30,9 @@ THE SOFTWARE.
 #include "2d/CCActionInterval.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 enum FrameType
 {
     kKeyframeMove = 0,
@@ -94,7 +95,7 @@ enum class FrameEaseType
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionFrame: public cocos2d::Ref
+class CC_STUDIO_DLL ActionFrame : public cocos2d::Ref
 {
 
 public:
@@ -182,7 +183,7 @@ public:
     *
     * @return ActionInterval
     */
-    virtual cocos2d::ActionInterval* getAction(float duration,ActionFrame* srcFrame);
+    virtual cocos2d::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 
     /**
     *Set the ActionInterval easing parameter.
@@ -190,7 +191,7 @@ public:
     *@param parameter   the parameter for frame ease
     *
     */
-    virtual void setEasingParameter(std::vector<float>& parameter);
+    virtual void setEasingParameter(std::vector<float> &parameter);
 protected:
     /**
     * Gets the Easing Action of ActionFrame.
@@ -201,7 +202,7 @@ protected:
     */
     virtual cocos2d::ActionInterval* getEasingAction(cocos2d::ActionInterval* action);
 protected:
-    int _frameType;    
+    int _frameType;
     int _frameIndex;
     float _fTime;
     FrameEaseType _easingType;
@@ -212,7 +213,7 @@ protected:
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionMoveFrame:public ActionFrame
+class CC_STUDIO_DLL ActionMoveFrame : public ActionFrame
 {
 public:
 
@@ -256,7 +257,7 @@ protected:
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionScaleFrame:public ActionFrame
+class CC_STUDIO_DLL ActionScaleFrame : public ActionFrame
 {
 public:
 
@@ -314,7 +315,7 @@ protected:
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionRotationFrame:public ActionFrame
+class CC_STUDIO_DLL ActionRotationFrame : public ActionFrame
 {
 public:
 
@@ -359,7 +360,7 @@ public:
     *
     * @return ActionInterval
     */
-    virtual cocos2d::ActionInterval* getAction(float duration,ActionFrame* srcFrame);
+    virtual cocos2d::ActionInterval* getAction(float duration, ActionFrame* srcFrame);
 public:
     float _rotation;
 };
@@ -367,7 +368,7 @@ public:
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionFadeFrame:public ActionFrame
+class CC_STUDIO_DLL ActionFadeFrame : public ActionFrame
 {
 public:
 
@@ -410,7 +411,7 @@ protected:
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionTintFrame:public ActionFrame
+class CC_STUDIO_DLL ActionTintFrame : public ActionFrame
 {
 
 public:

@@ -29,9 +29,10 @@ THE SOFTWARE.
 #define __CCLABEL_ATLAS_H__
 
 #include "2d/CCAtlasNode.h"
+
 #if CC_LABELATLAS_DEBUG_DRAW
-#include "renderer/CCCustomCommand.h"
-#include "2d/CCDrawNode.h"
+    #include "renderer/CCCustomCommand.h"
+    #include "2d/CCDrawNode.h"
 #endif
 NS_CC_BEGIN
 
@@ -61,62 +62,65 @@ public:
      * User need to call initWithString(...) later to make this object work properly.
      */
     static LabelAtlas* create();
-    
+
     /** Creates the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and the starting char of the atlas. */
-    static LabelAtlas* create(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
-    
+    static LabelAtlas* create(const std::string &string, const std::string &charMapFile, int itemWidth, int itemHeight,
+                              int startCharMap);
+
     /**
      * Creates the LabelAtlas with a string and a configuration file.
      * @since v2.0
      */
-    static LabelAtlas* create(const std::string& string, const std::string& fntFile);
+    static LabelAtlas* create(const std::string &string, const std::string &fntFile);
 
     /** Initializes the LabelAtlas with a string, a char map file(the atlas), the width and height of each element and the starting char of the atlas. */
-    bool initWithString(const std::string& string, const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap);
-    
+    bool initWithString(const std::string &string, const std::string &charMapFile, int itemWidth, int itemHeight,
+                        int startCharMap);
+
     /** 
      * Initializes the LabelAtlas with a string and a configuration file.
      * @since v2.0
      */
-    bool initWithString(const std::string& string, const std::string& fntFile);
-    
+    bool initWithString(const std::string &string, const std::string &fntFile);
+
     /** Initializes the LabelAtlas with a string, a texture, the width and height in points of each element and the starting char of the atlas */
-    bool initWithString(const std::string& string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
-    
+    bool initWithString(const std::string &string, Texture2D* texture, int itemWidth, int itemHeight, int startCharMap);
+
     virtual void setString(const std::string &label) override;
-    virtual const std::string& getString() const override;
+    virtual const std::string &getString() const override;
 
     virtual void updateAtlasValues() override;
-	/**
+    /**
      * @js NA
      */
     virtual std::string getDescription() const override;
 
-#if CC_LABELATLAS_DEBUG_DRAW
+    #if CC_LABELATLAS_DEBUG_DRAW
     virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-#endif
+    #endif
 
 CC_CONSTRUCTOR_ACCESS:
+
     LabelAtlas()
-    :_string("")
+    : _string("")
     {
-#if CC_LABELATLAS_DEBUG_DRAW
+        #if CC_LABELATLAS_DEBUG_DRAW
         _debugDrawNode = DrawNode::create();
         addChild(_debugDrawNode);
-#endif
+        #endif
     }
 
     virtual ~LabelAtlas()
     {
         _string.clear();
     }
-    
+
 protected:
     virtual void updateColor() override;
 
-#if CC_LABELATLAS_DEBUG_DRAW
+    #if CC_LABELATLAS_DEBUG_DRAW
     DrawNode *_debugDrawNode;
-#endif
+    #endif
 
     // string to render
     std::string _string;

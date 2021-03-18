@@ -35,48 +35,50 @@ NS_CC_BEGIN
  * @addtogroup ui
  * @{
  */
-namespace ui {
+namespace ui
+{
 
 /**
  * HBox is just a convenient wrapper class for horizontal layout type.
  * HBox lays out its children in a single horizontal row.
  */
-class CC_GUI_DLL HBox : public Layout{
+class CC_GUI_DLL HBox : public Layout
+{
 public:
-    
+
     /**
      * Default constructor
      * @js ctor
      * @lua new
      */
     HBox();
-    
+
     /**
      * Default destructor
      * @js NA
      * @lua NA
      */
     virtual ~HBox();
-    
+
     /**
      * Create a empty HBox instance.
      * @return A HBox instance pointer.
      */
     static HBox* create();
-    
+
     /**
      *Create a HBox with a certain size.
      *@param size The content size of the layout.
      *@return A HBox instance pointer.
      */
-    static HBox* create(const Size& size);
-    
+    static HBox* create(const Size &size);
+
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
-    virtual bool initWithSize(const Size& size);
+    virtual bool initWithSize(const Size &size);
 };
-    
+
 }
 
 // end of ui group

@@ -30,24 +30,25 @@ THE SOFTWARE.
 
 //#define VERY_VERY_VERBOSE_LOGGING
 #ifdef VERY_VERY_VERBOSE_LOGGING
-#define ALOGVV ALOGV
+    #define ALOGVV ALOGV
 #else
-#define ALOGVV(a...) do { } while (0)
+    #define ALOGVV(a...) do { } while (0)
 #endif
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 PcmBufferProvider::PcmBufferProvider()
-        : _addr(nullptr)
-        , _numFrames(0)
-        , _frameSize(0)
-        , _nextFrame(0)
-        , _unrel(0)
+: _addr(nullptr)
+, _numFrames(0)
+, _frameSize(0)
+, _nextFrame(0)
+, _unrel(0)
 {
-    
+
 }
 
-bool PcmBufferProvider::init(const void *addr, size_t frames, size_t frameSize)
+bool PcmBufferProvider::init(const void* addr, size_t frames, size_t frameSize)
 {
     _addr = addr;
     _numFrames = frames;
@@ -57,37 +58,44 @@ bool PcmBufferProvider::init(const void *addr, size_t frames, size_t frameSize)
     return true;
 }
 
-status_t PcmBufferProvider::getNextBuffer(Buffer *buffer,
-                                          int64_t pts/* = kInvalidPTS*/) {
-    (void) pts; // suppress warning
+status_t PcmBufferProvider::getNextBuffer(Buffer* buffer, int64_t pts/* = kInvalidPTS*/)
+{
+    (void)pts; // suppress warning
     size_t requestedFrames = buffer->frameCount;
-    if (requestedFrames > _numFrames - _nextFrame) {
+    if (requestedFrames > _numFrames - _nextFrame)
+    {
         buffer->frameCount = _numFrames - _nextFrame;
     }
 
     ALOGVV("getNextBuffer() requested %zu frames out of %zu frames available,"
-                  " and returned %zu frames",
-              requestedFrames, (size_t) (_numFrames - _nextFrame), buffer->frameCount);
+           " and returned %zu frames", requestedFrames, (size_t)(_numFrames - _nextFrame), buffer->frameCount);
 
     _unrel = buffer->frameCount;
-    if (buffer->frameCount > 0) {
-        buffer->raw = (char *) _addr + _frameSize * _nextFrame;
+    if (buffer->frameCount > 0)
+    {
+        buffer->raw = (char*)_addr + _frameSize * _nextFrame;
         return NO_ERROR;
-    } else {
+    }
+    else
+    {
         buffer->raw = NULL;
         return NOT_ENOUGH_DATA;
     }
 }
 
-void PcmBufferProvider::releaseBuffer(Buffer *buffer) {
-    if (buffer->frameCount > _unrel) {
+void PcmBufferProvider::releaseBuffer(Buffer* buffer)
+{
+    if (buffer->frameCount > _unrel)
+    {
         ALOGVV("ERROR releaseBuffer() released %zu frames but only %zu available "
-                "to release", buffer->frameCount, _unrel);
+               "to release", buffer->frameCount, _unrel);
         _nextFrame += _unrel;
         _unrel = 0;
-    } else {
+    }
+    else
+    {
         ALOGVV("releaseBuffer() released %zu frames out of %zu frames available "
-                           "to release", buffer->frameCount, _unrel);
+               "to release", buffer->frameCount, _unrel);
         _nextFrame += buffer->frameCount;
         _unrel -= buffer->frameCount;
     }
@@ -95,7 +103,8 @@ void PcmBufferProvider::releaseBuffer(Buffer *buffer) {
     buffer->raw = NULL;
 }
 
-void PcmBufferProvider::reset() {
+void PcmBufferProvider::reset()
+{
     _nextFrame = 0;
 }
 

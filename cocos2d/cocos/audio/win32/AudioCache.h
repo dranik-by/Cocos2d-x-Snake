@@ -29,18 +29,18 @@
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
-#include <functional>
-#include <memory>
-#include <mutex>
-#include <string>
-#include <vector>
-#ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
-#else
-#include <AL/al.h>
-#endif
-#include "platform/CCPlatformMacros.h"
-#include "audio/win32/AudioMacros.h"
+    #include <functional>
+    #include <memory>
+    #include <mutex>
+    #include <string>
+    #include <vector>
+    #ifdef OPENAL_PLAIN_INCLUDES
+        #include <al.h>
+    #else
+        #include <AL/al.h>
+    #endif
+    #include "platform/CCPlatformMacros.h"
+    #include "audio/win32/AudioMacros.h"
 
 NS_CC_BEGIN
 

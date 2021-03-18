@@ -58,12 +58,18 @@ public:
     //
     virtual ProgressTo* clone() const override;
     virtual ProgressTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    ProgressTo() {}
-    virtual ~ProgressTo() {}
+
+    ProgressTo()
+    {
+    }
+
+    virtual ~ProgressTo()
+    {
+    }
 
     /** 
      * @brief Initializes with a duration and destination percentage. 
@@ -77,8 +83,7 @@ protected:
     float _to;
     float _from;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ProgressTo);
 };
 
 /**
@@ -102,12 +107,18 @@ public:
     //
     virtual ProgressFromTo* clone() const override;
     virtual ProgressFromTo* reverse() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    ProgressFromTo() {}
-    virtual ~ProgressFromTo() {}
+
+    ProgressFromTo()
+    {
+    }
+
+    virtual ~ProgressFromTo()
+    {
+    }
 
     /**
      * @brief Initializes the action with a duration, a "from" percentage and a "to" percentage.
@@ -122,8 +133,7 @@ protected:
     float _to;
     float _from;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ProgressFromTo);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ProgressFromTo);
 };
 
 // end of actions group

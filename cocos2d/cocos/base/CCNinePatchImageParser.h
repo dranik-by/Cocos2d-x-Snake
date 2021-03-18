@@ -30,7 +30,6 @@ NS_CC_BEGIN
 class Image;
 class SpriteFrame;
 
-
 /**
  * A class for paring Android .9 patch image.
  * For more about Android .9 patch image format, please refer to
@@ -52,7 +51,7 @@ public:
      *
      * @return If the filename contains ".9.png", then return true, otherwise false.
      */
-    static bool isNinePatchImage(const std::string& filename);
+    static bool isNinePatchImage(const std::string &filename);
 
     /**
      * Default constructor.
@@ -78,7 +77,7 @@ public:
      * @param frameRect The sprite frame rect in the image atlas.
      * @param rotated Whether is sprite frame is rotated in the image atlas.
      */
-    NinePatchImageParser(Image* image, const Rect& frameRect, bool rotated);
+    NinePatchImageParser(Image* image, const Rect &frameRect, bool rotated);
 
     /**
      * Change the sprite frame info.
@@ -87,7 +86,7 @@ public:
      * @param frameRect The sprite frame rect in the image atlas.
      * @param rotated Whether is sprite frame is rotated in the image atlas.
      */
-    void setSpriteFrameInfo(Image* image, const Rect& frameRect, bool rotated);
+    void setSpriteFrameInfo(Image* image, const Rect &frameRect, bool rotated);
 
     /**
      * Default destructor.
@@ -98,18 +97,18 @@ public:
      * Parsing the image data and extract the capInsets info.
      * @return The capInsets Rect.
      */
-    Rect parseCapInset()const;
+    Rect parseCapInset() const;
 private:
     enum class Direction
     {
         HORIZONTAL,
         VERTICAL
     };
-    int getPixelOriginOffset(Direction direction)const;
-    Vec2 parseHorizontalMargin()const;
-    Vec2 parseVerticalMargin()const;
-    int getFrameWidth()const;
-    int getFrameHeight()const;
+    int getPixelOriginOffset(Direction direction) const;
+    Vec2 parseHorizontalMargin() const;
+    Vec2 parseVerticalMargin() const;
+    int getFrameWidth() const;
+    int getFrameHeight() const;
 
     Image* _image;
     Rect _imageFrame;

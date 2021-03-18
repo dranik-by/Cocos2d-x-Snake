@@ -33,58 +33,64 @@
 
 namespace cocostudio
 {
-    namespace timeline
-    {
-        class ActionTimelineData;
-    }
+namespace timeline
+{
+class ActionTimelineData;
+}
 }
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL ComExtensionData : public cocos2d::Component
+class CC_STUDIO_DLL ComExtensionData : public cocos2d::Component
+{
+DECLARE_CLASS_COMPONENT_INFO
+public:
+    const static std::string COMPONENT_NAME;
+
+    /**
+    * @js NA
+    * @lua NA
+    */
+    virtual void onEnter() override;
+    /**
+    * @js NA
+    * @lua NA
+    */
+    virtual void onExit() override;
+    /**
+    * @js NA
+    * @lua NA
+    */
+    virtual void onAdd() override;
+    /**
+    * @js NA
+    * @lua NA
+    */
+    virtual void onRemove() override;
+    static ComExtensionData* create();
+    virtual bool init() override;
+
+    virtual void setCustomProperty(const std::string &customProperty)
     {
-        DECLARE_CLASS_COMPONENT_INFO
-    public:
-        const static std::string COMPONENT_NAME;
+        _customProperty = customProperty;
+    }
 
-        /**
-        * @js NA
-        * @lua NA
-        */
-        virtual void onEnter() override;
-        /**
-        * @js NA
-        * @lua NA
-        */
-        virtual void onExit() override;
-        /**
-        * @js NA
-        * @lua NA
-        */
-        virtual void onAdd() override;
-        /**
-        * @js NA
-        * @lua NA
-        */
-        virtual void onRemove() override;
-        static ComExtensionData* create();
-        virtual bool init() override;
-
-        virtual void setCustomProperty(const std::string& customProperty) { _customProperty = customProperty; }
-        virtual std::string getCustomProperty() const { return _customProperty; };
-        
-        virtual void setActionTag(int actionTag);
-        virtual int getActionTag() const;
-        
-    public:
-        ComExtensionData();
-        ~ComExtensionData();
-        
-    protected:
-        std::string _customProperty;
-        cocostudio::timeline::ActionTimelineData* _timelineData;
+    virtual std::string getCustomProperty() const
+    {
+        return _customProperty;
     };
-}
 
+    virtual void setActionTag(int actionTag);
+    virtual int getActionTag() const;
+
+public:
+    ComExtensionData();
+    ~ComExtensionData();
+
+protected:
+    std::string _customProperty;
+    cocostudio::timeline::ActionTimelineData* _timelineData;
+};
+}
 
 #endif /* defined(__cocos2d_libs__CCObjectExtensionData__) */

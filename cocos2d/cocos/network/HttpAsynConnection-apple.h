@@ -28,40 +28,42 @@
 /// @cond DO_NOT_SHOW
 
 #include "platform/CCPlatformConfig.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-#import <Foundation/Foundation.h>
-#import <Security/Security.h>
+    #import <Foundation/Foundation.h>
+    #import <Security/Security.h>
+
 /// @cond
 @interface HttpAsynConnection : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 {
 }
 
 // The original URL to download.  Due to redirects the actual content may come from another URL
-@property (strong) NSString *srcURL;
+@property(strong) NSString* srcURL;
 
-@property (strong) NSString *sslFile;
+@property(strong) NSString* sslFile;
 
-@property (copy) NSDictionary *responseHeader;
+@property(copy) NSDictionary* responseHeader;
 
-@property (strong) NSMutableData *responseData;
+@property(strong) NSMutableData* responseData;
 
-@property (readonly) NSInteger getDataTime;
+@property(readonly) NSInteger getDataTime;
 
-@property (readonly) NSInteger responseCode;
-@property (readonly) NSString *statusString;
+@property(readonly) NSInteger responseCode;
+@property(readonly) NSString* statusString;
 
-@property (strong) NSError *responseError;
-@property (strong) NSError *connError;
+@property(strong) NSError* responseError;
+@property(strong) NSError* connError;
 
-@property (strong) NSURLConnection *conn;
+@property(strong) NSURLConnection* conn;
 
 @property bool finish;
 
-@property (strong) NSRunLoop *runLoop;
+@property(strong) NSRunLoop* runLoop;
 
 // instructs the class to start the request.
--(void) startRequest:(NSURLRequest*)request;
+- (void)startRequest:(NSURLRequest*)request;
 
 @end
 

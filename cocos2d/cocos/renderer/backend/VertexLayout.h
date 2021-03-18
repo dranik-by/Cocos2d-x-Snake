@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -48,23 +48,26 @@ public:
     struct Attribute
     {
         Attribute() = default;
-        Attribute(const std::string& _name, std::size_t _index, VertexFormat _format, std::size_t _offset, bool needToBeNormallized)
+
+        Attribute(const std::string &_name, std::size_t _index, VertexFormat _format, std::size_t _offset,
+                  bool needToBeNormallized)
         : name(_name)
         , format(_format)
         , offset(_offset)
         , index(_index)
         , needToBeNormallized(needToBeNormallized)
-        {}
-        
+        {
+        }
+
         std::string name; ///< name is used in opengl
-        VertexFormat format = VertexFormat::INT3; 
+        VertexFormat format = VertexFormat::INT3;
         std::size_t offset = 0;
         std::size_t index = 0; ///< index is used in metal
         bool needToBeNormallized = false;
     };
 
     VertexLayout() = default;
-    
+
     /**
      * Set attribute values to name.
      * @param name Specifies the attribute name.
@@ -73,38 +76,51 @@ public:
      * @param offset Specifies the byte offset to the first component of the first generic vertex attribute.
      * @param needToBeNormallized Specifies whether fixed-point data values should be normalized (true) or converted directly as fixed-point values (false) when they are accessed.
      */
-    void setAttribute(const std::string& name, std::size_t index, VertexFormat format, std::size_t offset, bool needToBeNormallized);
-    
+    void setAttribute(const std::string &name, std::size_t index, VertexFormat format, std::size_t offset,
+                      bool needToBeNormallized);
+
     /**
      * Set stride of vertices.
      * @param stride Specifies the distance between the data of two vertices, in bytes.
      */
     void setLayout(std::size_t stride);
-    
+
     /**
      * Get the distance between the data of two vertices, in bytes.
      * @return The distance between the data of two vertices, in bytes.
      */
-    inline std::size_t getStride() const { return _stride; }
+    inline std::size_t getStride() const
+    {
+        return _stride;
+    }
 
     /**
      * Get vertex step function. Default value is VERTEX.
      * @return Vertex step function.
      * @note Used in metal.
      */
-    inline VertexStepMode getVertexStepMode() const { return _stepMode; }
+    inline VertexStepMode getVertexStepMode() const
+    {
+        return _stepMode;
+    }
 
     /**
      * Get attribute informations
      * @return Atrribute informations.
      */
-    inline const std::unordered_map<std::string, Attribute>& getAttributes() const { return _attributes; }
+    inline const std::unordered_map<std::string, Attribute> &getAttributes() const
+    {
+        return _attributes;
+    }
 
     /**
      * Check if vertex layout has been set.
      */
-    inline bool isValid() const { return _stride != 0; }
-    
+    inline bool isValid() const
+    {
+        return _stride != 0;
+    }
+
 private:
     std::unordered_map<std::string, Attribute> _attributes;
     std::size_t _stride = 0;

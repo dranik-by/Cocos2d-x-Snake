@@ -29,12 +29,18 @@ NS_CC_MATH_BEGIN
 const Quaternion Quaternion::ZERO(0.0f, 0.0f, 0.0f, 0.0f);
 
 Quaternion::Quaternion()
-    : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+: x(0.0f)
+, y(0.0f)
+, z(0.0f)
+, w(1.0f)
 {
 }
 
 Quaternion::Quaternion(float xx, float yy, float zz, float ww)
-    : x(xx), y(yy), z(zz), w(ww)
+: x(xx)
+, y(yy)
+, z(zz)
+, w(ww)
 {
 }
 
@@ -43,23 +49,23 @@ Quaternion::Quaternion(float* array)
     set(array);
 }
 
-Quaternion::Quaternion(const Mat4& m)
+Quaternion::Quaternion(const Mat4 &m)
 {
     set(m);
 }
 
-Quaternion::Quaternion(const Vec3& axis, float angle)
+Quaternion::Quaternion(const Vec3 &axis, float angle)
 {
     set(axis, angle);
 }
 
-const Quaternion& Quaternion::identity()
+const Quaternion &Quaternion::identity()
 {
     static Quaternion value(0.0f, 0.0f, 0.0f, 1.0f);
     return value;
 }
 
-const Quaternion& Quaternion::zero()
+const Quaternion &Quaternion::zero()
 {
     static Quaternion value(0.0f, 0.0f, 0.0f, 0.0f);
     return value;
@@ -75,12 +81,12 @@ bool Quaternion::isZero() const
     return x == 0.0f && y == 0.0f && z == 0.0f && w == 0.0f;
 }
 
-void Quaternion::createFromRotationMatrix(const Mat4& m, Quaternion* dst)
+void Quaternion::createFromRotationMatrix(const Mat4 &m, Quaternion* dst)
 {
     m.getRotation(dst);
 }
 
-void Quaternion::createFromAxisAngle(const Vec3& axis, float angle, Quaternion* dst)
+void Quaternion::createFromAxisAngle(const Vec3 &axis, float angle, Quaternion* dst)
 {
     GP_ASSERT(dst);
 
@@ -143,12 +149,12 @@ Quaternion Quaternion::getInversed() const
     return q;
 }
 
-void Quaternion::multiply(const Quaternion& q)
+void Quaternion::multiply(const Quaternion &q)
 {
     multiply(*this, q, this);
 }
 
-void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion* dst)
+void Quaternion::multiply(const Quaternion &q1, const Quaternion &q2, Quaternion* dst)
 {
     GP_ASSERT(dst);
 
@@ -166,16 +172,16 @@ void Quaternion::multiply(const Quaternion& q1, const Quaternion& q2, Quaternion
 void Quaternion::normalize()
 {
     float n = x * x + y * y + z * z + w * w;
-    
+
     // Already normalized.
     if (n == 1.0f)
         return;
-    
+
     n = std::sqrt(n);
     // Too close to zero.
     if (n < 0.000001f)
         return;
-    
+
     n = 1.0f / n;
     x *= n;
     y *= n;
@@ -208,17 +214,17 @@ void Quaternion::set(float* array)
     w = array[3];
 }
 
-void Quaternion::set(const Mat4& m)
+void Quaternion::set(const Mat4 &m)
 {
     Quaternion::createFromRotationMatrix(m, this);
 }
 
-void Quaternion::set(const Vec3& axis, float angle)
+void Quaternion::set(const Vec3 &axis, float angle)
 {
     Quaternion::createFromAxisAngle(axis, angle, this);
 }
 
-void Quaternion::set(const Quaternion& q)
+void Quaternion::set(const Quaternion &q)
 {
     this->x = q.x;
     this->y = q.y;
@@ -248,7 +254,7 @@ float Quaternion::toAxisAngle(Vec3* axis) const
     return (2.0f * std::acos(q.w));
 }
 
-void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quaternion::lerp(const Quaternion &q1, const Quaternion &q2, float t, Quaternion* dst)
 {
     GP_ASSERT(dst);
     GP_ASSERT(!(t < 0.0f || t > 1.0f));
@@ -272,13 +278,14 @@ void Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, float t, Quate
     dst->w = t1 * q1.w + t * q2.w;
 }
 
-void Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quaternion::slerp(const Quaternion &q1, const Quaternion &q2, float t, Quaternion* dst)
 {
     GP_ASSERT(dst);
     slerp(q1.x, q1.y, q1.z, q1.w, q2.x, q2.y, q2.z, q2.w, t, &dst->x, &dst->y, &dst->z, &dst->w);
 }
 
-void Quaternion::squad(const Quaternion& q1, const Quaternion& q2, const Quaternion& s1, const Quaternion& s2, float t, Quaternion* dst)
+void Quaternion::squad(const Quaternion &q1, const Quaternion &q2, const Quaternion &s1, const Quaternion &s2, float t,
+                       Quaternion* dst)
 {
     GP_ASSERT(!(t < 0.0f || t > 1.0f));
 
@@ -290,7 +297,8 @@ void Quaternion::squad(const Quaternion& q1, const Quaternion& q2, const Quatern
     slerpForSquad(dstQ, dstS, 2.0f * t * (1.0f - t), dst);
 }
 
-void Quaternion::slerp(float q1x, float q1y, float q1z, float q1w, float q2x, float q2y, float q2z, float q2w, float t, float* dstx, float* dsty, float* dstz, float* dstw)
+void Quaternion::slerp(float q1x, float q1y, float q1z, float q1w, float q2x, float q2y, float q2z, float q2w, float t,
+                       float* dstx, float* dsty, float* dstz, float* dstw)
 {
     // Fast slerp implementation by kwhatmough:
     // It contains no division operations, no trig, no inverse trig
@@ -389,7 +397,7 @@ void Quaternion::slerp(float q1x, float q1y, float q1z, float q1w, float q2x, fl
     *dstz = z * f1;
 }
 
-void Quaternion::slerpForSquad(const Quaternion& q1, const Quaternion& q2, float t, Quaternion* dst)
+void Quaternion::slerpForSquad(const Quaternion &q1, const Quaternion &q2, float t, Quaternion* dst)
 {
     GP_ASSERT(dst);
 

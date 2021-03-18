@@ -55,19 +55,19 @@ public:
     @return Current application instance pointer.
     */
     static Application* getInstance();
-    
+
     /* override functions */
     virtual void setAnimationInterval(float interval) override;
 
     virtual LanguageType getCurrentLanguage();
 
-    virtual const char * getCurrentLanguageCode();
-    
+    virtual const char* getCurrentLanguageCode();
+
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform();
-    
+
     /**
     @brief Get application version
     */
@@ -84,29 +84,29 @@ public:
      *  Sets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->setSearchPaths() instead.
      */
-    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string& rootResDir);
+    CC_DEPRECATED_ATTRIBUTE void setResourceRootPath(const std::string &rootResDir);
 
     /** 
      *  Gets the Resource root path.
      *  @deprecated Please use FileUtils::getInstance()->getSearchPaths() instead. 
      */
-    CC_DEPRECATED_ATTRIBUTE const std::string& getResourceRootPath();
+    CC_DEPRECATED_ATTRIBUTE const std::string &getResourceRootPath();
 
-    void setStartupScriptFilename(const std::string& startupScriptFile);
+    void setStartupScriptFilename(const std::string &startupScriptFile);
 
-    const std::string& getStartupScriptFilename()
+    const std::string &getStartupScriptFilename()
     {
         return _startupScriptFilename;
     }
 
 protected:
-    HINSTANCE           _instance;
-    HACCEL              _accelTable;
-    LARGE_INTEGER       _animationInterval;
-    std::string         _resourceRootPath;
-    std::string         _startupScriptFilename;
+    HINSTANCE _instance;
+    HACCEL _accelTable;
+    LARGE_INTEGER _animationInterval;
+    std::string _resourceRootPath;
+    std::string _startupScriptFilename;
 
-    static Application * sm_pSharedApplication;
+    static Application* sm_pSharedApplication;
 };
 
 NS_CC_END

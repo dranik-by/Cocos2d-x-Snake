@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -48,7 +48,7 @@ struct RenderPipelineDescriptor
 {
     ProgramState* programState = nullptr;
     BlendState* blendState = nullptr;
-    PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = { PixelFormat::DEFAULT };
+    PixelFormat colorAttachmentsFormat[MAX_COLOR_ATTCHMENT] = {PixelFormat::DEFAULT};
     PixelFormat depthAttachmentFormat = PixelFormat::NONE;
     PixelFormat stencilAttachmentFormat = PixelFormat::NONE;
 };

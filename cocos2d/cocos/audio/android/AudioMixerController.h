@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <atomic>
 #include <vector>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class Track;
 class AudioMixer;
@@ -59,15 +60,22 @@ public:
 
     void pause();
     void resume();
-    inline bool isPaused() const { return _isPaused; };
+
+    inline bool isPaused() const
+    {
+        return _isPaused;
+    };
 
     void mixOneFrame();
 
-    inline OutputBuffer* current() { return &_mixingBuffer; }
+    inline OutputBuffer* current()
+    {
+        return &_mixingBuffer;
+    }
 
 private:
     void destroy();
-    void initTrack(Track* track, std::vector<Track*>& tracksToRemove);
+    void initTrack(Track* track, std::vector<Track*> &tracksToRemove);
 
 private:
     int _bufferSizeInFrames;

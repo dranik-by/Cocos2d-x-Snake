@@ -28,32 +28,31 @@
 NS_CC_BEGIN
 
 Plane::Plane()
-:
-_normal(0.f, 0.f, 1.f),
-_dist(0.f)
+: _normal(0.f, 0.f, 1.f)
+, _dist(0.f)
 {
-    
+
 }
 
 // create plane from tree point
-Plane::Plane(const Vec3& p1, const Vec3& p2, const Vec3& p3)
+Plane::Plane(const Vec3 &p1, const Vec3 &p2, const Vec3 &p3)
 {
     initPlane(p1, p2, p3);
 }
 
 // create plane from normal and dist
-Plane::Plane(const Vec3& normal, float dist)
+Plane::Plane(const Vec3 &normal, float dist)
 {
     initPlane(normal, dist);
 }
 
 // create plane from normal and a point on plane
-Plane::Plane(const Vec3& normal, const Vec3& point)
+Plane::Plane(const Vec3 &normal, const Vec3 &point)
 {
     initPlane(normal, point);
 }
 
-void Plane::initPlane(const Vec3& p1, const Vec3& p2, const Vec3& p3)
+void Plane::initPlane(const Vec3 &p1, const Vec3 &p2, const Vec3 &p3)
 {
     Vec3 p21 = p2 - p1;
     Vec3 p32 = p3 - p2;
@@ -62,27 +61,26 @@ void Plane::initPlane(const Vec3& p1, const Vec3& p2, const Vec3& p3)
     _dist = _normal.dot(p1);
 }
 
-void Plane::initPlane(const Vec3& normal, float dist)
+void Plane::initPlane(const Vec3 &normal, float dist)
 {
     float oneOverLength = 1 / normal.length();
     _normal = normal * oneOverLength;
     _dist = dist * oneOverLength;
 }
 
-void Plane::initPlane(const Vec3& normal, const Vec3& point)
+void Plane::initPlane(const Vec3 &normal, const Vec3 &point)
 {
     _normal = normal;
     _normal.normalize();
     _dist = _normal.dot(point);
 }
 
-float Plane::dist2Plane(const Vec3& p) const
+float Plane::dist2Plane(const Vec3 &p) const
 {
     return _normal.dot(p) - _dist;
 }
 
-
-PointSide Plane::getSide(const Vec3& point) const
+PointSide Plane::getSide(const Vec3 &point) const
 {
     float dist = dist2Plane(point);
     if (dist > 0)

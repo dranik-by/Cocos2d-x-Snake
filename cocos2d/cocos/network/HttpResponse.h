@@ -36,7 +36,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
 /**
  * @brief defines the object which users will receive at onHttpCompleted(sender, HttpResponse) callback.
@@ -52,9 +53,9 @@ public:
      * @param request the corresponding HttpRequest which leads to this response.
      */
     HttpResponse(HttpRequest* request)
-        : _pHttpRequest(request)
-        , _succeed(false)
-        , _responseDataString("")
+    : _pHttpRequest(request)
+    , _succeed(false)
+    , _responseDataString("")
     {
         if (_pHttpRequest)
         {
@@ -179,7 +180,6 @@ public:
         _responseHeader = *data;
     }
 
-
     /**
      * Set the http response code.
      * @param value the http response code that represent whether the request is successful or not.
@@ -188,7 +188,6 @@ public:
     {
         _responseCode = value;
     }
-
 
     /**
      * Set the error buffer which will tell you more the reason why http request failed.
@@ -224,13 +223,13 @@ protected:
     bool initWithRequest(HttpRequest* request);
 
     // properties
-    HttpRequest*        _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
-    bool                _succeed;       /// to indicate if the http request is successful simply
-    std::vector<char>   _responseData;  /// the returned raw data. You can also dump it as a string
-    std::vector<char>   _responseHeader;  /// the returned raw header data. You can also dump it as a string
-    long                _responseCode;    /// the status code returned from libcurl, e.g. 200, 404
-    std::string         _errorBuffer;   /// if _responseCode != 200, please read _errorBuffer to find the reason
-    std::string         _responseDataString; // the returned raw data. You can also dump it as a string
+    HttpRequest* _pHttpRequest;  /// the corresponding HttpRequest pointer who leads to this response
+    bool _succeed;       /// to indicate if the http request is successful simply
+    std::vector<char> _responseData;  /// the returned raw data. You can also dump it as a string
+    std::vector<char> _responseHeader;  /// the returned raw header data. You can also dump it as a string
+    long _responseCode;    /// the status code returned from libcurl, e.g. 200, 404
+    std::string _errorBuffer;   /// if _responseCode != 200, please read _errorBuffer to find the reason
+    std::string _responseDataString; // the returned raw data. You can also dump it as a string
 
 };
 

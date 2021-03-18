@@ -27,19 +27,22 @@
 
 #include "network/CCIDownloaderImpl.h"
 
-namespace cocos2d { namespace network
+namespace cocos2d
 {
-    class DownloaderHints;
-    class DownloaderApple : public IDownloaderImpl
-    {
-    public:
-        DownloaderApple(const DownloaderHints& hints);
-        virtual ~DownloaderApple();
+namespace network
+{
+class DownloaderHints;
+class DownloaderApple : public IDownloaderImpl
+{
+public:
+    DownloaderApple(const DownloaderHints &hints);
+    virtual ~DownloaderApple();
 
-        virtual IDownloadTask *createCoTask(std::shared_ptr<const DownloadTask>& task) override;
+    virtual IDownloadTask* createCoTask(std::shared_ptr<const DownloadTask> &task) override;
 
-    private:
-        void* _impl;
-    };
-}}  // namespace cocos2d::network
+private:
+    void* _impl;
+};
+}
+}  // namespace cocos2d::network
 

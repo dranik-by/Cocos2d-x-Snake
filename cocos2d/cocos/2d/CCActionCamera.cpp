@@ -40,25 +40,26 @@ ActionCamera::ActionCamera()
 , _up(0, 1, 0)
 {
 }
-void ActionCamera::startWithTarget(Node *target)
+
+void ActionCamera::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
 }
 
 ActionCamera* ActionCamera::clone() const
 {
-    auto action = new (std::nothrow) ActionCamera();
+    auto action = new(std::nothrow) ActionCamera();
     if (action)
     {
         action->autorelease();
         return action;
     }
-    
+
     delete action;
     return nullptr;
 }
 
-ActionCamera * ActionCamera::reverse() const
+ActionCamera* ActionCamera::reverse() const
 {
     // FIXME: This conversion isn't safe.
     return (ActionCamera*)ReverseTime::create(const_cast<ActionCamera*>(this));
@@ -71,7 +72,7 @@ void ActionCamera::restore()
     _up.set(0.0f, 1.0f, 0.0f);
 }
 
-void ActionCamera::setEye(const Vec3& eye)
+void ActionCamera::setEye(const Vec3 &eye)
 {
     _eye = eye;
     updateTransform();
@@ -83,13 +84,13 @@ void ActionCamera::setEye(float x, float y, float z)
     updateTransform();
 }
 
-void ActionCamera::setCenter(const Vec3& center)
+void ActionCamera::setCenter(const Vec3 &center)
 {
     _center = center;
     updateTransform();
 }
 
-void ActionCamera::setUp(const Vec3& up)
+void ActionCamera::setUp(const Vec3 &up)
 {
     _up = up;
     updateTransform();
@@ -106,16 +107,16 @@ void ActionCamera::updateTransform()
 
     Mat4 mv = Mat4::IDENTITY;
 
-    if(needsTranslation)
+    if (needsTranslation)
     {
         Mat4 t;
         Mat4::createTranslation(anchorPoint.x, anchorPoint.y, 0, &t);
         mv = mv * t;
     }
-    
+
     mv = mv * lookupMatrix;
 
-    if(needsTranslation)
+    if (needsTranslation)
     {
         Mat4 t;
         Mat4::createTranslation(-anchorPoint.x, -anchorPoint.y, 0, &t);
@@ -148,19 +149,21 @@ OrbitCamera::OrbitCamera()
 , _radDeltaX(0.0)
 {
 }
+
 OrbitCamera::~OrbitCamera()
 {
 }
 
-OrbitCamera * OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+OrbitCamera* OrbitCamera::create(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ,
+                                 float angleX, float deltaAngleX)
 {
-    OrbitCamera * obitCamera = new (std::nothrow) OrbitCamera();
-    if(obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
+    OrbitCamera* obitCamera = new(std::nothrow) OrbitCamera();
+    if (obitCamera && obitCamera->initWithDuration(t, radius, deltaRadius, angleZ, deltaAngleZ, angleX, deltaAngleX))
     {
         obitCamera->autorelease();
         return obitCamera;
     }
-    
+
     delete obitCamera;
     return nullptr;
 }
@@ -171,9 +174,10 @@ OrbitCamera* OrbitCamera::clone() const
     return OrbitCamera::create(_duration, _radius, _deltaRadius, _angleZ, _deltaAngleZ, _angleX, _deltaAngleX);
 }
 
-bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ, float angleX, float deltaAngleX)
+bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, float angleZ, float deltaAngleZ,
+                                   float angleX, float deltaAngleX)
 {
-    if ( ActionInterval::initWithDuration(t) )
+    if (ActionInterval::initWithDuration(t))
     {
         _radius = radius;
         _deltaRadius = deltaRadius;
@@ -189,17 +193,17 @@ bool OrbitCamera::initWithDuration(float t, float radius, float deltaRadius, flo
     return false;
 }
 
-void OrbitCamera::startWithTarget(Node *target)
+void OrbitCamera::startWithTarget(Node* target)
 {
     ActionCamera::startWithTarget(target);
 
     float r, zenith, azimuth;
     this->sphericalRadius(&r, &zenith, &azimuth);
-    if( std::isnan(_radius) )
+    if (std::isnan(_radius))
         _radius = r;
-    if( std::isnan(_angleZ) )
+    if (std::isnan(_angleZ))
         _angleZ = (float)CC_RADIANS_TO_DEGREES(zenith);
-    if( std::isnan(_angleX) )
+    if (std::isnan(_angleX))
         _angleX = (float)CC_RADIANS_TO_DEGREES(azimuth);
 
     _radZ = (float)CC_DEGREES_TO_RADIANS(_angleZ);
@@ -216,10 +220,10 @@ void OrbitCamera::update(float dt)
     float j = sinf(za) * sinf(xa) * r + _center.y;
     float k = cosf(za) * r + _center.z;
 
-    setEye(i,j,k);
+    setEye(i, j, k);
 }
 
-void OrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azimuth)
+void OrbitCamera::sphericalRadius(float* newRadius, float* zenith, float* azimuth)
 {
     float r; // radius
     float s;
@@ -228,18 +232,18 @@ void OrbitCamera::sphericalRadius(float *newRadius, float *zenith, float *azimut
     float y = _eye.y - _center.y;
     float z = _eye.z - _center.z;
 
-    r = sqrtf( powf(x,2) + powf(y,2) + powf(z,2));
-    s = sqrtf( powf(x,2) + powf(y,2));
-    if( s == 0.0f )
+    r = sqrtf(powf(x, 2) + powf(y, 2) + powf(z, 2));
+    s = sqrtf(powf(x, 2) + powf(y, 2));
+    if (s == 0.0f)
         s = FLT_EPSILON;
-    if(r==0.0f)
+    if (r == 0.0f)
         r = FLT_EPSILON;
 
-    *zenith = acosf( z/r);
-    if( x < 0 )
-        *azimuth= (float)M_PI - asinf(y/s);
+    *zenith = acosf(z / r);
+    if (x < 0)
+        *azimuth = (float)M_PI - asinf(y / s);
     else
-        *azimuth = asinf(y/s);
+        *azimuth = asinf(y / s);
 
     *newRadius = r / FLT_EPSILON;
 }

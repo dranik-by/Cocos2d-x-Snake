@@ -33,15 +33,17 @@
 
 #include "cocos2d.h"
 
-namespace spine {
+namespace spine
+{
 
-class AttachmentVertices {
+class AttachmentVertices
+{
 public:
-	AttachmentVertices (cocos2d::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
-	virtual ~AttachmentVertices ();
+    AttachmentVertices(cocos2d::Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount);
+    virtual ~AttachmentVertices();
 
-	cocos2d::Texture2D* _texture;
-	cocos2d::TrianglesCommand::Triangles* _triangles;
+    cocos2d::Texture2D* _texture;
+    cocos2d::TrianglesCommand::Triangles* _triangles;
 };
 
 }

@@ -27,19 +27,20 @@
 
 NS_CC_BEGIN
 
-namespace ui{
-    
+namespace ui
+{
+
 HBox::HBox()
 {
 }
-    
+
 HBox::~HBox()
 {
 }
-    
+
 HBox* HBox::create()
 {
-    HBox* widget = new (std::nothrow) HBox();
+    HBox* widget = new(std::nothrow) HBox();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -48,10 +49,10 @@ HBox* HBox::create()
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
+
 HBox* HBox::create(const cocos2d::Size &size)
 {
-    HBox* widget = new (std::nothrow) HBox();
+    HBox* widget = new(std::nothrow) HBox();
     if (widget && widget->initWithSize(size))
     {
         widget->autorelease();
@@ -60,7 +61,7 @@ HBox* HBox::create(const cocos2d::Size &size)
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
+
 bool HBox::init()
 {
     if (Layout::init())
@@ -70,8 +71,8 @@ bool HBox::init()
     }
     return false;
 }
-    
-bool HBox::initWithSize(const Size& size)
+
+bool HBox::initWithSize(const Size &size)
 {
     if (init())
     {
@@ -80,7 +81,7 @@ bool HBox::initWithSize(const Size& size)
     }
     return false;
 }
-    
+
 }
 
 NS_CC_END

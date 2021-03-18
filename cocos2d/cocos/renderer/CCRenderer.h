@@ -45,11 +45,11 @@ using Winding = backend::Winding;
 
 namespace backend
 {
-    class Buffer;
-    class CommandBuffer;
-    class RenderPipeline;
-    class RenderPass;
-    struct RenderPipelineDescriptor;
+class Buffer;
+class CommandBuffer;
+class RenderPipeline;
+class RenderPass;
+struct RenderPipelineDescriptor;
 }
 
 class EventListenerCustom;
@@ -101,15 +101,23 @@ public:
     void clear();
     /**Realloc command queues and reserve with given size. Note: this clears any existing commands.*/
     void realloc(size_t reserveSize);
+
     /**Get a sub group of the render queue.*/
-    std::vector<RenderCommand*>& getSubQueue(QUEUE_GROUP group) { return _commands[group]; }
+    std::vector<RenderCommand*> &getSubQueue(QUEUE_GROUP group)
+    {
+        return _commands[group];
+    }
+
     /**Get the number of render commands contained in a subqueue.*/
-    ssize_t getSubQueueSize(QUEUE_GROUP group) const { return _commands[group].size(); }
-    
+    ssize_t getSubQueueSize(QUEUE_GROUP group) const
+    {
+        return _commands[group].size();
+    }
+
 protected:
     /**The commands in the render queue.*/
     std::vector<RenderCommand*> _commands[QUEUE_COUNT];
-    
+
     /**Cull state.*/
     bool _isCullEnabled;
     /**Depth test enable state.*/
@@ -120,7 +128,6 @@ protected:
 
 class GroupCommandManager;
 
-
 /* Class responsible for the rendering in.
 
 Whenever possible prefer to use `TrianglesCommand` objects since the renderer will automatically batch them.
@@ -128,7 +135,7 @@ Whenever possible prefer to use `TrianglesCommand` objects since the renderer wi
 class CC_DLL Renderer
 {
 public:
-    
+
     /**The max number of vertices in a vertex buffer object.*/
     static const int VBO_SIZE = 65536;
     /**The max number of indices in a index buffer.*/
@@ -167,15 +174,34 @@ public:
     void clean();
 
     /* returns the number of drawn batches in the last frame */
-    ssize_t getDrawnBatches() const { return _drawnBatches; }
+    ssize_t getDrawnBatches() const
+    {
+        return _drawnBatches;
+    }
+
     /* RenderCommands (except) TrianglesCommand should update this value */
-    void addDrawnBatches(ssize_t number) { _drawnBatches += number; };
+    void addDrawnBatches(ssize_t number)
+    {
+        _drawnBatches += number;
+    };
+
     /* returns the number of drawn triangles in the last frame */
-    ssize_t getDrawnVertices() const { return _drawnVertices; }
+    ssize_t getDrawnVertices() const
+    {
+        return _drawnVertices;
+    }
+
     /* RenderCommands (except) TrianglesCommand should update this value */
-    void addDrawnVertices(ssize_t number) { _drawnVertices += number; };
+    void addDrawnVertices(ssize_t number)
+    {
+        _drawnVertices += number;
+    };
+
     /* clear draw stats */
-    void clearDrawStats() { _drawnBatches = _drawnVertices = 0; }
+    void clearDrawStats()
+    {
+        _drawnBatches = _drawnVertices = 0;
+    }
 
     /**
      Set render targets. If not set, will use default render targets. It will effect all commands.
@@ -185,7 +211,8 @@ public:
      @stencilAttachment The value to replace stencil attachment. Depth attachment and stencil attachment
                         can be the same value.
      */
-    void setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment, Texture2D* stencilAttachment);
+    void setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment,
+                         Texture2D* stencilAttachment);
     /**
     Set clear values for each attachment.
     @flags Flags to indicate which attachment clear value to be modified.
@@ -193,7 +220,7 @@ public:
     @depth The clear depth value.
     @stencil The clear stencil value.
     */
-    void clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder);
+    void clear(ClearFlag flags, const Color4F &color, float depth, unsigned int stencil, float globalOrder);
 
     /**
      * Get color attachment.
@@ -217,7 +244,7 @@ public:
      * Get color clear value.
      * @return Color clear value.
      */
-    const Color4F& getClearColor() const;
+    const Color4F &getClearColor() const;
 
     /**
      * Get depth clear value.
@@ -301,14 +328,13 @@ public:
      * @param depthFailureOp Specifies the stencil action when the stencil test passes, but the depth test fails. 
      * @param stencilDepthPassOp Specifies the stencil action when both the stencil test and the depth test pass, or when the stencil test passes and either there is no depth buffer or depth testing is not enabled. 
      */
-    void setStencilOperation(backend::StencilOperation stencilFailureOp,
-                             backend::StencilOperation depthFailureOp,
+    void setStencilOperation(backend::StencilOperation stencilFailureOp, backend::StencilOperation depthFailureOp,
                              backend::StencilOperation stencilDepthPassOp);
 
     /**
      * Control the front and back writing of individual bits in the stencil planes.
      * @param mask Specifies a bit mask to enable and disable writing of individual bits in the stencil planes.
-     */                
+     */
     void setStencilWriteMask(unsigned int mask);
 
     /**
@@ -328,12 +354,12 @@ public:
 
     /// Get the stencil test function.
     backend::CompareFunction getStencilCompareFunction() const;
-    
+
     /**
      * Get the stencil readMask.
      * @return Stencil read mask.
      * @see `setStencilCompareFunction(backend::CompareFunction func, unsigned int ref, unsigned int readMask)`
-     */ 
+     */
     unsigned int getStencilReadMask() const;
 
     /**
@@ -341,8 +367,8 @@ public:
      * @return Stencil write mask.
      * @see `setStencilWriteMask(unsigned int mask)`
      */
-    unsigned int getStencilWriteMask() const; 
-    
+    unsigned int getStencilWriteMask() const;
+
     /**
      * Get stencil reference value set by `setStencilCompareFunction`. 
      * @return Stencil reference value.
@@ -354,25 +380,37 @@ public:
      * Fixed-function state
      * @param mode Controls if primitives are culled when front facing, back facing, or not culled at all.
      */
-    void setCullMode(CullMode mode) { _cullMode = mode; }
+    void setCullMode(CullMode mode)
+    {
+        _cullMode = mode;
+    }
 
     /**
      * Get cull mode.
      * @return The cull mode.
      */
-    CullMode getCullMode() const { return _cullMode; }
+    CullMode getCullMode() const
+    {
+        return _cullMode;
+    }
 
     /**
      * Fixed-function state
      * @param winding The winding order of front-facing primitives.
      */
-    void setWinding(Winding winding) { _winding = winding; }
+    void setWinding(Winding winding)
+    {
+        _winding = winding;
+    }
 
     /**
      * Get winding mode.
      * @return The winding mode.
      */
-    Winding getWinding() const { return _winding; }
+    Winding getWinding() const
+    {
+        return _winding;
+    }
 
     /**
      * Fixed-function state
@@ -384,7 +422,10 @@ public:
     void setViewPort(int x, int y, unsigned int w, unsigned int h);
 
     /// Get viewport.
-    const Viewport& getViewport() const { return _viewport; }
+    const Viewport &getViewport() const
+    {
+        return _viewport;
+    }
 
     /**
      * Enable/disable scissor test. 
@@ -400,11 +441,11 @@ public:
      */
     void setScissorRect(float x, float y, float width, float height);
     bool getScissorTest() const; ///< Get whether scissor test is enabled or not.
-    const ScissorRect& getScissorRect() const; ///< Get scissor rectangle.
+    const ScissorRect &getScissorRect() const; ///< Get scissor rectangle.
 
     /** returns whether or not a rectangle is visible or not */
-    bool checkVisibility(const Mat4& transform, const Size& size);
-    
+    bool checkVisibility(const Mat4 &transform, const Size &size);
+
 protected:
     friend class Director;
     friend class GroupCommand;
@@ -446,7 +487,11 @@ protected:
         std::vector<backend::Buffer*> _indexBufferPool;
     };
 
-    inline GroupCommandManager * getGroupCommandManager() const { return _groupCommandManager; }
+    inline GroupCommandManager* getGroupCommandManager() const
+    {
+        return _groupCommandManager;
+    }
+
     void drawBatchedTriangles();
     void drawCustomCommand(RenderCommand* command);
     void drawMeshCommand(RenderCommand* command);
@@ -457,28 +502,28 @@ protected:
 
     ///Draw the previews queued triangles and flush previous context
     void flush();
-    
+
     void flush2D();
-    
+
     void flush3D();
 
     void flushTriangles();
 
     void processRenderCommand(RenderCommand* command);
     void processGroupCommand(GroupCommand*);
-    void visitRenderQueue(RenderQueue& queue);
-    void doVisitRenderQueue(const std::vector<RenderCommand*>&);
+    void visitRenderQueue(RenderQueue &queue);
+    void doVisitRenderQueue(const std::vector<RenderCommand*> &);
 
     void fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int vertexBufferOffset);
     void beginRenderPass(RenderCommand*); /// Begin a render pass.
-    
+
     /**
      * Building a programmable pipeline involves an expensive evaluation of GPU state.
      * So a new render pipeline object will be created only if it hasn't been created before.
      * @param pipelineDescriptor Specifies the pipeline descriptor.
      * @param renderPassDescriptor Specifies the render pass descriptor.
      */
-    void setRenderPipeline(const PipelineDescriptor&, const backend::RenderPassDescriptor&);
+    void setRenderPipeline(const PipelineDescriptor &, const backend::RenderPassDescriptor &);
 
     void pushStateBlock();
 
@@ -487,11 +532,11 @@ protected:
     backend::RenderPipeline* _renderPipeline = nullptr;
 
     Viewport _viewport;
-    CullMode _cullMode  = CullMode::NONE;
-    Winding _winding    = Winding::COUNTER_CLOCK_WISE; //default front face is CCW in GL
+    CullMode _cullMode = CullMode::NONE;
+    Winding _winding = Winding::COUNTER_CLOCK_WISE; //default front face is CCW in GL
 
     std::stack<int> _commandGroupStack;
-    
+
     std::vector<RenderQueue> _renderGroups;
 
     std::vector<TrianglesCommand*> _queuedTriangleCommands;
@@ -502,7 +547,7 @@ protected:
     backend::Buffer* _vertexBuffer = nullptr;
     backend::Buffer* _indexBuffer = nullptr;
     TriangleCommandBufferManager _triangleCommandBufferManager;
-    
+
     backend::CommandBuffer* _commandBuffer = nullptr;
     backend::RenderPassDescriptor _renderPassDescriptor;
     backend::DepthStencilDescriptor _depthStencilDescriptor;
@@ -532,7 +577,7 @@ protected:
     //the flag for checking whether renderer is rendering
     bool _isRendering = false;
     bool _isDepthTestFor2D = false;
-        
+
     GroupCommandManager* _groupCommandManager = nullptr;
 
     unsigned int _stencilRef = 0;
@@ -551,11 +596,12 @@ protected:
         bool isEnabled = false;
     };
     ScissorState _scissorState;
-    
-    struct StateBlock{
+
+    struct StateBlock
+    {
         bool depthTest = false;
         bool depthWrite = false;
-        backend::CullMode  cullMode = backend::CullMode::NONE;
+        backend::CullMode cullMode = backend::CullMode::NONE;
     };
 
     std::deque<StateBlock> _stateBlockStack;

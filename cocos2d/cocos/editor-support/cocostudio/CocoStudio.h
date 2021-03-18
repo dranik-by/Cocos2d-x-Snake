@@ -70,7 +70,7 @@ THE SOFTWARE.
 
 namespace cocostudio
 {
-    void CC_STUDIO_DLL destroyCocosStudio();
+void CC_STUDIO_DLL destroyCocosStudio();
 }
 
 #endif

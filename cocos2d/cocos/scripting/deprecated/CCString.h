@@ -29,7 +29,9 @@ THE SOFTWARE.
 /// @cond DO_NOT_SHOW
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_BLACKBERRY)
-#include <string.h>
+
+    #include <string.h>
+
 #endif
 
 #include <stdarg.h>
@@ -66,12 +68,12 @@ public:
      * @js NA
      * @lua NA
      */
-    __String(const std::string& str);
+    __String(const std::string &str);
     /**
      * @js NA
      * @lua NA
      */
-    __String(const __String& str);
+    __String(const __String &str);
     /**
      * @js NA
      * @lua NA
@@ -82,7 +84,7 @@ public:
      * @js NA
      * @lua NA
      */
-    __String& operator= (const __String& other);
+    __String &operator=(const __String &other);
 
     /** init a string with format, it's similar with the c function 'sprintf'
      * @js NA
@@ -128,13 +130,13 @@ public:
     /** compare to a c string
      * @js NA
      */
-    int compare(const char *) const;
+    int compare(const char*) const;
 
     /** append additional characters at the end of its current value
      * @js NA
      * @lua NA
      */
-    void append(const std::string& str);
+    void append(const std::string &str);
 
     /** append(w/ format) additional characters at the end of its current value
      * @js NA
@@ -146,7 +148,7 @@ public:
      * @js NA
      * @lua NA
      */
-    __Array* componentsSeparatedByString(const char *delimiter);
+    __Array* componentsSeparatedByString(const char* delimiter);
 
     /* override functions
      * @js NA
@@ -158,7 +160,7 @@ public:
      *          it means that you needn't do a release operation unless you retain it.
      * @js NA
      */
-    static __String* create(const std::string& str);
+    static __String* create(const std::string &str);
 
     /** create a string with format, it's similar with the c function 'sprintf', the default buffer size is (1024*100) bytes,
      *  if you want to change it, you should modify the kMax__StringLen macro in __String.cpp file.
@@ -180,7 +182,7 @@ public:
      *          it means that you needn't do a release operation unless you retain it.
      * @js NA
      */
-    static __String* createWithContentsOfFile(const std::string& filename);
+    static __String* createWithContentsOfFile(const std::string &filename);
     /**
      * @js NA
      * @lua NA
@@ -201,11 +203,13 @@ public:
     std::string _string;
 };
 
-struct StringCompare : public std::function<bool(__String *, __String *)> {
-    public:
-        bool operator() (__String * a, __String * b) const {
-            return strcmp(a->getCString(), b->getCString()) < 0;
-        }
+struct StringCompare : public std::function<bool(__String*, __String*)>
+{
+public:
+    bool operator()(__String* a, __String* b) const
+    {
+        return strcmp(a->getCString(), b->getCString()) < 0;
+    }
 };
 
 #define StringMake(str) String::create(str)

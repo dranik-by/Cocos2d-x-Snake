@@ -52,19 +52,19 @@ option(BUILD_EDITOR_COCOSTUDIO "Build editor support for cocostudio" ON)
 option(BUILD_EDITOR_SPINE "Build editor support for spine" OFF)
 option(BUILD_EXTENSIONS "Build extension library" ON)
 
-if(BUILD_EDITOR_COCOSTUDIO)
+if (BUILD_EDITOR_COCOSTUDIO)
     include(editor-support/cocostudio/CMakeLists.txt)
     set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_CS_SRC} ${COCOS_CS_HEADER})
-endif(BUILD_EDITOR_COCOSTUDIO)
+endif (BUILD_EDITOR_COCOSTUDIO)
 
-if(BUILD_EDITOR_SPINE)
+if (BUILD_EDITOR_SPINE)
     include(editor-support/spine/CMakeLists.txt)
     set(COCOS_EDITOR_SUPPORT_SRC ${COCOS_EDITOR_SUPPORT_SRC} ${COCOS_SPINE_SRC} ${COCOS_SPINE_HEADER})
-endif(BUILD_EDITOR_SPINE)
+endif (BUILD_EDITOR_SPINE)
 
-if(BUILD_EXTENSIONS)
+if (BUILD_EXTENSIONS)
     include(../extensions/CMakeLists.txt)
-endif(BUILD_EXTENSIONS)
+endif (BUILD_EXTENSIONS)
 
 set(COCOS_HEADER cocos2d.h
     ${COCOS_2D_HEADER}
@@ -117,15 +117,15 @@ use_cocos2dx_compile_options(cocos2d)
 use_cocos2dx_libs_depend(cocos2d)
 
 target_include_directories(cocos2d
-    PUBLIC ${COCOS2DX_ROOT_PATH}
-    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
-    PUBLIC ${COCOS2DX_ROOT_PATH}/extensions
-    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/platform
-    PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/editor-support
-    INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/base
-    INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/audio/include
-    INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/platform/${PLATFORM_FOLDER}
-)
+                           PUBLIC ${COCOS2DX_ROOT_PATH}
+                           PUBLIC ${COCOS2DX_ROOT_PATH}/cocos
+                           PUBLIC ${COCOS2DX_ROOT_PATH}/extensions
+                           PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/platform
+                           PUBLIC ${COCOS2DX_ROOT_PATH}/cocos/editor-support
+                           INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/base
+                           INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/audio/include
+                           INTERFACE ${COCOS2DX_ROOT_PATH}/cocos/platform/${PLATFORM_FOLDER}
+                           )
 
 set_target_properties(cocos2d
                       PROPERTIES
@@ -136,22 +136,22 @@ set_target_properties(cocos2d
                       )
 
 ## Lua bindings lib
-if(BUILD_LUA_LIBS)
+if (BUILD_LUA_LIBS)
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/scripting/lua-bindings ${ENGINE_BINARY_PATH}/cocos/lua-bindings)
-endif()
+endif ()
 
-if(XCODE OR VS)
+if (XCODE OR VS)
     cocos_mark_code_files("cocos2d")
-endif()
+endif ()
 
-if(WINDOWS)
+if (WINDOWS)
     # precompiled header. Compilation time speedup ~4x.
     target_sources(cocos2d PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp")
     set_target_properties(cocos2d PROPERTIES COMPILE_FLAGS "/Yuprecheader.h /FIprecheader.h")
     set_source_files_properties("${CMAKE_CURRENT_SOURCE_DIR}/precheader.cpp" PROPERTIES COMPILE_FLAGS "/Ycprecheader.h")
     # compile c as c++. needed for precompiled header
     set_source_files_properties(${COCOS_SPINE_SRC} base/ccFPSImages.c PROPERTIES LANGUAGE CXX)
-endif()
+endif ()
 
 #if(XCODE)
 #    # Later versions of Xcode clang want to compile C++17 with aligned allocation turned on and this is only supported on iOS 11.0+

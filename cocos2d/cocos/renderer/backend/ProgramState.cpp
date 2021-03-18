@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "renderer/backend/ProgramState.h"
 #include "renderer/backend/ProgramCache.h"
 #include "renderer/backend/Program.h"
@@ -34,12 +34,13 @@
 #include <algorithm>
 
 #ifdef CC_USE_METAL
-#include "glsl_optimizer.h"
+    #include "glsl_optimizer.h"
 #endif
 
 CC_BACKEND_BEGIN
 
-namespace {
+namespace
+{
 #define MAT3_SIZE 36
 #define MAT4X3_SIZE 48
 #define VEC3_SIZE 12
@@ -48,44 +49,50 @@ namespace {
 #define BVEC4_SIZE 4
 #define IVEC3_SIZE 12
 #define IVEC4_SIZE 16
-    
-    void convertbVec3TobVec4(const bool* src, bool* dst)
-    {
-        dst[0] = src[0];
-        dst[1] = src[1];
-        dst[2] = src[2];
-        dst[3] = false;
-    }
-    
-    void convertiVec3ToiVec4(const int* src, int* dst)
-    {
-        dst[0] = src[0];
-        dst[1] = src[1];
-        dst[2] = src[2];
-        dst[3] = 0;
-    }
-    
-    void convertVec3ToVec4(const float* src, float* dst)
-    {
-        dst[0] = src[0];
-        dst[1] = src[1];
-        dst[2] = src[2];
-        dst[3] = 0.0f;
-    }
-    
-    void convertMat3ToMat4x3(const float* src, float* dst)
-    {
-        dst[3] = dst[7] = dst[11] = 0.0f;
-        dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2];
-        dst[4] = src[3]; dst[5] = src[4]; dst[6] = src[5];
-        dst[8] = src[6]; dst[9] = src[7]; dst[10] = src[8];
-    }
+
+void convertbVec3TobVec4(const bool* src, bool* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = false;
+}
+
+void convertiVec3ToiVec4(const int* src, int* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = 0;
+}
+
+void convertVec3ToVec4(const float* src, float* dst)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[3] = 0.0f;
+}
+
+void convertMat3ToMat4x3(const float* src, float* dst)
+{
+    dst[3] = dst[7] = dst[11] = 0.0f;
+    dst[0] = src[0];
+    dst[1] = src[1];
+    dst[2] = src[2];
+    dst[4] = src[3];
+    dst[5] = src[4];
+    dst[6] = src[5];
+    dst[8] = src[6];
+    dst[9] = src[7];
+    dst[10] = src[8];
+}
 }
 
 //static field
 std::vector<ProgramState::AutoBindingResolver*> ProgramState::_customAutoBindingResolvers;
 
-TextureInfo::TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures)
+TextureInfo::TextureInfo(const std::vector<uint32_t> &_slots, const std::vector<backend::TextureBackend*> _textures)
 : slot(_slots)
 , textures(_textures)
 {
@@ -93,10 +100,10 @@ TextureInfo::TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<
 }
 
 TextureInfo::TextureInfo(const TextureInfo &other)
-    : slot(other.slot)
-    , textures(other.textures)
+: slot(other.slot)
+, textures(other.textures)
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    , location(other.location)
+, location(other.location)
 #endif
 {
     retainTextures();
@@ -109,38 +116,38 @@ TextureInfo::~TextureInfo()
 
 void TextureInfo::retainTextures()
 {
-    for (auto& texture : textures)
+    for (auto &texture : textures)
         CC_SAFE_RETAIN(texture);
 }
 
 void TextureInfo::releaseTextures()
 {
-    for (auto& texture : textures)
+    for (auto &texture : textures)
         CC_SAFE_RELEASE(texture);
 }
 
-TextureInfo& TextureInfo::operator=(TextureInfo&& rhs)
+TextureInfo &TextureInfo::operator=(TextureInfo &&rhs)
 {
     if (this != &rhs)
     {
         slot = rhs.slot;
-        
+
         rhs.retainTextures();
         releaseTextures();
         textures = rhs.textures;
-        
+
         //release the textures before cleaning the vertor
         rhs.releaseTextures();
         rhs.textures.clear();
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+        #if CC_ENABLE_CACHE_TEXTURE_DATA
         location = rhs.location;
-#endif
+        #endif
     }
     return *this;
 }
 
-TextureInfo& TextureInfo::operator=(const TextureInfo& rhs)
+TextureInfo &TextureInfo::operator=(const TextureInfo &rhs)
 {
     if (this != &rhs)
     {
@@ -148,9 +155,9 @@ TextureInfo& TextureInfo::operator=(const TextureInfo& rhs)
         textures = rhs.textures;
         retainTextures();
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+        #if CC_ENABLE_CACHE_TEXTURE_DATA
         location = rhs.location;
-#endif
+        #endif
     }
     return *this;
 }
@@ -167,24 +174,24 @@ bool ProgramState::init(Program* program)
     _vertexUniformBufferSize = _program->getUniformBufferSize(ShaderStage::VERTEX);
     _vertexUniformBuffer = new char[_vertexUniformBufferSize];
     memset(_vertexUniformBuffer, 0, _vertexUniformBufferSize);
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     _fragmentUniformBufferSize = _program->getUniformBufferSize(ShaderStage::FRAGMENT);
     _fragmentUniformBuffer = new char[_fragmentUniformBufferSize];
     memset(_fragmentUniformBuffer, 0, _fragmentUniformBufferSize);
-#endif
+    #endif
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
         this->resetUniforms();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    #endif
     return true;
 }
 
 void ProgramState::resetUniforms()
 {
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     if(_program == nullptr)
         return;
 
@@ -200,7 +207,7 @@ void ProgramState::resetUniforms()
             _vertexTextureInfos[location].location = mappedLocation;
         }
     }
-#endif
+    #endif
 }
 
 ProgramState::ProgramState()
@@ -212,15 +219,15 @@ ProgramState::~ProgramState()
     CC_SAFE_RELEASE(_program);
     CC_SAFE_DELETE_ARRAY(_vertexUniformBuffer);
     CC_SAFE_DELETE_ARRAY(_fragmentUniformBuffer);
-    
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
+    #endif
 }
 
-ProgramState *ProgramState::clone() const
+ProgramState* ProgramState::clone() const
 {
-    ProgramState *cp = new ProgramState();
+    ProgramState* cp = new ProgramState();
     cp->_program = _program;
     cp->_vertexUniformBufferSize = _vertexUniformBufferSize;
     cp->_fragmentUniformBufferSize = _fragmentUniformBufferSize;
@@ -229,10 +236,10 @@ ProgramState *ProgramState::clone() const
     cp->_vertexUniformBuffer = new char[_vertexUniformBufferSize];
     memcpy(cp->_vertexUniformBuffer, _vertexUniformBuffer, _vertexUniformBufferSize);
     cp->_vertexLayout = _vertexLayout;
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     cp->_fragmentUniformBuffer = new char[_fragmentUniformBufferSize];
     memcpy(cp->_fragmentUniformBuffer, _fragmentUniformBuffer, _fragmentUniformBufferSize);
-#endif
+    #endif
     CC_SAFE_RETAIN(cp->_program);
 
     return cp;
@@ -243,17 +250,17 @@ backend::UniformLocation ProgramState::getUniformLocation(backend::Uniform name)
     return _program->getUniformLocation(name);
 }
 
-backend::UniformLocation ProgramState::getUniformLocation(const std::string& uniform) const
+backend::UniformLocation ProgramState::getUniformLocation(const std::string &uniform) const
 {
     return _program->getUniformLocation(uniform);
 }
 
-void ProgramState::setCallbackUniform(const backend::UniformLocation& uniformLocation,const UniformCallback& callback)
+void ProgramState::setCallbackUniform(const backend::UniformLocation &uniformLocation, const UniformCallback &callback)
 {
     _callbackUniforms[uniformLocation] = callback;
 }
 
-void ProgramState::setUniform(const backend::UniformLocation& uniformLocation, const void* data, std::size_t size)
+void ProgramState::setUniform(const backend::UniformLocation &uniformLocation, const void* data, std::size_t size)
 {
     switch (uniformLocation.shaderStage)
     {
@@ -343,11 +350,11 @@ void ProgramState::convertAndCopyUniformData(const backend::UniformInfo& uniform
 
 void ProgramState::setVertexUniform(int location, const void* data, std::size_t size, std::size_t offset)
 {
-    if(location < 0)
+    if (location < 0)
         return;
-    
-//float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
+
+    //float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
+    #ifdef CC_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::VERTEX, location);
     if(uniformInfo.needConvert)
     {
@@ -357,18 +364,18 @@ void ProgramState::setVertexUniform(int location, const void* data, std::size_t 
     {
         memcpy(_vertexUniformBuffer + location, data, size);
     }
-#else
+    #else
     memcpy(_vertexUniformBuffer + offset, data, size);
-#endif
+    #endif
 }
 
 void ProgramState::setFragmentUniform(int location, const void* data, std::size_t size)
 {
-    if(location < 0)
+    if (location < 0)
         return;
-   
-//float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
-#ifdef CC_USE_METAL
+
+    //float3 etc in Metal has both sizeof and alignment same as float4, need convert to correct laytout
+    #ifdef CC_USE_METAL
     const auto& uniformInfo = _program->getActiveUniformInfo(ShaderStage::FRAGMENT, location);
     if(uniformInfo.needConvert)
     {
@@ -378,10 +385,11 @@ void ProgramState::setFragmentUniform(int location, const void* data, std::size_
     {
         memcpy(_fragmentUniformBuffer + location, data, size);
     }
-#endif
+    #endif
 }
 
-void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, uint32_t slot, backend::TextureBackend* texture)
+void ProgramState::setTexture(const backend::UniformLocation &uniformLocation, uint32_t slot,
+                              backend::TextureBackend* texture)
 {
     switch (uniformLocation.shaderStage)
     {
@@ -400,7 +408,8 @@ void ProgramState::setTexture(const backend::UniformLocation& uniformLocation, u
     }
 }
 
-void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocation, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures)
+void ProgramState::setTextureArray(const backend::UniformLocation &uniformLocation, const std::vector<uint32_t> &slots,
+                                   const std::vector<backend::TextureBackend*> textures)
 {
     switch (uniformLocation.shaderStage)
     {
@@ -419,31 +428,34 @@ void ProgramState::setTextureArray(const backend::UniformLocation& uniformLocati
     }
 }
 
-void ProgramState::setTexture(int location, uint32_t slot, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTexture(int location, uint32_t slot, backend::TextureBackend* texture,
+                              std::unordered_map<int, TextureInfo> &textureInfo)
 {
-    if(location < 0)
+    if (location < 0)
         return;
-    TextureInfo& info = textureInfo[location];
+    TextureInfo &info = textureInfo[location];
     info.releaseTextures();
     info.slot = {slot};
     info.textures = {texture};
     info.retainTextures();
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
-#endif
+    #endif
 }
 
-void ProgramState::setTextureArray(int location, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo)
+void ProgramState::setTextureArray(int location, const std::vector<uint32_t> &slots,
+                                   const std::vector<backend::TextureBackend*> textures,
+                                   std::unordered_map<int, TextureInfo> &textureInfo)
 {
     assert(slots.size() == textures.size());
-    TextureInfo& info = textureInfo[location];
+    TextureInfo &info = textureInfo[location];
     info.releaseTextures();
     info.slot = slots;
     info.textures = textures;
     info.retainTextures();
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     info.location = location;
-#endif
+    #endif
 }
 
 void ProgramState::setParameterAutoBinding(const std::string &uniform, const std::string &autoBinding)
@@ -458,7 +470,8 @@ void ProgramState::applyAutoBinding(const std::string &uniformName, const std::s
     for (const auto resolver : _customAutoBindingResolvers)
     {
         resolved = resolver->resolveAutoBinding(this, uniformName, autoBinding);
-        if (resolved) break;
+        if (resolved)
+            break;
     }
 }
 
@@ -473,13 +486,13 @@ ProgramState::AutoBindingResolver::~AutoBindingResolver()
     list.erase(std::remove(list.begin(), list.end(), this), list.end());
 }
 
-void ProgramState::getVertexUniformBuffer(char** buffer, std::size_t& size) const
+void ProgramState::getVertexUniformBuffer(char** buffer, std::size_t &size) const
 {
     *buffer = _vertexUniformBuffer;
     size = _vertexUniformBufferSize;
 }
 
-void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t& size) const
+void ProgramState::getFragmentUniformBuffer(char** buffer, std::size_t &size) const
 {
     *buffer = _fragmentUniformBuffer;
     size = _fragmentUniformBufferSize;

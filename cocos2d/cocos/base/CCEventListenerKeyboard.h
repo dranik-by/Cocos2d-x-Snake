@@ -47,19 +47,19 @@ class CC_DLL EventListenerKeyboard : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a keyboard event listener.
      * 
      * @return An autoreleased EventListenerKeyboard object.
      */
     static EventListenerKeyboard* create();
-    
+
     /// Overrides
     virtual EventListenerKeyboard* clone() override;
     virtual bool checkAvailable() override;
-    
-    std::function<void(EventKeyboard::KeyCode, Event*)> onKeyPressed;
-    std::function<void(EventKeyboard::KeyCode, Event*)> onKeyReleased;
+
+    std::function<void(EventKeyboard::KeyCode, Event * )> onKeyPressed;
+    std::function<void(EventKeyboard::KeyCode, Event * )> onKeyReleased;
 CC_CONSTRUCTOR_ACCESS:
     EventListenerKeyboard();
     bool init();

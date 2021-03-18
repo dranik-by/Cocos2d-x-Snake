@@ -28,7 +28,8 @@ THE SOFTWARE.
 #include "audio/android/AudioDecoderOgg.h"
 #include "platform/CCFileUtils.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 AudioDecoderOgg::AudioDecoderOgg()
 {
@@ -71,7 +72,7 @@ bool AudioDecoderOgg::decodeToPcm()
     // header
     auto vi = ov_info(&vf, -1);
 
-    uint32_t pcmSamples = (uint32_t) ov_pcm_total(&vf, -1);
+    uint32_t pcmSamples = (uint32_t)ov_pcm_total(&vf, -1);
 
     uint32_t bufferSize = pcmSamples * vi->channels * sizeof(short);
     char* pcmBuffer = (char*)malloc(bufferSize);

@@ -44,7 +44,7 @@ NS_CC_BEGIN
  */
 enum class EvaluateType
 {
-    INT_LINEAR, 
+    INT_LINEAR,
     INT_NEAR,
     INT_QUAT_SLERP,
     INT_USER_FUNCTION,
@@ -56,13 +56,13 @@ enum class EvaluateType
  * @lua NA
  */
 template <int componentSize>
-class AnimationCurve: public Ref
+class AnimationCurve : public Ref
 {
 public:
-    
+
     /**create animation curve*/
     static AnimationCurve* create(float* keytime, float* value, int count);
-    
+
     /**
      * evaluate value of time
      * @param time Time to be estimated
@@ -70,33 +70,33 @@ public:
      * @param type EvaluateType
      */
     void evaluate(float time, float* dst, EvaluateType type) const;
-    
+
     /**set evaluate function, allow the user use own function*/
     void setEvaluateFun(std::function<void(float time, float* dst)> fun);
-    
+
     /**get start time*/
     float getStartTime() const;
-    
+
     /**get end time*/
     float getEndTime() const;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    
+
     AnimationCurve();
     virtual ~AnimationCurve();
-    
+
     /**
      * Determine index by time.
      */
     int determineIndex(float time) const;
-    
+
 protected:
-    
+
     float* _value;   //
     float* _keytime; //key time(0 - 1), start time _keytime[0], end time _keytime[_count - 1]
     int _count;
     int _componentSizeByte; //component size in byte, position and scale 3 * sizeof(float), rotation 4 * sizeof(float)
-    
+
     std::function<void(float time, float* dst)> _evaluateFun; //user defined function
 };
 

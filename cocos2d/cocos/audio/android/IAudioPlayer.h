@@ -27,7 +27,8 @@ THE SOFTWARE.
 
 #include <functional>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class IAudioPlayer
 {
@@ -45,7 +46,8 @@ public:
     using PlayEventCallback = std::function<void(State)>;
 
     virtual ~IAudioPlayer()
-    { };
+    {
+    };
 
     virtual int getId() const = 0;
 

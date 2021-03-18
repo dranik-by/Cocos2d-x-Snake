@@ -34,7 +34,7 @@ NS_TIMELINE_BEGIN
 // ActionTimelineData
 ActionTimelineData* ActionTimelineData::create(int actionTag)
 {
-    ActionTimelineData * ret = new (std::nothrow) ActionTimelineData();
+    ActionTimelineData* ret = new(std::nothrow) ActionTimelineData();
     if (ret && ret->init(actionTag))
     {
         ret->autorelease();
@@ -47,7 +47,7 @@ ActionTimelineData* ActionTimelineData::create(int actionTag)
 }
 
 ActionTimelineData::ActionTimelineData()
-    : _actionTag(0)
+: _actionTag(0)
 {
 }
 
@@ -57,11 +57,10 @@ bool ActionTimelineData::init(int actionTag)
     return true;
 }
 
-
 // ActionTimeline
 ActionTimeline* ActionTimeline::create()
 {
-    ActionTimeline* object = new (std::nothrow) ActionTimeline();
+    ActionTimeline* object = new(std::nothrow) ActionTimeline();
     if (object && object->init())
     {
         object->autorelease();
@@ -72,16 +71,16 @@ ActionTimeline* ActionTimeline::create()
 }
 
 ActionTimeline::ActionTimeline()
-    : _duration(0)
-    , _time(0)
-    , _timeSpeed(1)
-    , _frameInternal(1/60.0f)
-    , _playing(false)
-    , _currentFrame(0)
-    , _startFrame(0)
-    , _endFrame(0)
-    , _frameEventListener(nullptr)
-    , _lastFrameListener(nullptr)
+: _duration(0)
+, _time(0)
+, _timeSpeed(1)
+, _frameInternal(1 / 60.0f)
+, _playing(false)
+, _currentFrame(0)
+, _startFrame(0)
+, _endFrame(0)
+, _frameEventListener(nullptr)
+, _lastFrameListener(nullptr)
 {
 }
 
@@ -102,7 +101,7 @@ void ActionTimeline::play(std::string name, bool loop)
         return;
     }
 
-    AnimationInfo& index = _animationInfos[name];
+    AnimationInfo &index = _animationInfos[name];
     gotoFrameAndPlay(index.startIndex, index.endIndex, loop);
 }
 
@@ -127,7 +126,7 @@ void ActionTimeline::gotoFrameAndPlay(int startIndex, int endIndex, int currentF
     _endFrame = endIndex;
     _currentFrame = currentFrameIndex;
     _loop = loop;
-    _time = _currentFrame*_frameInternal;
+    _time = _currentFrame * _frameInternal;
 
     resume();
     gotoFrame(_currentFrame);
@@ -136,7 +135,7 @@ void ActionTimeline::gotoFrameAndPlay(int startIndex, int endIndex, int currentF
 void ActionTimeline::gotoFrameAndPause(int startIndex)
 {
     _startFrame = _currentFrame = startIndex;
-    _time       = _currentFrame * _frameInternal;
+    _time = _currentFrame * _frameInternal;
 
     pause();
     gotoFrame(_currentFrame);
@@ -162,7 +161,7 @@ void ActionTimeline::setCurrentFrame(int frameIndex)
     if (frameIndex >= _startFrame && frameIndex <= _endFrame)
     {
         _currentFrame = frameIndex;
-        _time = _currentFrame*_frameInternal;
+        _time = _currentFrame * _frameInternal;
     }
     else
     {
@@ -176,16 +175,16 @@ ActionTimeline* ActionTimeline::clone() const
     newAction->setDuration(_duration);
     newAction->setTimeSpeed(_timeSpeed);
 
-    for (const auto& timelines : _timelineMap)
+    for (const auto &timelines : _timelineMap)
     {
-        for(auto timeline : timelines.second)
-        {      
+        for (auto timeline : timelines.second)
+        {
             Timeline* newTimeline = timeline->clone();
             newAction->addTimeline(newTimeline);
         }
     }
-    
-    for(const auto& info : _animationInfos)
+
+    for (const auto &info : _animationInfos)
     {
         newAction->addAnimationInfo(info.second);
     }
@@ -233,31 +232,31 @@ void ActionTimeline::step(float delta)
 }
 
 typedef std::function<void(Node*)> tCallBack;
+
 void foreachNodeDescendant(Node* parent, tCallBack callback)
 {
     callback(parent);
 
-    auto& children = parent->getChildren();
+    auto &children = parent->getChildren();
     for (auto child : children)
     {
         foreachNodeDescendant(child, callback);
     }
 }
 
-void ActionTimeline::startWithTarget(Node *target)
+void ActionTimeline::startWithTarget(Node* target)
 {
     Action::startWithTarget(target);
     this->setTag(target->getTag());
 
-    foreachNodeDescendant(target, 
-        [this](Node* child)
+    foreachNodeDescendant(target, [this](Node* child)
     {
         ComExtensionData* data = dynamic_cast<ComExtensionData*>(child->getComponent("ComExtensionData"));
 
-        if(data)
+        if (data)
         {
             int actionTag = data->getActionTag();
-            if(_timelineMap.find(actionTag) != _timelineMap.end())
+            if (_timelineMap.find(actionTag) != _timelineMap.end())
             {
                 auto timelines = this->_timelineMap[actionTag];
                 for (auto timeline : timelines)
@@ -290,7 +289,7 @@ void ActionTimeline::removeTimeline(Timeline* timeline)
     int tag = timeline->getActionTag();
     if (_timelineMap.find(tag) != _timelineMap.end())
     {
-        if(_timelineMap[tag].contains(timeline))
+        if (_timelineMap[tag].contains(timeline))
         {
             _timelineMap[tag].eraseObject(timeline);
             _timelineList.eraseObject(timeline);
@@ -299,8 +298,7 @@ void ActionTimeline::removeTimeline(Timeline* timeline)
     }
 }
 
-
-void ActionTimeline::addAnimationInfo(const AnimationInfo& animationInfo)
+void ActionTimeline::addAnimationInfo(const AnimationInfo &animationInfo)
 {
     if (_animationInfos.find(animationInfo.name) != _animationInfos.end())
     {
@@ -325,12 +323,12 @@ void ActionTimeline::removeAnimationInfo(std::string animationName)
     _animationInfos.erase(animationName);
 }
 
-bool ActionTimeline::IsAnimationInfoExists(const std::string& animationName)
+bool ActionTimeline::IsAnimationInfoExists(const std::string &animationName)
 {
     return _animationInfos.find(animationName) != _animationInfos.end();
 }
 
-const AnimationInfo& ActionTimeline::getAnimationInfo(const std::string &animationName)
+const AnimationInfo &ActionTimeline::getAnimationInfo(const std::string &animationName)
 {
     return _animationInfos.find(animationName)->second;
 }
@@ -347,7 +345,7 @@ void ActionTimeline::setAnimationEndCallFunc(const std::string animationName, st
     addFrameEndCallFunc(clipIter->second.endIndex, animationName, func);
 }
 
-void ActionTimeline::setFrameEventCallFunc(std::function<void(Frame *)> listener)
+void ActionTimeline::setFrameEventCallFunc(std::function<void(Frame*)> listener)
 {
     _frameEventListener = listener;
 }
@@ -369,13 +367,13 @@ void ActionTimeline::clearLastFrameCallFunc()
 
 void ActionTimeline::emitFrameEvent(Frame* frame)
 {
-    if(_frameEventListener)
+    if (_frameEventListener)
     {
         _frameEventListener(frame);
     }
 }
 
-void ActionTimeline::addFrameEndCallFunc(int frameIndex, const std::string& funcKey, std::function<void()> func)
+void ActionTimeline::addFrameEndCallFunc(int frameIndex, const std::string &funcKey, std::function<void()> func)
 {
     if (func != nullptr)
     {
@@ -383,7 +381,7 @@ void ActionTimeline::addFrameEndCallFunc(int frameIndex, const std::string& func
     }
 }
 
-void ActionTimeline::removeFrameEndCallFunc(int frameIndex, const std::string& funcKey)
+void ActionTimeline::removeFrameEndCallFunc(int frameIndex, const std::string &funcKey)
 {
     auto endClipCallsIter = _frameEndCallFuncs.find(frameIndex);
     if (endClipCallsIter != _frameEndCallFuncs.end())
@@ -416,19 +414,19 @@ void ActionTimeline::emitFrameEndCallFuncs(int frameIndex)
     if (clipEndCallsIter != _frameEndCallFuncs.end())
     {
         auto clipEndCalls = (*clipEndCallsIter).second;
-        for (const auto& call : clipEndCalls)
+        for (const auto &call : clipEndCalls)
             (call).second();
     }
 }
 
 void ActionTimeline::gotoFrame(int frameIndex)
 {
-    if(_target == nullptr)
+    if (_target == nullptr)
         return;
 
     ssize_t size = _timelineList.size();
-    for(ssize_t i = 0; i < size; i++)
-    {      
+    for (ssize_t i = 0; i < size; i++)
+    {
         _timelineList.at(i)->gotoFrame(frameIndex);
     }
 }
@@ -436,8 +434,8 @@ void ActionTimeline::gotoFrame(int frameIndex)
 void ActionTimeline::stepToFrame(int frameIndex)
 {
     ssize_t size = _timelineList.size();
-    for(ssize_t i = 0; i < size; i++)
-    {      
+    for (ssize_t i = 0; i < size; i++)
+    {
         _timelineList.at(i)->stepToFrame(frameIndex);
     }
 }

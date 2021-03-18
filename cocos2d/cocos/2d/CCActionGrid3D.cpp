@@ -30,9 +30,9 @@ THE SOFTWARE.
 NS_CC_BEGIN
 // implementation of Waves3D
 
-Waves3D* Waves3D::create(float duration, const Size& gridSize, unsigned int waves, float amplitude)
+Waves3D* Waves3D::create(float duration, const Size &gridSize, unsigned int waves, float amplitude)
 {
-    Waves3D *action = new (std::nothrow) Waves3D();
+    Waves3D* action = new(std::nothrow) Waves3D();
 
     if (action && action->initWithDuration(duration, gridSize, waves, amplitude))
     {
@@ -44,7 +44,7 @@ Waves3D* Waves3D::create(float duration, const Size& gridSize, unsigned int wave
     return nullptr;
 }
 
-bool Waves3D::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude)
+bool Waves3D::initWithDuration(float duration, const Size &gridSize, unsigned int waves, float amplitude)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -73,7 +73,7 @@ void Waves3D::update(float time)
         {
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
-            v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * 0.01f) * _amplitude * _amplitudeRate);
+            v.z += (sinf((float)M_PI * time * _waves * 2 + (v.y + v.x) * 0.01f) * _amplitude * _amplitudeRate);
             //CCLOG("v.z offset is %f\n", (sinf((float)M_PI * time * _waves * 2 + (v.y+v.x) * .01f) * _amplitude * _amplitudeRate));
             setVertex(pos, v);
         }
@@ -84,7 +84,7 @@ void Waves3D::update(float time)
 
 FlipX3D* FlipX3D::create(float duration)
 {
-    FlipX3D *action = new (std::nothrow) FlipX3D();
+    FlipX3D* action = new(std::nothrow) FlipX3D();
 
     if (action && action->initWithDuration(duration))
     {
@@ -101,7 +101,7 @@ bool FlipX3D::initWithDuration(float duration)
     return Grid3DAction::initWithDuration(duration, Size(1, 1));
 }
 
-bool FlipX3D::initWithSize(const Size& gridSize, float duration)
+bool FlipX3D::initWithSize(const Size &gridSize, float duration)
 {
     if (gridSize.width != 1 || gridSize.height != 1)
     {
@@ -117,7 +117,7 @@ bool FlipX3D::initWithSize(const Size& gridSize, float duration)
 FlipX3D* FlipX3D::clone() const
 {
     // no copy constructor    
-    auto a = new (std::nothrow) FlipX3D();
+    auto a = new(std::nothrow) FlipX3D();
     a->initWithSize(_gridSize, _duration);
     a->autorelease();
     return a;
@@ -135,12 +135,12 @@ void FlipX3D::update(float time)
     v0 = getOriginalVertex(Vec2(1.0f, 1.0f));
     v1 = getOriginalVertex(Vec2());
 
-    float    x0 = v0.x;
-    float    x1 = v1.x;
-    float    x;
-    Vec2    a, b, c, d;
+    float x0 = v0.x;
+    float x1 = v1.x;
+    float x;
+    Vec2 a, b, c, d;
 
-    if ( x0 > x1 )
+    if (x0 > x1)
     {
         // Normal Grid
         a.setZero();
@@ -158,28 +158,28 @@ void FlipX3D::update(float time)
         b.set(1.0f, 1.0f);
         x = x1;
     }
-    
-    diff.x = ( x - x * mx );
-    diff.z = fabsf( floorf( (x * mz) / 4.0f ) );
+
+    diff.x = (x - x * mx);
+    diff.z = fabsf(floorf((x * mz) / 4.0f));
 
     // bottom-left
     v = getOriginalVertex(a);
     v.x = diff.x;
     v.z += diff.z;
     setVertex(a, v);
-    
+
     // upper-left
     v = getOriginalVertex(b);
     v.x = diff.x;
     v.z += diff.z;
     setVertex(b, v);
-    
+
     // bottom-right
     v = getOriginalVertex(c);
     v.x -= diff.x;
     v.z -= diff.z;
     setVertex(c, v);
-    
+
     // upper-right
     v = getOriginalVertex(d);
     v.x -= diff.x;
@@ -192,7 +192,7 @@ void FlipX3D::update(float time)
 FlipY3D* FlipY3D::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) FlipY3D();
+    auto a = new(std::nothrow) FlipY3D();
     a->initWithSize(_gridSize, _duration);
     a->autorelease();
     return a;
@@ -200,7 +200,7 @@ FlipY3D* FlipY3D::clone() const
 
 FlipY3D* FlipY3D::create(float duration)
 {
-    FlipY3D *action = new (std::nothrow) FlipY3D();
+    FlipY3D* action = new(std::nothrow) FlipY3D();
 
     if (action)
     {
@@ -220,20 +220,20 @@ FlipY3D* FlipY3D::create(float duration)
 void FlipY3D::update(float time)
 {
     float angle = (float)M_PI * time; // 180 degrees
-    float mz = sinf( angle );
+    float mz = sinf(angle);
     angle = angle / 2.0f;     // x calculates degrees from 0 to 90
     float my = cosf(angle);
-    
-    Vec3    v0, v1, v, diff;
-    
+
+    Vec3 v0, v1, v, diff;
+
     v0 = getOriginalVertex(Vec2(1.0f, 1.0f));
     v1 = getOriginalVertex(Vec2());
-    
-    float    y0 = v0.y;
-    float    y1 = v1.y;
+
+    float y0 = v0.y;
+    float y1 = v1.y;
     float y;
-    Vec2    a, b, c, d;
-    
+    Vec2 a, b, c, d;
+
     if (y0 > y1)
     {
         // Normal Grid
@@ -252,28 +252,28 @@ void FlipY3D::update(float time)
         c.set(1.0f, 1.0f);
         y = y1;
     }
-    
+
     diff.y = y - y * my;
     diff.z = fabsf(floorf((y * mz) / 4.0f));
-    
+
     // bottom-left
     v = getOriginalVertex(a);
     v.y = diff.y;
     v.z += diff.z;
     setVertex(a, v);
-    
+
     // upper-left
     v = getOriginalVertex(b);
     v.y -= diff.y;
     v.z -= diff.z;
     setVertex(b, v);
-    
+
     // bottom-right
     v = getOriginalVertex(c);
     v.y = diff.y;
     v.z += diff.z;
     setVertex(c, v);
-    
+
     // upper-right
     v = getOriginalVertex(d);
     v.y -= diff.y;
@@ -284,9 +284,9 @@ void FlipY3D::update(float time)
 
 // implementation of Lens3D
 
-Lens3D* Lens3D::create(float duration, const Size& gridSize, const Vec2& position, float radius)
+Lens3D* Lens3D::create(float duration, const Size &gridSize, const Vec2 &position, float radius)
 {
-    Lens3D *action = new (std::nothrow) Lens3D();
+    Lens3D* action = new(std::nothrow) Lens3D();
 
     if (action)
     {
@@ -303,7 +303,7 @@ Lens3D* Lens3D::create(float duration, const Size& gridSize, const Vec2& positio
     return action;
 }
 
-bool Lens3D::initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius)
+bool Lens3D::initWithDuration(float duration, const Size &gridSize, const Vec2 &position, float radius)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -323,15 +323,15 @@ bool Lens3D::initWithDuration(float duration, const Size& gridSize, const Vec2& 
 Lens3D* Lens3D::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) Lens3D();
+    auto a = new(std::nothrow) Lens3D();
     a->initWithDuration(_duration, _gridSize, _position, _radius);
     a->autorelease();
     return a;
 }
 
-void Lens3D::setPosition(const Vec2& pos)
+void Lens3D::setPosition(const Vec2 &pos)
 {
-    if( !pos.equals(_position))
+    if (!pos.equals(_position))
     {
         _position = pos;
         _dirty = true;
@@ -343,7 +343,7 @@ void Lens3D::update(float /*time*/)
     if (_dirty)
     {
         int i, j;
-        
+
         for (i = 0; i < _gridSize.width + 1; ++i)
         {
             for (j = 0; j < _gridSize.height + 1; ++j)
@@ -352,19 +352,19 @@ void Lens3D::update(float /*time*/)
                 Vec3 v = getOriginalVertex(pos);
                 Vec2 vect = _position - Vec2(v.x, v.y);
                 float r = vect.getLength();
-                
+
                 if (r < _radius)
                 {
                     r = _radius - r;
                     float pre_log = r / _radius;
-                    if ( pre_log == 0 ) 
+                    if (pre_log == 0)
                     {
                         pre_log = 0.001f;
                     }
 
                     float l = logf(pre_log) * _lensEffect;
-                    float new_r = expf( l ) * _radius;
-                    
+                    float new_r = expf(l) * _radius;
+
                     if (vect.getLength() > 0)
                     {
                         vect.normalize();
@@ -372,20 +372,21 @@ void Lens3D::update(float /*time*/)
                         v.z += (_concave ? -1.0f : 1.0f) * new_vect.getLength() * _lensEffect;
                     }
                 }
-                
+
                 setVertex(pos, v);
             }
         }
-        
+
         _dirty = false;
     }
 }
 
 // implementation of Ripple3D
 
-Ripple3D* Ripple3D::create(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude)
+Ripple3D* Ripple3D::create(float duration, const Size &gridSize, const Vec2 &position, float radius, unsigned int waves,
+                           float amplitude)
 {
-    Ripple3D *action = new (std::nothrow) Ripple3D();
+    Ripple3D* action = new(std::nothrow) Ripple3D();
 
     if (action)
     {
@@ -402,7 +403,8 @@ Ripple3D* Ripple3D::create(float duration, const Size& gridSize, const Vec2& pos
     return action;
 }
 
-bool Ripple3D::initWithDuration(float duration, const Size& gridSize, const Vec2& position, float radius, unsigned int waves, float amplitude)
+bool Ripple3D::initWithDuration(float duration, const Size &gridSize, const Vec2 &position, float radius,
+                                unsigned int waves, float amplitude)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -418,16 +420,15 @@ bool Ripple3D::initWithDuration(float duration, const Size& gridSize, const Vec2
     return false;
 }
 
-void Ripple3D::setPosition(const Vec2& position)
+void Ripple3D::setPosition(const Vec2 &position)
 {
     _position = position;
 }
 
-
 Ripple3D* Ripple3D::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) Ripple3D();
+    auto a = new(std::nothrow) Ripple3D();
     a->initWithDuration(_duration, _gridSize, _position, _radius, _waves, _amplitude);
     a->autorelease();
     return a;
@@ -437,22 +438,22 @@ void Ripple3D::update(float time)
 {
     int i, j;
 
-    for (i = 0; i < (_gridSize.width+1); ++i)
+    for (i = 0; i < (_gridSize.width + 1); ++i)
     {
-        for (j = 0; j < (_gridSize.height+1); ++j)
+        for (j = 0; j < (_gridSize.height + 1); ++j)
         {
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
-            Vec2 vect = _position - Vec2(v.x,v.y);
+            Vec2 vect = _position - Vec2(v.x, v.y);
             float r = vect.getLength();
-            
+
             if (r < _radius)
             {
                 r = _radius - r;
                 float rate = powf(r / _radius, 2);
-                v.z += (sinf( time*(float)M_PI * _waves * 2 + r * 0.1f) * _amplitude * _amplitudeRate * rate);
+                v.z += (sinf(time * (float)M_PI * _waves * 2 + r * 0.1f) * _amplitude * _amplitudeRate * rate);
             }
-            
+
             setVertex(pos, v);
         }
     }
@@ -460,9 +461,9 @@ void Ripple3D::update(float time)
 
 // implementation of Shaky3D
 
-Shaky3D* Shaky3D::create(float duration, const Size& gridSize, int range, bool shakeZ)
+Shaky3D* Shaky3D::create(float duration, const Size &gridSize, int range, bool shakeZ)
 {
-    Shaky3D *action = new (std::nothrow) Shaky3D();
+    Shaky3D* action = new(std::nothrow) Shaky3D();
 
     if (action)
     {
@@ -479,7 +480,7 @@ Shaky3D* Shaky3D::create(float duration, const Size& gridSize, int range, bool s
     return action;
 }
 
-bool Shaky3D::initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ)
+bool Shaky3D::initWithDuration(float duration, const Size &gridSize, int range, bool shakeZ)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -495,7 +496,7 @@ bool Shaky3D::initWithDuration(float duration, const Size& gridSize, int range, 
 Shaky3D* Shaky3D::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) Shaky3D();
+    auto a = new(std::nothrow) Shaky3D();
     a->initWithDuration(_duration, _gridSize, _randrange, _shakeZ);
     a->autorelease();
     return a;
@@ -505,19 +506,19 @@ void Shaky3D::update(float /*time*/)
 {
     int i, j;
 
-    for (i = 0; i < (_gridSize.width+1); ++i)
+    for (i = 0; i < (_gridSize.width + 1); ++i)
     {
-        for (j = 0; j < (_gridSize.height+1); ++j)
+        for (j = 0; j < (_gridSize.height + 1); ++j)
         {
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
-            v.x += (rand() % (_randrange*2)) - _randrange;
-            v.y += (rand() % (_randrange*2)) - _randrange;
+            v.x += (rand() % (_randrange * 2)) - _randrange;
+            v.y += (rand() % (_randrange * 2)) - _randrange;
             if (_shakeZ)
             {
-                v.z += (rand() % (_randrange*2)) - _randrange;
+                v.z += (rand() % (_randrange * 2)) - _randrange;
             }
-            
+
             setVertex(pos, v);
         }
     }
@@ -525,9 +526,9 @@ void Shaky3D::update(float /*time*/)
 
 // implementation of Liquid
 
-Liquid* Liquid::create(float duration, const Size& gridSize, unsigned int waves, float amplitude)
+Liquid* Liquid::create(float duration, const Size &gridSize, unsigned int waves, float amplitude)
 {
-    Liquid *action = new (std::nothrow) Liquid();
+    Liquid* action = new(std::nothrow) Liquid();
 
     if (action)
     {
@@ -544,7 +545,7 @@ Liquid* Liquid::create(float duration, const Size& gridSize, unsigned int waves,
     return action;
 }
 
-bool Liquid::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude)
+bool Liquid::initWithDuration(float duration, const Size &gridSize, unsigned int waves, float amplitude)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -561,7 +562,7 @@ bool Liquid::initWithDuration(float duration, const Size& gridSize, unsigned int
 Liquid* Liquid::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) Liquid();
+    auto a = new(std::nothrow) Liquid();
     a->initWithDuration(_duration, _gridSize, _waves, _amplitude);
     a->autorelease();
     return a;
@@ -586,9 +587,10 @@ void Liquid::update(float time)
 
 // implementation of Waves
 
-Waves* Waves::create(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
+Waves* Waves::create(float duration, const Size &gridSize, unsigned int waves, float amplitude, bool horizontal,
+                     bool vertical)
 {
-    Waves *action = new (std::nothrow) Waves();
+    Waves* action = new(std::nothrow) Waves();
 
     if (action)
     {
@@ -605,7 +607,8 @@ Waves* Waves::create(float duration, const Size& gridSize, unsigned int waves, f
     return action;
 }
 
-bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude, bool horizontal, bool vertical)
+bool Waves::initWithDuration(float duration, const Size &gridSize, unsigned int waves, float amplitude, bool horizontal,
+                             bool vertical)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -624,7 +627,7 @@ bool Waves::initWithDuration(float duration, const Size& gridSize, unsigned int 
 Waves* Waves::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) Waves();
+    auto a = new(std::nothrow) Waves();
     a->initWithDuration(_duration, _gridSize, _waves, _amplitude, _horizontal, _vertical);
     a->autorelease();
     return a;
@@ -658,9 +661,9 @@ void Waves::update(float time)
 
 // implementation of Twirl
 
-Twirl* Twirl::create(float duration, const Size& gridSize, const Vec2& position, unsigned int twirls, float amplitude)
+Twirl* Twirl::create(float duration, const Size &gridSize, const Vec2 &position, unsigned int twirls, float amplitude)
 {
-    Twirl *action = new (std::nothrow) Twirl();
+    Twirl* action = new(std::nothrow) Twirl();
 
     if (action)
     {
@@ -677,7 +680,8 @@ Twirl* Twirl::create(float duration, const Size& gridSize, const Vec2& position,
     return action;
 }
 
-bool Twirl::initWithDuration(float duration, const Size& gridSize, const Vec2& position, unsigned int twirls, float amplitude)
+bool Twirl::initWithDuration(float duration, const Size &gridSize, const Vec2 &position, unsigned int twirls,
+                             float amplitude)
 {
     if (Grid3DAction::initWithDuration(duration, gridSize))
     {
@@ -692,15 +696,15 @@ bool Twirl::initWithDuration(float duration, const Size& gridSize, const Vec2& p
     return false;
 }
 
-void Twirl::setPosition(const Vec2& position)
+void Twirl::setPosition(const Vec2 &position)
 {
     _position = position;
 }
 
-Twirl *Twirl::clone() const
+Twirl* Twirl::clone() const
 {
     // no copy constructor    
-    auto a = new (std::nothrow) Twirl();
+    auto a = new(std::nothrow) Twirl();
     a->initWithDuration(_duration, _gridSize, _position, _twirls, _amplitude);
     a->autorelease();
     return a;
@@ -709,25 +713,23 @@ Twirl *Twirl::clone() const
 void Twirl::update(float time)
 {
     int i, j;
-    Vec2    c = _position;
-    
-    for (i = 0; i < (_gridSize.width+1); ++i)
+    Vec2 c = _position;
+
+    for (i = 0; i < (_gridSize.width + 1); ++i)
     {
-        for (j = 0; j < (_gridSize.height+1); ++j)
+        for (j = 0; j < (_gridSize.height + 1); ++j)
         {
             Vec2 pos((float)i, (float)j);
             Vec3 v = getOriginalVertex(pos);
-            
-            Vec2 avg(i-(_gridSize.width/2.0f), j-(_gridSize.height/2.0f));
+
+            Vec2 avg(i - (_gridSize.width / 2.0f), j - (_gridSize.height / 2.0f));
             float r = avg.getLength();
-            
+
             float amp = 0.1f * _amplitude * _amplitudeRate;
-            float a = r * cosf( (float)M_PI/2.0f + time * (float)M_PI * _twirls * 2 ) * amp;
-            
-            Vec2 d(
-                sinf(a) * (v.y-c.y) + cosf(a) * (v.x-c.x),
-                cosf(a) * (v.y-c.y) - sinf(a) * (v.x-c.x));
-            
+            float a = r * cosf((float)M_PI / 2.0f + time * (float)M_PI * _twirls * 2) * amp;
+
+            Vec2 d(sinf(a) * (v.y - c.y) + cosf(a) * (v.x - c.x), cosf(a) * (v.y - c.y) - sinf(a) * (v.x - c.x));
+
             v.x = c.x + d.x;
             v.y = c.y + d.y;
 

@@ -33,23 +33,23 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
+Application* Application::sm_pSharedApplication = nullptr;
 
-static long getCurrentMillSecond() {
+static long getCurrentMillSecond()
+{
     long lLastTime;
     struct timeval stCurrentTime;
 
-    gettimeofday(&stCurrentTime,NULL);
-    lLastTime = stCurrentTime.tv_sec*1000+stCurrentTime.tv_usec*0.001; // milliseconds
+    gettimeofday(&stCurrentTime, NULL);
+    lLastTime = stCurrentTime.tv_sec * 1000 + stCurrentTime.tv_usec * 0.001; // milliseconds
     return lLastTime;
 }
 
 Application::Application()
-: _animationInterval(1.0f/60.0f*1000.0f)
+: _animationInterval(1.0f / 60.0f * 1000.0f)
 {
-    CC_ASSERT(! sm_pSharedApplication);
+    CC_ASSERT(!sm_pSharedApplication);
     sm_pSharedApplication = this;
 }
 
@@ -63,7 +63,7 @@ int Application::run()
 {
     initGLContextAttrs();
     // Initialize instance and cocos2d.
-    if (! applicationDidFinishLaunching())
+    if (!applicationDidFinishLaunching())
     {
         return 0;
     }
@@ -87,7 +87,7 @@ int Application::run()
         curTime = getCurrentMillSecond();
         if (curTime - lastTime < _animationInterval)
         {
-            usleep((_animationInterval - curTime + lastTime)*1000);
+            usleep((_animationInterval - curTime + lastTime) * 1000);
         }
     }
     /* Only work on Desktop
@@ -108,10 +108,10 @@ int Application::run()
 void Application::setAnimationInterval(float interval)
 {
     //TODO do something else
-    _animationInterval = interval*1000.0f;
+    _animationInterval = interval * 1000.0f;
 }
 
-void Application::setResourceRootPath(const std::string& rootResDir)
+void Application::setResourceRootPath(const std::string &rootResDir)
 {
     _resourceRootPath = rootResDir;
     if (_resourceRootPath[_resourceRootPath.length() - 1] != '/')
@@ -124,7 +124,7 @@ void Application::setResourceRootPath(const std::string& rootResDir)
     pFileUtils->setSearchPaths(searchPaths);
 }
 
-const std::string& Application::getResourceRootPath()
+const std::string &Application::getResourceRootPath()
 {
     return _resourceRootPath;
 }
@@ -160,23 +160,23 @@ Application* Application::sharedApplication()
     return Application::getInstance();
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
-    char *pLanguageName = getenv("LANG");
+    static char code[3] = {0};
+    char* pLanguageName = getenv("LANG");
     if (!pLanguageName)
         return "en";
     strtok(pLanguageName, "_");
     if (!pLanguageName)
         return "en";
-    strncpy(code,pLanguageName,2);
-    code[2]='\0';
+    strncpy(code, pLanguageName, 2);
+    code[2] = '\0';
     return code;
 }
 
 LanguageType Application::getCurrentLanguage()
 {
-    char *pLanguageName = getenv("LANG");
+    char* pLanguageName = getenv("LANG");
     if (!pLanguageName)
     {
         return LanguageType::ENGLISH;
@@ -186,7 +186,7 @@ LanguageType Application::getCurrentLanguage()
     {
         return LanguageType::ENGLISH;
     }
-    
+
     return utils::getLanguageTypeByISO2(pLanguageName);
 }
 

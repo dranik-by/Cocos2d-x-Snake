@@ -33,33 +33,33 @@
 
 namespace tinyxml2
 {
-    class XMLAttribute;
+class XMLAttribute;
 }
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL UserCameraReader : public cocos2d::Ref, public NodeReaderProtocol
-    {
-        DECLARE_CLASS_NODE_READER_INFO
-        
-    public:
-        UserCameraReader();
-        ~UserCameraReader();
-        
-        static UserCameraReader* getInstance();
-        /** @deprecated Use method destroyInstance() instead */
-        CC_DEPRECATED_ATTRIBUTE static void purge();
-        static void destroyInstance();
-        
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-                                                                             flatbuffers::FlatBufferBuilder* builder);
-        void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* userCameraOptions);
-        cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* userCameraOptions);
-        
-    protected:
-        int getResourceType(std::string key);
-        cocos2d::Vec2 getVec2Attribute(const tinyxml2::XMLAttribute* attribute) const;
-    };
+class CC_STUDIO_DLL UserCameraReader : public cocos2d::Ref, public NodeReaderProtocol
+{
+DECLARE_CLASS_NODE_READER_INFO
+
+public:
+    UserCameraReader();
+    ~UserCameraReader();
+
+    static UserCameraReader* getInstance();
+    /** @deprecated Use method destroyInstance() instead */
+    CC_DEPRECATED_ATTRIBUTE static void purge();
+    static void destroyInstance();
+
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                         flatbuffers::FlatBufferBuilder* builder);
+    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* userCameraOptions);
+    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* userCameraOptions);
+
+protected:
+    int getResourceType(std::string key);
+    cocos2d::Vec2 getVec2Attribute(const tinyxml2::XMLAttribute* attribute) const;
+};
 }
 
 #endif /* defined(__cocos2d_libs__UserCameraReader__) */

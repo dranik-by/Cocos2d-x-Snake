@@ -61,13 +61,13 @@ All features from Node are valid, plus the following new features:
 */
 class CC_DLL Layer : public Node
 {
-public:    
+public:
     /** Creates a fullscreen black layer.
      *
      * @return An autoreleased Layer object.
      */
-    static Layer *create();
-    
+    static Layer* create();
+
     /* Callback function should not be deprecated, it will generate lots of warnings.
        Since 'setTouchEnabled' was deprecated, it will make warnings if developer overrides onTouchXXX and invokes setTouchEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
     */
@@ -78,28 +78,28 @@ public:
      * @return if return false, onTouchMoved, onTouchEnded, onTouchCancelled will never called.
      * @js NA
      */
-    virtual bool onTouchBegan(Touch *touch, Event *unused_event);
+    virtual bool onTouchBegan(Touch* touch, Event* unused_event);
     /** Callback function for touch moved.
     *
     * @param touch Touch information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchMoved(Touch *touch, Event *unused_event);
+    virtual void onTouchMoved(Touch* touch, Event* unused_event);
     /** Callback function for touch ended.
     *
     * @param touch Touch information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchEnded(Touch *touch, Event *unused_event);
+    virtual void onTouchEnded(Touch* touch, Event* unused_event);
     /** Callback function for touch cancelled.
     *
     * @param touch Touch information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchCancelled(Touch *touch, Event *unused_event);
+    virtual void onTouchCancelled(Touch* touch, Event* unused_event);
 
     /** Callback function for multiple touches began.
     *
@@ -107,31 +107,31 @@ public:
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchesBegan(const std::vector<Touch*>& touches, Event *unused_event);
+    virtual void onTouchesBegan(const std::vector<Touch*> &touches, Event* unused_event);
     /** Callback function for multiple touches moved.
     *
     * @param touches Touches information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchesMoved(const std::vector<Touch*>& touches, Event *unused_event);
+    virtual void onTouchesMoved(const std::vector<Touch*> &touches, Event* unused_event);
     /** Callback function for multiple touches ended.
     *
     * @param touches Touches information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchesEnded(const std::vector<Touch*>& touches, Event *unused_event);
+    virtual void onTouchesEnded(const std::vector<Touch*> &touches, Event* unused_event);
     /** Callback function for multiple touches cancelled.
     *
     * @param touches Touches information.
     * @param unused_event Event information.
     * @js NA
     */
-    virtual void onTouchesCancelled(const std::vector<Touch*>&touches, Event *unused_event);
+    virtual void onTouchesCancelled(const std::vector<Touch*> &touches, Event* unused_event);
 
-	/* Callback function should not be deprecated, it will generate lots of warnings.
-	Since 'setAccelerometerEnabled' was deprecated, it will make warnings if developer overrides onAcceleration and invokes setAccelerometerEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
+    /* Callback function should not be deprecated, it will generate lots of warnings.
+    Since 'setAccelerometerEnabled' was deprecated, it will make warnings if developer overrides onAcceleration and invokes setAccelerometerEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
     */
     /** Callback function for acceleration.
      * @param acc Acceleration information.
@@ -141,8 +141,8 @@ public:
     virtual void onAcceleration(Acceleration* acc, Event* unused_event);
 
 
-	/* Callback function should not be deprecated, it will generate lots of warnings.
-	Since 'setKeyboardEnabled' was deprecated, it will make warnings if developer overrides onKeyXXX and invokes setKeyboardEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
+    /* Callback function should not be deprecated, it will generate lots of warnings.
+    Since 'setKeyboardEnabled' was deprecated, it will make warnings if developer overrides onKeyXXX and invokes setKeyboardEnabled(true) instead of using EventDispatcher::addEventListenerWithXXX.
     */
     /** Callback function for key pressed.
      * @param keyCode KeyCode information.
@@ -167,9 +167,9 @@ CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
 
 protected:
-    
+
     int executeScriptTouchHandler(EventTouch::EventCode eventType, Touch* touch, Event* event);
-    int executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*>& touches, Event* event);
+    int executeScriptTouchesHandler(EventTouch::EventCode eventType, const std::vector<Touch*> &touches, Event* event);
 
     bool _touchEnabled;
     bool _accelerometerEnabled;
@@ -181,8 +181,7 @@ protected:
     Touch::DispatchMode _touchMode;
     bool _swallowsTouches;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Layer);
+private: CC_DISALLOW_COPY_AND_ASSIGN(Layer);
 
 };
 
@@ -212,13 +211,13 @@ public:
      * @param height The height of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color4B& color, float width, float height);
+    static LayerColor* create(const Color4B &color, float width, float height);
     /** Creates a Layer with color. Width and height are the window size.
      *
      * @param color The color of layer.
      * @return An autoreleased LayerColor object.
      */
-    static LayerColor * create(const Color4B& color);
+    static LayerColor* create(const Color4B &color);
 
     /** Change width in Points.
      * 
@@ -241,14 +240,14 @@ public:
     //
     // Overrides
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
 
-    virtual void setContentSize(const Size & var) override;
+    virtual void setContentSize(const Size &var) override;
     /** BlendFunction. Conforms to BlendProtocol protocol */
     /**
     * @lua NA
     */
-    virtual const BlendFunc& getBlendFunc() const override;
+    virtual const BlendFunc &getBlendFunc() const override;
     /**
     *@code
     *When this function bound into js or lua,the parameter will be changed
@@ -256,15 +255,15 @@ public:
     *In lua: local setBlendFunc(local src, local dst)
     *@endcode
     */
-    virtual void setBlendFunc(const BlendFunc& blendFunc) override;
-    
+    virtual void setBlendFunc(const BlendFunc &blendFunc) override;
+
 CC_CONSTRUCTOR_ACCESS:
     LayerColor();
     virtual ~LayerColor();
-    
+
     bool init() override;
-    bool initWithColor(const Color4B& color, float width, float height);
-    bool initWithColor(const Color4B& color);
+    bool initWithColor(const Color4B &color, float width, float height);
+    bool initWithColor(const Color4B &color);
 
 protected:
 
@@ -276,10 +275,9 @@ protected:
     CustomCommand _customCommand;
 
     V3F_C4F _vertexData[4];
-    
+
     backend::UniformLocation _mvpMatrixLocation;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
+private: CC_DISALLOW_COPY_AND_ASSIGN(LayerColor);
 
 };
 
@@ -321,7 +319,7 @@ public:
      * @param end The end color.
      * @return An autoreleased LayerGradient object.
      */
-    static LayerGradient* create(const Color4B& start, const Color4B& end);
+    static LayerGradient* create(const Color4B &start, const Color4B &end);
 
     /** Creates a full-screen Layer with a gradient between start and end in the direction of v.
      *
@@ -330,8 +328,8 @@ public:
      * @param v The direction of gradient color.
      * @return An autoreleased LayerGradient object.
      */
-    static LayerGradient* create(const Color4B& start, const Color4B& end, const Vec2& v);
-    
+    static LayerGradient* create(const Color4B &start, const Color4B &end, const Vec2 &v);
+
     /** Whether or not the interpolation will be compressed in order to display all the colors of the gradient both in canonical and non canonical vectors.
      Default: true.
      *
@@ -348,29 +346,29 @@ public:
      * 
      * @param startColor The start color.
      */
-    void setStartColor( const Color3B& startColor );
+    void setStartColor(const Color3B &startColor);
     /** Returns the start color of the gradient.
      *
      * @return The start color.
      */
-    const Color3B& getStartColor() const;
+    const Color3B &getStartColor() const;
 
     /** Sets the end color of the gradient.
      *
      * @param endColor The end color.
      */
-    void setEndColor( const Color3B& endColor );
+    void setEndColor(const Color3B &endColor);
     /** Returns the end color of the gradient.
      *
      * @return The end color.
      */
-    const Color3B& getEndColor() const;
+    const Color3B &getEndColor() const;
 
     /** Returns the start opacity of the gradient.
      *
      * @param startOpacity The start opacity, from 0 to 255.
      */
-    void setStartOpacity(uint8_t startOpacity );
+    void setStartOpacity(uint8_t startOpacity);
     /** Returns the start opacity of the gradient.
      *
      * @return The start opacity.
@@ -381,7 +379,7 @@ public:
      *
      * @param endOpacity The end opacity, from 0 to 255.
      */
-    void setEndOpacity(uint8_t endOpacity );
+    void setEndOpacity(uint8_t endOpacity);
     /** Returns the end opacity of the gradient.
      *
      * @return The end opacity.
@@ -393,31 +391,31 @@ public:
      *
      * @param alongVector The direction of gradient.
      */
-    void setVector(const Vec2& alongVector);
+    void setVector(const Vec2 &alongVector);
     /** Returns the directional vector used for the gradient.
      *
      * @return The direction of gradient.
      */
-    const Vec2& getVector() const;
+    const Vec2 &getVector() const;
 
     virtual std::string getDescription() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     LayerGradient();
     virtual ~LayerGradient();
-    
+
     virtual bool init() override;
     /** Initializes the Layer with a gradient between start and end.
      * @js init
      * @lua init
      */
-    bool initWithColor(const Color4B& start, const Color4B& end);
-    
+    bool initWithColor(const Color4B &start, const Color4B &end);
+
     /** Initializes the Layer with a gradient between start and end in the direction of v.
      * @js init
      * @lua init
      */
-    bool initWithColor(const Color4B& start, const Color4B& end, const Vec2& v);
+    bool initWithColor(const Color4B &start, const Color4B &end, const Vec2 &v);
 
 protected:
     virtual void updateColor() override;
@@ -426,10 +424,9 @@ protected:
     Color3B _endColor = Color3B::BLACK;
     uint8_t _startOpacity = 255;
     uint8_t _endOpacity = 255;
-    Vec2   _alongVector = {0.0f, -1.0f};
-    bool    _compressedInterpolation = true;
+    Vec2 _alongVector = {0.0f, -1.0f};
+    bool _compressedInterpolation = true;
 };
-
 
 /** @class LayerRadialGradient
  * @brief LayerRadialGradient is a subclass of Layer that draws radial gradients across the background.
@@ -446,55 +443,57 @@ public:
      * @param expand an alpha value(0.f-1.f) that specifies how much of that radius in only inner color(the gradient
                      starts outside of that amount)
      */
-    static LayerRadialGradient* create(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand);
+    static LayerRadialGradient* create(const Color4B &startColor, const Color4B &endColor, float radius,
+                                       const Vec2 &center, float expand);
     static LayerRadialGradient* create();
-    
+
     //
     // overrides
     //
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-    virtual void setContentSize(const Size& size) override;
-    
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void setContentSize(const Size &size) override;
+
     void setStartOpacity(uint8_t opacity);
     uint8_t getStartOpacity() const;
-    
+
     void setEndOpacity(uint8_t opacity);
     uint8_t getEndOpacity() const;
-    
+
     void setRadius(float radius);
     float getRadius() const;
-    
-    void setCenter(const Vec2& center);
+
+    void setCenter(const Vec2 &center);
     Vec2 getCenter() const;
-    
+
     void setExpand(float expand);
     float getExpand() const;
-    
-    void setStartColor(const Color3B& color);
-    void setStartColor(const Color4B& color);
+
+    void setStartColor(const Color3B &color);
+    void setStartColor(const Color4B &color);
     Color4B getStartColor() const;
     Color3B getStartColor3B() const;
-    
-    void setEndColor(const Color3B& color);
-    void setEndColor(const Color4B& color);
+
+    void setEndColor(const Color3B &color);
+    void setEndColor(const Color4B &color);
     Color4B getEndColor() const;
     Color3B getEndColor3B() const;
-    
-    void setBlendFunc(const BlendFunc& blendFunc);
+
+    void setBlendFunc(const BlendFunc &blendFunc);
     BlendFunc getBlendFunc() const;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     LayerRadialGradient();
     virtual ~LayerRadialGradient();
-    
-    bool initWithColor(const Color4B& startColor, const Color4B& endColor, float radius, const Vec2& center, float expand);
-    
+
+    bool initWithColor(const Color4B &startColor, const Color4B &endColor, float radius, const Vec2 &center,
+                       float expand);
+
 private:
-    void convertColor4B24F(Color4F& outColor, const Color4B& inColor);
-    
+    void convertColor4B24F(Color4F &outColor, const Color4B &inColor);
+
     Color4B _startColor = Color4B::BLACK;
     Color4F _startColorRend = Color4F::BLACK; // start color used in shader
-    
+
     Color4B _endColor = Color4B::BLACK;
     Color4F _endColorRend = Color4F::BLACK; // end color used in shader
 
@@ -503,9 +502,9 @@ private:
     float _radius = 0.f;
     float _expand = 0.f;
     CustomCommand _customCommand;
-    
+
     BlendFunc _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
-    
+
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _startColorLocation;
     backend::UniformLocation _endColorLocation;
@@ -513,7 +512,6 @@ private:
     backend::UniformLocation _radiusLocation;
     backend::UniformLocation _expandLocation;
 };
-
 
 /** @class LayerMultiplex
  * @brief MultipleLayer is a Layer with the ability to multiplex it's children.
@@ -538,7 +536,7 @@ public:
      * @param arrayOfLayers An array of layers.
      * @return An autoreleased LayerMultiplex object.
      */
-    static LayerMultiplex* createWithArray(const Vector<Layer*>& arrayOfLayers);
+    static LayerMultiplex* createWithArray(const Vector<Layer*> &arrayOfLayers);
 
     /** Creates a LayerMultiplex with one or more layers using a variable argument list.
      * @code
@@ -547,7 +545,7 @@ public:
      * In lua:local create(...)
      * @endcode
      */
-    static LayerMultiplex * create(Layer* layer, ... );
+    static LayerMultiplex* create(Layer* layer, ...);
 
     /** Creates a LayerMultiplex with one layer.
      * Lua script can not init with undetermined number of variables
@@ -558,8 +556,7 @@ public:
      * @param layer A certain layer.
      * @return An autoreleased LayerMultiplex object.
      */
-    static LayerMultiplex * createWithLayer(Layer* layer);
-
+    static LayerMultiplex* createWithLayer(Layer* layer);
 
     /** Add a certain layer to LayerMultiplex.
      *
@@ -584,7 +581,7 @@ public:
     void switchToAndReleaseMe(int n);
 
     virtual std::string getDescription() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     /**
      * @js ctor
@@ -595,25 +592,24 @@ CC_CONSTRUCTOR_ACCESS:
      * @lua NA
      */
     virtual ~LayerMultiplex();
-    
+
     virtual bool init() override;
     /** initializes a MultiplexLayer with one or more layers using a variable argument list.
      * @js NA
      * @lua NA
      */
     bool initWithLayers(Layer* layer, va_list params);
-    
+
     /** initializes a MultiplexLayer with an array of layers
      @since v2.1
      */
-    bool initWithArray(const Vector<Layer*>& arrayOfLayers);
+    bool initWithArray(const Vector<Layer*> &arrayOfLayers);
 
 protected:
     unsigned int _enabledLayer;
-    Vector<Layer*>    _layers;
+    Vector<Layer*> _layers;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);
+private: CC_DISALLOW_COPY_AND_ASSIGN(LayerMultiplex);
 };
 
 

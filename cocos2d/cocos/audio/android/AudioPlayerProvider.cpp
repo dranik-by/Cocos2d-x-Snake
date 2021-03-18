@@ -40,7 +40,8 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <algorithm> // for std::find_if
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 static int getSystemAPILevel()
 {
@@ -70,28 +71,32 @@ struct AudioFileIndicator
 };
 
 static AudioFileIndicator __audioFileIndicator[] = {
-        {"default", 128000}, // If we could not handle the audio format, return default value, the position should be first.
-        {".wav",    1024000},
-        {".ogg",    128000},
-        {".mp3",    160000}
+{  "default", 128000}
+, // If we could not handle the audio format, return default value, the position should be first.
+{  ".wav"   , 1024000}
+, {".ogg"   , 128000}
+, {".mp3"   , 160000}
 };
 
-AudioPlayerProvider::AudioPlayerProvider(SLEngineItf engineItf, SLObjectItf outputMixObject,
-                                         int deviceSampleRate, int bufferSizeInFrames,
-                                         const FdGetterCallback &fdGetterCallback,
+AudioPlayerProvider::AudioPlayerProvider(SLEngineItf engineItf, SLObjectItf outputMixObject, int deviceSampleRate,
+                                         int bufferSizeInFrames, const FdGetterCallback &fdGetterCallback,
                                          ICallerThreadUtils* callerThreadUtils)
-        : _engineItf(engineItf), _outputMixObject(outputMixObject),
-          _deviceSampleRate(deviceSampleRate), _bufferSizeInFrames(bufferSizeInFrames),
-          _fdGetterCallback(fdGetterCallback), _callerThreadUtils(callerThreadUtils),
-          _pcmAudioService(nullptr), _mixController(nullptr),
-          _threadPool(ThreadPool::newCachedThreadPool(1, 8, 5, 2, 2))
+: _engineItf(engineItf)
+, _outputMixObject(outputMixObject)
+, _deviceSampleRate(deviceSampleRate)
+, _bufferSizeInFrames(bufferSizeInFrames)
+, _fdGetterCallback(fdGetterCallback)
+, _callerThreadUtils(callerThreadUtils)
+, _pcmAudioService(nullptr)
+, _mixController(nullptr)
+, _threadPool(ThreadPool::newCachedThreadPool(1, 8, 5, 2, 2))
 {
     ALOGI("deviceSampleRate: %d, bufferSizeInFrames: %d", _deviceSampleRate, _bufferSizeInFrames);
     if (getSystemAPILevel() >= 17)
     {
-        _mixController = new (std::nothrow) AudioMixerController(_bufferSizeInFrames, _deviceSampleRate, 2);
+        _mixController = new(std::nothrow) AudioMixerController(_bufferSizeInFrames, _deviceSampleRate, 2);
         _mixController->init();
-        _pcmAudioService = new (std::nothrow) PcmAudioService(engineItf, outputMixObject);
+        _pcmAudioService = new(std::nothrow) PcmAudioService(engineItf, outputMixObject);
         _pcmAudioService->init(_mixController, 2, deviceSampleRate, bufferSizeInFrames * 2);
     }
 
@@ -108,7 +113,7 @@ AudioPlayerProvider::~AudioPlayerProvider()
     SL_SAFE_DELETE(_threadPool);
 }
 
-IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePath)
+IAudioPlayer* AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePath)
 {
     // Pcm data decoding by OpenSLES API only supports in API level 17 and later.
     if (getSystemAPILevel() < 17)
@@ -122,7 +127,7 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
         return nullptr;
     }
 
-    IAudioPlayer *player = nullptr;
+    IAudioPlayer* player = nullptr;
 
     _pcmCacheMutex.lock();
     auto iter = _pcmCache.find(audioFilePath);
@@ -131,7 +136,8 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
         PcmData pcmData = iter->second;
         _pcmCacheMutex.unlock();
         player = obtainPcmAudioPlayer(audioFilePath, pcmData);
-        ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__, audioFilePath.c_str());
+        ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__,
+                 audioFilePath.c_str());
     }
     else
     {
@@ -154,7 +160,9 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
 
                 void* infoPtr = &info;
                 std::string url = info.url;
-                preloadEffect(info, [infoPtr, url, threadId, pcmData, isSucceed, isReturnFromCache, isPreloadFinished](bool succeed, PcmData data){
+                preloadEffect(info, [infoPtr, url, threadId, pcmData, isSucceed, isReturnFromCache, isPreloadFinished](
+                bool succeed, PcmData data)
+                {
                     // If the callback is in the same thread as caller's, it means that we found it
                     // in the cache
                     *isReturnFromCache = std::this_thread::get_id() == threadId;
@@ -178,7 +186,8 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
                     if (pcmData->isValid())
                     {
                         player = obtainPcmAudioPlayer(info.url, *pcmData);
-                        ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__, audioFilePath.c_str());
+                        ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__,
+                                 audioFilePath.c_str());
                     }
                     else
                     {
@@ -193,7 +202,8 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
             else
             {
                 player = createUrlAudioPlayer(info);
-                ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__, audioFilePath.c_str());
+                ALOGV_IF(player == nullptr, "%s, %d: player is nullptr, path: %s", __FUNCTION__, __LINE__,
+                         audioFilePath.c_str());
             }
         }
         else
@@ -206,7 +216,7 @@ IAudioPlayer *AudioPlayerProvider::getAudioPlayer(const std::string &audioFilePa
     return player;
 }
 
-void AudioPlayerProvider::preloadEffect(const std::string &audioFilePath, const PreloadCallback& cb)
+void AudioPlayerProvider::preloadEffect(const std::string &audioFilePath, const PreloadCallback &cb)
 {
     // Pcm data decoding by OpenSLES API only supports in API level 17 and later.
     if (getSystemAPILevel() < 17)
@@ -217,7 +227,7 @@ void AudioPlayerProvider::preloadEffect(const std::string &audioFilePath, const 
     }
 
     _pcmCacheMutex.lock();
-    auto&& iter = _pcmCache.find(audioFilePath);
+    auto &&iter = _pcmCache.find(audioFilePath);
     if (iter != _pcmCache.end())
     {
         ALOGV("preload return from cache: (%s)", audioFilePath.c_str());
@@ -228,17 +238,19 @@ void AudioPlayerProvider::preloadEffect(const std::string &audioFilePath, const 
     _pcmCacheMutex.unlock();
 
     auto info = getFileInfo(audioFilePath);
-    preloadEffect(info, [this, cb, audioFilePath](bool succeed, PcmData data){
+    preloadEffect(info, [this, cb, audioFilePath](bool succeed, PcmData data)
+    {
 
-        _callerThreadUtils->performFunctionInCallerThread([this, succeed, data, cb](){
-            cb(succeed, data);
-        });
+        _callerThreadUtils->performFunctionInCallerThread([this, succeed, data, cb]()
+                                                          {
+                                                              cb(succeed, data);
+                                                          });
 
     }, false);
 }
 
 // Used internally
-void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const PreloadCallback& cb, bool isPreloadInPlay2d)
+void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const PreloadCallback &cb, bool isPreloadInPlay2d)
 {
     PcmData pcmData;
 
@@ -254,7 +266,7 @@ void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const Preload
 
         // 1. First time check, if it wasn't in the cache, goto 2 step
         _pcmCacheMutex.lock();
-        auto&& iter = _pcmCache.find(audioFilePath);
+        auto &&iter = _pcmCache.find(audioFilePath);
         if (iter != _pcmCache.end())
         {
             ALOGV("1. Return pcm data from cache, url: %s", info.url.c_str());
@@ -269,7 +281,7 @@ void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const Preload
             // goto step 3
             std::lock_guard<std::mutex> lk(_preloadCallbackMutex);
 
-            auto&& preloadIter = _preloadCallbackMap.find(audioFilePath);
+            auto &&preloadIter = _preloadCallbackMap.find(audioFilePath);
             if (preloadIter != _preloadCallbackMap.end())
             {
                 ALOGV("audio (%s) is being preloaded, add to callback vector!", audioFilePath.c_str());
@@ -283,7 +295,7 @@ void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const Preload
             // 3. Check it in cache again. If it has been removed from map just now, the file is in
             // the cache absolutely.
             _pcmCacheMutex.lock();
-            auto&& iter = _pcmCache.find(audioFilePath);
+            auto &&iter = _pcmCache.find(audioFilePath);
             if (iter != _pcmCache.end())
             {
                 ALOGV("2. Return pcm data from cache, url: %s", info.url.c_str());
@@ -301,44 +313,50 @@ void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const Preload
             _preloadCallbackMap.insert(std::make_pair(audioFilePath, std::move(callbacks)));
         }
 
-        _threadPool->pushTask([this, audioFilePath](int tid) {
-            ALOGV("AudioPlayerProvider::preloadEffect: (%s)", audioFilePath.c_str());
-            PcmData d;
-            AudioDecoder* decoder = AudioDecoderProvider::createAudioDecoder(_engineItf, audioFilePath, _bufferSizeInFrames, _deviceSampleRate, _fdGetterCallback);
-            bool ret = decoder != nullptr && decoder->start();
-            if (ret)
-            {
-                d = decoder->getResult();
-                std::lock_guard<std::mutex> lk(_pcmCacheMutex);
-                _pcmCache.insert(std::make_pair(audioFilePath, d));
-            }
-            else
-            {
-                ALOGE("decode (%s) failed!", audioFilePath.c_str());
-            }
+        _threadPool->pushTask([this, audioFilePath](int tid)
+                              {
+                                  ALOGV("AudioPlayerProvider::preloadEffect: (%s)", audioFilePath.c_str());
+                                  PcmData d;
+                                  AudioDecoder* decoder = AudioDecoderProvider::createAudioDecoder(_engineItf,
+                                                                                                   audioFilePath,
+                                                                                                   _bufferSizeInFrames,
+                                                                                                   _deviceSampleRate,
+                                                                                                   _fdGetterCallback);
+                                  bool ret = decoder != nullptr && decoder->start();
+                                  if (ret)
+                                  {
+                                      d = decoder->getResult();
+                                      std::lock_guard<std::mutex> lk(_pcmCacheMutex);
+                                      _pcmCache.insert(std::make_pair(audioFilePath, d));
+                                  }
+                                  else
+                                  {
+                                      ALOGE("decode (%s) failed!", audioFilePath.c_str());
+                                  }
 
-            ALOGV("decode %s", (ret ? "succeed" : "failed"));
+                                  ALOGV("decode %s", (ret ? "succeed" : "failed"));
 
-            std::lock_guard<std::mutex> lk(_preloadCallbackMutex);
-            auto&& preloadIter = _preloadCallbackMap.find(audioFilePath);
-            if (preloadIter != _preloadCallbackMap.end())
-            {
-                auto&& params = preloadIter->second;
-                ALOGV("preload (%s) callback count: %d", audioFilePath.c_str(), (int)params.size());
-                PcmData result = decoder->getResult();
-                for (auto&& param : params)
-                {
-                    param.callback(ret, result);
-                    if (param.isPreloadInPlay2d)
-                    {
-                        _preloadWaitCond.notify_one();
-                    }
-                }
-                _preloadCallbackMap.erase(preloadIter);
-            }
+                                  std::lock_guard<std::mutex> lk(_preloadCallbackMutex);
+                                  auto &&preloadIter = _preloadCallbackMap.find(audioFilePath);
+                                  if (preloadIter != _preloadCallbackMap.end())
+                                  {
+                                      auto &&params = preloadIter->second;
+                                      ALOGV("preload (%s) callback count: %d", audioFilePath.c_str(),
+                                            (int)params.size());
+                                      PcmData result = decoder->getResult();
+                                      for (auto &&param : params)
+                                      {
+                                          param.callback(ret, result);
+                                          if (param.isPreloadInPlay2d)
+                                          {
+                                              _preloadWaitCond.notify_one();
+                                          }
+                                      }
+                                      _preloadCallbackMap.erase(preloadIter);
+                                  }
 
-            AudioDecoderProvider::destroyAudioDecoder(&decoder);
-        });
+                                  AudioDecoderProvider::destroyAudioDecoder(&decoder);
+                              });
     }
     else
     {
@@ -347,8 +365,7 @@ void AudioPlayerProvider::preloadEffect(const AudioFileInfo &info, const Preload
     }
 }
 
-AudioPlayerProvider::AudioFileInfo AudioPlayerProvider::getFileInfo(
-        const std::string &audioFilePath)
+AudioPlayerProvider::AudioFileInfo AudioPlayerProvider::getFileInfo(const std::string &audioFilePath)
 {
     AudioFileInfo info;
     long fileSize = 0;
@@ -382,7 +399,7 @@ AudioPlayerProvider::AudioFileInfo AudioPlayerProvider::getFileInfo(
     }
     else
     {
-        FILE *fp = fopen(audioFilePath.c_str(), "rb");
+        FILE* fp = fopen(audioFilePath.c_str(), "rb");
         if (fp != nullptr)
         {
             fseek(fp, 0, SEEK_END);
@@ -417,17 +434,18 @@ bool AudioPlayerProvider::isSmallFile(const AudioFileInfo &info)
         extension = audioFileInfo.url.substr(pos);
     }
     auto iter = std::find_if(std::begin(__audioFileIndicator), std::end(__audioFileIndicator),
-                             [&extension](const AudioFileIndicator &judge) -> bool {
+                             [&extension](const AudioFileIndicator &judge)->bool
+                             {
                                  return judge.extension == extension;
                              });
 
     if (iter != std::end(__audioFileIndicator))
     {
-//        ALOGV("isSmallFile: found: %s: ", iter->extension.c_str());
+        //        ALOGV("isSmallFile: found: %s: ", iter->extension.c_str());
         return info.length < iter->smallSizeIndicator;
     }
 
-//    ALOGV("isSmallFile: not found return default value");
+    //    ALOGV("isSmallFile: not found return default value");
     return info.length < __audioFileIndicator[0].smallSizeIndicator;
 }
 
@@ -452,10 +470,9 @@ void AudioPlayerProvider::clearAllPcmCaches()
     _pcmCache.clear();
 }
 
-PcmAudioPlayer *AudioPlayerProvider::obtainPcmAudioPlayer(const std::string &url,
-                                                           const PcmData &pcmData)
+PcmAudioPlayer* AudioPlayerProvider::obtainPcmAudioPlayer(const std::string &url, const PcmData &pcmData)
 {
-    PcmAudioPlayer *pcmPlayer = nullptr;
+    PcmAudioPlayer* pcmPlayer = nullptr;
     if (pcmData.isValid())
     {
         pcmPlayer = new(std::nothrow) PcmAudioPlayer(_mixController, _callerThreadUtils);
@@ -471,8 +488,7 @@ PcmAudioPlayer *AudioPlayerProvider::obtainPcmAudioPlayer(const std::string &url
     return pcmPlayer;
 }
 
-UrlAudioPlayer *AudioPlayerProvider::createUrlAudioPlayer(
-        const AudioPlayerProvider::AudioFileInfo &info)
+UrlAudioPlayer* AudioPlayerProvider::createUrlAudioPlayer(const AudioPlayerProvider::AudioFileInfo &info)
 {
     if (info.url.empty())
     {
@@ -481,7 +497,7 @@ UrlAudioPlayer *AudioPlayerProvider::createUrlAudioPlayer(
     }
 
     SLuint32 locatorType = info.assetFd->getFd() > 0 ? SL_DATALOCATOR_ANDROIDFD : SL_DATALOCATOR_URI;
-    auto urlPlayer = new (std::nothrow) UrlAudioPlayer(_engineItf, _outputMixObject, _callerThreadUtils);
+    auto urlPlayer = new(std::nothrow) UrlAudioPlayer(_engineItf, _outputMixObject, _callerThreadUtils);
     bool ret = urlPlayer->prepare(info.url, locatorType, info.assetFd, info.start, info.length);
     if (!ret)
     {

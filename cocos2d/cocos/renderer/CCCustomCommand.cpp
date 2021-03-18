@@ -51,11 +51,11 @@ void CustomCommand::init(float globalZOrder)
     _globalOrder = globalZOrder;
 }
 
-void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
+void CustomCommand::init(float globalZOrder, const BlendFunc &blendFunc)
 {
     _globalOrder = globalZOrder;
 
-    auto& blendDescriptor = _pipelineDescriptor.blendDescriptor;
+    auto &blendDescriptor = _pipelineDescriptor.blendDescriptor;
     blendDescriptor.blendEnabled = true;
     blendDescriptor.sourceRGBBlendFactor = blendDescriptor.sourceAlphaBlendFactor = blendFunc.src;
     blendDescriptor.destinationRGBBlendFactor = blendDescriptor.destinationAlphaBlendFactor = blendFunc.dst;
@@ -64,10 +64,10 @@ void CustomCommand::init(float globalZOrder, const BlendFunc& blendFunc)
 void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capacity, BufferUsage usage)
 {
     CC_SAFE_RELEASE(_vertexBuffer);
-    
+
     _vertexCapacity = capacity;
     _vertexDrawCount = capacity;
-    
+
     auto device = backend::Device::getInstance();
     _vertexBuffer = device->newBuffer(vertexSize * capacity, backend::BufferType::VERTEX, usage);
 }
@@ -75,18 +75,18 @@ void CustomCommand::createVertexBuffer(std::size_t vertexSize, std::size_t capac
 void CustomCommand::createIndexBuffer(IndexFormat format, std::size_t capacity, BufferUsage usage)
 {
     CC_SAFE_RELEASE(_indexBuffer);
-    
+
     _indexFormat = format;
     _indexSize = computeIndexSize();
     _indexCapacity = capacity;
     _indexDrawCount = capacity;
-    
+
     auto device = backend::Device::getInstance();
     _indexBuffer = device->newBuffer(_indexSize * capacity, backend::BufferType::INDEX, usage);
 }
 
 void CustomCommand::updateVertexBuffer(void* data, std::size_t offset, std::size_t length)
-{   
+{
     assert(_vertexBuffer);
     _vertexBuffer->updateSubData(data, offset, length);
 }
@@ -97,7 +97,7 @@ void CustomCommand::updateIndexBuffer(void* data, std::size_t offset, std::size_
     _indexBuffer->updateSubData(data, offset, length);
 }
 
-void CustomCommand::setVertexBuffer(backend::Buffer *vertexBuffer)
+void CustomCommand::setVertexBuffer(backend::Buffer* vertexBuffer)
 {
     if (_vertexBuffer == vertexBuffer)
         return;
@@ -106,7 +106,7 @@ void CustomCommand::setVertexBuffer(backend::Buffer *vertexBuffer)
     CC_SAFE_RETAIN(_vertexBuffer);
 }
 
-void CustomCommand::setIndexBuffer(backend::Buffer *indexBuffer, IndexFormat format)
+void CustomCommand::setIndexBuffer(backend::Buffer* indexBuffer, IndexFormat format)
 {
     if (_indexBuffer == indexBuffer && _indexFormat == format)
         return;
@@ -132,10 +132,10 @@ void CustomCommand::updateIndexBuffer(void* data, std::size_t length)
 
 std::size_t CustomCommand::computeIndexSize() const
 {
-if (IndexFormat::U_SHORT == _indexFormat)
-    return sizeof(unsigned short);
-else
-    return sizeof(unsigned int);
+    if (IndexFormat::U_SHORT == _indexFormat)
+        return sizeof(unsigned short);
+    else
+        return sizeof(unsigned int);
 }
 
 NS_CC_END

@@ -37,7 +37,8 @@ NS_CC_BEGIN
 
 class Node;
 
-enum {
+enum
+{
     kActionUpdate
 };
 
@@ -91,7 +92,7 @@ public:
      *
      * @param target A certain target.
      */
-    virtual void startWithTarget(Node *target);
+    virtual void startWithTarget(Node* target);
 
     /** 
      * Called after the action has finished. It will set the 'target' to nil.
@@ -116,22 +117,35 @@ public:
      * @param time A value between 0 and 1.
      */
     virtual void update(float time);
+
     /** Return certain target.
      *
      * @return A certain target.
      */
-    Node* getTarget() const { return _target; }
-    /** The action will modify the target properties. 
+    Node* getTarget() const
+    {
+        return _target;
+    }
+
+    /** The action will modify the target properties.
      *
      * @param target A certain target.
      */
-    void setTarget(Node *target) { _target = target; }
-    /** Return a original Target. 
+    void setTarget(Node* target)
+    {
+        _target = target;
+    }
+
+    /** Return a original Target.
      *
      * @return A original Target.
      */
-    Node* getOriginalTarget() const { return _originalTarget; }
-    /** 
+    Node* getOriginalTarget() const
+    {
+        return _originalTarget;
+    }
+
+    /**
      * Set the original target, since target can be nil.
      * Is the target that were used to run the action. Unless you are doing something complex, like ActionManager, you should NOT call this method.
      * The target is 'assigned', it is not 'retained'.
@@ -139,51 +153,69 @@ public:
      *
      * @param originalTarget Is 'assigned', it is not 'retained'.
      */
-    void setOriginalTarget(Node *originalTarget) { _originalTarget = originalTarget; }
-    /** Returns a tag that is used to identify the action easily. 
+    void setOriginalTarget(Node* originalTarget)
+    {
+        _originalTarget = originalTarget;
+    }
+
+    /** Returns a tag that is used to identify the action easily.
      *
      * @return A tag.
      */
-    int getTag() const { return _tag; }
-    /** Changes the tag that is used to identify the action easily. 
+    int getTag() const
+    {
+        return _tag;
+    }
+
+    /** Changes the tag that is used to identify the action easily.
      *
      * @param tag Used to identify the action easily.
      */
-    void setTag(int tag) { _tag = tag; }
+    void setTag(int tag)
+    {
+        _tag = tag;
+    }
+
     /** Returns a flag field that is used to group the actions easily.
      *
      * @return A tag.
      */
-    unsigned int getFlags() const { return _flags; }
+    unsigned int getFlags() const
+    {
+        return _flags;
+    }
+
     /** Changes the flag field that is used to group the actions easily.
      *
      * @param flags Used to group the actions easily.
      */
-    void setFlags(unsigned int flags) { _flags = flags; }
+    void setFlags(unsigned int flags)
+    {
+        _flags = flags;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
     Action();
     virtual ~Action();
 
 protected:
-    Node    *_originalTarget;
+    Node* _originalTarget;
     /** 
      * The "target".
      * The target will be set with the 'startWithTarget' method.
      * When the 'stop' method is called, target will be set to nil.
      * The target is 'assigned', it is not 'retained'.
      */
-    Node    *_target;
+    Node* _target;
     /** The action tag. An identifier of the action. */
-    int     _tag;
+    int _tag;
     /** The action flag field. To categorize action into certain groups.*/
     unsigned int _flags;
 
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
-#endif
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Action);
+    #endif
+private: CC_DISALLOW_COPY_AND_ASSIGN(Action);
 };
 
 /** @class FiniteTimeAction
@@ -201,12 +233,19 @@ public:
      *
      * @return The duration in seconds of the action.
      */
-    float getDuration() const { return _duration; }
-    /** Set duration in seconds of the action. 
+    float getDuration() const
+    {
+        return _duration;
+    }
+
+    /** Set duration in seconds of the action.
      *
      * @param duration In seconds of the action.
      */
-    void setDuration(float duration) { _duration = duration; }
+    void setDuration(float duration)
+    {
+        _duration = duration;
+    }
 
     //
     // Overrides
@@ -216,6 +255,7 @@ public:
         CC_ASSERT(0);
         return nullptr;
     }
+
     virtual FiniteTimeAction* clone() const override
     {
         CC_ASSERT(0);
@@ -223,16 +263,20 @@ public:
     }
 
 CC_CONSTRUCTOR_ACCESS:
+
     FiniteTimeAction()
     : _duration(0)
-    {}
-    virtual ~FiniteTimeAction(){}
+    {
+    }
+
+    virtual ~FiniteTimeAction()
+    {
+    }
 
 protected:
     //! Duration in seconds.
     float _duration;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FiniteTimeAction);
+private: CC_DISALLOW_COPY_AND_ASSIGN(FiniteTimeAction);
 };
 
 class ActionInterval;
@@ -253,27 +297,39 @@ public:
      * @param speed The action speed.
      */
     static Speed* create(ActionInterval* action, float speed);
+
     /** Return the speed.
      *
      * @return The action speed.
      */
-    float getSpeed() const { return _speed; }
-    /** Alter the speed of the inner function in runtime. 
+    float getSpeed() const
+    {
+        return _speed;
+    }
+
+    /** Alter the speed of the inner function in runtime.
      *
      * @param speed Alter the speed of the inner function in runtime.
      */
-    void setSpeed(float speed) { _speed = speed; }
+    void setSpeed(float speed)
+    {
+        _speed = speed;
+    }
 
     /** Replace the interior action.
      *
      * @param action The new action, it will replace the running action.
      */
-    void setInnerAction(ActionInterval *action);
+    void setInnerAction(ActionInterval* action);
+
     /** Return the interior action.
      *
      * @return The interior action.
      */
-    ActionInterval* getInnerAction() const { return _innerAction; }
+    ActionInterval* getInnerAction() const
+    {
+        return _innerAction;
+    }
 
     //
     // Override
@@ -290,20 +346,19 @@ public:
      *
      * @return Is true if the action has finished.
      */
-    virtual bool isDone() const  override;
-    
+    virtual bool isDone() const override;
+
 CC_CONSTRUCTOR_ACCESS:
     Speed();
     virtual ~Speed();
     /** Initializes the action. */
-    bool initWithAction(ActionInterval *action, float speed);
+    bool initWithAction(ActionInterval* action, float speed);
 
 protected:
     float _speed;
-    ActionInterval *_innerAction;
+    ActionInterval* _innerAction;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Speed);
+private: CC_DISALLOW_COPY_AND_ASSIGN(Speed);
 };
 
 /** @class Follow
@@ -325,9 +380,9 @@ public:
      * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
      *              with no boundary.
     */
-    
-    static Follow* create(Node *followedNode, const Rect& rect = Rect::ZERO);
-    
+
+    static Follow* create(Node* followedNode, const Rect &rect = Rect::ZERO);
+
     /**
      * Creates the action with a set boundary or with no boundary with offsets.
      *
@@ -343,18 +398,25 @@ public:
      *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
      */
 
-    static Follow* createWithOffset(Node* followedNode,float xOffset,float yOffset,const Rect& rect = Rect::ZERO);
-    
+    static Follow* createWithOffset(Node* followedNode, float xOffset, float yOffset, const Rect &rect = Rect::ZERO);
+
     /** Return boundarySet.
      *
      * @return Return boundarySet.
      */
-    bool isBoundarySet() const { return _boundarySet; }
-    /** Alter behavior - turn on/off boundary. 
+    bool isBoundarySet() const
+    {
+        return _boundarySet;
+    }
+
+    /** Alter behavior - turn on/off boundary.
      *
      * @param value Turn on/off boundary.
      */
-    void setBoundarySet(bool value) { _boundarySet = value; }
+    void setBoundarySet(bool value)
+    {
+        _boundarySet = value;
+    }
 
     //
     // Override
@@ -370,6 +432,7 @@ public:
     virtual void stop() override;
 
 CC_CONSTRUCTOR_ACCESS:
+
     /**
      * @js ctor
      */
@@ -384,13 +447,15 @@ CC_CONSTRUCTOR_ACCESS:
     , _offsetX(0.0)
     , _offsetY(0.0)
     , _worldRect(Rect::ZERO)
-    {}
+    {
+    }
+
     /**
      * @js NA
      * @lua NA
      */
     virtual ~Follow();
-    
+
     /**
      * Initializes the action with a set boundary or with no boundary.
      *
@@ -398,9 +463,8 @@ CC_CONSTRUCTOR_ACCESS:
      * @param rect  The boundary. If \p rect is equal to Rect::ZERO, it'll work
      *              with no boundary.
     */
-    bool initWithTarget(Node *followedNode, const Rect& rect = Rect::ZERO);
-    
-    
+    bool initWithTarget(Node* followedNode, const Rect &rect = Rect::ZERO);
+
     /**
      * Initializes the action with a set boundary or with no boundary with offsets.
      *
@@ -416,11 +480,11 @@ CC_CONSTRUCTOR_ACCESS:
      *   If both xOffset and yOffset are set to zero,then the node will be horizontally and vertically centered followed.
 
      */
-    bool initWithTargetAndOffset(Node *followedNode,float xOffset,float yOffset,const Rect& rect = Rect::ZERO);
+    bool initWithTargetAndOffset(Node* followedNode, float xOffset, float yOffset, const Rect &rect = Rect::ZERO);
 
 protected:
     /** Node to follow. */
-    Node *_followedNode;
+    Node* _followedNode;
 
     /** Whether camera should be limited to certain area. */
     bool _boundarySet;
@@ -437,15 +501,14 @@ protected:
     float _rightBoundary;
     float _topBoundary;
     float _bottomBoundary;
-    
+
     /** Horizontal (x) and vertical (y) offset values. */
     float _offsetX;
     float _offsetY;
-    
+
     Rect _worldRect;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Follow);
+private: CC_DISALLOW_COPY_AND_ASSIGN(Follow);
 };
 
 // end of actions group

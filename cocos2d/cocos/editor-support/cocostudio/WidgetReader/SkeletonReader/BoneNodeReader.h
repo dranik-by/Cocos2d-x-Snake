@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 class BoneNodeReader : public cocos2d::Ref, public cocostudio::NodeReaderProtocol
 {
-    DECLARE_CLASS_NODE_READER_INFO
+DECLARE_CLASS_NODE_READER_INFO
 
 public:
 
@@ -44,7 +44,7 @@ public:
     static void destroyInstance();
 
     flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-        flatbuffers::FlatBufferBuilder* builder) override;
+                                                                         flatbuffers::FlatBufferBuilder* builder) override;
     void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* boneOptions) override;
 
     cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* boneOptions) override;

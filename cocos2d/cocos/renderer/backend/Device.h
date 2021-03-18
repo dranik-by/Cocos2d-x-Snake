@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -59,14 +59,14 @@ class Device : public cocos2d::Ref
 public:
     friend class ProgramCache;
     friend class ShaderCache;
-    
+
     /** 
      * Returns a shared instance of the device. 
      */
     static Device* getInstance();
-    
+
     virtual ~Device() = default;
-    
+
     /**
      * New a CommandBuffer object, not auto released.
      * @return A CommandBuffer object.
@@ -87,14 +87,14 @@ public:
      * @param descriptor Specifies texture description.
      * @return A TextureBackend object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) = 0;
+    virtual TextureBackend* newTexture(const TextureDescriptor &descriptor) = 0;
 
     /**
      * Create an auto released DepthStencilState object.
      * @param descriptor Specifies depth and stencil description.
      * @return An auto release DepthStencilState object.
      */
-    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor& descriptor) = 0;
+    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor &descriptor) = 0;
 
     /**
      * New a RenderPipeline object, not auto released.
@@ -119,13 +119,16 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) = 0;
+    virtual Program* newProgram(const std::string &vertexShader, const std::string &fragmentShader) = 0;
 
     /**
      * Get a DeviceInfo object.
      * @return A DeviceInfo object.
      */
-    inline DeviceInfo* getDeviceInfo() const { return _deviceInfo; }
+    inline DeviceInfo* getDeviceInfo() const
+    {
+        return _deviceInfo;
+    }
 
 protected:
     /**
@@ -134,8 +137,8 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) = 0;
-        
+    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string &source) = 0;
+
     DeviceInfo* _deviceInfo = nullptr; ///< Device information.
 
 private:

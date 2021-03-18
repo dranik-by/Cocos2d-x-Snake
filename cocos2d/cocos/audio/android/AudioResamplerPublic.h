@@ -19,7 +19,8 @@
 #include <stdint.h>
 #include <math.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 // AUDIO_RESAMPLER_DOWN_RATIO_MAX is the maximum ratio between the original
 // audio sample rate and the target rate when downsampling,
@@ -60,11 +61,11 @@ namespace cocos2d {
 #define AUDIO_TIMESTRETCH_PITCH_NORMAL 1.0f
 #define AUDIO_TIMESTRETCH_PITCH_MIN_DELTA 0.0001f
 
-
 //Determines the current algorithm used for stretching
-enum AudioTimestretchStretchMode : int32_t {
-    AUDIO_TIMESTRETCH_STRETCH_DEFAULT            = 0,
-    AUDIO_TIMESTRETCH_STRETCH_SPEECH             = 1,
+enum AudioTimestretchStretchMode : int32_t
+{
+    AUDIO_TIMESTRETCH_STRETCH_DEFAULT = 0,
+    AUDIO_TIMESTRETCH_STRETCH_SPEECH = 1,
     //TODO: add more stretch modes/algorithms
 };
 
@@ -78,49 +79,43 @@ enum AudioTimestretchStretchMode : int32_t {
 //    for speed > 1.0 will repeat frames
 // FALLBACK_MUTE: will set all processed frames to zero
 // FALLBACK_FAIL:  will stop program execution and log a fatal error
-enum AudioTimestretchFallbackMode : int32_t {
-    AUDIO_TIMESTRETCH_FALLBACK_CUT_REPEAT     = -1,
-    AUDIO_TIMESTRETCH_FALLBACK_DEFAULT        = 0,
-    AUDIO_TIMESTRETCH_FALLBACK_MUTE           = 1,
-    AUDIO_TIMESTRETCH_FALLBACK_FAIL           = 2,
+enum AudioTimestretchFallbackMode : int32_t
+{
+    AUDIO_TIMESTRETCH_FALLBACK_CUT_REPEAT = -1,
+    AUDIO_TIMESTRETCH_FALLBACK_DEFAULT = 0,
+    AUDIO_TIMESTRETCH_FALLBACK_MUTE = 1,
+    AUDIO_TIMESTRETCH_FALLBACK_FAIL = 2,
 };
 
-struct AudioPlaybackRate {
+struct AudioPlaybackRate
+{
     float mSpeed;
     float mPitch;
-    enum AudioTimestretchStretchMode  mStretchMode;
+    enum AudioTimestretchStretchMode mStretchMode;
     enum AudioTimestretchFallbackMode mFallbackMode;
 };
 
 static const AudioPlaybackRate AUDIO_PLAYBACK_RATE_DEFAULT = {
-        AUDIO_TIMESTRETCH_SPEED_NORMAL,
-        AUDIO_TIMESTRETCH_PITCH_NORMAL,
-        AUDIO_TIMESTRETCH_STRETCH_DEFAULT,
-        AUDIO_TIMESTRETCH_FALLBACK_DEFAULT
+AUDIO_TIMESTRETCH_SPEED_NORMAL, AUDIO_TIMESTRETCH_PITCH_NORMAL, AUDIO_TIMESTRETCH_STRETCH_DEFAULT
+, AUDIO_TIMESTRETCH_FALLBACK_DEFAULT
 };
 
-static inline bool isAudioPlaybackRateEqual(const AudioPlaybackRate &pr1,
-        const AudioPlaybackRate &pr2) {
-    return fabs(pr1.mSpeed - pr2.mSpeed) < AUDIO_TIMESTRETCH_SPEED_MIN_DELTA &&
-           fabs(pr1.mPitch - pr2.mPitch) < AUDIO_TIMESTRETCH_PITCH_MIN_DELTA &&
-           pr2.mStretchMode == pr2.mStretchMode &&
-           pr2.mFallbackMode == pr2.mFallbackMode;
+static inline bool isAudioPlaybackRateEqual(const AudioPlaybackRate &pr1, const AudioPlaybackRate &pr2)
+{
+    return fabs(pr1.mSpeed - pr2.mSpeed) < AUDIO_TIMESTRETCH_SPEED_MIN_DELTA && fabs(
+    pr1.mPitch - pr2.mPitch) < AUDIO_TIMESTRETCH_PITCH_MIN_DELTA && pr2.mStretchMode == pr2.mStretchMode && pr2.mFallbackMode == pr2.mFallbackMode;
 }
 
-static inline bool isAudioPlaybackRateValid(const AudioPlaybackRate &playbackRate) {
-    if (playbackRate.mFallbackMode == AUDIO_TIMESTRETCH_FALLBACK_FAIL &&
-            (playbackRate.mStretchMode == AUDIO_TIMESTRETCH_STRETCH_SPEECH ||
-                    playbackRate.mStretchMode == AUDIO_TIMESTRETCH_STRETCH_DEFAULT)) {
+static inline bool isAudioPlaybackRateValid(const AudioPlaybackRate &playbackRate)
+{
+    if (playbackRate.mFallbackMode == AUDIO_TIMESTRETCH_FALLBACK_FAIL && (playbackRate.mStretchMode == AUDIO_TIMESTRETCH_STRETCH_SPEECH || playbackRate.mStretchMode == AUDIO_TIMESTRETCH_STRETCH_DEFAULT))
+    {
         //test sonic specific constraints
-        return playbackRate.mSpeed >= TIMESTRETCH_SONIC_SPEED_MIN &&
-                playbackRate.mSpeed <= TIMESTRETCH_SONIC_SPEED_MAX &&
-                playbackRate.mPitch >= AUDIO_TIMESTRETCH_PITCH_MIN &&
-                playbackRate.mPitch <= AUDIO_TIMESTRETCH_PITCH_MAX;
-    } else {
-        return playbackRate.mSpeed >= AUDIO_TIMESTRETCH_SPEED_MIN &&
-                playbackRate.mSpeed <= AUDIO_TIMESTRETCH_SPEED_MAX &&
-                playbackRate.mPitch >= AUDIO_TIMESTRETCH_PITCH_MIN &&
-                playbackRate.mPitch <= AUDIO_TIMESTRETCH_PITCH_MAX;
+        return playbackRate.mSpeed >= TIMESTRETCH_SONIC_SPEED_MIN && playbackRate.mSpeed <= TIMESTRETCH_SONIC_SPEED_MAX && playbackRate.mPitch >= AUDIO_TIMESTRETCH_PITCH_MIN && playbackRate.mPitch <= AUDIO_TIMESTRETCH_PITCH_MAX;
+    }
+    else
+    {
+        return playbackRate.mSpeed >= AUDIO_TIMESTRETCH_SPEED_MIN && playbackRate.mSpeed <= AUDIO_TIMESTRETCH_SPEED_MAX && playbackRate.mPitch >= AUDIO_TIMESTRETCH_PITCH_MIN && playbackRate.mPitch <= AUDIO_TIMESTRETCH_PITCH_MAX;
     }
 }
 
@@ -131,28 +126,29 @@ static inline bool isAudioPlaybackRateValid(const AudioPlaybackRate &playbackRat
 // Nevertheless, this should be an upper bound on the requirements of the resampler.
 // If srcSampleRate and dstSampleRate are equal, then it returns destination frames, which
 // may not be true if the resampler is asynchronous.
-static inline size_t sourceFramesNeeded(
-        uint32_t srcSampleRate, size_t dstFramesRequired, uint32_t dstSampleRate) {
+static inline size_t sourceFramesNeeded(uint32_t srcSampleRate, size_t dstFramesRequired, uint32_t dstSampleRate)
+{
     // +1 for rounding - always do this even if matched ratio (resampler may use phases not ratio)
     // +1 for additional sample needed for interpolation
-    return srcSampleRate == dstSampleRate ? dstFramesRequired :
-            size_t((uint64_t)dstFramesRequired * srcSampleRate / dstSampleRate + 1 + 1);
+    return srcSampleRate == dstSampleRate ? dstFramesRequired : size_t(
+    (uint64_t)dstFramesRequired * srcSampleRate / dstSampleRate + 1 + 1);
 }
 
 // An upper bound for the number of destination frames possible from srcFrames
 // after sample rate conversion.  This may be used for buffer sizing.
-static inline size_t destinationFramesPossible(size_t srcFrames, uint32_t srcSampleRate,
-        uint32_t dstSampleRate) {
-    if (srcSampleRate == dstSampleRate) {
+static inline size_t destinationFramesPossible(size_t srcFrames, uint32_t srcSampleRate, uint32_t dstSampleRate)
+{
+    if (srcSampleRate == dstSampleRate)
+    {
         return srcFrames;
     }
     uint64_t dstFrames = (uint64_t)srcFrames * dstSampleRate / srcSampleRate;
     return dstFrames > 2 ? dstFrames - 2 : 0;
 }
 
-static inline size_t sourceFramesNeededWithTimestretch(
-        uint32_t srcSampleRate, size_t dstFramesRequired, uint32_t dstSampleRate,
-        float speed) {
+static inline size_t sourceFramesNeededWithTimestretch(uint32_t srcSampleRate, size_t dstFramesRequired,
+                                                       uint32_t dstSampleRate, float speed)
+{
     // required is the number of input frames the resampler needs
     size_t required = sourceFramesNeeded(srcSampleRate, dstFramesRequired, dstSampleRate);
     // to deliver this, the time stretcher requires:
@@ -165,7 +161,8 @@ static inline size_t sourceFramesNeededWithTimestretch(
 // involving resampling as well as asynchronous resampling.
 #define AUDIO_PROCESSING_MUSIC_RATE 40000
 
-static inline bool isMusicRate(uint32_t sampleRate) {
+static inline bool isMusicRate(uint32_t sampleRate)
+{
     return sampleRate >= AUDIO_PROCESSING_MUSIC_RATE;
 }
 

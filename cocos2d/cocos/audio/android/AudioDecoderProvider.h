@@ -27,14 +27,16 @@ THE SOFTWARE.
 
 #include "audio/android/OpenSLHelper.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoder;
 
 class AudioDecoderProvider
 {
 public:
-    static AudioDecoder* createAudioDecoder(SLEngineItf engineItf, const std::string &url, int bufferSizeInFrames, int sampleRate, const FdGetterCallback &fdGetterCallback);
+    static AudioDecoder* createAudioDecoder(SLEngineItf engineItf, const std::string &url, int bufferSizeInFrames,
+                                            int sampleRate, const FdGetterCallback &fdGetterCallback);
     static void destroyAudioDecoder(AudioDecoder** decoder);
 };
 

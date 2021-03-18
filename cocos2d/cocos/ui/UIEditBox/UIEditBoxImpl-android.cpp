@@ -29,15 +29,15 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-#include "ui/UIEditBox/UIEditBox.h"
-#include <jni.h>
-#include "platform/android/jni/JniHelper.h"
-#include "2d/CCLabel.h"
-#include "base/ccUTF8.h"
-#include "math/Vec2.h"
-#include "ui/UIHelper.h"
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
+    #include "ui/UIEditBox/UIEditBox.h"
+    #include <jni.h>
+    #include "platform/android/jni/JniHelper.h"
+    #include "2d/CCLabel.h"
+    #include "base/ccUTF8.h"
+    #include "math/Vec2.h"
+    #include "ui/UIHelper.h"
+    #include "base/CCDirector.h"
+    #include "platform/CCFileUtils.h"
 
 NS_CC_BEGIN
 
@@ -45,7 +45,7 @@ static const std::string editBoxClassName = "org.cocos2dx.lib.Cocos2dxEditBoxHel
 
 namespace ui {
 
-#define  LOGD(...)  __android_log_print(ANDROID_LOG_ERROR,"",__VA_ARGS__)
+    #define  LOGD(...)  __android_log_print(ANDROID_LOG_ERROR,"",__VA_ARGS__)
 static void editBoxEditingDidBegin(int index);
 static void editBoxEditingDidChanged(int index, const std::string& text);
 static void editBoxEditingDidEnd(int index, const std::string& text, int action);

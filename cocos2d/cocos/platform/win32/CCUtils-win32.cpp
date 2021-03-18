@@ -31,7 +31,7 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-std::wstring StringUtf8ToWideChar(const std::string& strUtf8)
+std::wstring StringUtf8ToWideChar(const std::string &strUtf8)
 {
     std::wstring ret;
     if (!strUtf8.empty())
@@ -55,7 +55,7 @@ std::wstring StringUtf8ToWideChar(const std::string& strUtf8)
     return ret;
 }
 
-std::string StringWideCharToUtf8(const std::wstring& strWideChar)
+std::string StringWideCharToUtf8(const std::wstring &strWideChar)
 {
     std::string ret;
     if (!strWideChar.empty())
@@ -80,7 +80,7 @@ std::string StringWideCharToUtf8(const std::wstring& strWideChar)
     return ret;
 }
 
-std::string UTF8StringToMultiByte(const std::string& strUtf8)
+std::string UTF8StringToMultiByte(const std::string &strUtf8)
 {
     std::string ret;
     if (!strUtf8.empty())

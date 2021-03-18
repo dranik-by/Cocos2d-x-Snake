@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "audio/android/tinysndfile.h"
 #include "platform/CCFileUtils.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 AudioDecoderWav::AudioDecoderWav()
 {
@@ -48,7 +49,7 @@ void* AudioDecoderWav::onWavOpen(const char* path, void* user)
 
 int AudioDecoderWav::onWavSeek(void* datasource, long offset, int whence)
 {
-    return AudioDecoder::fileSeek(datasource, (int64_t) offset, whence);
+    return AudioDecoder::fileSeek(datasource, (int64_t)offset, whence);
 }
 
 int AudioDecoderWav::onWavClose(void* datasource)
@@ -84,7 +85,8 @@ bool AudioDecoderWav::decodeToPcm()
         if (info.frames == 0)
             break;
 
-        ALOGD("wav info: frames: %d, samplerate: %d, channels: %d, format: %d", info.frames, info.samplerate, info.channels, info.format);
+        ALOGD("wav info: frames: %d, samplerate: %d, channels: %d, format: %d", info.frames, info.samplerate,
+              info.channels, info.format);
         size_t bufSize = sizeof(short) * info.frames * info.channels;
         unsigned char* buf = (unsigned char*)malloc(bufSize);
         sf_count_t readFrames = sf_readf_short(handle, (short*)buf, info.frames);

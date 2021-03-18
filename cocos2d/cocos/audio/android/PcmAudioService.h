@@ -32,7 +32,8 @@ THE SOFTWARE.
 #include <mutex>
 #include <condition_variable>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioMixerController;
 
@@ -40,10 +41,14 @@ class PcmAudioService
 {
 public:
     inline int getChannelCount() const
-    { return _numChannels; };
+    {
+        return _numChannels;
+    };
 
     inline int getSampleRate() const
-    { return _sampleRate; };
+    {
+        return _sampleRate;
+    };
 
 private:
     PcmAudioService(SLEngineItf engineItf, SLObjectItf outputMixObject);

@@ -36,93 +36,93 @@
 
 namespace flatbuffers
 {
-    class FlatBufferBuilder;
-    template<typename T> struct Offset;
-    struct String;
-    
-    struct CSParseBinary;
-    struct NodeTree;
-    
-    struct WidgetOptions;
-    
-    struct SingleNodeOptions;
-    struct SpriteOptions;
-    struct ParticleSystemOptions;
-    struct TMXTiledMapOptions;
-    
-    struct ButtonOptions;
-    struct CheckBoxOptions;
-    struct ImageViewOptions;
-    struct TextBMFontOptions;
-    struct TextOptions;
-    struct TextFieldOptions;
-    struct LoadingBarOptions;
-    struct SliderOptions;
-    struct PanelOptions;
-    struct ScrollViewOptions;
-    struct PageViewOptions;
-    struct ListViewOptions;
-    
-    struct ProjectNodeOptions;
-    
-    struct ComponentOptions;
-    struct ComAudioOptions;
-    
-    struct TextAtlasOptions;
-    
-    struct NodeAction;
-    struct AnimationInfo;
-    struct TimeLine;
-    struct Frame;
-    struct PointFrame;
-    struct ScaleFrame;
-    struct ColorFrame;
-    struct TextureFrame;
-    struct EventFrame;
-    struct IntFrame;
-    struct BoolFrame;
-    struct InnerActionFrame;
-    struct EasingData;
-    struct BlendFrame;
+class FlatBufferBuilder;
+template <typename T>
+struct Offset;
+struct String;
+
+struct CSParseBinary;
+struct NodeTree;
+
+struct WidgetOptions;
+
+struct SingleNodeOptions;
+struct SpriteOptions;
+struct ParticleSystemOptions;
+struct TMXTiledMapOptions;
+
+struct ButtonOptions;
+struct CheckBoxOptions;
+struct ImageViewOptions;
+struct TextBMFontOptions;
+struct TextOptions;
+struct TextFieldOptions;
+struct LoadingBarOptions;
+struct SliderOptions;
+struct PanelOptions;
+struct ScrollViewOptions;
+struct PageViewOptions;
+struct ListViewOptions;
+
+struct ProjectNodeOptions;
+
+struct ComponentOptions;
+struct ComAudioOptions;
+
+struct TextAtlasOptions;
+
+struct NodeAction;
+struct AnimationInfo;
+struct TimeLine;
+struct Frame;
+struct PointFrame;
+struct ScaleFrame;
+struct ColorFrame;
+struct TextureFrame;
+struct EventFrame;
+struct IntFrame;
+struct BoolFrame;
+struct InnerActionFrame;
+struct EasingData;
+struct BlendFrame;
 }
 
 namespace tinyxml2
 {
-    class XMLElement;
+class XMLElement;
 }
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 class CC_STUDIO_DLL FlatBuffersSerialize
 {
-    
+
 public:
     static FlatBuffersSerialize* getInstance();
     /** @deprecated Use method destroyInstance() instead */
     CC_DEPRECATED_ATTRIBUTE static void purge();
     static void destroyInstance();
-    
+
     FlatBuffersSerialize();
     ~FlatBuffersSerialize();
-    
+
     void deleteFlatBufferBuilder();
-    
-    std::string test(const std::string& xmlFileName,
-                     const std::string& flatbuffersFileName);
-    
+
+    std::string test(const std::string &xmlFileName, const std::string &flatbuffersFileName);
+
     /* serialize flat buffers with XML */
-    std::string serializeFlatBuffersWithXMLFile(const std::string& xmlFileName,
-                                                const std::string& flatbuffersFileName);
+    std::string serializeFlatBuffersWithXMLFile(const std::string &xmlFileName, const std::string &flatbuffersFileName);
 
     // NodeTree
     flatbuffers::Offset<flatbuffers::NodeTree> createNodeTree(const tinyxml2::XMLElement* objectData,
                                                               std::string classType);
-    
+
     // NodeAction
     flatbuffers::Offset<flatbuffers::NodeAction> createNodeAction(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::TimeLine> createTimeLine(const tinyxml2::XMLElement* objectData);    
+    flatbuffers::Offset<flatbuffers::TimeLine> createTimeLine(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::PointFrame> createPointFrame(const tinyxml2::XMLElement* objectData);
-    flatbuffers::Offset<flatbuffers::ScaleFrame> createScaleFrame(const tinyxml2::XMLElement* objectData);    
+    flatbuffers::Offset<flatbuffers::ScaleFrame> createScaleFrame(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::ColorFrame> createColorFrame(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::TextureFrame> createTextureFrame(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::EventFrame> createEventFrame(const tinyxml2::XMLElement* objectData);
@@ -130,35 +130,40 @@ public:
     flatbuffers::Offset<flatbuffers::BoolFrame> createBoolFrame(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::InnerActionFrame> createInnerActionFrame(const tinyxml2::XMLElement* objectData);
     flatbuffers::Offset<flatbuffers::BlendFrame> createBlendFrame(const tinyxml2::XMLElement* objectData);
-    
+
     flatbuffers::Offset<flatbuffers::EasingData> createEasingData(const tinyxml2::XMLElement* objectData);
 
     //Animation Info
     flatbuffers::Offset<flatbuffers::AnimationInfo> createAnimationInfo(const tinyxml2::XMLElement* objectData);
     /**/
-    
+
     int getResourceType(std::string key);
     std::string getGUIClassName(const std::string &name);
-    std::string getWidgetReaderClassName(cocos2d::ui::Widget *widget);
-    
+    std::string getWidgetReaderClassName(cocos2d::ui::Widget* widget);
+
     /* create flat buffers with XML */
-    flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(const std::string& xmlFileName);
+    flatbuffers::FlatBufferBuilder* createFlatBuffersWithXMLFileForSimulator(const std::string &xmlFileName);
     flatbuffers::Offset<flatbuffers::NodeTree> createNodeTreeForSimulator(const tinyxml2::XMLElement* objectData,
                                                                           std::string classType);
-    flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(const tinyxml2::XMLElement* objectData);
-	/**/
-    std::string getCsdVersion() { return _csdVersion; }
+    flatbuffers::Offset<flatbuffers::ProjectNodeOptions> createProjectNodeOptionsForSimulator(
+    const tinyxml2::XMLElement* objectData);
+
+    /**/
+    std::string getCsdVersion()
+    {
+        return _csdVersion;
+    }
 
     /* Serialize language XML file to Flat Buffers file. */
-    std::string serializeFlatBuffersWithXMLFileForLanguageData(const std::string& xmlFilePath,
-                                                               const std::string& flatBuffersFilePath,
-                                                               const std::string& languageName);
-    
+    std::string serializeFlatBuffersWithXMLFileForLanguageData(const std::string &xmlFilePath,
+                                                               const std::string &flatBuffersFilePath,
+                                                               const std::string &languageName);
+
 public:
     std::vector<flatbuffers::Offset<flatbuffers::String>> _textures;
     std::vector<flatbuffers::Offset<flatbuffers::String>> _texturePngs;
     bool _isSimulator;
-    
+
 private:
     flatbuffers::FlatBufferBuilder* _builder;
     flatbuffers::Offset<flatbuffers::CSParseBinary>* _csparsebinary;

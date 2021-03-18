@@ -26,12 +26,16 @@
 NS_CC_MATH_BEGIN
 
 Vec3::Vec3()
-    : x(0.0f), y(0.0f), z(0.0f)
+: x(0.0f)
+, y(0.0f)
+, z(0.0f)
 {
 }
 
 Vec3::Vec3(float xx, float yy, float zz)
-    : x(xx), y(yy), z(zz)
+: x(xx)
+, y(yy)
+, z(zz)
 {
 }
 
@@ -40,7 +44,7 @@ Vec3::Vec3(const float* array)
     set(array);
 }
 
-Vec3::Vec3(const Vec3& p1, const Vec3& p2)
+Vec3::Vec3(const Vec3 &p1, const Vec3 &p2)
 {
     set(p1, p2);
 }
@@ -51,7 +55,7 @@ Vec3 Vec3::fromColor(unsigned int color)
     int componentIndex = 0;
     for (int i = 2; i >= 0; --i)
     {
-        int component = (color >> i*8) & 0x0000ff;
+        int component = (color >> i * 8) & 0x0000ff;
 
         components[componentIndex++] = static_cast<float>(component) / 255.0f;
     }
@@ -60,7 +64,7 @@ Vec3 Vec3::fromColor(unsigned int color)
     return value;
 }
 
-float Vec3::angle(const Vec3& v1, const Vec3& v2)
+float Vec3::angle(const Vec3 &v1, const Vec3 &v2)
 {
     float dx = v1.y * v2.z - v1.z * v2.y;
     float dy = v1.z * v2.x - v1.x * v2.z;
@@ -69,7 +73,7 @@ float Vec3::angle(const Vec3& v1, const Vec3& v2)
     return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
-void Vec3::add(const Vec3& v1, const Vec3& v2, Vec3* dst)
+void Vec3::add(const Vec3 &v1, const Vec3 &v2, Vec3* dst)
 {
     GP_ASSERT(dst);
 
@@ -78,7 +82,7 @@ void Vec3::add(const Vec3& v1, const Vec3& v2, Vec3* dst)
     dst->z = v1.z + v2.z;
 }
 
-void Vec3::clamp(const Vec3& min, const Vec3& max)
+void Vec3::clamp(const Vec3 &min, const Vec3 &max)
 {
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
 
@@ -101,7 +105,7 @@ void Vec3::clamp(const Vec3& min, const Vec3& max)
         z = max.z;
 }
 
-void Vec3::clamp(const Vec3& v, const Vec3& min, const Vec3& max, Vec3* dst)
+void Vec3::clamp(const Vec3 &v, const Vec3 &min, const Vec3 &max, Vec3* dst)
 {
     GP_ASSERT(dst);
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
@@ -128,12 +132,12 @@ void Vec3::clamp(const Vec3& v, const Vec3& min, const Vec3& max, Vec3* dst)
         dst->z = max.z;
 }
 
-void Vec3::cross(const Vec3& v)
+void Vec3::cross(const Vec3 &v)
 {
     cross(*this, v, this);
 }
 
-void Vec3::cross(const Vec3& v1, const Vec3& v2, Vec3* dst)
+void Vec3::cross(const Vec3 &v1, const Vec3 &v2, Vec3* dst)
 {
     GP_ASSERT(dst);
 
@@ -143,7 +147,7 @@ void Vec3::cross(const Vec3& v1, const Vec3& v2, Vec3* dst)
     MathUtil::crossVec3(&v1.x, &v2.x, &dst->x);
 }
 
-float Vec3::distance(const Vec3& v) const
+float Vec3::distance(const Vec3 &v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -152,7 +156,7 @@ float Vec3::distance(const Vec3& v) const
     return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-float Vec3::distanceSquared(const Vec3& v) const
+float Vec3::distanceSquared(const Vec3 &v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -161,12 +165,12 @@ float Vec3::distanceSquared(const Vec3& v) const
     return (dx * dx + dy * dy + dz * dz);
 }
 
-float Vec3::dot(const Vec3& v) const
+float Vec3::dot(const Vec3 &v) const
 {
     return (x * v.x + y * v.y + z * v.z);
 }
 
-float Vec3::dot(const Vec3& v1, const Vec3& v2)
+float Vec3::dot(const Vec3 &v1, const Vec3 &v2)
 {
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
@@ -177,12 +181,12 @@ void Vec3::normalize()
     // Already normalized.
     if (n == 1.0f)
         return;
-    
+
     n = std::sqrt(n);
     // Too close to zero.
     if (n < MATH_TOLERANCE)
         return;
-    
+
     n = 1.0f / n;
     x *= n;
     y *= n;
@@ -196,7 +200,7 @@ Vec3 Vec3::getNormalized() const
     return v;
 }
 
-void Vec3::subtract(const Vec3& v1, const Vec3& v2, Vec3* dst)
+void Vec3::subtract(const Vec3 &v1, const Vec3 &v2, Vec3* dst)
 {
     GP_ASSERT(dst);
 
@@ -205,7 +209,7 @@ void Vec3::subtract(const Vec3& v1, const Vec3& v2, Vec3* dst)
     dst->z = v1.z - v2.z;
 }
 
-void Vec3::smooth(const Vec3& target, float elapsedTime, float responseTime)
+void Vec3::smooth(const Vec3 &target, float elapsedTime, float responseTime)
 {
     if (elapsedTime > 0)
     {

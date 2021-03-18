@@ -35,13 +35,14 @@
 
 extern "C" {
 
-typedef struct Cocos2dAttachmentLoader {
-	spAttachmentLoader super;
-	spAtlasAttachmentLoader* atlasAttachmentLoader;
+typedef struct Cocos2dAttachmentLoader
+{
+    spAttachmentLoader super;
+    spAtlasAttachmentLoader* atlasAttachmentLoader;
 } Cocos2dAttachmentLoader;
 
 /* The Cocos2dAttachmentLoader must not be disposed until after the skeleton data has been disposed. */
-Cocos2dAttachmentLoader* Cocos2dAttachmentLoader_create (spAtlas* atlas);
+Cocos2dAttachmentLoader* Cocos2dAttachmentLoader_create(spAtlas* atlas);
 
 }
 

@@ -43,9 +43,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
-
-
+namespace network
+{
 
 /** Singleton that handles asynchronous http requests.
  *
@@ -66,7 +65,7 @@ public:
      *
      * @return the instance of HttpClient.
      */
-    static HttpClient *getInstance();
+    static HttpClient* getInstance();
 
     /**
      * Release the instance of HttpClient.
@@ -85,21 +84,21 @@ public:
      *
      * @return the cookie filename
      */
-    const std::string& getCookieFilename();
+    const std::string &getCookieFilename();
 
     /**
      * Set root certificate path for SSL verification.
      *
      * @param caFile a full path of root certificate.if it is empty, SSL verification is disabled.
      */
-    void setSSLVerification(const std::string& caFile);
+    void setSSLVerification(const std::string &caFile);
 
     /**
      * Get the ssl CA filename
      *
      * @return the ssl CA filename
      */
-    const std::string& getSSLVerification();
+    const std::string &getSSLVerification();
 
     /**
      * Add a get request to task queue
@@ -145,12 +144,21 @@ public:
      */
     int getTimeoutForRead();
 
-    HttpCookie* getCookie() const {return _cookie; }
+    HttpCookie* getCookie() const
+    {
+        return _cookie;
+    }
 
-    std::mutex& getCookieFileMutex() {return _cookieFileMutex;}
+    std::mutex &getCookieFileMutex()
+    {
+        return _cookieFileMutex;
+    }
 
-    std::mutex& getSSLCaFileMutex() {return _sslCaFileMutex;}
-    
+    std::mutex &getSSLCaFileMutex()
+    {
+        return _sslCaFileMutex;
+    }
+
     typedef std::function<bool(HttpRequest*)> ClearRequestPredicate;
     typedef std::function<bool(HttpResponse*)> ClearResponsePredicate;
 
@@ -159,7 +167,7 @@ public:
      * If defined, the method uses the ClearRequestPredicate and ClearResponsePredicate
      * to check for each request/response which to delete
      */
-    void clearResponseAndRequestQueue(); 
+    void clearResponseAndRequestQueue();
 
     /**
     * Sets a predicate function that is going to be called to determine if we proceed
@@ -167,7 +175,10 @@ public:
     *
     * @param predicate function that will be called 
     */
-    void setClearRequestPredicate(ClearRequestPredicate predicate) { _clearRequestPredicate = predicate; }
+    void setClearRequestPredicate(ClearRequestPredicate predicate)
+    {
+        _clearRequestPredicate = predicate;
+    }
 
     /**
      Sets a predicate function that is going to be called to determine if we proceed
@@ -175,9 +186,11 @@ public:
     *
     * @param cb predicate function that will be called 
     */
-    void setClearResponsePredicate(ClearResponsePredicate predicate) { _clearResponsePredicate = predicate; }
+    void setClearResponsePredicate(ClearResponsePredicate predicate)
+    {
+        _clearResponsePredicate = predicate;
+    }
 
-        
 private:
     HttpClient();
     virtual ~HttpClient();
@@ -206,13 +219,13 @@ private:
     int _timeoutForRead;
     std::mutex _timeoutForReadMutex;
 
-    int  _threadCount;
+    int _threadCount;
     std::mutex _threadCountMutex;
 
     Scheduler* _scheduler;
     std::mutex _schedulerMutex;
 
-    Vector<HttpRequest*>  _requestQueue;
+    Vector<HttpRequest*> _requestQueue;
     std::mutex _requestQueueMutex;
 
     Vector<HttpResponse*> _responseQueue;
@@ -231,7 +244,7 @@ private:
     char _responseMessage[RESPONSE_BUFFER_SIZE];
 
     HttpRequest* _requestSentinel;
-    
+
     ClearRequestPredicate _clearRequestPredicate;
     ClearResponsePredicate _clearResponsePredicate;
 };

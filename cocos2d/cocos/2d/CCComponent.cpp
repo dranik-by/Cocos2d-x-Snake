@@ -31,10 +31,10 @@ Component::Component()
 : _owner(nullptr)
 , _enabled(true)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* engine = ScriptEngineManager::getInstance()->getScriptEngine();
     _scriptType = engine != nullptr ? engine->getScriptType() : kScriptTypeNone;
-#endif
+    #endif
 }
 
 Component::~Component()
@@ -51,19 +51,19 @@ bool Component::init()
 static bool sendComponentEventToJS(Component* node, int action)
 {
     auto scriptEngine = ScriptEngineManager::getInstance()->getScriptEngine();
-    
+
     if (scriptEngine->isCalledFromScript())
     {
         scriptEngine->setCalledFromScript(false);
     }
     else
     {
-        BasicScriptData data(node,(void*)&action);
-        ScriptEvent scriptEvent(kComponentEvent,(void*)&data);
+        BasicScriptData data(node, (void*)&action);
+        ScriptEvent scriptEvent(kComponentEvent, (void*)&data);
         if (scriptEngine->sendEvent(&scriptEvent))
             return true;
     }
-    
+
     return false;
 }
 
@@ -71,52 +71,52 @@ static bool sendComponentEventToJS(Component* node, int action)
 
 void Component::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         sendComponentEventToJS(this, kComponentOnEnter);
     }
-#endif
+    #endif
 }
 
 void Component::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         sendComponentEventToJS(this, kComponentOnExit);
     }
-#endif
+    #endif
 }
 
 void Component::onAdd()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         sendComponentEventToJS(this, kComponentOnAdd);
     }
-#endif
+    #endif
 }
 
 void Component::onRemove()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         sendComponentEventToJS(this, kComponentOnRemove);
     }
-#endif
+    #endif
 }
 
 void Component::update(float /*delta*/)
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         sendComponentEventToJS(this, kComponentOnUpdate);
     }
-#endif
+    #endif
 }
 
 bool Component::serialize(void* /*ar*/)
@@ -126,7 +126,7 @@ bool Component::serialize(void* /*ar*/)
 
 Component* Component::create()
 {
-    Component * ret = new (std::nothrow) Component();
+    Component* ret = new(std::nothrow) Component();
 
     if (ret && ret->init())
     {
@@ -140,7 +140,7 @@ Component* Component::create()
     return ret;
 }
 
-void Component::setOwner(Node *owner)
+void Component::setOwner(Node* owner)
 {
     _owner = owner;
 }

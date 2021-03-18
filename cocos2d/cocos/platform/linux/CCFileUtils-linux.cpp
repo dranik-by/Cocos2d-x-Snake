@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <errno.h>
 
 #ifndef CC_RESOURCE_FOLDER_LINUX
-#define CC_RESOURCE_FOLDER_LINUX ("/Resources/")
+    #define CC_RESOURCE_FOLDER_LINUX ("/Resources/")
 #endif
 
 using namespace std;
@@ -48,27 +48,29 @@ FileUtils* FileUtils::getInstance()
     if (s_sharedFileUtils == nullptr)
     {
         s_sharedFileUtils = new FileUtilsLinux();
-        if(!s_sharedFileUtils->init())
+        if (!s_sharedFileUtils->init())
         {
-          delete s_sharedFileUtils;
-          s_sharedFileUtils = nullptr;
-          CCLOG("ERROR: Could not init CCFileUtilsLinux");
+            delete s_sharedFileUtils;
+            s_sharedFileUtils = nullptr;
+            CCLOG("ERROR: Could not init CCFileUtilsLinux");
         }
     }
     return s_sharedFileUtils;
 }
 
 FileUtilsLinux::FileUtilsLinux()
-{}
+{
+}
 
 bool FileUtilsLinux::init()
 {
     DECLARE_GUARD;
     // get application path
     char fullpath[256] = {0};
-    ssize_t length = readlink("/proc/self/exe", fullpath, sizeof(fullpath)-1);
+    ssize_t length = readlink("/proc/self/exe", fullpath, sizeof(fullpath) - 1);
 
-    if (length <= 0) {
+    if (length <= 0)
+    {
         return false;
     }
 
@@ -80,11 +82,14 @@ bool FileUtilsLinux::init()
     // Set writable path to $XDG_CONFIG_HOME or ~/.config/<app name>/ if $XDG_CONFIG_HOME not exists.
     const char* xdg_config_path = getenv("XDG_CONFIG_HOME");
     std::string xdgConfigPath;
-    if (xdg_config_path == NULL) {
+    if (xdg_config_path == NULL)
+    {
         xdgConfigPath = getenv("HOME");
         xdgConfigPath += "/.config";
-    } else {
-        xdgConfigPath  = xdg_config_path;
+    }
+    else
+    {
+        xdgConfigPath = xdg_config_path;
     }
     _writablePath = xdgConfigPath;
     _writablePath += appPath.substr(appPath.find_last_of('/'));
@@ -98,14 +103,15 @@ string FileUtilsLinux::getWritablePath() const
     DECLARE_GUARD;
     struct stat st;
     stat(_writablePath.c_str(), &st);
-    if (!S_ISDIR(st.st_mode)) {
+    if (!S_ISDIR(st.st_mode))
+    {
         mkdir(_writablePath.c_str(), 0744);
     }
 
     return _writablePath;
 }
 
-bool FileUtilsLinux::isFileExistInternal(const std::string& strFilePath) const
+bool FileUtilsLinux::isFileExistInternal(const std::string &strFilePath) const
 {
     DECLARE_GUARD;
     if (strFilePath.empty())

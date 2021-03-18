@@ -32,7 +32,7 @@
 
 @interface CCUIMultilineTextField : UITextView
 
-@property (nonatomic, assign) NSString *placeholder;
-@property (nonatomic, retain) UILabel *placeHolderLabel;
+@property(nonatomic, assign) NSString* placeholder;
+@property(nonatomic, retain) UILabel* placeHolderLabel;
 
 @end

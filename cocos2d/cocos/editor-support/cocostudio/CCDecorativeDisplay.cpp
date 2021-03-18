@@ -28,11 +28,12 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-DecorativeDisplay *DecorativeDisplay::create()
+namespace cocostudio
 {
-    DecorativeDisplay *pDisplay = new (std::nothrow) DecorativeDisplay();
+
+DecorativeDisplay* DecorativeDisplay::create()
+{
+    DecorativeDisplay* pDisplay = new(std::nothrow) DecorativeDisplay();
     if (pDisplay && pDisplay->init())
     {
         pDisplay->autorelease();
@@ -43,24 +44,22 @@ DecorativeDisplay *DecorativeDisplay::create()
 }
 
 DecorativeDisplay::DecorativeDisplay()
-    : _display(nullptr)
-    , _displayData(nullptr)
-
+: _display(nullptr)
+, _displayData(nullptr)
 {
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     _colliderDetector = nullptr;
-#endif
+    #endif
 }
-
 
 DecorativeDisplay::~DecorativeDisplay()
 {
     CC_SAFE_RELEASE_NULL(_displayData);
     CC_SAFE_RELEASE_NULL(_display);
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     CC_SAFE_RELEASE_NULL(_colliderDetector);
-#endif
+    #endif
 }
 
 bool DecorativeDisplay::init()
@@ -68,7 +67,7 @@ bool DecorativeDisplay::init()
     return true;
 }
 
-void DecorativeDisplay::setDisplay(cocos2d::Node *display)
+void DecorativeDisplay::setDisplay(cocos2d::Node* display)
 {
     if (_display != display)
     {
@@ -77,5 +76,5 @@ void DecorativeDisplay::setDisplay(cocos2d::Node *display)
         _display = display;
     }
 }
-    
+
 }

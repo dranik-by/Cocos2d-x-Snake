@@ -63,30 +63,30 @@ public:
      */
     Size();
     Size(float width, float height);
-    Size(const Size& other);
-    explicit Size(const Vec2& point);
+    Size(const Size &other);
+    explicit Size(const Vec2 &point);
     /**@}*/
 
     /**
      * @js NA
      * @lua NA
      */
-    Size& operator= (const Size& other);
+    Size &operator=(const Size &other);
     /**
      * @js NA
      * @lua NA
      */
-    Size& operator= (const Vec2& point);
+    Size &operator=(const Vec2 &point);
     /**
      * @js NA
      * @lua NA
      */
-    Size operator+(const Size& right) const;
+    Size operator+(const Size &right) const;
     /**
      * @js NA
      * @lua NA
      */
-    Size operator-(const Size& right) const;
+    Size operator-(const Size &right) const;
     /**
      * @js NA
      * @lua NA
@@ -107,7 +107,7 @@ public:
     Check if two size is the same.
      * @js NA
      */
-    bool equals(const Size& target) const;
+    bool equals(const Size &target) const;
     /**Size(0,0).*/
     static const Size ZERO;
 };
@@ -119,7 +119,7 @@ public:
     /**Low left point of rect.*/
     Vec2 origin;
     /**Width and height of the rect.*/
-    Size  size;
+    Size size;
 
 public:
     /**
@@ -136,18 +136,18 @@ public:
      Constructor a rect.
      * @js NA
      */
-    Rect(const Vec2& pos, const Size& dimension);
+    Rect(const Vec2 &pos, const Size &dimension);
     /**
     Copy constructor.
      * @js NA
      * @lua NA
      */
-    Rect(const Rect& other);
+    Rect(const Rect &other);
     /**
      * @js NA
      * @lua NA
      */
-    Rect& operator= (const Rect& other);
+    Rect &operator=(const Rect &other);
     /**
     Set the x, y, width and height of Rect.
      * @js NA
@@ -188,30 +188,30 @@ public:
     Compare two rects.
      * @js NA
      */
-    bool equals(const Rect& rect) const;
+    bool equals(const Rect &rect) const;
     /**
     Check if the points is contained in the rect.
      * @js NA
      */
-    bool containsPoint(const Vec2& point) const;
+    bool containsPoint(const Vec2 &point) const;
     /**
     Check the intersect status of two rects.
      * @js NA
      */
-    bool intersectsRect(const Rect& rect) const;
+    bool intersectsRect(const Rect &rect) const;
     /**
     Check the intersect status of the rect and a circle.
      * @js NA
      */
-    bool intersectsCircle(const Vec2& center, float radius) const;
+    bool intersectsCircle(const Vec2 &center, float radius) const;
     /**
     Get the min rect which can contain this and rect.
      * @js NA
      * @lua NA
      */
-    Rect unionWithRect(const Rect & rect) const;
+    Rect unionWithRect(const Rect &rect) const;
     /**Compute the min rect which can contain this and rect, assign it to this.*/
-    void merge(const Rect& rect);
+    void merge(const Rect &rect);
     /**An empty Rect.*/
     static const Rect ZERO;
 };

@@ -26,20 +26,21 @@
  ****************************************************************************/
 
 #include "platform/CCPlatformConfig.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-#include "network/HttpClient.h"
+    #include "network/HttpClient.h"
 
-#include <queue>
-#include <sstream>
-#include <stdio.h>
-#include <errno.h>
+    #include <queue>
+    #include <sstream>
+    #include <stdio.h>
+    #include <errno.h>
 
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
-#include "platform/android/jni/JniHelper.h"
+    #include "base/CCDirector.h"
+    #include "platform/CCFileUtils.h"
+    #include "platform/android/jni/JniHelper.h"
 
-#include "base/ccUTF8.h"
+    #include "base/ccUTF8.h"
  
 NS_CC_BEGIN
 

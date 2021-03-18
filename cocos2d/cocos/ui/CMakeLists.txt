@@ -1,12 +1,12 @@
-if(WINDOWS)
+if (WINDOWS)
     set(COCOS_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-win32.h
         )
     set(COCOS_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-win32.cpp
         )
-elseif(APPLE)
-    if(MACOSX)
+elseif (APPLE)
+    if (MACOSX)
         set(COCOS_UI_SPECIFIC_HEADER
             ui/UIEditBox/UIEditBoxImpl-mac.h
             ui/UIEditBox/Mac/CCUIPasswordTextField.h
@@ -24,7 +24,7 @@ elseif(APPLE)
             ui/UIEditBox/Mac/CCUISingleLineTextField.m
             ui/UIEditBox/Mac/CCUITextFieldFormatter.m
             )
-    elseif(IOS)
+    elseif (IOS)
         set(COCOS_UI_SPECIFIC_HEADER
             ui/UIWebView/UIWebView.h
             ui/UIVideoPlayer.h
@@ -48,15 +48,15 @@ elseif(APPLE)
             ui/UIEditBox/iOS/UITextField+CCUITextInput.mm
             ui/UIEditBox/iOS/UITextView+CCUITextInput.mm
             )
-    endif()
-elseif(LINUX)
+    endif ()
+elseif (LINUX)
     set(COCOS_UI_SPECIFIC_HEADER
         ui/UIEditBox/UIEditBoxImpl-linux.h
         )
     set(COCOS_UI_SPECIFIC_SRC
         ui/UIEditBox/UIEditBoxImpl-linux.cpp
         )
-elseif(ANDROID)
+elseif (ANDROID)
     set(COCOS_UI_SPECIFIC_HEADER
         ui/UIWebView/UIWebView.h
         ui/UIVideoPlayer.h
@@ -70,7 +70,7 @@ elseif(ANDROID)
         # it's special for android, not a common file
         ui/UIWebView/UIWebView.cpp
         )
-endif()
+endif ()
 
 set(COCOS_UI_HEADER
     ${COCOS_UI_SPECIFIC_HEADER}
@@ -80,7 +80,7 @@ set(COCOS_UI_HEADER
     ui/UIAbstractCheckButton.h
     ui/UIButton.h
     ui/UICheckBox.h
-#    ui/UIDeprecated.h
+    #    ui/UIDeprecated.h
     ui/UIHBox.h
     ui/UIHelper.h
     ui/UIImageView.h
@@ -115,7 +115,7 @@ set(COCOS_UI_SRC
     ui/UIAbstractCheckButton.cpp
     ui/UICheckBox.cpp
     ui/UIRadioButton.cpp
- #   ui/UIDeprecated.cpp
+    #   ui/UIDeprecated.cpp
     ui/UIHBox.cpp
     ui/UIHelper.cpp
     ui/UIImageView.cpp

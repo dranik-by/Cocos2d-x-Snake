@@ -34,7 +34,8 @@
 
 NS_CC_BEGIN
 
-namespace network {
+namespace network
+{
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 typedef int int32_t;
@@ -42,39 +43,42 @@ typedef int int32_t;
 
 static HttpClient* _httpClient = nullptr; // pointer to singleton
 
-typedef size_t (*write_callback)(void *ptr, size_t size, size_t nmemb, void *stream);
+typedef size_t (* write_callback)(void* ptr, size_t size, size_t nmemb, void* stream);
 
 // Callback function used by libcurl for collect response data
-static size_t writeData(void *ptr, size_t size, size_t nmemb, void *stream)
+static size_t writeData(void* ptr, size_t size, size_t nmemb, void* stream)
 {
-    std::vector<char> *recvBuffer = (std::vector<char>*)stream;
+    std::vector<char>* recvBuffer = (std::vector<char>*)stream;
     size_t sizes = size * nmemb;
-    
+
     // add data to the end of recvBuffer
     // write data maybe called more than once in a single request
-    recvBuffer->insert(recvBuffer->end(), (char*)ptr, (char*)ptr+sizes);
-    
+    recvBuffer->insert(recvBuffer->end(), (char*)ptr, (char*)ptr + sizes);
+
     return sizes;
 }
 
 // Callback function used by libcurl for collect header data
-static size_t writeHeaderData(void *ptr, size_t size, size_t nmemb, void *stream)
+static size_t writeHeaderData(void* ptr, size_t size, size_t nmemb, void* stream)
 {
-    std::vector<char> *recvBuffer = (std::vector<char>*)stream;
+    std::vector<char>* recvBuffer = (std::vector<char>*)stream;
     size_t sizes = size * nmemb;
-    
+
     // add data to the end of recvBuffer
     // write data maybe called more than once in a single request
-    recvBuffer->insert(recvBuffer->end(), (char*)ptr, (char*)ptr+sizes);
-    
+    recvBuffer->insert(recvBuffer->end(), (char*)ptr, (char*)ptr + sizes);
+
     return sizes;
 }
 
-
-static int processGetTask(HttpClient* client, HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
-static int processPostTask(HttpClient* client, HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
-static int processPutTask(HttpClient* client,  HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
-static int processDeleteTask(HttpClient* client,  HttpRequest* request, write_callback callback, void *stream, long *errorCode, write_callback headerCallback, void *headerStream, char* errorBuffer);
+static int processGetTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                          long* errorCode, write_callback headerCallback, void* headerStream, char* errorBuffer);
+static int processPostTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                           long* errorCode, write_callback headerCallback, void* headerStream, char* errorBuffer);
+static int processPutTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                          long* errorCode, write_callback headerCallback, void* headerStream, char* errorBuffer);
+static int processDeleteTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                             long* errorCode, write_callback headerCallback, void* headerStream, char* errorBuffer);
 // int processDownloadTask(HttpRequest *task, write_callback callback, void *stream, int32_t *errorCode);
 
 // Worker thread
@@ -84,7 +88,7 @@ void HttpClient::networkThread()
 
     while (true)
     {
-        HttpRequest *request;
+        HttpRequest* request;
 
         // step 1: send http request if the requestQueue isn't empty
         {
@@ -97,14 +101,15 @@ void HttpClient::networkThread()
             _requestQueue.erase(0);
         }
 
-        if (request == _requestSentinel) {
+        if (request == _requestSentinel)
+        {
             break;
         }
 
         // step 2: libcurl sync access
-        
+
         // Create a HttpResponse object, the default setting is http access failed
-        HttpResponse *response = new (std::nothrow) HttpResponse(request);
+        HttpResponse* response = new(std::nothrow) HttpResponse(request);
 
         processResponse(response, _responseMessage);
 
@@ -121,7 +126,7 @@ void HttpClient::networkThread()
         }
         _schedulerMutex.unlock();
     }
-    
+
     // cleanup: if worker thread received quit signal, clean up un-completed request queue
     _requestQueueMutex.lock();
     _requestQueue.clear();
@@ -139,29 +144,30 @@ void HttpClient::networkThreadAlone(HttpRequest* request, HttpResponse* response
 {
     increaseThreadCount();
 
-    char responseMessage[RESPONSE_BUFFER_SIZE] = { 0 };
+    char responseMessage[RESPONSE_BUFFER_SIZE] = {0};
     processResponse(response, responseMessage);
 
     _schedulerMutex.lock();
     if (nullptr != _scheduler)
     {
-        _scheduler->performFunctionInCocosThread([this, response, request]{
-            const ccHttpRequestCallback& callback = request->getCallback();
-            Ref* pTarget = request->getTarget();
-            SEL_HttpResponse pSelector = request->getSelector();
+        _scheduler->performFunctionInCocosThread([this, response, request]
+                                                 {
+                                                     const ccHttpRequestCallback &callback = request->getCallback();
+                                                     Ref* pTarget = request->getTarget();
+                                                     SEL_HttpResponse pSelector = request->getSelector();
 
-            if (callback != nullptr)
-            {
-                callback(this, response);
-            }
-            else if (pTarget && pSelector)
-            {
-                (pTarget->*pSelector)(this, response);
-            }
-            response->release();
-            // do not release in other thread
-            request->release();
-        });
+                                                     if (callback != nullptr)
+                                                     {
+                                                         callback(this, response);
+                                                     }
+                                                     else if (pTarget && pSelector)
+                                                     {
+                                                         (pTarget->*pSelector)(this, response);
+                                                     }
+                                                     response->release();
+                                                     // do not release in other thread
+                                                     request->release();
+                                                 });
     }
     _schedulerMutex.unlock();
 
@@ -171,34 +177,41 @@ void HttpClient::networkThreadAlone(HttpRequest* request, HttpResponse* response
 //Configure curl's timeout property
 static bool configureCURL(HttpClient* client, CURL* handle, char* errorBuffer)
 {
-    if (!handle) {
+    if (!handle)
+    {
         return false;
     }
-    
+
     int32_t code;
     code = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
-    if (code != CURLE_OK) {
+    if (code != CURLE_OK)
+    {
         return false;
     }
     code = curl_easy_setopt(handle, CURLOPT_TIMEOUT, HttpClient::getInstance()->getTimeoutForRead());
-    if (code != CURLE_OK) {
+    if (code != CURLE_OK)
+    {
         return false;
     }
     code = curl_easy_setopt(handle, CURLOPT_CONNECTTIMEOUT, HttpClient::getInstance()->getTimeoutForConnect());
-    if (code != CURLE_OK) {
+    if (code != CURLE_OK)
+    {
         return false;
     }
 
     std::string sslCaFilename = client->getSSLVerification();
-    if (sslCaFilename.empty()) {
+    if (sslCaFilename.empty())
+    {
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
-    } else {
+    }
+    else
+    {
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 1L);
         curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 2L);
         curl_easy_setopt(handle, CURLOPT_CAINFO, sslCaFilename.c_str());
     }
-    
+
     // FIXED #3224: The subthread of CCHttpClient interrupts main thread if timeout comes.
     // Document is here: http://curl.haxx.se/libcurl/c/curl_easy_setopt.html#CURLOPTNOSIGNAL 
     curl_easy_setopt(handle, CURLOPT_NOSIGNAL, 1L);
@@ -211,13 +224,13 @@ static bool configureCURL(HttpClient* client, CURL* handle, char* errorBuffer)
 class CURLRaii
 {
     /// Instance of CURL
-    CURL *_curl;
+    CURL* _curl;
     /// Keeps custom header data
-    curl_slist *_headers;
+    curl_slist* _headers;
 public:
     CURLRaii()
-        : _curl(curl_easy_init())
-        , _headers(nullptr)
+    : _curl(curl_easy_init())
+    , _headers(nullptr)
     {
     }
 
@@ -242,7 +255,8 @@ public:
      * @param callback Response write callback
      * @param stream Response write stream
      */
-    bool init(HttpClient* client, HttpRequest* request, write_callback callback, void* stream, write_callback headerCallback, void* headerStream, char* errorBuffer)
+    bool init(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+              write_callback headerCallback, void* headerStream, char* errorBuffer)
     {
         if (!_curl)
             return false;
@@ -250,92 +264,91 @@ public:
             return false;
 
         /* get custom header data (if set) */
-        std::vector<std::string> headers=request->getHeaders();
-        if(!headers.empty())
+        std::vector<std::string> headers = request->getHeaders();
+        if (!headers.empty())
         {
             /* append custom headers one by one */
-            for (auto& header : headers)
-                _headers = curl_slist_append(_headers,header.c_str());
+            for (auto &header : headers)
+                _headers = curl_slist_append(_headers, header.c_str());
             /* set custom headers for curl */
             if (!setOption(CURLOPT_HTTPHEADER, _headers))
                 return false;
         }
         std::string cookieFilename = client->getCookieFilename();
-        if (!cookieFilename.empty()) {
-            if (!setOption(CURLOPT_COOKIEFILE, cookieFilename.c_str())) {
+        if (!cookieFilename.empty())
+        {
+            if (!setOption(CURLOPT_COOKIEFILE, cookieFilename.c_str()))
+            {
                 return false;
             }
-            if (!setOption(CURLOPT_COOKIEJAR, cookieFilename.c_str())) {
+            if (!setOption(CURLOPT_COOKIEJAR, cookieFilename.c_str()))
+            {
                 return false;
             }
         }
 
-        return setOption(CURLOPT_URL, request->getUrl())
-                && setOption(CURLOPT_WRITEFUNCTION, callback)
-                && setOption(CURLOPT_WRITEDATA, stream)
-                && setOption(CURLOPT_HEADERFUNCTION, headerCallback)
-                && setOption(CURLOPT_HEADERDATA, headerStream);
-        
+        return setOption(CURLOPT_URL, request->getUrl()) && setOption(CURLOPT_WRITEFUNCTION, callback) && setOption(
+        CURLOPT_WRITEDATA, stream) && setOption(CURLOPT_HEADERFUNCTION, headerCallback) && setOption(CURLOPT_HEADERDATA,
+                                                                                                     headerStream);
+
     }
 
     /// @param responseCode Null not allowed
-    bool perform(long *responseCode)
+    bool perform(long* responseCode)
     {
         if (CURLE_OK != curl_easy_perform(_curl))
             return false;
         CURLcode code = curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, responseCode);
-        if (code != CURLE_OK || !(*responseCode >= 200 && *responseCode < 300)) {
+        if (code != CURLE_OK || !(*responseCode >= 200 && *responseCode < 300))
+        {
             CCLOGERROR("Curl curl_easy_getinfo failed: %s", curl_easy_strerror(code));
             return false;
         }
         // Get some mor data.
-        
+
         return true;
     }
 };
 
 //Process Get Request
-static int processGetTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream, long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
+static int processGetTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                          long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
 {
     CURLRaii curl;
-    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer)
-            && curl.setOption(CURLOPT_FOLLOWLOCATION, true)
-            && curl.perform(responseCode);
+    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer) && curl.setOption(
+    CURLOPT_FOLLOWLOCATION, true) && curl.perform(responseCode);
     return ok ? 0 : 1;
 }
 
 //Process POST Request
-static int processPostTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream, long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
+static int processPostTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                           long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
 {
     CURLRaii curl;
-    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer)
-            && curl.setOption(CURLOPT_POST, 1)
-            && curl.setOption(CURLOPT_POSTFIELDS, request->getRequestData())
-            && curl.setOption(CURLOPT_POSTFIELDSIZE, request->getRequestDataSize())
-            && curl.perform(responseCode);
+    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer) && curl.setOption(
+    CURLOPT_POST, 1) && curl.setOption(CURLOPT_POSTFIELDS, request->getRequestData()) && curl.setOption(
+    CURLOPT_POSTFIELDSIZE, request->getRequestDataSize()) && curl.perform(responseCode);
     return ok ? 0 : 1;
 }
 
 //Process PUT Request
-static int processPutTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream, long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
+static int processPutTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                          long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
 {
     CURLRaii curl;
-    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer)
-            && curl.setOption(CURLOPT_CUSTOMREQUEST, "PUT")
-            && curl.setOption(CURLOPT_POSTFIELDS, request->getRequestData())
-            && curl.setOption(CURLOPT_POSTFIELDSIZE, request->getRequestDataSize())
-            && curl.perform(responseCode);
+    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer) && curl.setOption(
+    CURLOPT_CUSTOMREQUEST, "PUT") && curl.setOption(CURLOPT_POSTFIELDS, request->getRequestData()) && curl.setOption(
+    CURLOPT_POSTFIELDSIZE, request->getRequestDataSize()) && curl.perform(responseCode);
     return ok ? 0 : 1;
 }
 
 //Process DELETE Request
-static int processDeleteTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream, long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
+static int processDeleteTask(HttpClient* client, HttpRequest* request, write_callback callback, void* stream,
+                             long* responseCode, write_callback headerCallback, void* headerStream, char* errorBuffer)
 {
     CURLRaii curl;
-    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer)
-            && curl.setOption(CURLOPT_CUSTOMREQUEST, "DELETE")
-            && curl.setOption(CURLOPT_FOLLOWLOCATION, true)
-            && curl.perform(responseCode);
+    bool ok = curl.init(client, request, callback, stream, headerCallback, headerStream, errorBuffer) && curl.setOption(
+    CURLOPT_CUSTOMREQUEST, "DELETE") && curl.setOption(CURLOPT_FOLLOWLOCATION, true) && curl.perform(responseCode);
     return ok ? 0 : 1;
 }
 
@@ -344,9 +357,9 @@ HttpClient* HttpClient::getInstance()
 {
     if (_httpClient == nullptr)
     {
-        _httpClient = new (std::nothrow) HttpClient();
+        _httpClient = new(std::nothrow) HttpClient();
     }
-    
+
     return _httpClient;
 }
 
@@ -389,8 +402,8 @@ void HttpClient::enableCookies(const char* cookieFile)
         _cookieFilename = (FileUtils::getInstance()->getWritablePath() + "cookieFile.txt");
     }
 }
-    
-void HttpClient::setSSLVerification(const std::string& caFile)
+
+void HttpClient::setSSLVerification(const std::string &caFile)
 {
     std::lock_guard<std::mutex> lock(_sslCaFileMutex);
     _sslCaFilename = caFile;
@@ -431,7 +444,7 @@ bool HttpClient::lazyInitThreadSemaphore()
         t.detach();
         _isInited = true;
     }
-    
+
     return true;
 }
 
@@ -442,12 +455,12 @@ void HttpClient::send(HttpRequest* request)
     {
         return;
     }
-    
+
     if (!request)
     {
         return;
     }
-        
+
     request->retain();
 
     _requestQueueMutex.lock();
@@ -460,14 +473,14 @@ void HttpClient::send(HttpRequest* request)
 
 void HttpClient::sendImmediate(HttpRequest* request)
 {
-    if(!request)
+    if (!request)
     {
         return;
     }
 
     request->retain();
     // Create a HttpResponse object, the default setting is http access failed
-    HttpResponse *response = new (std::nothrow) HttpResponse(request);
+    HttpResponse* response = new(std::nothrow) HttpResponse(request);
 
     auto t = std::thread(&HttpClient::networkThreadAlone, this, request, response);
     t.detach();
@@ -487,11 +500,11 @@ void HttpClient::dispatchResponseCallbacks()
         _responseQueue.erase(0);
     }
     _responseQueueMutex.unlock();
-    
+
     if (response)
     {
-        HttpRequest *request = response->getHttpRequest();
-        const ccHttpRequestCallback& callback = request->getCallback();
+        HttpRequest* request = response->getHttpRequest();
+        const ccHttpRequestCallback &callback = request->getCallback();
         Ref* pTarget = request->getTarget();
         SEL_HttpResponse pSelector = request->getSelector();
 
@@ -503,7 +516,7 @@ void HttpClient::dispatchResponseCallbacks()
         {
             (pTarget->*pSelector)(this, response);
         }
-        
+
         response->release();
         // do not release in other thread
         request->release();
@@ -520,49 +533,29 @@ void HttpClient::processResponse(HttpResponse* response, char* responseMessage)
     // Process the request -> get response packet
     switch (request->getRequestType())
     {
-    case HttpRequest::Type::GET: // HTTP GET
-        retValue = processGetTask(this, request,
-            writeData,
-            response->getResponseData(),
-            &responseCode,
-            writeHeaderData,
-            response->getResponseHeader(),
-            responseMessage);
-        break;
+        case HttpRequest::Type::GET: // HTTP GET
+            retValue = processGetTask(this, request, writeData, response->getResponseData(), &responseCode,
+                                      writeHeaderData, response->getResponseHeader(), responseMessage);
+            break;
 
-    case HttpRequest::Type::POST: // HTTP POST
-        retValue = processPostTask(this, request,
-            writeData,
-            response->getResponseData(),
-            &responseCode,
-            writeHeaderData,
-            response->getResponseHeader(),
-            responseMessage);
-        break;
+        case HttpRequest::Type::POST: // HTTP POST
+            retValue = processPostTask(this, request, writeData, response->getResponseData(), &responseCode,
+                                       writeHeaderData, response->getResponseHeader(), responseMessage);
+            break;
 
-    case HttpRequest::Type::PUT:
-        retValue = processPutTask(this, request,
-            writeData,
-            response->getResponseData(),
-            &responseCode,
-            writeHeaderData,
-            response->getResponseHeader(),
-            responseMessage);
-        break;
+        case HttpRequest::Type::PUT:
+            retValue = processPutTask(this, request, writeData, response->getResponseData(), &responseCode,
+                                      writeHeaderData, response->getResponseHeader(), responseMessage);
+            break;
 
-    case HttpRequest::Type::DELETE:
-        retValue = processDeleteTask(this, request,
-            writeData,
-            response->getResponseData(),
-            &responseCode,
-            writeHeaderData,
-            response->getResponseHeader(),
-            responseMessage);
-        break;
+        case HttpRequest::Type::DELETE:
+            retValue = processDeleteTask(this, request, writeData, response->getResponseData(), &responseCode,
+                                         writeHeaderData, response->getResponseHeader(), responseMessage);
+            break;
 
-    default:
-        CCASSERT(false, "CCHttpClient: unknown request type, only GET, POST, PUT or DELETE is supported");
-        break;
+        default:
+            CCASSERT(false, "CCHttpClient: unknown request type, only GET, POST, PUT or DELETE is supported");
+            break;
     }
 
     // write data to HttpResponse
@@ -577,7 +570,7 @@ void HttpClient::processResponse(HttpResponse* response, char* responseMessage)
         response->setSucceed(true);
     }
 }
-    
+
 void HttpClient::clearResponseAndRequestQueue()
 {
     _requestQueueMutex.lock();
@@ -585,11 +578,10 @@ void HttpClient::clearResponseAndRequestQueue()
     {
         for (auto it = _requestQueue.begin(); it != _requestQueue.end();)
         {
-            if(!_clearRequestPredicate ||
-               _clearRequestPredicate((*it)))
+            if (!_clearRequestPredicate || _clearRequestPredicate((*it)))
             {
                 (*it)->release();
-                it =_requestQueue.erase(it);
+                it = _requestQueue.erase(it);
             }
             else
             {
@@ -598,11 +590,12 @@ void HttpClient::clearResponseAndRequestQueue()
         }
     }
     _requestQueueMutex.unlock();
-    
+
     _responseQueueMutex.lock();
     if (_clearResponsePredicate)
     {
-        _responseQueue.erase(std::remove_if(_responseQueue.begin(), _responseQueue.end(), _clearResponsePredicate), _responseQueue.end());
+        _responseQueue.erase(std::remove_if(_responseQueue.begin(), _responseQueue.end(), _clearResponsePredicate),
+                             _responseQueue.end());
     }
     else
     {
@@ -640,32 +633,32 @@ void HttpClient::setTimeoutForConnect(int value)
     std::lock_guard<std::mutex> lock(_timeoutForConnectMutex);
     _timeoutForConnect = value;
 }
-    
+
 int HttpClient::getTimeoutForConnect()
 {
     std::lock_guard<std::mutex> lock(_timeoutForConnectMutex);
     return _timeoutForConnect;
 }
-    
+
 void HttpClient::setTimeoutForRead(int value)
 {
     std::lock_guard<std::mutex> lock(_timeoutForReadMutex);
     _timeoutForRead = value;
 }
-    
+
 int HttpClient::getTimeoutForRead()
 {
     std::lock_guard<std::mutex> lock(_timeoutForReadMutex);
     return _timeoutForRead;
 }
-    
-const std::string& HttpClient::getCookieFilename()
+
+const std::string &HttpClient::getCookieFilename()
 {
     std::lock_guard<std::mutex> lock(_cookieFileMutex);
     return _cookieFilename;
 }
-    
-const std::string& HttpClient::getSSLVerification()
+
+const std::string &HttpClient::getSSLVerification()
 {
     std::lock_guard<std::mutex> lock(_sslCaFileMutex);
     return _sslCaFilename;

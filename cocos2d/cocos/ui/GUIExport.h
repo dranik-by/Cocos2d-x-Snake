@@ -40,7 +40,7 @@
         #endif
     #endif
 
-    /* Define NULL pointer value */
+/* Define NULL pointer value */
     #ifndef NULL
         #ifdef __cplusplus
             #define NULL    0

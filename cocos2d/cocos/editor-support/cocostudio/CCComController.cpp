@@ -26,7 +26,8 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCComController.h"
 #include "2d/CCNode.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 IMPLEMENT_CLASS_COMPONENT_INFO(ComController)
 
@@ -62,7 +63,7 @@ void ComController::onAdd()
 {
     if (_owner != nullptr)
     {
-       _owner->scheduleUpdate();
+        _owner->scheduleUpdate();
     }
 }
 
@@ -76,7 +77,7 @@ void ComController::update(float /*delta*/)
 
 ComController* ComController::create()
 {
-    ComController * pRet = new (std::nothrow) ComController();
+    ComController* pRet = new(std::nothrow) ComController();
     if (pRet && pRet->init())
     {
         pRet->autorelease();
@@ -85,7 +86,7 @@ ComController* ComController::create()
     {
         CC_SAFE_DELETE(pRet);
     }
-	return pRet;
+    return pRet;
 }
 
 }

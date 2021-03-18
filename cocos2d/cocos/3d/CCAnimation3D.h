@@ -43,7 +43,7 @@ NS_CC_BEGIN
 /**
  * @brief static animation data, shared
  */
-class CC_DLL Animation3D: public Ref
+class CC_DLL Animation3D : public Ref
 {
     friend class Bundle3D;
 public:
@@ -66,33 +66,38 @@ public:
         /**constructor */
         ~Curve();
     };
-    
+
     /**read all animation or only the animation with given animationName? animationName == "" read the first.*/
-    static Animation3D* create(const std::string& filename, const std::string& animationName = "");
-       
+    static Animation3D* create(const std::string &filename, const std::string &animationName = "");
+
     /**get duration*/
-    float getDuration() const { return _duration; }
-    
+    float getDuration() const
+    {
+        return _duration;
+    }
+
     /**
      * get bone curve
      * 
      * @lua NA
      */
-    Curve* getBoneCurveByName(const std::string& name) const;
-    
+    Curve* getBoneCurveByName(const std::string &name) const;
 
     /**get the bone Curves set*/
-    const std::unordered_map<std::string, Curve*>& getBoneCurves() const {return _boneCurves;}
-    
+    const std::unordered_map<std::string, Curve*> &getBoneCurves() const
+    {
+        return _boneCurves;
+    }
+
 CC_CONSTRUCTOR_ACCESS:
     Animation3D();
-    virtual ~Animation3D();  
+    virtual ~Animation3D();
     /**init Animation3D from bundle data*/
-    bool init(const Animation3DData& data);
-    
+    bool init(const Animation3DData &data);
+
     /**init Animation3D with file name and animation name*/
-    bool initWithFile(const std::string& filename, const std::string& animationName);
-    
+    bool initWithFile(const std::string &filename, const std::string &animationName);
+
 protected:
     std::unordered_map<std::string, Curve*> _boneCurves;//bone curves map, key bone name, value AnimationCurve
 
@@ -108,13 +113,13 @@ public:
     /**get and destroy instance*/
     static Animation3DCache* getInstance();
     static void destroyInstance();
-    
+
     /**get animation by key*/
-    Animation3D* getAnimation(const std::string& key);
-    
+    Animation3D* getAnimation(const std::string &key);
+
     /**add animation to cache*/
-    void addAnimation(const std::string& key, Animation3D* animation);
-    
+    void addAnimation(const std::string &key, Animation3D* animation);
+
     /**remove all animation*/
     void removeAllAnimations();
     /**remove unused animation*/
@@ -123,9 +128,9 @@ public:
 protected:
     Animation3DCache();
     ~Animation3DCache();
-    
+
     static Animation3DCache* _cacheInstance; //cache instance
-    
+
     std::unordered_map<std::string, Animation3D*> _animations; //cached animations
 };
 

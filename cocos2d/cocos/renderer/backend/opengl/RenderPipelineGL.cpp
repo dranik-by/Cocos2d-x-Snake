@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "RenderPipelineGL.h"
 #include "ShaderModuleGL.h"
 #include "DepthStencilStateGL.h"
@@ -32,19 +32,20 @@
 
 CC_BACKEND_BEGIN
 
-void RenderPipelineGL::update(const PipelineDescriptor& pipelineDescirptor, const RenderPassDescriptor& renderpassDescriptor)
+void RenderPipelineGL::update(const PipelineDescriptor &pipelineDescirptor,
+                              const RenderPassDescriptor &renderpassDescriptor)
 {
-    if(_programGL != pipelineDescirptor.programState->getProgram())
+    if (_programGL != pipelineDescirptor.programState->getProgram())
     {
         CC_SAFE_RELEASE(_programGL);
         _programGL = static_cast<ProgramGL*>(pipelineDescirptor.programState->getProgram());
         CC_SAFE_RETAIN(_programGL);
     }
-    
+
     updateBlendState(pipelineDescirptor.blendDescriptor);
 }
 
-void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
+void RenderPipelineGL::updateBlendState(const BlendDescriptor &descriptor)
 {
     auto blendEnabled = descriptor.blendEnabled;
     auto rgbBlendOperation = UtilsGL::toGLBlendOperation(descriptor.rgbBlendOperation);
@@ -62,14 +63,12 @@ void RenderPipelineGL::updateBlendState(const BlendDescriptor& descriptor)
     {
         glEnable(GL_BLEND);
         glBlendEquationSeparate(rgbBlendOperation, alphaBlendOperation);
-        glBlendFuncSeparate(sourceRGBBlendFactor,
-                            destinationRGBBlendFactor,
-                            sourceAlphaBlendFactor,
+        glBlendFuncSeparate(sourceRGBBlendFactor, destinationRGBBlendFactor, sourceAlphaBlendFactor,
                             destinationAlphaBlendFactor);
     }
     else
         glDisable(GL_BLEND);
-    
+
     glColorMask(writeMaskRed, writeMaskGreen, writeMaskBlue, writeMaskAlpha);
 }
 

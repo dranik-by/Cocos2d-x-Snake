@@ -51,22 +51,21 @@ public:
      * @param attachBone The bone to which the AttachNode is going to attach, the attacheBone must be a bone of the AttachNode's parent
      */
     static AttachNode* create(Bone3D* attachBone);
-    
+
     //override
     virtual Mat4 getWorldToNodeTransform() const override;
     virtual Mat4 getNodeToWorldTransform() const override;
-    virtual const Mat4& getNodeToParentTransform() const override;
-    virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
+    virtual const Mat4 &getNodeToParentTransform() const override;
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
 
 CC_CONSTRUCTOR_ACCESS:
-    
+
     AttachNode();
     virtual ~AttachNode();
-    
 
 protected:
     Bone3D* _attachBone;
-    mutable Mat4    _transformToParent;
+    mutable Mat4 _transformToParent;
 };
 
 // end of 3d group

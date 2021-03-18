@@ -54,7 +54,7 @@ bool EventListenerTouchOneByOne::init()
     {
         return true;
     }
-    
+
     return false;
 }
 
@@ -70,7 +70,7 @@ bool EventListenerTouchOneByOne::isSwallowTouches()
 
 EventListenerTouchOneByOne* EventListenerTouchOneByOne::create()
 {
-    auto ret = new (std::nothrow) EventListenerTouchOneByOne();
+    auto ret = new(std::nothrow) EventListenerTouchOneByOne();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -91,22 +91,22 @@ bool EventListenerTouchOneByOne::checkAvailable()
         CCASSERT(false, "Invalid EventListenerTouchOneByOne!");
         return false;
     }
-    
+
     return true;
 }
 
 EventListenerTouchOneByOne* EventListenerTouchOneByOne::clone()
 {
-    auto ret = new (std::nothrow) EventListenerTouchOneByOne();
+    auto ret = new(std::nothrow) EventListenerTouchOneByOne();
     if (ret && ret->init())
     {
         ret->autorelease();
-        
+
         ret->onTouchBegan = onTouchBegan;
         ret->onTouchMoved = onTouchMoved;
         ret->onTouchEnded = onTouchEnded;
         ret->onTouchCancelled = onTouchCancelled;
-        
+
         ret->_claimedTouches = _claimedTouches;
         ret->_needSwallow = _needSwallow;
     }
@@ -140,13 +140,13 @@ bool EventListenerTouchAllAtOnce::init()
     {
         return true;
     }
-    
+
     return false;
 }
 
 EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::create()
 {
-    auto ret = new (std::nothrow) EventListenerTouchAllAtOnce();
+    auto ret = new(std::nothrow) EventListenerTouchAllAtOnce();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -160,23 +160,22 @@ EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::create()
 
 bool EventListenerTouchAllAtOnce::checkAvailable()
 {
-    if (onTouchesBegan == nullptr && onTouchesMoved == nullptr
-        && onTouchesEnded == nullptr && onTouchesCancelled == nullptr)
+    if (onTouchesBegan == nullptr && onTouchesMoved == nullptr && onTouchesEnded == nullptr && onTouchesCancelled == nullptr)
     {
         CCASSERT(false, "Invalid EventListenerTouchAllAtOnce!");
         return false;
     }
-    
+
     return true;
 }
 
 EventListenerTouchAllAtOnce* EventListenerTouchAllAtOnce::clone()
 {
-    auto ret = new (std::nothrow) EventListenerTouchAllAtOnce();
+    auto ret = new(std::nothrow) EventListenerTouchAllAtOnce();
     if (ret && ret->init())
     {
         ret->autorelease();
-        
+
         ret->onTouchesBegan = onTouchesBegan;
         ret->onTouchesMoved = onTouchesMoved;
         ret->onTouchesEnded = onTouchesEnded;

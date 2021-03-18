@@ -32,9 +32,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
+AnimationFrame* AnimationFrame::create(SpriteFrame* spriteFrame, float delayUnits, const ValueMap &userInfo)
 {
-    auto ret = new (std::nothrow) AnimationFrame();
+    auto ret = new(std::nothrow) AnimationFrame();
     if (ret && ret->initWithSpriteFrame(spriteFrame, delayUnits, userInfo))
     {
         ret->autorelease();
@@ -53,7 +53,7 @@ AnimationFrame::AnimationFrame()
 
 }
 
-bool AnimationFrame::initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap& userInfo)
+bool AnimationFrame::initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUnits, const ValueMap &userInfo)
 {
     setSpriteFrame(spriteFrame);
     setDelayUnits(delayUnits);
@@ -63,8 +63,8 @@ bool AnimationFrame::initWithSpriteFrame(SpriteFrame* spriteFrame, float delayUn
 }
 
 AnimationFrame::~AnimationFrame()
-{    
-    CCLOGINFO( "deallocing AnimationFrame: %p", this);
+{
+    CCLOGINFO("deallocing AnimationFrame: %p", this);
 
     CC_SAFE_RELEASE(_spriteFrame);
 }
@@ -72,10 +72,8 @@ AnimationFrame::~AnimationFrame()
 AnimationFrame* AnimationFrame::clone() const
 {
     // no copy constructor
-    auto frame = new (std::nothrow) AnimationFrame();
-    frame->initWithSpriteFrame(_spriteFrame->clone(),
-                               _delayUnits,
-                               _userInfo);
+    auto frame = new(std::nothrow) AnimationFrame();
+    frame->initWithSpriteFrame(_spriteFrame->clone(), _delayUnits, _userInfo);
 
     frame->autorelease();
     return frame;
@@ -85,25 +83,27 @@ AnimationFrame* AnimationFrame::clone() const
 
 Animation* Animation::create()
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation* animation = new(std::nothrow) Animation();
     animation->init();
     animation->autorelease();
 
     return animation;
-} 
+}
 
-Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
+Animation* Animation::createWithSpriteFrames(const Vector<SpriteFrame*> &frames, float delay/* = 0.0f*/,
+                                             unsigned int loops/* = 1*/)
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation* animation = new(std::nothrow) Animation();
     animation->initWithSpriteFrames(frames, delay, loops);
     animation->autorelease();
 
     return animation;
 }
 
-Animation* Animation::create(const Vector<AnimationFrame*>& arrayOfAnimationFrameNames, float delayPerUnit, unsigned int loops /* = 1 */)
+Animation* Animation::create(const Vector<AnimationFrame*> &arrayOfAnimationFrameNames, float delayPerUnit,
+                             unsigned int loops /* = 1 */)
 {
-    Animation *animation = new (std::nothrow) Animation();
+    Animation* animation = new(std::nothrow) Animation();
     animation->initWithAnimationFrames(arrayOfAnimationFrameNames, delayPerUnit, loops);
     animation->autorelease();
     return animation;
@@ -113,16 +113,17 @@ bool Animation::init()
 {
     _loops = 1;
     _delayPerUnit = 0.0f;
-    
+
     return true;
 }
 
-bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*>& frames, float delay/* = 0.0f*/, unsigned int loops/* = 1*/)
+bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*> &frames, float delay/* = 0.0f*/,
+                                     unsigned int loops/* = 1*/)
 {
     _delayPerUnit = delay;
     _loops = loops;
 
-    for (auto& spriteFrame : frames)
+    for (auto &spriteFrame : frames)
     {
         auto animFrame = AnimationFrame::create(spriteFrame, 1, ValueMap());
         _frames.pushBack(animFrame);
@@ -132,14 +133,15 @@ bool Animation::initWithSpriteFrames(const Vector<SpriteFrame*>& frames, float d
     return true;
 }
 
-bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*>& arrayOfAnimationFrames, float delayPerUnit, unsigned int loops)
+bool Animation::initWithAnimationFrames(const Vector<AnimationFrame*> &arrayOfAnimationFrames, float delayPerUnit,
+                                        unsigned int loops)
 {
     _delayPerUnit = delayPerUnit;
     _loops = loops;
 
     setFrames(arrayOfAnimationFrames);
 
-    for (auto& animFrame : _frames)
+    for (auto &animFrame : _frames)
     {
         _totalDelayUnits += animFrame->getDelayUnits();
     }
@@ -163,25 +165,25 @@ Animation::~Animation()
 
 void Animation::addSpriteFrame(SpriteFrame* spriteFrame)
 {
-    AnimationFrame *animFrame = AnimationFrame::create(spriteFrame, 1.0f, ValueMap());
+    AnimationFrame* animFrame = AnimationFrame::create(spriteFrame, 1.0f, ValueMap());
     _frames.pushBack(animFrame);
 
     // update duration
     _totalDelayUnits++;
 }
 
-void Animation::addSpriteFrameWithFile(const std::string& filename)
+void Animation::addSpriteFrameWithFile(const std::string &filename)
 {
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(filename);
+    Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(filename);
     Rect rect = Rect::ZERO;
     rect.size = texture->getContentSize();
-    SpriteFrame *frame = SpriteFrame::createWithTexture(texture, rect);
+    SpriteFrame* frame = SpriteFrame::createWithTexture(texture, rect);
     addSpriteFrame(frame);
 }
 
-void Animation::addSpriteFrameWithTexture(Texture2D *pobTexture, const Rect& rect)
+void Animation::addSpriteFrameWithTexture(Texture2D* pobTexture, const Rect &rect)
 {
-    SpriteFrame *frame = SpriteFrame::createWithTexture(pobTexture, rect);
+    SpriteFrame* frame = SpriteFrame::createWithTexture(pobTexture, rect);
     addSpriteFrame(frame);
 }
 
@@ -193,7 +195,7 @@ float Animation::getDuration() const
 Animation* Animation::clone() const
 {
     // no copy constructor    
-    auto a = new (std::nothrow) Animation();
+    auto a = new(std::nothrow) Animation();
     a->initWithAnimationFrames(_frames, _delayPerUnit, _loops);
     a->setRestoreOriginalFrame(_restoreOriginalFrame);
     a->autorelease();

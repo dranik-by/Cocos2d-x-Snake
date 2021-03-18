@@ -37,7 +37,6 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-
 class Animation;
 
 /**
@@ -82,13 +81,13 @@ public:
      * @param animation An animation.
      * @param name The name of animation.
      */
-    void addAnimation(Animation *animation, const std::string& name);
+    void addAnimation(Animation* animation, const std::string &name);
 
     /** Deletes a Animation from the cache.
      *
      * @param name The name of animation.
      */
-    void removeAnimation(const std::string& name);
+    void removeAnimation(const std::string &name);
 
     /** Returns a Animation that was previously added.
      * If the name is not found it will return nil.
@@ -96,7 +95,7 @@ public:
      *
      * @return A Animation that was previously added. If the name is not found it will return nil.
      */
-    Animation* getAnimation(const std::string& name);
+    Animation* getAnimation(const std::string &name);
 
     /** Adds an animation from an NSDictionary.
      * Make sure that the frames were previously loaded in the SpriteFrameCache.
@@ -105,7 +104,7 @@ public:
      * @since v1.1
 	 @js NA
      */
-    void addAnimationsWithDictionary(const ValueMap& dictionary,const std::string& plist);
+    void addAnimationsWithDictionary(const ValueMap &dictionary, const std::string &plist);
 
     /** Adds an animation from a plist file.
      * Make sure that the frames were previously loaded in the SpriteFrameCache.
@@ -114,11 +113,11 @@ public:
      * @lua addAnimations
      * @param plist An animation from a plist file.
      */
-    void addAnimationsWithFile(const std::string& plist);
+    void addAnimationsWithFile(const std::string &plist);
 
 private:
-    void parseVersion1(const ValueMap& animations);
-    void parseVersion2(const ValueMap& animations);
+    void parseVersion1(const ValueMap &animations);
+    void parseVersion2(const ValueMap &animations);
 
 private:
     Map<std::string, Animation*> _animations;

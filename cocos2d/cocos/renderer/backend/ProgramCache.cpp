@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "ProgramCache.h"
 #include "Device.h"
 #include "ShaderModule.h"
@@ -31,36 +31,35 @@
 
 namespace std
 {
-    template <>
-    struct hash<cocos2d::backend::ProgramType>
+template <>
+struct hash<cocos2d::backend::ProgramType>
+{
+    typedef cocos2d::backend::ProgramType argument_type;
+    typedef std::size_t result_type;
+
+    result_type operator()(argument_type const &v) const
     {
-        typedef cocos2d::backend::ProgramType argument_type;
-        typedef std::size_t result_type;
-        result_type operator()(argument_type const& v) const
-        {
-            return hash<int>()(static_cast<int>(v));
-        }
-    };
+        return hash<int>()(static_cast<int>(v));
+    }
+};
 }
 
 CC_BACKEND_BEGIN
 
 namespace
 {
-    std::string getShaderMacrosForLight()
-    {
-        char def[256];
-        auto conf = Configuration::getInstance();
+std::string getShaderMacrosForLight()
+{
+    char def[256];
+    auto conf = Configuration::getInstance();
 
-        snprintf(def, sizeof(def) - 1, "\n#define MAX_DIRECTIONAL_LIGHT_NUM %d \n"
-            "\n#define MAX_POINT_LIGHT_NUM %d \n"
-            "\n#define MAX_SPOT_LIGHT_NUM %d \n",
-            conf->getMaxSupportDirLightInShader(),
-            conf->getMaxSupportPointLightInShader(),
-            conf->getMaxSupportSpotLightInShader());
+    snprintf(def, sizeof(def) - 1, "\n#define MAX_DIRECTIONAL_LIGHT_NUM %d \n"
+                                   "\n#define MAX_POINT_LIGHT_NUM %d \n"
+                                   "\n#define MAX_SPOT_LIGHT_NUM %d \n", conf->getMaxSupportDirLightInShader(),
+             conf->getMaxSupportPointLightInShader(), conf->getMaxSupportSpotLightInShader());
 
-        return std::string(def);
-    }
+    return std::string(def);
+}
 }
 
 std::unordered_map<backend::ProgramType, backend::Program*>  ProgramCache::_cachedPrograms;
@@ -68,10 +67,10 @@ ProgramCache* ProgramCache::_sharedProgramCache = nullptr;
 
 ProgramCache* ProgramCache::getInstance()
 {
-    if(!_sharedProgramCache)
+    if (!_sharedProgramCache)
     {
-        _sharedProgramCache = new (std::nothrow) ProgramCache();
-        if(!_sharedProgramCache->init())
+        _sharedProgramCache = new(std::nothrow) ProgramCache();
+        if (!_sharedProgramCache->init())
         {
             CC_SAFE_RELEASE(_sharedProgramCache);
         }
@@ -86,7 +85,7 @@ void ProgramCache::destroyInstance()
 
 ProgramCache::~ProgramCache()
 {
-    for(auto& program : _cachedPrograms)
+    for (auto &program : _cachedPrograms)
     {
         CC_SAFE_RELEASE(program.second);
     }
@@ -132,7 +131,8 @@ bool ProgramCache::init()
 void ProgramCache::addProgram(ProgramType type)
 {
     Program* program = nullptr;
-    switch (type) {
+    switch (type)
+    {
         case ProgramType::POSITION_TEXTURE_COLOR:
             program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, positionTextureColor_frag);
             break;
@@ -149,13 +149,16 @@ void ProgramCache::addProgram(ProgramType type)
             program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, labelOutline_frag);
             break;
         case ProgramType::LABLE_DISTANCEFIELD_GLOW:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, labelDistanceFieldGlow_frag);
+            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert,
+                                                                 labelDistanceFieldGlow_frag);
             break;
         case ProgramType::POSITION_COLOR_LENGTH_TEXTURE:
-            program = backend::Device::getInstance()->newProgram(positionColorLengthTexture_vert, positionColorLengthTexture_frag);
+            program = backend::Device::getInstance()->newProgram(positionColorLengthTexture_vert,
+                                                                 positionColorLengthTexture_frag);
             break;
         case ProgramType::POSITION_COLOR_TEXTURE_AS_POINTSIZE:
-            program = backend::Device::getInstance()->newProgram(positionColorTextureAsPointsize_vert, positionColor_frag);
+            program = backend::Device::getInstance()->newProgram(positionColorTextureAsPointsize_vert,
+                                                                 positionColor_frag);
             break;
         case ProgramType::POSITION_COLOR:
             program = backend::Device::getInstance()->newProgram(positionColor_vert, positionColor_frag);
@@ -170,7 +173,8 @@ void ProgramCache::addProgram(ProgramType type)
             program = backend::Device::getInstance()->newProgram(positionTexture_vert, positionTexture_frag);
             break;
         case ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST:
-            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert, positionTextureColorAlphaTest_frag);
+            program = backend::Device::getInstance()->newProgram(positionTextureColor_vert,
+                                                                 positionTextureColorAlphaTest_frag);
             break;
         case ProgramType::POSITION_UCOLOR:
             program = backend::Device::getInstance()->newProgram(positionUColor_vert, positionUColor_frag);
@@ -194,16 +198,18 @@ void ProgramCache::addProgram(ProgramType type)
             program = backend::Device::getInstance()->newProgram(CC3D_skinPositionTexture_vert, CC3D_colorTexture_frag);
             break;
         case ProgramType::SKINPOSITION_NORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_skinPositionNormalTexture_vert, def + CC3D_colorNormalTexture_frag);
-            }
+        {
+            std::string def = getShaderMacrosForLight();
+            program = backend::Device::getInstance()->newProgram(def + CC3D_skinPositionNormalTexture_vert,
+                                                                 def + CC3D_colorNormalTexture_frag);
+        }
             break;
         case ProgramType::POSITION_NORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert, def + CC3D_colorNormalTexture_frag);
-            }
+        {
+            std::string def = getShaderMacrosForLight();
+            program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert,
+                                                                 def + CC3D_colorNormalTexture_frag);
+        }
             break;
         case ProgramType::POSITION_TEXTURE_3D:
             program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_colorTexture_frag);
@@ -212,24 +218,28 @@ void ProgramCache::addProgram(ProgramType type)
             program = backend::Device::getInstance()->newProgram(CC3D_positionTexture_vert, CC3D_color_frag);
             break;
         case ProgramType::POSITION_NORMAL_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert, def + CC3D_colorNormal_frag);
-            }
+        {
+            std::string def = getShaderMacrosForLight();
+            program = backend::Device::getInstance()->newProgram(def + CC3D_positionNormalTexture_vert,
+                                                                 def + CC3D_colorNormal_frag);
+        }
             break;
         case ProgramType::POSITION_BUMPEDNORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
-                program = backend::Device::getInstance()->newProgram(def + normalMapDef + CC3D_positionNormalTexture_vert, def + normalMapDef + CC3D_colorNormalTexture_frag);
-            }
+        {
+            std::string def = getShaderMacrosForLight();
+            std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
+            program = backend::Device::getInstance()->newProgram(def + normalMapDef + CC3D_positionNormalTexture_vert,
+                                                                 def + normalMapDef + CC3D_colorNormalTexture_frag);
+        }
             break;
         case ProgramType::SKINPOSITION_BUMPEDNORMAL_TEXTURE_3D:
-            {
-                std::string def = getShaderMacrosForLight();
-                std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
-                program = backend::Device::getInstance()->newProgram(def + normalMapDef + CC3D_skinPositionNormalTexture_vert, def + normalMapDef + CC3D_colorNormalTexture_frag);
-            }
+        {
+            std::string def = getShaderMacrosForLight();
+            std::string normalMapDef = "\n#define USE_NORMAL_MAPPING 1 \n";
+            program = backend::Device::getInstance()->newProgram(
+            def + normalMapDef + CC3D_skinPositionNormalTexture_vert,
+            def + normalMapDef + CC3D_colorNormalTexture_frag);
+        }
             break;
         case ProgramType::TERRAIN_3D:
             program = backend::Device::getInstance()->newProgram(CC3D_terrain_vert, CC3D_terrain_frag);
@@ -250,7 +260,7 @@ void ProgramCache::addProgram(ProgramType type)
 
 backend::Program* ProgramCache::getBuiltinProgram(ProgramType type) const
 {
-    const auto& iter = ProgramCache::_cachedPrograms.find(type);
+    const auto &iter = ProgramCache::_cachedPrograms.find(type);
     if (ProgramCache::_cachedPrograms.end() != iter)
     {
         return iter->second;
@@ -264,7 +274,7 @@ void ProgramCache::removeProgram(backend::Program* program)
     {
         return;
     }
-    
+
     for (auto it = _cachedPrograms.cbegin(); it != _cachedPrograms.cend();)
     {
         if (it->second == program)
@@ -285,7 +295,7 @@ void ProgramCache::removeUnusedProgram()
         auto program = iter->second;
         if (program->getReferenceCount() == 1)
         {
-//            CCLOG("cocos2d: TextureCache: removing unused program");
+            //            CCLOG("cocos2d: TextureCache: removing unused program");
             program->release();
             iter = _cachedPrograms.erase(iter);
         }
@@ -298,7 +308,7 @@ void ProgramCache::removeUnusedProgram()
 
 void ProgramCache::removeAllPrograms()
 {
-    for (auto& program : _cachedPrograms)
+    for (auto &program : _cachedPrograms)
     {
         program.second->release();
     }

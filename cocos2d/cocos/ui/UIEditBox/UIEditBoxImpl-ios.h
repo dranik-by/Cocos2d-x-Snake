@@ -29,16 +29,15 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
-
-
+    #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
 @class UIEditBoxImplIOS_objc;
 @class UIFont;
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 class EditBox;
 
@@ -54,40 +53,38 @@ public:
      * @lua NA
      */
     virtual ~EditBoxImplIOS();
-    
+
     virtual bool isEditing() override;
-    virtual void createNativeControl(const Rect& frame) override;
+    virtual void createNativeControl(const Rect &frame) override;
     virtual void setNativeFont(const char* pFontName, int fontSize) override;
-    virtual void setNativeFontColor(const Color4B& color) override;
+    virtual void setNativeFontColor(const Color4B &color) override;
     virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override;
-    virtual void setNativePlaceholderFontColor(const Color4B& color) override;
+    virtual void setNativePlaceholderFontColor(const Color4B &color) override;
     virtual void setNativeInputMode(EditBox::InputMode inputMode) override;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)override;
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override;
     virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment) override;
     virtual void setNativeText(const char* pText) override;
     virtual void setNativePlaceHolder(const char* pText) override;
     virtual void setNativeVisible(bool visible) override;
-    virtual void updateNativeFrame(const Rect& rect) override;
+    virtual void updateNativeFrame(const Rect &rect) override;
     virtual const char* getNativeDefaultFontName() override;
     virtual void nativeOpenKeyboard() override;
     virtual void nativeCloseKeyboard() override;
-    
+
     //need to remove siri text
-    virtual const char* getText()override;
+    virtual const char* getText() override;
 
     virtual void doAnimationWhenKeyboardMove(float duration, float distance) override;
 private:
-    UIFont*         constructFont(const char* fontName, int fontSize);
-    
+    UIFont* constructFont(const char* fontName, int fontSize);
+
     UIEditBoxImplIOS_objc* _systemControl;
 };
-
 
 }
 
 NS_CC_END
-
 
 #endif /* #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
 

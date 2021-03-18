@@ -34,8 +34,9 @@
  */
 
 NS_CC_BEGIN
-namespace ui{
-        
+namespace ui
+{
+
 class WebViewImpl;
 
 /**
@@ -45,12 +46,13 @@ class WebViewImpl;
  * It's mean WebView displays web pages above all graphical elements of cocos2d-x.
  * @js NA
  */
-class CC_GUI_DLL WebView : public cocos2d::ui::Widget {
+class CC_GUI_DLL WebView : public cocos2d::ui::Widget
+{
 public:
     /**
      * Allocates and initializes a WebView.
      */
-    static WebView *create();
+    static WebView* create();
 
     /**
      * Set javascript interface scheme.
@@ -67,11 +69,9 @@ public:
      * @param encoding The encoding of the data.
      * @param baseURL The base URL for the content.
      */
-    void loadData(const cocos2d::Data &data,
-                  const std::string &MIMEType,
-                  const std::string &encoding,
+    void loadData(const cocos2d::Data &data, const std::string &MIMEType, const std::string &encoding,
                   const std::string &baseURL);
-    
+
     /**
      * Sets the main page content and base URL.
      *
@@ -144,65 +144,65 @@ public:
      * Set WebView should support zooming. The default value is false.
      */
     void setScalesPageToFit(const bool scalesPageToFit);
-    
+
     /**
      * Call before a web view begins loading.
      *
      * @param callback The web view that is about to load new content.
      * @return YES if the web view should begin loading content; otherwise, NO.
      */
-    void setOnShouldStartLoading(const std::function<bool(WebView *sender, const std::string &url)>& callback);
-    
+    void setOnShouldStartLoading(const std::function<bool(WebView* sender, const std::string &url)> &callback);
+
     /**
      * A callback which will be called when a WebView event happens.
      */
-    typedef std::function<void(WebView *sender, const std::string &url)> ccWebViewCallback;
+    typedef std::function<void(WebView* sender, const std::string &url)> ccWebViewCallback;
 
     /**
      * Call after a web view finishes loading.
      *
      * @param callback The web view that has finished loading.
      */
-    void setOnDidFinishLoading(const ccWebViewCallback& callback);
-    
+    void setOnDidFinishLoading(const ccWebViewCallback &callback);
+
     /**
      * Call if a web view failed to load content.
      *
      * @param callback The web view that has failed loading.
      */
-    void setOnDidFailLoading(const ccWebViewCallback& callback);
-    
+    void setOnDidFailLoading(const ccWebViewCallback &callback);
+
     /**
      * This callback called when load URL that start with javascript interface scheme.
      */
-    void setOnJSCallback(const ccWebViewCallback& callback);
-    
+    void setOnJSCallback(const ccWebViewCallback &callback);
+
     /**
      * Get the callback when WebView is about to start.
      */
-    std::function<bool(WebView *sender, const std::string &url)> getOnShouldStartLoading()const;
-    
+    std::function<bool(WebView* sender, const std::string &url)> getOnShouldStartLoading() const;
+
     /**
      * Get the callback when WebView has finished loading.
      */
-    ccWebViewCallback getOnDidFinishLoading()const;
-    
+    ccWebViewCallback getOnDidFinishLoading() const;
+
     /**
      * Get the callback when WebView has failed loading.
      */
-    ccWebViewCallback getOnDidFailLoading()const;
+    ccWebViewCallback getOnDidFailLoading() const;
 
     /**
      *Get the Javascript callback.
      */
-    ccWebViewCallback getOnJSCallback()const;
+    ccWebViewCallback getOnJSCallback() const;
 
     /**
      * Set whether the webview bounces at end of scroll of WebView.
      */
     void setBounces(bool bounce);
 
-    virtual void draw(cocos2d::Renderer *renderer, cocos2d::Mat4 const &transform, uint32_t flags) override;
+    virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const &transform, uint32_t flags) override;
 
     /**
      * Toggle visibility of WebView.
@@ -212,24 +212,24 @@ public:
      * SetOpacity of webview.
      */
     virtual void setOpacityWebView(float opacity);
-    
+
     /**
      * getOpacity of webview.
      */
     virtual float getOpacityWebView() const;
-    
+
     /**
      * set the background transparent
      */
     virtual void setBackgroundTransparent();
     virtual void onEnter() override;
     virtual void onExit() override;
-    
+
 protected:
     virtual cocos2d::ui::Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
-    
-    std::function<bool(WebView *sender, const std::string &url)> _onShouldStartLoading = nullptr;
+
+    std::function<bool(WebView* sender, const std::string &url)> _onShouldStartLoading = nullptr;
     ccWebViewCallback _onDidFinishLoading = nullptr;
     ccWebViewCallback _onDidFailLoading = nullptr;
     ccWebViewCallback _onJSCallback = nullptr;
@@ -239,17 +239,17 @@ CC_CONSTRUCTOR_ACCESS:
      * Default constructor.
      */
     WebView();
-    
+
     /**
      * Default destructor.
      */
     virtual ~WebView();
 
 private:
-    WebViewImpl *_impl = nullptr;
+    WebViewImpl* _impl = nullptr;
     friend class WebViewImpl;
 };
-        
+
 } // namespace ui
 }//namespace cocos2d
 

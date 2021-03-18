@@ -50,25 +50,27 @@ public:
     virtual ~FileUtilsApple();
     /* override functions */
     virtual std::string getWritablePath() const override;
-    virtual std::string getFullPathForFilenameWithinDirectory(const std::string& directory, const std::string& filename) const override;
+    virtual std::string getFullPathForFilenameWithinDirectory(const std::string &directory,
+                                                              const std::string &filename) const override;
 
-    virtual ValueMap getValueMapFromFile(const std::string& filename) const override;
+    virtual ValueMap getValueMapFromFile(const std::string &filename) const override;
     virtual ValueMap getValueMapFromData(const char* filedata, int filesize) const override;
-    virtual bool writeToFile(const ValueMap& dict, const std::string& fullPath) const override;
+    virtual bool writeToFile(const ValueMap &dict, const std::string &fullPath) const override;
 
-    virtual ValueVector getValueVectorFromFile(const std::string& filename) const override;
-#if CC_FILEUTILS_APPLE_ENABLE_OBJC
+    virtual ValueVector getValueVectorFromFile(const std::string &filename) const override;
+    #if CC_FILEUTILS_APPLE_ENABLE_OBJC
     void setBundle(NSBundle* bundle);
-#endif
-    
-    virtual bool createDirectory(const std::string& path) const override;
-    virtual std::string getPathForDirectory(const std::string &dir, const std::string &resolutionDiretory, const std::string &searchPath) const override;
+    #endif
+
+    virtual bool createDirectory(const std::string &path) const override;
+    virtual std::string getPathForDirectory(const std::string &dir, const std::string &resolutionDiretory,
+                                            const std::string &searchPath) const override;
 
 private:
-    virtual bool isFileExistInternal(const std::string& filePath) const override;
-    virtual bool removeDirectory(const std::string& dirPath) const override;
-    virtual void valueMapCompact(ValueMap& valueMap) const override;
-    virtual void valueVectorCompact(ValueVector& valueVector) const override;
+    virtual bool isFileExistInternal(const std::string &filePath) const override;
+    virtual bool removeDirectory(const std::string &dirPath) const override;
+    virtual void valueMapCompact(ValueMap &valueMap) const override;
+    virtual void valueVectorCompact(ValueVector &valueVector) const override;
 
     struct IMPL;
     std::unique_ptr<IMPL> pimpl_;

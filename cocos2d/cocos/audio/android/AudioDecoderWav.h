@@ -27,7 +27,8 @@ THE SOFTWARE.
 
 #include "audio/android/AudioDecoder.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoderWav : public AudioDecoder
 {

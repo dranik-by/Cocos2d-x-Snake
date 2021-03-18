@@ -36,8 +36,7 @@ typedef uint32_t gain_minifloat_packed_t;
 #define GAIN_MINIFLOAT_UNITY    0xE000
 
 /* Pack a pair of gain_mini_float_t into a combined gain_minifloat_packed_t */
-static inline gain_minifloat_packed_t gain_minifloat_pack(gain_minifloat_t left,
-        gain_minifloat_t right)
+static inline gain_minifloat_packed_t gain_minifloat_pack(gain_minifloat_t left, gain_minifloat_t right)
 {
     return (right << 16) | left;
 }

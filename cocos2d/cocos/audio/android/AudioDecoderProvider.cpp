@@ -31,9 +31,12 @@
 #include "audio/android/AudioDecoderWav.h"
 #include "platform/CCFileUtils.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
-AudioDecoder* AudioDecoderProvider::createAudioDecoder(SLEngineItf engineItf, const std::string &url, int bufferSizeInFrames, int sampleRate, const FdGetterCallback &fdGetterCallback)
+AudioDecoder* AudioDecoderProvider::createAudioDecoder(SLEngineItf engineItf, const std::string &url,
+                                                       int bufferSizeInFrames, int sampleRate,
+                                                       const FdGetterCallback &fdGetterCallback)
 {
     AudioDecoder* decoder = nullptr;
     std::string extension = FileUtils::getInstance()->getFileExtension(url);

@@ -58,17 +58,16 @@ public:
 
     enum class MouseButton
     {
-      BUTTON_UNSET   = -1,
-      BUTTON_LEFT    =  0,
-      BUTTON_RIGHT   =  1,
-      BUTTON_MIDDLE  =  2,
-      BUTTON_4       =  3,
-      BUTTON_5       =  4,
-      BUTTON_6       =  5,
-      BUTTON_7       =  6,
-      BUTTON_8       =  7
+        BUTTON_UNSET = -1,
+        BUTTON_LEFT = 0,
+        BUTTON_RIGHT = 1,
+        BUTTON_MIDDLE = 2,
+        BUTTON_4 = 3,
+        BUTTON_5 = 4,
+        BUTTON_6 = 5,
+        BUTTON_7 = 6,
+        BUTTON_8 = 7
     };
-
 
     /** Constructor.
      *
@@ -82,17 +81,29 @@ public:
      * @param scrollX The scroll data of x axis.
      * @param scrollY The scroll data of y axis.
      */
-    void setScrollData(float scrollX, float scrollY) { _scrollX = scrollX; _scrollY = scrollY; }
+    void setScrollData(float scrollX, float scrollY)
+    {
+        _scrollX = scrollX;
+        _scrollY = scrollY;
+    }
+
     /** Get mouse scroll data of x axis.
      * 
      * @return The scroll data of x axis.
      */
-    float getScrollX() const { return _scrollX; }
+    float getScrollX() const
+    {
+        return _scrollX;
+    }
+
     /** Get mouse scroll data of y axis.
      *
      * @return The scroll data of y axis.
      */
-    float getScrollY() const { return _scrollY; }
+    float getScrollY() const
+    {
+        return _scrollY;
+    }
 
     /** Set the cursor position.
      *
@@ -100,7 +111,8 @@ public:
      * @param y The y coordinate of cursor position.
      * @js setLocation
      */
-    void setCursorPosition(float x, float y) { 
+    void setCursorPosition(float x, float y)
+    {
         _x = x;
         _y = y;
         _prevPoint = _point;
@@ -118,25 +130,40 @@ public:
      * @param button a given mouse button.
      * @js setButton
      */
-    void setMouseButton(MouseButton button) { _mouseButton = button; }
+    void setMouseButton(MouseButton button)
+    {
+        _mouseButton = button;
+    }
+
     /** Get mouse button.
      *
      * @return The mouse button.
      * @js getButton
      */
-    MouseButton getMouseButton() const { return _mouseButton; }
+    MouseButton getMouseButton() const
+    {
+        return _mouseButton;
+    }
+
     /** Get the cursor position of x axis.
      *
      * @return The x coordinate of cursor position.
      * @js getLocationX
      */
-    float getCursorX() const { return _x; }
+    float getCursorX() const
+    {
+        return _x;
+    }
+
     /** Get the cursor position of y axis.
      *
      * @return The y coordinate of cursor position.
      * @js getLocationY
      */
-    float getCursorY() const { return _y; }
+    float getCursorY() const
+    {
+        return _y;
+    }
 
     /** Returns the current touch location in OpenGL coordinates.
      *
@@ -177,7 +204,6 @@ public:
      * @js NA
      */
     Vec2 getStartLocationInView() const;
-
 
 private:
     MouseEventType _mouseEventType;

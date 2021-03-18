@@ -80,7 +80,7 @@ private:
      *  @param  pObject   The object of this element.
      */
     DictElement(intptr_t iKey, Ref* pObject);
-    
+
 public:
     /**
      *  The destructor of DictElement.
@@ -90,7 +90,7 @@ public:
     ~DictElement();
 
     // Inline functions need to be implemented in header file on Android.
-    
+
     /**
      * Get the string key of this element.
      * @note    This method assumes you know the key type in the element. 
@@ -116,21 +116,24 @@ public:
         CCASSERT(_strKey[0] == '\0', "Should not call this function for string dictionary");
         return _intKey;
     }
-    
+
     /**
      * Get the object of this element.
      *
      * @return  The object of this element.
      */
-    Ref* getObject() const { return _object; }
+    Ref* getObject() const
+    {
+        return _object;
+    }
 
 private:
     // The max length of string key.
     #define   MAX_KEY_LEN   256
     // char array is needed for HASH_ADD_STR in UT_HASH.
     // So it's a pain that all elements will allocate 256 bytes for this array.
-    char      _strKey[MAX_KEY_LEN];     // hash key of string type
-    intptr_t  _intKey;       // hash key of integer type
+    char _strKey[MAX_KEY_LEN];     // hash key of string type
+    intptr_t _intKey;       // hash key of integer type
     Ref* _object;    // hash value
 public:
     UT_hash_handle hh;      // makes this class hashable
@@ -146,8 +149,6 @@ public:
     DictElement* pTmp##__dict__##__el__ = nullptr; \
     if (__dict__) \
     HASH_ITER(hh, (__dict__)->_elements, __el__, pTmp##__dict__##__el__)
-
-
 
 /**
  *  Dictionary is a class like NSDictionary in Obj-C .
@@ -239,8 +240,8 @@ public:
      *  @see objectForKey(intptr_t)
      * @js NA
      */
-    Ref* objectForKey(const std::string& key);
-    
+    Ref* objectForKey(const std::string &key);
+
     /**
      *  Get the object according to the specified integer key.
      *
@@ -251,7 +252,7 @@ public:
      * @js NA
      */
     Ref* objectForKey(intptr_t key);
-    
+
     /** Get the value according to the specified string key.
      *
      *  @note Be careful to use this function since it assumes the objects in the dictionary are __String pointer.
@@ -261,8 +262,8 @@ public:
      *  @see valueForKey(intptr_t)
      *  @js NA
      */
-    const __String* valueForKey(const std::string& key);
-    
+    const __String* valueForKey(const std::string &key);
+
     /** Get the value according to the specified integer key.
      *
      *  @note Be careful to use this function since it assumes the objects in the dictionary are __String pointer.
@@ -286,8 +287,8 @@ public:
      *  @see setObject(Ref*, intptr_t)
      * @js NA
      */
-    void setObject(Ref* pObject, const std::string& key);
-    
+    void setObject(Ref* pObject, const std::string &key);
+
     /** Insert an object to dictionary, and match it with the specified string key.
      *
      *  @note Then the first time this method is invoked, the key type will be set to string.
@@ -309,8 +310,8 @@ public:
      *       removeObjectForElememt(DictElement*), removeAllObjects().
      *  @js NA
      */
-    void removeObjectForKey(const std::string& key);
-    
+    void removeObjectForKey(const std::string &key);
+
     /**
      *  Remove an object by the specified integer key.
      *
@@ -320,7 +321,7 @@ public:
      *  @js NA
      */
     void removeObjectForKey(intptr_t key);
-    
+
     /**
      *  Remove objects by an array of keys.
      *
@@ -330,7 +331,7 @@ public:
      *  @js NA
      */
     void removeObjectsForKeys(__Array* pKey__Array);
-    
+
     /**
      *  Remove an object by an element.
      *
@@ -341,7 +342,7 @@ public:
      * @lua NA
      */
     void removeObjectForElememt(DictElement* pElement);
-    
+
     /**
      *  Remove all objects in the dictionary.
      *
@@ -350,7 +351,7 @@ public:
      * @js NA
      */
     void removeAllObjects();
-    
+
     /**
      *  Return a random object in the dictionary.
      *
@@ -360,7 +361,7 @@ public:
      *  @lua NA
      */
     Ref* randomObject();
-    
+
     /**
      *  Create a dictionary.
      *  @return A dictionary which is an autorelease object.
@@ -378,7 +379,7 @@ public:
      *  @js NA
      */
     static __Dictionary* createWithDictionary(__Dictionary* srcDict);
-    
+
     /**
      *  Create a dictionary with a plist file.
      *  @param  pFileName  The name of the plist file.
@@ -386,8 +387,8 @@ public:
      *  @see create(), createWithDictionary(Dictionary*), createWithContentsOfFileThreadSafe(const char*).
      *  @js NA
      */
-    static __Dictionary* createWithContentsOfFile(const char *pFileName);
-    
+    static __Dictionary* createWithContentsOfFile(const char* pFileName);
+
     /**
      *  Write a dictionary to a plist file.
      *  @param fullPath The full path of the plist file. You can get writable path by getWritablePath()
@@ -395,8 +396,8 @@ public:
      *  @js NA
      *  @lua NA
      */
-    bool writeToFile(const char *fullPath);
-     
+    bool writeToFile(const char* fullPath);
+
     /**
      *  Create a dictionary with a plist file.
      *  
@@ -410,7 +411,7 @@ public:
      *  @js NA
      *  @lua NA
      */
-    static __Dictionary* createWithContentsOfFileThreadSafe(const char *pFileName);
+    static __Dictionary* createWithContentsOfFileThreadSafe(const char* pFileName);
 
     /* override functions 
      *  @js NA
@@ -422,14 +423,14 @@ public:
      *  @lua NA
      */
     virtual __Dictionary* clone() const override;
-    
+
 private:
     /** 
      *  For internal usage, invoked by setObject.
      */
-    void setObjectUnSafe(Ref* pObject, const std::string& key);
+    void setObjectUnSafe(Ref* pObject, const std::string &key);
     void setObjectUnSafe(Ref* pObject, const intptr_t key);
-    
+
 public:
     /**
      *  All the elements in dictionary.
@@ -438,7 +439,7 @@ public:
      */
     DictElement* _elements;
 private:
-    
+
     /** The support type of dictionary, it's confirmed when setObject is invoked. */
     enum DictType
     {
@@ -446,7 +447,7 @@ private:
         kDictStr,
         kDictInt
     };
-    
+
     /** 
      *  The type of dictionary, it's assigned to kDictUnknown by default.
      */

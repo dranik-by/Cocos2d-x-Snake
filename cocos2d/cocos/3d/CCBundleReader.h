@@ -45,19 +45,19 @@ NS_CC_BEGIN
  * @js NA
  * @lua NA
  */
-class BundleReader: public cocos2d::Ref
+class BundleReader : public cocos2d::Ref
 {
 public:
     /**
      * Constructor
      */
     BundleReader();
-    
+
     /**
      * Destructor
      */
     ~BundleReader();
-    
+
     /**
      * initialise
      * @param buffer The data buffer pointer
@@ -110,8 +110,10 @@ public:
     /**
      * read binary typed value.
      */
-    template<typename T> bool read(T* ptr);
-    template<typename T> bool readArray(unsigned int* length, std::vector<T>* values);
+    template <typename T>
+    bool read(T* ptr);
+    template <typename T>
+    bool readArray(unsigned int* length, std::vector<T>* values);
 
     /**
      * first read length, then read string text
@@ -126,7 +128,7 @@ public:
 
 private:
     ssize_t _position;
-    ssize_t  _length;
+    ssize_t _length;
     char* _buffer;
 };
 
@@ -135,8 +137,8 @@ private:
 /**
 * template read routines
 */
-template<typename T>
-inline bool BundleReader::read(T *ptr)
+template <typename T>
+inline bool BundleReader::read(T* ptr)
 {
     return (read(ptr, sizeof(T), 1) == 1);
 }
@@ -144,14 +146,14 @@ inline bool BundleReader::read(T *ptr)
 /**
 * template function to read array of value.
 */
-template<typename T>
-inline bool BundleReader::readArray(unsigned int *length, std::vector<T> *values)
+template <typename T>
+inline bool BundleReader::readArray(unsigned int* length, std::vector<T>* values)
 {
     if (!read(length))
     {
         return false;
     }
-    
+
     if (*length > 0 && values)
     {
         values->resize(*length);
@@ -166,8 +168,8 @@ inline bool BundleReader::readArray(unsigned int *length, std::vector<T> *values
 /**
 * specialization for char
 */
-template<>
-inline bool BundleReader::read<char>(char *ptr)
+template <>
+inline bool BundleReader::read<char>(char* ptr)
 {
     if (read(ptr, sizeof(char), 1) == 1)
     {
@@ -183,7 +185,7 @@ inline bool BundleReader::read<char>(char *ptr)
 /**
 * specialization for std::string
 */
-template<>
+template <>
 inline bool BundleReader::read<std::string>(std::string* /*ptr*/)
 {
     CCLOG("can not read std::string, use readString() instead");
@@ -193,8 +195,8 @@ inline bool BundleReader::read<std::string>(std::string* /*ptr*/)
 /**
 * template function to read array of value.
 */
-template<>
-inline bool BundleReader::readArray<std::string>(unsigned int *length, std::vector<std::string> *values)
+template <>
+inline bool BundleReader::readArray<std::string>(unsigned int* length, std::vector<std::string>* values)
 {
     if (!read(length))
     {

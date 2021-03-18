@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "Macros.h"
@@ -46,13 +46,13 @@ class ProgramCache : public Ref
 public:
     /** returns the shared instance */
     static ProgramCache* getInstance();
-    
+
     /** purges the cache. It releases the retained instance. */
     static void destroyInstance();
-    
+
     /// get built-in program
     backend::Program* getBuiltinProgram(ProgramType type) const;
-    
+
     /**
      * Remove a program object from cache.
      * @param program Specifies the program object to move.
@@ -68,11 +68,11 @@ public:
      * Remove all program objects from cache.
      */
     void removeAllPrograms();
-    
+
 protected:
     ProgramCache() = default;
     virtual ~ProgramCache();
-    
+
     /**
      * Pre-load programs into cache.
      */
@@ -80,9 +80,9 @@ protected:
 
     /// Add built-in program
     void addProgram(ProgramType type);
-    
+
     static std::unordered_map<backend::ProgramType, backend::Program*> _cachedPrograms; ///< The cached program object.
-    static ProgramCache *_sharedProgramCache; ///< A shared instance of the program cache.
+    static ProgramCache* _sharedProgramCache; ///< A shared instance of the program cache.
 };
 
 //end of _backend group

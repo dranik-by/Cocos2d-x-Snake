@@ -63,26 +63,26 @@ public:
      *
      * @return An autoreleased ParticleSystemQuad object.
      */
-    static ParticleSystemQuad * create();
+    static ParticleSystemQuad* create();
     /** Creates a Particle Emitter with a number of particles.
      *
      * @param numberOfParticles A given number of particles.
      * @return An autoreleased ParticleSystemQuad object.
      */
-    static ParticleSystemQuad * createWithTotalParticles(int numberOfParticles);
+    static ParticleSystemQuad* createWithTotalParticles(int numberOfParticles);
     /** Creates an initializes a ParticleSystemQuad from a plist file.
      This plist files can be created manually or with Particle Designer.
      *
      * @param filename Particle plist file name.
      * @return An autoreleased ParticleSystemQuad object.
      */
-    static ParticleSystemQuad * create(const std::string& filename);
+    static ParticleSystemQuad* create(const std::string &filename);
     /** Creates a Particle Emitter with a dictionary.
      * 
      * @param dictionary Particle dictionary.
      * @return An autoreleased ParticleSystemQuad object.
      */
-    static ParticleSystemQuad * create(ValueMap &dictionary);
+    static ParticleSystemQuad* create(ValueMap &dictionary);
 
     /** Sets a new SpriteFrame as particle.
     WARNING: this method is experimental. Use setTextureWithRect instead.
@@ -90,7 +90,7 @@ public:
      * @param spriteFrame A given sprite frame as particle texture.
     @since v0.99.4
     */
-    void setDisplayFrame(SpriteFrame *spriteFrame);
+    void setDisplayFrame(SpriteFrame* spriteFrame);
 
     /** Sets a new texture with a rect. The rect is in Points.
      @since v0.99.4
@@ -100,7 +100,7 @@ public:
      * @param texture A given texture.
      8 @param rect A given rect, in points.
      */
-    void setTextureWithRect(Texture2D *texture, const Rect& rect);
+    void setTextureWithRect(Texture2D* texture, const Rect &rect);
 
     /** Listen the event that renderer was recreated on Android/WP8.
      * @js NA
@@ -118,13 +118,13 @@ public:
     /**
      * @js NA
      * @lua NA
-     */    
+     */
     virtual void updateParticleQuads() override;
     /**
      * @js NA
      * @lua NA
      */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
 
     /**
      * @js NA
@@ -138,7 +138,7 @@ public:
     virtual void setTotalParticles(int tp) override;
 
     virtual std::string getDescription() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     /**
      * @js ctor
@@ -149,7 +149,7 @@ CC_CONSTRUCTOR_ACCESS:
      * @lua NA
      */
     virtual ~ParticleSystemQuad();
-    
+
     // Overrides
     /**
      * @js NA
@@ -160,24 +160,23 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     /** initializes the indices for the vertices*/
     void initIndices();
-    
+
     /** initializes the texture with a rectangle measured Points */
-    void initTexCoordsWithRect(const Rect& rect);
-    
+    void initTexCoordsWithRect(const Rect &rect);
+
     /** Updates texture coords */
     void updateTexCoords();
 
     bool allocMemory();
 
-    V3F_C4B_T2F_Quad    *_quads = nullptr;        // quads to be rendered
-    unsigned short      *_indices = nullptr;      // indices
+    V3F_C4B_T2F_Quad* _quads = nullptr;        // quads to be rendered
+    unsigned short* _indices = nullptr;      // indices
 
     QuadCommand _quadCommand;           // quad command
-    
+
     backend::UniformLocation _mvpMatrixLocaiton;
-    backend::UniformLocation _textureLocation;    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystemQuad);
+    backend::UniformLocation _textureLocation;
+private: CC_DISALLOW_COPY_AND_ASSIGN(ParticleSystemQuad);
 };
 
 // end of _2d group

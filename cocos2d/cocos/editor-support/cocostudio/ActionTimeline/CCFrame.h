@@ -44,26 +44,64 @@ class CC_STUDIO_DLL Frame : public cocos2d::Ref
 {
 public:
 
-    virtual void setFrameIndex(unsigned int frameIndex) { _frameIndex = frameIndex; }
-    virtual unsigned int getFrameIndex() const { return _frameIndex; }
+    virtual void setFrameIndex(unsigned int frameIndex)
+    {
+        _frameIndex = frameIndex;
+    }
 
-    virtual void setTimeline(Timeline* timeline) { _timeline = timeline; }
-    virtual Timeline* getTimeline() const { return _timeline; }
+    virtual unsigned int getFrameIndex() const
+    {
+        return _frameIndex;
+    }
 
-    virtual void setNode(cocos2d::Node* node) { _node = node; }
-    virtual cocos2d::Node* getNode() const { return _node; }
+    virtual void setTimeline(Timeline* timeline)
+    {
+        _timeline = timeline;
+    }
 
-    virtual void setTween(bool tween) { _tween = tween; }
-    virtual bool isTween() const { return _tween; }
+    virtual Timeline* getTimeline() const
+    {
+        return _timeline;
+    }
 
-    virtual void setTweenType(const cocos2d::tweenfunc::TweenType& tweenType) { _tweenType = tweenType; }
-    virtual cocos2d::tweenfunc::TweenType getTweenType() const { return _tweenType; }
-    
+    virtual void setNode(cocos2d::Node* node)
+    {
+        _node = node;
+    }
+
+    virtual cocos2d::Node* getNode() const
+    {
+        return _node;
+    }
+
+    virtual void setTween(bool tween)
+    {
+        _tween = tween;
+    }
+
+    virtual bool isTween() const
+    {
+        return _tween;
+    }
+
+    virtual void setTweenType(const cocos2d::tweenfunc::TweenType &tweenType)
+    {
+        _tweenType = tweenType;
+    }
+
+    virtual cocos2d::tweenfunc::TweenType getTweenType() const
+    {
+        return _tweenType;
+    }
+
     // !to make easing with params, need setTweenType(TweenType::CUSTOM_EASING)
-    virtual void setEasingParams(const std::vector<float>& easingParams);
-    virtual const std::vector<float>& getEasingParams() const;
-    
-    virtual bool isEnterWhenPassed() { return _enterWhenPassed; }
+    virtual void setEasingParams(const std::vector<float> &easingParams);
+    virtual const std::vector<float> &getEasingParams() const;
+
+    virtual bool isEnterWhenPassed()
+    {
+        return _enterWhenPassed;
+    }
 
     virtual void onEnter(Frame* nextFrame, int currentFrameIndex) = 0;
     virtual void apply(float percent);
@@ -72,25 +110,26 @@ public:
 protected:
     Frame();
     virtual ~Frame();
-    
-    virtual void onApply(float percent) {};
+
+    virtual void onApply(float percent)
+    {
+    };
     //update percent depends _tweenType, and return the Calculated percent
     virtual float tweenPercent(float percent);
-    
+
     virtual void emitEvent();
     virtual void cloneProperty(Frame* frame);
 protected:
 
-    unsigned int    _frameIndex;
-    bool            _tween;
-    bool            _enterWhenPassed;
-    
-    cocos2d::tweenfunc::TweenType _tweenType;
-    std::vector<float>   _easingParam;
-    Timeline* _timeline;
-    cocos2d::Node*  _node;
-};
+    unsigned int _frameIndex;
+    bool _tween;
+    bool _enterWhenPassed;
 
+    cocos2d::tweenfunc::TweenType _tweenType;
+    std::vector<float> _easingParam;
+    Timeline* _timeline;
+    cocos2d::Node* _node;
+};
 
 class CC_STUDIO_DLL VisibleFrame : public Frame
 {
@@ -99,16 +138,22 @@ public:
 
     VisibleFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setVisible(bool visible) { _visible = visible;}
-    inline bool isVisible() const { return _visible; }
+    inline void setVisible(bool visible)
+    {
+        _visible = visible;
+    }
+
+    inline bool isVisible() const
+    {
+        return _visible;
+    }
 
 protected:
     bool _visible;
 };
-
 
 class CC_STUDIO_DLL TextureFrame : public Frame
 {
@@ -119,11 +164,18 @@ public:
 
     virtual void setNode(cocos2d::Node* node) override;
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setTextureName(std::string textureName) { _textureName = textureName;}
-    inline std::string getTextureName() const { return _textureName; }
+    inline void setTextureName(std::string textureName)
+    {
+        _textureName = textureName;
+    }
+
+    inline std::string getTextureName() const
+    {
+        return _textureName;
+    }
 
 protected:
     cocos2d::Sprite* _sprite;
@@ -137,15 +189,22 @@ public:
 
     RotationFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void  setRotation(float rotation) { _rotation = rotation; }
-    inline float getRotation() const { return _rotation; }
+    inline void setRotation(float rotation)
+    {
+        _rotation = rotation;
+    }
+
+    inline float getRotation() const
+    {
+        return _rotation;
+    }
 
 protected:
     virtual void onApply(float percent) override;
-    
+
     float _rotation;
     float _betwennRotation;
 };
@@ -157,24 +216,37 @@ public:
 
     SkewFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void  setSkewX(float skewx) { _skewX = skewx; }
-    inline float getSkewX() const { return _skewX; }
+    inline void setSkewX(float skewx)
+    {
+        _skewX = skewx;
+    }
 
-    inline void  setSkewY(float skewy) { _skewY = skewy; }
-    inline float getSkewY() const { return _skewY; }
+    inline float getSkewX() const
+    {
+        return _skewX;
+    }
+
+    inline void setSkewY(float skewy)
+    {
+        _skewY = skewy;
+    }
+
+    inline float getSkewY() const
+    {
+        return _skewY;
+    }
 
 protected:
     virtual void onApply(float percent) override;
-    
+
     float _skewX;
     float _skewY;
     float _betweenSkewX;
     float _betweenSkewY;
 };
-
 
 class CC_STUDIO_DLL RotationSkewFrame : public SkewFrame
 {
@@ -183,13 +255,12 @@ public:
 
     RotationSkewFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
-    
+
 protected:
     virtual void onApply(float percent) override;
 };
-
 
 class CC_STUDIO_DLL PositionFrame : public Frame
 {
@@ -198,26 +269,46 @@ public:
 
     PositionFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setPosition(const cocos2d::Point& position) { _position = position; }
-    inline cocos2d::Point getPosition() const { return _position; }
+    inline void setPosition(const cocos2d::Point &position)
+    {
+        _position = position;
+    }
 
-    inline void setX(float x) { _position.x = x; }
-    inline void setY(float y) { _position.y = y; }
+    inline cocos2d::Point getPosition() const
+    {
+        return _position;
+    }
 
-    inline float getX() const { return _position.x; }
-    inline float getY() const { return _position.y; }
-    
+    inline void setX(float x)
+    {
+        _position.x = x;
+    }
+
+    inline void setY(float y)
+    {
+        _position.y = y;
+    }
+
+    inline float getX() const
+    {
+        return _position.x;
+    }
+
+    inline float getY() const
+    {
+        return _position.y;
+    }
+
 protected:
     virtual void onApply(float percent) override;
-    
+
     cocos2d::Point _position;
     float _betweenX;
     float _betweenY;
 };
-
 
 class CC_STUDIO_DLL ScaleFrame : public Frame
 {
@@ -226,26 +317,43 @@ public:
 
     ScaleFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void  setScale(float scale) { _scaleX = scale; _scaleY = scale; }
+    inline void setScale(float scale)
+    {
+        _scaleX = scale;
+        _scaleY = scale;
+    }
 
-    inline void  setScaleX(float scaleX) { _scaleX = scaleX; }
-    inline float getScaleX() const { return _scaleX; }
+    inline void setScaleX(float scaleX)
+    {
+        _scaleX = scaleX;
+    }
 
-    inline void  setScaleY(float scaleY) { _scaleY = scaleY;}
-    inline float getScaleY() const { return _scaleY; }
+    inline float getScaleX() const
+    {
+        return _scaleX;
+    }
+
+    inline void setScaleY(float scaleY)
+    {
+        _scaleY = scaleY;
+    }
+
+    inline float getScaleY() const
+    {
+        return _scaleY;
+    }
 
 protected:
     virtual void onApply(float percent) override;
-    
+
     float _scaleX;
     float _scaleY;
     float _betweenScaleX;
     float _betweenScaleY;
 };
-
 
 class CC_STUDIO_DLL AnchorPointFrame : public Frame
 {
@@ -254,11 +362,18 @@ public:
 
     AnchorPointFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setAnchorPoint(const cocos2d::Point& point) { _anchorPoint = point; }
-    inline cocos2d::Point getAnchorPoint() const { return _anchorPoint; }
+    inline void setAnchorPoint(const cocos2d::Point &point)
+    {
+        _anchorPoint = point;
+    }
+
+    inline cocos2d::Point getAnchorPoint() const
+    {
+        return _anchorPoint;
+    }
 
 protected:
     virtual void onApply(float percent) override;
@@ -266,8 +381,6 @@ protected:
     cocos2d::Vec2 _betweenAnchorPoint;
     cocos2d::Vec2 _anchorPoint;
 };
-
-
 
 enum InnerActionType
 {
@@ -280,28 +393,53 @@ class CC_STUDIO_DLL InnerActionFrame : public Frame
 {
 public:
     static const std::string AnimationAllName;
-    
+
     static InnerActionFrame* create();
     InnerActionFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setInnerActionType(InnerActionType type) { _innerActionType = type; }
-    inline InnerActionType getInnerActionType() const { return _innerActionType; }
-    
-    inline void setEnterWithName(bool isEnterWithName) { _enterWithName = isEnterWithName;}
-    
-	void setStartFrameIndex(int frameIndex);
-    inline int  getStartFrameIndex() const { return _startFrameIndex; }
+    inline void setInnerActionType(InnerActionType type)
+    {
+        _innerActionType = type;
+    }
 
-	void setEndFrameIndex(int frameIndex);
-    inline int  getEndFrameIndex() const { return _endFrameIndex; }
-    
-	void setAnimationName(const std::string& animationNamed);
-    
-    inline void setSingleFrameIndex(int frameIndex) { _singleFrameIndex = frameIndex;}
-    inline int  getSingleFrameIndex() const { return _singleFrameIndex;}
+    inline InnerActionType getInnerActionType() const
+    {
+        return _innerActionType;
+    }
+
+    inline void setEnterWithName(bool isEnterWithName)
+    {
+        _enterWithName = isEnterWithName;
+    }
+
+    void setStartFrameIndex(int frameIndex);
+
+    inline int getStartFrameIndex() const
+    {
+        return _startFrameIndex;
+    }
+
+    void setEndFrameIndex(int frameIndex);
+
+    inline int getEndFrameIndex() const
+    {
+        return _endFrameIndex;
+    }
+
+    void setAnimationName(const std::string &animationNamed);
+
+    inline void setSingleFrameIndex(int frameIndex)
+    {
+        _singleFrameIndex = frameIndex;
+    }
+
+    inline int getSingleFrameIndex() const
+    {
+        return _singleFrameIndex;
+    }
 
 protected:
     InnerActionType _innerActionType;
@@ -312,26 +450,39 @@ protected:
     bool _enterWithName;
 };
 
-
 class CC_STUDIO_DLL ColorFrame : public Frame
 {
 public:
     static ColorFrame* create();
     ColorFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
     /** @deprecated Use method setAlpha() and getAlpha() of AlphaFrame instead */
-    CC_DEPRECATED_ATTRIBUTE inline void    setAlpha(uint8_t alpha) { _alpha = alpha; }
-    CC_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const { return _alpha; }
+    CC_DEPRECATED_ATTRIBUTE inline void setAlpha(uint8_t alpha)
+    {
+        _alpha = alpha;
+    }
 
-    inline void    setColor(const cocos2d::Color3B& color) { _color = color; }
-    inline cocos2d::Color3B getColor() const { return _color; }
+    CC_DEPRECATED_ATTRIBUTE inline uint8_t getAlpha() const
+    {
+        return _alpha;
+    }
+
+    inline void setColor(const cocos2d::Color3B &color)
+    {
+        _color = color;
+    }
+
+    inline cocos2d::Color3B getColor() const
+    {
+        return _color;
+    }
 
 protected:
     virtual void onApply(float percent) override;
-    
+
     uint8_t _alpha;
     cocos2d::Color3B _color;
 
@@ -346,15 +497,22 @@ public:
     static AlphaFrame* create();
     AlphaFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void    setAlpha(uint8_t alpha) { _alpha = alpha; }
-    inline uint8_t getAlpha() const { return _alpha; }
+    inline void setAlpha(uint8_t alpha)
+    {
+        _alpha = alpha;
+    }
+
+    inline uint8_t getAlpha() const
+    {
+        return _alpha;
+    }
 
 protected:
     virtual void onApply(float percent) override;
-    
+
     uint8_t _alpha;
     int _betweenAlpha;
 };
@@ -368,12 +526,19 @@ public:
     EventFrame();
 
     virtual void setNode(cocos2d::Node* node) override;
-    
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setEvent(std::string event) { _event = event;}
-    inline std::string getEvent() const { return _event; }
+    inline void setEvent(std::string event)
+    {
+        _event = event;
+    }
+
+    inline std::string getEvent() const
+    {
+        return _event;
+    }
 
 protected:
     std::string _event;
@@ -387,47 +552,67 @@ public:
 
     ZOrderFrame();
 
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
 
-    inline void setZOrder(int zorder) { _zorder = zorder;}
-    inline int getZOrder() const { return _zorder; }
+    inline void setZOrder(int zorder)
+    {
+        _zorder = zorder;
+    }
+
+    inline int getZOrder() const
+    {
+        return _zorder;
+    }
 
 protected:
     int _zorder;
 };
 
-
 class CC_STUDIO_DLL BlendFuncFrame : public Frame
 {
 public:
     static BlendFuncFrame* create();
-    
+
     BlendFuncFrame();
-    
-    virtual void onEnter(Frame *nextFrame, int currentFrameIndex) override;
+
+    virtual void onEnter(Frame* nextFrame, int currentFrameIndex) override;
     virtual Frame* clone() override;
-    
-    inline cocos2d::BlendFunc getBlendFunc() const { return _blendFunc; }
-    inline void setBlendFunc(cocos2d::BlendFunc blendFunc) { _blendFunc = blendFunc; }
-    
+
+    inline cocos2d::BlendFunc getBlendFunc() const
+    {
+        return _blendFunc;
+    }
+
+    inline void setBlendFunc(cocos2d::BlendFunc blendFunc)
+    {
+        _blendFunc = blendFunc;
+    }
+
 protected:
-    cocos2d::BlendFunc  _blendFunc;
+    cocos2d::BlendFunc _blendFunc;
 };
 
 class CC_STUDIO_DLL PlayableFrame : public Frame
 {
 public:
     static PlayableFrame* create();
-    
+
     PlayableFrame();
-    
+
     virtual void onEnter(Frame* nextFrame, int currentFrameINdex) override;
     virtual Frame* clone() override;
 
-    inline std::string getPlayableAct() const { return _playableAct; }
+    inline std::string getPlayableAct() const
+    {
+        return _playableAct;
+    }
+
     // @param playact, express the interface in PlayableProtocol, should be "start"  or "stop"
-    inline void setPlayableAct(std::string playact) { _playableAct = playact; }
+    inline void setPlayableAct(std::string playact)
+    {
+        _playableAct = playact;
+    }
 
     static const std::string PLAYABLE_EXTENTION;
 private:

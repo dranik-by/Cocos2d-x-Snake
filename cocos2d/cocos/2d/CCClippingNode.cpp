@@ -52,7 +52,7 @@ ClippingNode::~ClippingNode()
 
 ClippingNode* ClippingNode::create()
 {
-    ClippingNode *ret = new (std::nothrow) ClippingNode();
+    ClippingNode* ret = new(std::nothrow) ClippingNode();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -61,13 +61,13 @@ ClippingNode* ClippingNode::create()
     {
         CC_SAFE_DELETE(ret);
     }
-    
+
     return ret;
 }
 
-ClippingNode* ClippingNode::create(Node *pStencil)
+ClippingNode* ClippingNode::create(Node* pStencil)
 {
-    ClippingNode *ret = new (std::nothrow) ClippingNode();
+    ClippingNode* ret = new(std::nothrow) ClippingNode();
     if (ret && ret->init(pStencil))
     {
         ret->autorelease();
@@ -76,7 +76,7 @@ ClippingNode* ClippingNode::create(Node *pStencil)
     {
         CC_SAFE_DELETE(ret);
     }
-    
+
     return ret;
 }
 
@@ -85,7 +85,7 @@ bool ClippingNode::init()
     return init(nullptr);
 }
 
-bool ClippingNode::init(Node *stencil)
+bool ClippingNode::init(Node* stencil)
 {
     setStencil(stencil);
     return true;
@@ -93,16 +93,16 @@ bool ClippingNode::init(Node *stencil)
 
 void ClippingNode::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
             return;
     }
-#endif
-    
+    #endif
+
     Node::onEnter();
-    
+
     if (_stencil != nullptr)
     {
         _stencil->onEnter();
@@ -115,16 +115,16 @@ void ClippingNode::onEnter()
 
 void ClippingNode::onEnterTransitionDidFinish()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnterTransitionDidFinish))
             return;
     }
-#endif
-    
+    #endif
+
     Node::onEnterTransitionDidFinish();
-    
+
     if (_stencil != nullptr)
     {
         _stencil->onEnterTransitionDidFinish();
@@ -133,46 +133,45 @@ void ClippingNode::onEnterTransitionDidFinish()
 
 void ClippingNode::onExitTransitionDidStart()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExitTransitionDidStart))
             return;
     }
-#endif
-    
+    #endif
+
     if (_stencil != nullptr)
     {
         _stencil->onExitTransitionDidStart();
     }
-   
+
     Node::onExitTransitionDidStart();
 }
 
 void ClippingNode::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
             return;
     }
-#endif
-    
+    #endif
+
     if (_stencil != nullptr)
     {
         _stencil->onExit();
     }
-    
+
     Node::onExit();
 }
 
-
-void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void ClippingNode::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     if (!_visible || !hasContent())
         return;
-    
+
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
     // IMPORTANT:
@@ -184,7 +183,7 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
 
     //Add group command
-        
+
     _groupCommandStencil.init(_globalZOrder);
     renderer->addCommand(&_groupCommandStencil);
 
@@ -194,12 +193,12 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     // _beforeVisitCmd.func = CC_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
     // renderer->addCommand(&_beforeVisitCmd);
     _stencilStateManager->onBeforeVisit(_globalZOrder);
-    
+
     auto alphaThreshold = this->getAlphaThreshold();
     if (alphaThreshold < 1)
     {
         auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR_ALPHA_TEST);
-        auto programState = new (std::nothrow) backend::ProgramState(program);
+        auto programState = new(std::nothrow) backend::ProgramState(program);
         auto alphaLocation = programState->getUniformLocation("u_alpha_value");
         programState->setUniform(alphaLocation, &alphaThreshold, sizeof(alphaThreshold));
         setProgramStateRecursively(_stencil, programState);
@@ -214,7 +213,7 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
 
     int i = 0;
     bool visibleByCamera = isVisitableByVisitingCamera();
-    
+
 
     // `_groupCommandChildren` is used as a barrier
     // to ensure commands above be executed before children nodes
@@ -223,15 +222,15 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
 
     renderer->pushGroup(_groupCommandChildren.getRenderQueueID());
 
-    if(!_children.empty())
+    if (!_children.empty())
     {
         sortAllChildren();
         // draw children zOrder < 0
-        for(auto size = _children.size(); i < size; ++i)
+        for (auto size = _children.size(); i < size; ++i)
         {
             auto node = _children.at(i);
-            
-            if ( node && node->getLocalZOrder() < 0 )
+
+            if (node && node->getLocalZOrder() < 0)
                 node->visit(renderer, _modelViewTransform, flags);
             else
                 break;
@@ -240,14 +239,13 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
         if (visibleByCamera)
             this->draw(renderer, _modelViewTransform, flags);
 
-        for(auto it=_children.cbegin()+i, itCend = _children.cend(); it != itCend; ++it)
+        for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
             (*it)->visit(renderer, _modelViewTransform, flags);
     }
     else if (visibleByCamera)
     {
         this->draw(renderer, _modelViewTransform, flags);
     }
-
 
     renderer->popGroup();
 
@@ -256,14 +254,14 @@ void ClippingNode::visit(Renderer *renderer, const Mat4 &parentTransform, uint32
     renderer->addCommand(&_afterVisitCmd);
 
     renderer->popGroup();
-    
+
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
 
 void ClippingNode::setCameraMask(unsigned short mask, bool applyChildren)
 {
     Node::setCameraMask(mask, applyChildren);
-    
+
     if (_stencil)
         _stencil->setCameraMask(mask, applyChildren);
 }
@@ -273,13 +271,13 @@ Node* ClippingNode::getStencil() const
     return _stencil;
 }
 
-void ClippingNode::setStencil(Node *stencil)
+void ClippingNode::setStencil(Node* stencil)
 {
     //early out if the stencil is already set
     if (_stencil == stencil)
         return;
-    
-#if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+
+    #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     auto sEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (sEngine)
     {
@@ -288,23 +286,23 @@ void ClippingNode::setStencil(Node *stencil)
         if (stencil)
             sEngine->retainScriptObject(this, stencil);
     }
-#endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-    
+    #endif // CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+
     //cleanup current stencil
-    if(_stencil != nullptr && _stencil->isRunning())
+    if (_stencil != nullptr && _stencil->isRunning())
     {
         _stencil->onExitTransitionDidStart();
         _stencil->onExit();
     }
     CC_SAFE_RELEASE_NULL(_stencil);
-    
+
     //initialise new stencil
     _stencil = stencil;
     CC_SAFE_RETAIN(_stencil);
-    if(_stencil != nullptr && this->isRunning())
+    if (_stencil != nullptr && this->isRunning())
     {
         _stencil->onEnter();
-        if(this->_isTransitionFinished)
+        if (this->_isTransitionFinished)
         {
             _stencil->onEnterTransitionDidFinish();
         }
@@ -313,8 +311,9 @@ void ClippingNode::setStencil(Node *stencil)
     if (_stencil != nullptr)
     {
         _originalStencilProgramState[_stencil] = _stencil->getProgramState();
-        auto& children = _stencil->getChildren();
-        for (const auto &child : children) {
+        auto &children = _stencil->getChildren();
+        for (const auto &child : children)
+        {
             _originalStencilProgramState[child] = child->getProgramState();
         }
     }
@@ -356,8 +355,9 @@ void ClippingNode::setProgramStateRecursively(Node* node, backend::ProgramState*
     _originalStencilProgramState[node] = node->getProgramState();
     node->setProgramState(programState);
 
-    auto& children = node->getChildren();
-    for (const auto &child : children) {
+    auto &children = node->getChildren();
+    for (const auto &child : children)
+    {
         setProgramStateRecursively(child, programState);
     }
 }
@@ -371,6 +371,5 @@ void ClippingNode::restoreAllProgramStates()
         node->setProgramState(programState);
     }
 }
-
 
 NS_CC_END

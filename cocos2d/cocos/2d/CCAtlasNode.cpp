@@ -44,33 +44,29 @@ NS_CC_BEGIN
 
 AtlasNode::AtlasNode()
 {
-    auto& pipelineDescriptor = _quadCommand.getPipelineDescriptor();
+    auto &pipelineDescriptor = _quadCommand.getPipelineDescriptor();
     auto* program = backend::Program::getBuiltinProgram(backend::ProgramType::POSITION_TEXTURE_COLOR);
-    _programState = new (std::nothrow) backend::ProgramState(program);
+    _programState = new(std::nothrow) backend::ProgramState(program);
     pipelineDescriptor.programState = _programState;
     _mvpMatrixLocation = pipelineDescriptor.programState->getUniformLocation("u_MVPMatrix");
     _textureLocation = pipelineDescriptor.programState->getUniformLocation("u_texture");
-  
+
     auto vertexLayout = _programState->getVertexLayout();
-  //a_position
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION, 
-                               _programState->getAttributeLocation(backend::Attribute::POSITION), 
-                               backend::VertexFormat::FLOAT3, 
-                               0, 
-                               false);
-   
+    //a_position
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_POSITION,
+                               _programState->getAttributeLocation(backend::Attribute::POSITION),
+                               backend::VertexFormat::FLOAT3, 0, false);
+
     //a_texCoord
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD, 
-                               _programState->getAttributeLocation(backend::Attribute::TEXCOORD), 
-                               backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), 
-                               false);
-   
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_TEXCOORD,
+                               _programState->getAttributeLocation(backend::Attribute::TEXCOORD),
+                               backend::VertexFormat::FLOAT2, offsetof(V3F_C4B_T2F, texCoords), false);
+
     //a_color
-    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR, 
+    vertexLayout->setAttribute(backend::ATTRIBUTE_NAME_COLOR,
                                _programState->getAttributeLocation(backend::Attribute::COLOR),
-                               backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors),
-                               true);
-    
+                               backend::VertexFormat::UBYTE4, offsetof(V3F_C4B_T2F, colors), true);
+
     vertexLayout->setLayout(sizeof(V3F_C4B_T2F));
 }
 
@@ -79,9 +75,9 @@ AtlasNode::~AtlasNode()
     CC_SAFE_RELEASE(_textureAtlas);
 }
 
-AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
+AtlasNode* AtlasNode::create(const std::string &tile, int tileWidth, int tileHeight, int itemsToRender)
 {
-    AtlasNode * ret = new (std::nothrow) AtlasNode();
+    AtlasNode* ret = new(std::nothrow) AtlasNode();
     if (ret->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
     {
         ret->autorelease();
@@ -91,16 +87,16 @@ AtlasNode * AtlasNode::create(const std::string& tile, int tileWidth, int tileHe
     return nullptr;
 }
 
-bool AtlasNode::initWithTileFile(const std::string& tile, int tileWidth, int tileHeight, int itemsToRender)
+bool AtlasNode::initWithTileFile(const std::string &tile, int tileWidth, int tileHeight, int itemsToRender)
 {
     CCASSERT(tile.size() > 0, "file size should not be empty");
-    Texture2D *texture = Director::getInstance()->getTextureCache()->addImage(tile);
+    Texture2D* texture = Director::getInstance()->getTextureCache()->addImage(tile);
     return initWithTexture(texture, tileWidth, tileHeight, itemsToRender);
 }
 
 bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeight, int itemsToRender)
 {
-    _itemWidth  = tileWidth;
+    _itemWidth = tileWidth;
     _itemHeight = tileHeight;
 
     _colorUnmodified = Color3B::WHITE;
@@ -108,14 +104,14 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
 
     _blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
 
-    _textureAtlas = new (std::nothrow) TextureAtlas();
+    _textureAtlas = new(std::nothrow) TextureAtlas();
 
-    if (! _textureAtlas)
+    if (!_textureAtlas)
     {
         CCLOG("cocos2d: Could not initialize AtlasNode. Invalid Texture.");
         return false;
     }
-    
+
     _textureAtlas->initWithTexture(texture, itemsToRender);
 
     this->updateBlendFunc();
@@ -134,12 +130,12 @@ bool AtlasNode::initWithTexture(Texture2D* texture, int tileWidth, int tileHeigh
 void AtlasNode::calculateMaxItems()
 {
     Size s = _textureAtlas->getTexture()->getContentSize();
-    
+
     if (_ignoreContentScaleFactor)
     {
         s = _textureAtlas->getTexture()->getContentSizeInPixels();
     }
-    
+
     _itemsPerColumn = (int)(s.height / _itemHeight);
     _itemsPerRow = (int)(s.width / _itemWidth);
 }
@@ -150,42 +146,43 @@ void AtlasNode::updateAtlasValues()
 }
 
 // AtlasNode - draw
-void AtlasNode::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{    
-    if( _textureAtlas->getTotalQuads() == 0 )
+void AtlasNode::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
+{
+    if (_textureAtlas->getTotalQuads() == 0)
         return;
-    
+
     auto programState = _quadCommand.getPipelineDescriptor().programState;
     programState->setTexture(_textureLocation, 0, _textureAtlas->getTexture()->getBackendTexture());
-    
-    const auto& projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+
+    const auto &projectionMat = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     programState->setUniform(_mvpMatrixLocation, projectionMat.m, sizeof(projectionMat.m));
-    
-    _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw, transform, flags);
+
+    _quadCommand.init(_globalZOrder, _textureAtlas->getTexture(), _blendFunc, _textureAtlas->getQuads(), _quadsToDraw,
+                      transform, flags);
     renderer->addCommand(&_quadCommand);
 }
 
 // AtlasNode - RGBA protocol
 
-const Color3B& AtlasNode::getColor() const
+const Color3B &AtlasNode::getColor() const
 {
-    if(_isOpacityModifyRGB)
+    if (_isOpacityModifyRGB)
     {
         return _colorUnmodified;
     }
     return Node::getColor();
 }
 
-void AtlasNode::setColor(const Color3B& color3)
+void AtlasNode::setColor(const Color3B &color3)
 {
     Color3B tmp = color3;
     _colorUnmodified = color3;
 
-    if( _isOpacityModifyRGB )
+    if (_isOpacityModifyRGB)
     {
-        tmp.r = tmp.r * _displayedOpacity/255;
-        tmp.g = tmp.g * _displayedOpacity/255;
-        tmp.b = tmp.b * _displayedOpacity/255;
+        tmp.r = tmp.r * _displayedOpacity / 255;
+        tmp.g = tmp.g * _displayedOpacity / 255;
+        tmp.b = tmp.b * _displayedOpacity / 255;
     }
     Node::setColor(tmp);
 }
@@ -195,7 +192,7 @@ void AtlasNode::setOpacity(uint8_t opacity)
     Node::setOpacity(opacity);
 
     // special opacity for premultiplied textures
-    if( _isOpacityModifyRGB )
+    if (_isOpacityModifyRGB)
         this->setColor(_colorUnmodified);
 }
 
@@ -223,7 +220,7 @@ void AtlasNode::setIgnoreContentScaleFactor(bool ignoreContentScaleFactor)
 
 // AtlasNode - CocosNodeTexture protocol
 
-const BlendFunc& AtlasNode::getBlendFunc() const
+const BlendFunc &AtlasNode::getBlendFunc() const
 {
     return _blendFunc;
 }
@@ -235,7 +232,7 @@ void AtlasNode::setBlendFunc(const BlendFunc &blendFunc)
 
 void AtlasNode::updateBlendFunc()
 {
-    if( ! _textureAtlas->getTexture()->hasPremultipliedAlpha() )
+    if (!_textureAtlas->getTexture()->hasPremultipliedAlpha())
     {
         _blendFunc = BlendFunc::ALPHA_NON_PREMULTIPLIED;
         setOpacityModifyRGB(false);
@@ -247,14 +244,14 @@ void AtlasNode::updateBlendFunc()
     }
 }
 
-void AtlasNode::setTexture(Texture2D *texture)
+void AtlasNode::setTexture(Texture2D* texture)
 {
     _textureAtlas->setTexture(texture);
     this->updateBlendFunc();
     this->updateOpacityModifyRGB();
 }
 
-Texture2D * AtlasNode::getTexture() const
+Texture2D* AtlasNode::getTexture() const
 {
     return _textureAtlas->getTexture();
 }
@@ -266,7 +263,7 @@ void AtlasNode::setTextureAtlas(TextureAtlas* textureAtlas)
     _textureAtlas = textureAtlas;
 }
 
-TextureAtlas * AtlasNode::getTextureAtlas() const
+TextureAtlas* AtlasNode::getTextureAtlas() const
 {
     return _textureAtlas;
 }

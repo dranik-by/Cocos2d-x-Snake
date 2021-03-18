@@ -35,7 +35,8 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 class PageViewIndicator;
 
@@ -45,9 +46,9 @@ class PageViewIndicator;
  */
 class CC_GUI_DLL PageView : public ListView
 {
-    
-    DECLARE_CLASS_GUI_INFO
-    
+
+DECLARE_CLASS_GUI_INFO
+
 public:
     /**
      * Page turn event type.
@@ -56,7 +57,7 @@ public:
     {
         TURNING
     };
-    
+
     /**
      * Touch direction type.
      */
@@ -71,7 +72,7 @@ public:
     /**
      * PageView page turn event callback.
      */
-    typedef std::function<void(Ref*, EventType)> ccPageViewCallback;
+    typedef std::function<void(Ref * , EventType)> ccPageViewCallback;
 
     /**
      * Default constructor
@@ -79,14 +80,14 @@ public:
      * @lua new
      */
     PageView();
-    
+
     /**
      * Default destructor
      * @js NA
      * @lua NA
      */
     virtual ~PageView();
-    
+
     /**
      * Create an empty PageView.
      *@return A PageView instance.
@@ -133,14 +134,14 @@ public:
      * @brief Remove all pages of the PageView.
      */
     void removeAllPages();
-    
+
     /**
      * Scroll to a page with a given index.
      *
      * @param idx   A given index in the PageView. Index start from 0 to pageCount -1.
      */
     void scrollToPage(ssize_t idx);
-    
+
     /**
      * Scroll to a page with a given index and with a given scroll time.
      *
@@ -155,7 +156,7 @@ public:
      * @param itemIndex   A given index in the PageView. Index start from 0 to pageCount -1.
      */
     void scrollToItem(ssize_t itemIndex);
-    
+
     /**
      * Scroll to a item with a given index and with a given scroll time.
      *
@@ -183,7 +184,7 @@ public:
      *
      * @param callback A page turning callback.
      */
-    void addEventListener(const ccPageViewCallback& callback);
+    void addEventListener(const ccPageViewCallback &callback);
     using ScrollView::addEventListener;
     //override methods
     virtual std::string getDescription() const override;
@@ -200,35 +201,38 @@ public:
      *
      * @return True if page indicator is enabled, false otherwise.
      */
-    bool getIndicatorEnabled() const { return _indicator != nullptr; }
+    bool getIndicatorEnabled() const
+    {
+        return _indicator != nullptr;
+    }
 
     /**
      * @brief Set the page indicator's position using anchor point.
      *
      * @param positionAsAnchorPoint The position as anchor point.
      */
-    void setIndicatorPositionAsAnchorPoint(const Vec2& positionAsAnchorPoint);
+    void setIndicatorPositionAsAnchorPoint(const Vec2 &positionAsAnchorPoint);
 
     /**
      * @brief Get the page indicator's position as anchor point.
      *
      * @return positionAsAnchorPoint
      */
-    const Vec2& getIndicatorPositionAsAnchorPoint() const;
+    const Vec2 &getIndicatorPositionAsAnchorPoint() const;
 
     /**
      * @brief Set the page indicator's position in page view.
      *
      * @param position The position in page view
      */
-    void setIndicatorPosition(const Vec2& position);
-    
+    void setIndicatorPosition(const Vec2 &position);
+
     /**
      * @brief Get the page indicator's position.
      *
      * @return positionAsAnchorPoint
      */
-    const Vec2& getIndicatorPosition() const;
+    const Vec2 &getIndicatorPosition() const;
 
     /**
      * @brief Set space between page indicator's index nodes.
@@ -249,72 +253,73 @@ public:
      *
      * @param color New color for selected (current) index.
      */
-    void setIndicatorSelectedIndexColor(const Color3B& color);
+    void setIndicatorSelectedIndexColor(const Color3B &color);
 
     /**
      * @brief Get the color of page indicator's selected index.
      *
      * @return color
      */
-    const Color3B& getIndicatorSelectedIndexColor() const;
+    const Color3B &getIndicatorSelectedIndexColor() const;
 
     /**
      * @brief Set color of page indicator's index nodes.
      *
      * @param color New indicator node color.
      */
-    void setIndicatorIndexNodesColor(const Color3B& color);
-    
+    void setIndicatorIndexNodesColor(const Color3B &color);
+
     /**
      * @brief Get the color of page indicator's index nodes.
      *
      * @return color
      */
-    const Color3B& getIndicatorIndexNodesColor() const;
-    
+    const Color3B &getIndicatorIndexNodesColor() const;
+
     /**
      * @brief Set opacity of page indicator's selected index.
      *
      * @param color New opacity for selected (current) index.
      */
     void setIndicatorSelectedIndexOpacity(uint8_t opacity);
-    
+
     /**
      * @brief Get the opacity of page indicator's selected index.
      *
      * @return opacity
      */
     uint8_t getIndicatorSelectedIndexOpacity() const;
-    
+
     /**
      * @brief Set opacity of page indicator's index nodes.
      *
      * @param opacity New indicator node opacity.
      */
     void setIndicatorIndexNodesOpacity(uint8_t opacity);
-    
+
     /**
      * @brief Get the opacity of page indicator's index nodes.
      *
      * @return opacity
      */
     uint8_t getIndicatorIndexNodesOpacity() const;
-    
+
     /**
      * @brief Set scale of page indicator's index nodes.
      *
      * @param indexNodesScale Scale of index nodes.
      */
     void setIndicatorIndexNodesScale(float indexNodesScale);
-    
+
     /**
      * sets texture for index nodes.
      *
      * @param fileName   File name of texture.
      * @param resType    @see TextureResType .
      */
-    void setIndicatorIndexNodesTexture(const std::string& texName,Widget::TextureResType texType = Widget::TextureResType::LOCAL);
-    
+    void setIndicatorIndexNodesTexture(const std::string &texName,
+                                       Widget::TextureResType texType = Widget::TextureResType::LOCAL);
+
     /**
      * @brief Get scale of page indicator's index nodes.
      *
@@ -334,12 +339,12 @@ protected:
     void pageTurningEvent();
     virtual float getAutoScrollStopEpsilon() const override;
 
-    virtual void remedyLayoutParameter(Widget* item)override;
-    virtual void moveInnerContainer(const Vec2& deltaMove, bool canStartBounceBack) override;
+    virtual void remedyLayoutParameter(Widget* item) override;
+    virtual void moveInnerContainer(const Vec2 &deltaMove, bool canStartBounceBack) override;
     virtual void onItemListChanged() override;
     virtual void onSizeChanged() override;
-    virtual void handleReleaseLogic(Touch *touch) override;
-    virtual void handlePressLogic(Touch *touch) override;
+    virtual void handleReleaseLogic(Touch* touch) override;
+    virtual void handlePressLogic(Touch* touch) override;
 
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;

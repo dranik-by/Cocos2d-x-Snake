@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../DepthStencilState.h"
@@ -45,17 +45,20 @@ public:
     /**
      * @param mtlDevice The device for which MTLDepthStencilState object was created.
      */
-    DepthStencilStateMTL(id<MTLDevice> mtlDevice, const DepthStencilDescriptor& descriptor);
+    DepthStencilStateMTL(id <MTLDevice> mtlDevice, const DepthStencilDescriptor &descriptor);
     ~DepthStencilStateMTL();
-    
+
     /// @name Setters & Getters
     /**
      * get a MTLDepthStencilState object
      */
-    inline id<MTLDepthStencilState> getMTLDepthStencilState() const { return _mtlDepthStencilState; }
-    
+    inline id <MTLDepthStencilState> getMTLDepthStencilState() const
+    {
+        return _mtlDepthStencilState;
+    }
+
 private:
-    id<MTLDepthStencilState> _mtlDepthStencilState = nil;
+    id <MTLDepthStencilState> _mtlDepthStencilState = nil;
 };
 
 // end of _metal group

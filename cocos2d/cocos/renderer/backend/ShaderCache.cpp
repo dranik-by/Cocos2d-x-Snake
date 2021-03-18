@@ -32,10 +32,10 @@ ShaderCache* ShaderCache::_sharedShaderCache = nullptr;
 
 ShaderCache* ShaderCache::getInstance()
 {
-    if(!_sharedShaderCache)
+    if (!_sharedShaderCache)
     {
-        _sharedShaderCache = new (std::nothrow) ShaderCache();
-        if(!_sharedShaderCache->init())
+        _sharedShaderCache = new(std::nothrow) ShaderCache();
+        if (!_sharedShaderCache->init())
         {
             CC_SAFE_RELEASE(_sharedShaderCache);
         }
@@ -50,7 +50,7 @@ void ShaderCache::destroyInstance()
 
 ShaderCache::~ShaderCache()
 {
-    for(auto& shaderModule : _cachedShaders)
+    for (auto &shaderModule : _cachedShaders)
     {
         CC_SAFE_RELEASE(shaderModule.second);
     }
@@ -62,29 +62,29 @@ bool ShaderCache::init()
     return true;
 }
 
-backend::ShaderModule* ShaderCache::newVertexShaderModule(const std::string& shaderSource)
+backend::ShaderModule* ShaderCache::newVertexShaderModule(const std::string &shaderSource)
 {
     auto vertexShaderModule = newShaderModule(backend::ShaderStage::VERTEX, shaderSource);
     return vertexShaderModule;
 }
 
-backend::ShaderModule* ShaderCache::newFragmentShaderModule(const std::string& shaderSource)
+backend::ShaderModule* ShaderCache::newFragmentShaderModule(const std::string &shaderSource)
 {
     auto fragmenShaderModule = newShaderModule(backend::ShaderStage::FRAGMENT, shaderSource);
     return fragmenShaderModule;
 }
 
-backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, const std::string& shaderSource)
+backend::ShaderModule* ShaderCache::newShaderModule(backend::ShaderStage stage, const std::string &shaderSource)
 {
-    std::size_t key = std::hash<std::string>{}(shaderSource);
+    std::size_t key = std::hash<std::string> {}(shaderSource);
     auto iter = _cachedShaders.find(key);
     if (_cachedShaders.end() != iter)
         return iter->second;
-    
+
     auto shader = backend::Device::getInstance()->newShaderModule(stage, shaderSource);
     shader->setHashValue(key);
     _cachedShaders.emplace(key, shader);
-    
+
     return shader;
 }
 

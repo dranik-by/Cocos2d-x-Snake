@@ -38,7 +38,8 @@ THE SOFTWARE.
 class b2Body;
 struct cpBody;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 CC_DEPRECATED_ATTRIBUTE typedef ProcessBase CCProcessBase;
 CC_DEPRECATED_ATTRIBUTE typedef BaseData CCBaseData;
@@ -78,7 +79,7 @@ public:
     * Allocates and initializes an armature.
     * @return An initialized armature which is marked as "autorelease".
     */
-    static Armature *create();
+    static Armature* create();
 
     /**
     * Allocates an armature, and use the ArmatureData named name in ArmatureDataManager to initializes the armature.
@@ -86,9 +87,9 @@ public:
     * @param  name Armature will use the name to find the ArmatureData to initializes it.
     * @return A initialized armature which is marked as "autorelease".
     */
-    static Armature *create(const std::string& name);
+    static Armature* create(const std::string &name);
 
-    static Armature *create(const std::string& name, Bone *parentBone);
+    static Armature* create(const std::string &name, Bone* parentBone);
 
 public:
     /**
@@ -110,110 +111,136 @@ public:
      * Init an armature with specified name
      * @param name Armature name
      */
-    virtual bool init(const std::string& name);
+    virtual bool init(const std::string &name);
 
-    virtual bool init(const std::string& name, Bone *parentBone);
+    virtual bool init(const std::string &name, Bone* parentBone);
     /**
      * Add a Bone to this Armature,
      *
      * @param bone  The Bone you want to add to Armature
      * @param parentName   The parent Bone's name you want to add to . If it's  nullptr, then set Armature to its parent
      */
-    virtual void addBone(Bone *bone, const std::string& parentName);
+    virtual void addBone(Bone* bone, const std::string &parentName);
     /**
      * Get a bone with the specified name
      *
      * @param name The bone's name you want to get
      */
-    virtual Bone *getBone(const std::string& name) const;
+    virtual Bone* getBone(const std::string &name) const;
     /**
      * Change a bone's parent with the specified parent name.
      *
      * @param bone The bone you want to change parent
      * @param parentName The new parent's name.
      */
-    virtual void changeBoneParent(Bone *bone, const std::string& parentName);
+    virtual void changeBoneParent(Bone* bone, const std::string &parentName);
     /**
      * Remove a bone with the specified name. If recursion it will also remove child Bone recursionly.
      *
      * @param bone The bone you want to remove
      * @param recursion Determine whether remove the bone's child  recursion.
      */
-    virtual void removeBone(Bone *bone, bool recursion);
+    virtual void removeBone(Bone* bone, bool recursion);
 
     /**
      * Get Armature's bone dictionary
      * @return Armature's bone dictionary
      */
-    const cocos2d::Map<std::string, Bone*>& getBoneDic() const;
+    const cocos2d::Map<std::string, Bone*> &getBoneDic() const;
 
     /**
      * This boundingBox will calculate all bones' boundingBox every time
      */
     virtual cocos2d::Rect getBoundingBox() const override;
 
-    Bone *getBoneAtPoint(float x, float y) const;
+    Bone* getBoneAtPoint(float x, float y) const;
 
     // overrides
     /**
      * @js NA
      * @lua NA
      */
-    virtual void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags) override;
-    virtual void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
+    virtual void visit(cocos2d::Renderer* renderer, const cocos2d::Mat4 &parentTransform,
+                       uint32_t parentFlags) override;
+    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4 &transform, uint32_t flags) override;
     virtual void update(float dt) override;
 
     virtual void onEnter() override;
-    virtual void onExit() override; 
+    virtual void onExit() override;
 
-    virtual const cocos2d::Mat4& getNodeToParentTransform() const override;
+    virtual const cocos2d::Mat4 &getNodeToParentTransform() const override;
+
     /**
      *  @js NA
      *  @lua NA
      */
-    inline void setBlendFunc(const cocos2d::BlendFunc &blendFunc) override { _blendFunc = blendFunc; }
+    inline void setBlendFunc(const cocos2d::BlendFunc &blendFunc) override
+    {
+        _blendFunc = blendFunc;
+    }
+
     /**
      *  @js NA
      *  @lua NA
      */
-    inline const cocos2d::BlendFunc &getBlendFunc() const override{ return _blendFunc; }
-    
+    inline const cocos2d::BlendFunc &getBlendFunc() const override
+    {
+        return _blendFunc;
+    }
 
     /**
      * Set contentsize and Calculate anchor point.
      */
     virtual void updateOffsetPoint();
-    virtual void setAnchorPoint(const cocos2d::Vec2& point) override;
-    virtual const cocos2d::Vec2& getAnchorPointInPoints() const override;
-    virtual const cocos2d::Vec2& getOffsetPoints() const;
+    virtual void setAnchorPoint(const cocos2d::Vec2 &point) override;
+    virtual const cocos2d::Vec2 &getAnchorPointInPoints() const override;
+    virtual const cocos2d::Vec2 &getOffsetPoints() const;
 
-    virtual void setAnimation(ArmatureAnimation *animation);
-    virtual ArmatureAnimation *getAnimation() const;
-    
+    virtual void setAnimation(ArmatureAnimation* animation);
+    virtual ArmatureAnimation* getAnimation() const;
+
     virtual bool getArmatureTransformDirty() const;
 
-
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
     virtual void setColliderFilter(ColliderFilter *filter);
-#elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #elif ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     CC_DEPRECATED_ATTRIBUTE virtual void drawContour();
-#endif
+    #endif
 
+    virtual void setArmatureData(ArmatureData* armatureData)
+    {
+        _armatureData = armatureData;
+    }
 
-    virtual void setArmatureData(ArmatureData *armatureData) { _armatureData = armatureData; }
-    virtual ArmatureData *getArmatureData() const { return _armatureData; }
+    virtual ArmatureData* getArmatureData() const
+    {
+        return _armatureData;
+    }
 
+    virtual void setParentBone(Bone* parentBone);
+    virtual Bone* getParentBone() const;
 
-    virtual void setParentBone(Bone *parentBone);
-    virtual Bone *getParentBone() const;
+    virtual void setVersion(float version)
+    {
+        _version = version;
+    }
 
-    virtual void setVersion(float version) { _version = version; }
-    virtual float getVersion() const { return _version; }
+    virtual float getVersion() const
+    {
+        return _version;
+    }
 
-    virtual void setBatchNode(BatchNode *batchNode) { _batchNode = batchNode; }
-    virtual BatchNode *getBatchNode() const { return _batchNode; }
+    virtual void setBatchNode(BatchNode* batchNode)
+    {
+        _batchNode = batchNode;
+    }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT
+    virtual BatchNode* getBatchNode() const
+    {
+        return _batchNode;
+    }
+
+    #if ENABLE_PHYSICS_BOX2D_DETECT
     virtual b2Fixture *getShapeList();
     /**
      *  @js NA
@@ -225,7 +252,7 @@ public:
      *  @lua NA
      */
     virtual b2Body *getBody() const;
-#elif ENABLE_PHYSICS_CHIPMUNK_DETECT
+    #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
     /**
      *  @js NA
      *  @lua NA
@@ -241,7 +268,7 @@ public:
      *  @lua NA
      */
     virtual cpBody *getBody() const;
-#endif
+    #endif
 
 protected:
 
@@ -250,14 +277,14 @@ protected:
      * @js NA
      * @lua NA
      */
-    Bone *createBone(const std::string& boneName );
+    Bone* createBone(const std::string &boneName);
 
 protected:
-    ArmatureData *_armatureData;
+    ArmatureData* _armatureData;
 
-    BatchNode *_batchNode;
+    BatchNode* _batchNode;
 
-    Bone *_parentBone;
+    Bone* _parentBone;
     float _version;
 
     mutable bool _armatureTransformDirty;
@@ -271,13 +298,13 @@ protected:
     cocos2d::Vec2 _offsetPoint;
     cocos2d::Vec2 _realAnchorPointInPoints;
 
-    ArmatureAnimation *_animation;
+    ArmatureAnimation* _animation;
 
-#if ENABLE_PHYSICS_BOX2D_DETECT
+    #if ENABLE_PHYSICS_BOX2D_DETECT
     b2Body *_body;
-#elif ENABLE_PHYSICS_CHIPMUNK_DETECT
+    #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
     cpBody *_body;
-#endif
+    #endif
 };
 
 }

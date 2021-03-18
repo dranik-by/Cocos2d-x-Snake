@@ -53,13 +53,13 @@ You SHOULD not use this class.
 Instead, use the newer TMX file format: TMXTiledMap
 @js NA
 */
-class CC_DLL TileMapAtlas : public AtlasNode 
+class CC_DLL TileMapAtlas : public AtlasNode
 {
 public:
     /** creates a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
      The tile file will be loaded using the TextureMgr.
      */
-    static TileMapAtlas * create(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
+    static TileMapAtlas* create(const std::string &tile, const std::string &mapFile, int tileWidth, int tileHeight);
     /**
      * @js ctor
      */
@@ -69,42 +69,47 @@ public:
      * @lua NA
      */
     virtual ~TileMapAtlas();
-    
+
     /** initializes a TileMap with a tile file (atlas) with a map file and the width and height of each tile in points.
     The file will be loaded using the TextureMgr.
     */
-    bool initWithTileFile(const std::string& tile, const std::string& mapFile, int tileWidth, int tileHeight);
+    bool initWithTileFile(const std::string &tile, const std::string &mapFile, int tileWidth, int tileHeight);
     /**
      * Returns a tile from position x,y.
      *For the moment only channel R is used
      */
-    Color3B getTileAt(const Vec2& position) const;
+    Color3B getTileAt(const Vec2 &position) const;
 
     /** sets a tile at position x,y.
     For the moment only channel R is used
     */
-    void setTile(const Color3B& tile, const Vec2& position);
+    void setTile(const Color3B &tile, const Vec2 &position);
     /** dealloc the map from memory */
     void releaseMap();
-    
+
     /**
      * Query TGA image info.
      *@return The TGA image info.
      */
-    struct sImageTGA* getTGAInfo() const { return _TGAInfo; }
+    struct sImageTGA* getTGAInfo() const
+    {
+        return _TGAInfo;
+    }
 
     /**
      * Set the TGA image info for TileMapAtlas
      *@param TGAInfo The TGA info in sImageTGA.
      */
-    void setTGAInfo(struct sImageTGA* TGAInfo) { _TGAInfo = TGAInfo; }
+    void setTGAInfo(struct sImageTGA* TGAInfo)
+    {
+        _TGAInfo = TGAInfo;
+    }
 
 protected:
-    void loadTGAfile(const std::string& file);
+    void loadTGAfile(const std::string &file);
     void calculateItemsToRender();
-    void updateAtlasValueAt(const Vec2& pos, const Color3B& value, int index);
+    void updateAtlasValueAt(const Vec2 &pos, const Color3B &value, int index);
     void updateAtlasValues();
-
 
     //! x,y to atlas dictionary
     ValueMap _posToAtlasIndex;

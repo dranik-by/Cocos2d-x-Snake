@@ -34,7 +34,7 @@
 #include "audio/include/Export.h"
 
 #ifdef ERROR
-#undef ERROR
+    #undef ERROR
 #endif // ERROR
 
 /**
@@ -56,10 +56,10 @@ public:
     std::string name;
     //The maximum number of simultaneous audio instance.
     unsigned int maxInstances;
-    
+
     /* Minimum delay in between sounds */
     double minDelay;
-    
+
     /**
      * Default constructor
      *
@@ -69,7 +69,7 @@ public:
     : maxInstances(0)
     , minDelay(0.0)
     {
-        
+
     }
 };
 
@@ -90,12 +90,12 @@ public:
     /** AudioState enum,all possible states of an audio instance.*/
     enum class AudioState
     {
-        ERROR  = -1,
+        ERROR = -1,
         INITIALIZING,
         PLAYING,
         PAUSED
     };
-    
+
     static const int INVALID_AUDIO_ID;
 
     static const float TIME_UNKNOWN;
@@ -109,14 +109,14 @@ public:
      * @lua endToLua
      */
     static void end();
-    
+
     /**  
      * Gets the default profile of audio instances.
      *
      * @return The default profile of audio instances.
      */
     static AudioProfile* getDefaultProfile();
-    
+
     /** 
      * Play 2d sound.
      *
@@ -128,8 +128,9 @@ public:
      *
      * @see `AudioProfile`
      */
-    static int play2d(const std::string& filePath, bool loop = false, float volume = 1.0f, const AudioProfile *profile = nullptr);
-    
+    static int play2d(const std::string &filePath, bool loop = false, float volume = 1.0f,
+                      const AudioProfile* profile = nullptr);
+
     /** 
      * Sets whether an audio instance loop or not.
      *
@@ -231,20 +232,23 @@ public:
      * @param audioID An audioID returned by the play2d function.
      * @param callback
      */
-    static void setFinishCallback(int audioID, const std::function<void(int,const std::string&)>& callback);
-    
+    static void setFinishCallback(int audioID, const std::function<void(int, const std::string &)> &callback);
+
     /**
      * Gets the maximum number of simultaneous audio instance of AudioEngine.
      */
-    static int getMaxAudioInstance() {return _maxInstances;}
-    
+    static int getMaxAudioInstance()
+    {
+        return _maxInstances;
+    }
+
     /**
      * Sets the maximum number of simultaneous audio instance for AudioEngine.
      *
      * @param maxInstances The maximum number of simultaneous audio instance.
      */
     static bool setMaxAudioInstance(int maxInstances);
-    
+
     /** 
      * Uncache the audio data from internal buffer.
      * AudioEngine cache audio data on ios,mac, and win32 platform.
@@ -252,15 +256,15 @@ public:
      * @warning This can lead to stop related audio first.
      * @param filePath Audio file path.
      */
-    static void uncache(const std::string& filePath);
-    
+    static void uncache(const std::string &filePath);
+
     /** 
      * Uncache all audio data from internal buffer.
      *
      * @warning All audio will be stopped first.
      */
     static void uncacheAll();
-    
+
     /**  
      * Gets the audio profile by id of audio instance.
      *
@@ -281,20 +285,23 @@ public:
      * Preload audio file.
      * @param filePath The file path of an audio.
      */
-    static void preload(const std::string& filePath) { preload(filePath, nullptr); }
+    static void preload(const std::string &filePath)
+    {
+        preload(filePath, nullptr);
+    }
 
     /**
      * Preload audio file.
      * @param filePath The file path of an audio.
      * @param callback A callback which will be called after loading is finished.
      */
-    static void preload(const std::string& filePath, std::function<void(bool isSuccess)> callback);
+    static void preload(const std::string &filePath, std::function<void(bool isSuccess)> callback);
 
     /**
      * Gets playing audio count.
      */
     static int getPlayingAudioCount();
-    
+
     /**
      * Whether to enable playing audios
      * @note If it's disabled, current playing audios will be stopped and the later 'preload', 'play2d' methods will take no effects.
@@ -304,11 +311,11 @@ public:
      * Check whether AudioEngine is enabled.
      */
     static bool isEnabled();
-    
+
 protected:
-    static void addTask(const std::function<void()>& task);
+    static void addTask(const std::function<void()> &task);
     static void remove(int audioID);
-    
+
     struct ProfileHelper
     {
         AudioProfile profile;
@@ -318,17 +325,17 @@ protected:
         double lastPlayTime;
 
         ProfileHelper()
-            : lastPlayTime(0.0)
+        : lastPlayTime(0.0)
         {
 
         }
     };
-    
+
     struct AudioInfo
     {
         std::string filePath;
         ProfileHelper* profileHelper;
-        
+
         float volume;
         bool loop;
         float duration;
@@ -337,32 +344,32 @@ protected:
         AudioInfo();
         ~AudioInfo();
     private:
-        AudioInfo(const AudioInfo& info);
-        AudioInfo(AudioInfo&& info);
-        AudioInfo& operator=(const AudioInfo& info);
-        AudioInfo& operator=(AudioInfo&& info);
+        AudioInfo(const AudioInfo &info);
+        AudioInfo(AudioInfo &&info);
+        AudioInfo &operator=(const AudioInfo &info);
+        AudioInfo &operator=(AudioInfo &&info);
     };
 
     //audioID,audioAttribute
     static std::unordered_map<int, AudioInfo> _audioIDInfoMap;
-    
+
     //audio file path,audio IDs
-    static std::unordered_map<std::string,std::list<int>> _audioPathIDMap;
-    
+    static std::unordered_map<std::string, std::list<int>> _audioPathIDMap;
+
     //profileName,ProfileHelper
     static std::unordered_map<std::string, ProfileHelper> _audioPathProfileHelperMap;
-    
+
     static unsigned int _maxInstances;
-    
+
     static ProfileHelper* _defaultProfileHelper;
-    
+
     static AudioEngineImpl* _audioEngineImpl;
 
     class AudioEngineThreadPool;
     static AudioEngineThreadPool* s_threadPool;
-    
+
     static bool _isEnabled;
-    
+
     friend class AudioEngineImpl;
 };
 

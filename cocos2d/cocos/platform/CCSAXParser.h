@@ -42,28 +42,30 @@ typedef unsigned char CC_XML_CHAR;
 class CC_DLL SAXDelegator
 {
 public:
-    virtual ~SAXDelegator() {}
+    virtual ~SAXDelegator()
+    {
+    }
 
     /**
      * @js NA
      * @lua NA
      */
-    virtual void startElement(void *ctx, const char *name, const char **atts) = 0;
+    virtual void startElement(void* ctx, const char* name, const char** atts) = 0;
     /**
      * @js NA
      * @lua NA
      */
-    virtual void endElement(void *ctx, const char *name) = 0;
+    virtual void endElement(void* ctx, const char* name) = 0;
     /**
      * @js NA
      * @lua NA
      */
-    virtual void textHandler(void *ctx, const char *s, size_t len) = 0;
+    virtual void textHandler(void* ctx, const char* s, size_t len) = 0;
 };
 
 class CC_DLL SAXParser
 {
-    SAXDelegator*    _delegator;
+    SAXDelegator* _delegator;
 public:
     /**
      * @js NA
@@ -79,7 +81,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool init(const char *encoding);
+    bool init(const char* encoding);
     /**
      * @js NA
      * @lua NA
@@ -89,7 +91,7 @@ public:
      * @js NA
      * @lua NA
      */
-    bool parse(const std::string& filename);
+    bool parse(const std::string &filename);
 
     /**
     * New API for performance.
@@ -105,17 +107,17 @@ public:
      * @js NA
      * @lua NA
      */
-    static void startElement(void *ctx, const CC_XML_CHAR *name, const CC_XML_CHAR **atts);
+    static void startElement(void* ctx, const CC_XML_CHAR* name, const CC_XML_CHAR** atts);
     /**
      * @js NA
      * @lua NA
      */
-    static void endElement(void *ctx, const CC_XML_CHAR *name);
+    static void endElement(void* ctx, const CC_XML_CHAR* name);
     /**
      * @js NA
      * @lua NA
      */
-    static void textHandler(void *ctx, const CC_XML_CHAR *name, size_t len);
+    static void textHandler(void* ctx, const CC_XML_CHAR* name, size_t len);
 };
 
 // end of platform group

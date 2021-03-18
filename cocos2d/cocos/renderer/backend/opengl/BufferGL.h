@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../Buffer.h"
@@ -49,7 +49,7 @@ public:
      */
     BufferGL(std::size_t size, BufferType type, BufferUsage usage);
     ~BufferGL();
-    
+
     /**
      * @brief Update buffer data
      * @param data Specifies a pointer to data that will be copied into the data store for initialization.
@@ -72,22 +72,25 @@ public:
      * This interface is used to indicate whether external data needs to be used to update the buffer(false) instead of using the default stored data(true).
      * @param needDefaultStoredData Specifies whether to use the default stored data.
      */
-    virtual void usingDefaultStoredData(bool needDefaultStoredData) override ;
+    virtual void usingDefaultStoredData(bool needDefaultStoredData) override;
 
     /**
      * Get buffer object.
      * @return Buffer object.
      */
-    inline GLuint getHandler() const { return _buffer; }
+    inline GLuint getHandler() const
+    {
+        return _buffer;
+    }
 
 private:
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     void reloadBuffer();
     void fillBuffer(void* data, std::size_t offset, std::size_t size);
 
     bool _bufferAlreadyFilled = false;
     EventListenerCustom* _backToForegroundListener = nullptr;
-#endif
+    #endif
 
     GLuint _buffer = 0;
     std::size_t _bufferAllocated = 0;

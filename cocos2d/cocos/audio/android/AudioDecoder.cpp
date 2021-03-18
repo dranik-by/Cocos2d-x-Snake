@@ -34,7 +34,8 @@ THE SOFTWARE.
 #include <chrono>
 #include <stdlib.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 size_t AudioDecoder::fileRead(void* ptr, size_t size, size_t nmemb, void* datasource)
 {
@@ -42,7 +43,7 @@ size_t AudioDecoder::fileRead(void* ptr, size_t size, size_t nmemb, void* dataso
     ssize_t toReadBytes = std::min((ssize_t)(thiz->_fileData.getSize() - thiz->_fileCurrPos), (ssize_t)(nmemb * size));
     if (toReadBytes > 0)
     {
-        memcpy(ptr, (unsigned char*) thiz->_fileData.getBytes() + thiz->_fileCurrPos, toReadBytes);
+        memcpy(ptr, (unsigned char*)thiz->_fileData.getBytes() + thiz->_fileCurrPos, toReadBytes);
         thiz->_fileCurrPos += toReadBytes;
     }
     // ALOGD("File size: %d, After fileRead _fileCurrPos %d", (int)thiz->_fileData.getSize(), thiz->_fileCurrPos);
@@ -69,11 +70,12 @@ int AudioDecoder::fileClose(void* datasource)
 long AudioDecoder::fileTell(void* datasource)
 {
     AudioDecoder* thiz = (AudioDecoder*)datasource;
-    return (long) thiz->_fileCurrPos;
+    return (long)thiz->_fileCurrPos;
 }
 
 AudioDecoder::AudioDecoder()
-        : _fileCurrPos(0), _sampleRate(-1)
+: _fileCurrPos(0)
+, _sampleRate(-1)
 {
     auto pcmBuffer = std::make_shared<std::vector<char>>();
     pcmBuffer->reserve(4096);
@@ -100,7 +102,7 @@ bool AudioDecoder::start()
     do
     {
         ret = decodeToPcm();
-        if (!ret) 
+        if (!ret)
         {
             ALOGE("decodeToPcm (%s) failed!", _url.c_str());
             break;
@@ -111,7 +113,7 @@ bool AudioDecoder::start()
         oldTime = nowTime;
 
         ret = resample();
-        if (!ret) 
+        if (!ret)
         {
             ALOGE("resample (%s) failed!", _url.c_str());
             break;
@@ -122,16 +124,16 @@ bool AudioDecoder::start()
         oldTime = nowTime;
 
         ret = interleave();
-        if (!ret) 
+        if (!ret)
         {
             ALOGE("interleave (%s) failed!", _url.c_str());
             break;
         }
-        
+
         nowTime = clockNow();
         ALOGD("Interleave (%s) wasted %fms", _url.c_str(), intervalInMS(oldTime, nowTime));
 
-    } while(false);
+    } while (false);
 
     ALOGV_IF(!ret, "%s returns false, decode (%s)", __FUNCTION__, _url.c_str());
     return ret;
@@ -141,8 +143,9 @@ bool AudioDecoder::resample()
 {
     if (_result.sampleRate == _sampleRate)
     {
-        ALOGI("No need to resample since the sample rate (%d) of the decoded pcm data is the same as the device output sample rate",
-              _sampleRate);
+        ALOGI(
+        "No need to resample since the sample rate (%d) of the decoded pcm data is the same as the device output sample rate",
+        _sampleRate);
         return true;
     }
 
@@ -155,9 +158,9 @@ bool AudioDecoder::resample()
     const int outFrameRate = _sampleRate;
     int outputChannels = 2;
     size_t outputFrameSize = outputChannels * sizeof(int32_t);
-    size_t outputFrames = ((int64_t) r.numFrames * outFrameRate) / r.sampleRate;
+    size_t outputFrames = ((int64_t)r.numFrames * outFrameRate) / r.sampleRate;
     size_t outputSize = outputFrames * outputFrameSize;
-    void *outputVAddr = malloc(outputSize);
+    void* outputVAddr = malloc(outputSize);
 
     auto resampler = AudioResampler::create(AUDIO_FORMAT_PCM_16_BIT, r.numChannels, outFrameRate,
                                             AudioResampler::MED_QUALITY);
@@ -185,8 +188,7 @@ bool AudioDecoder::resample()
         {
             thisFrames = outputFrames - i;
         }
-        int outFrames = resampler->resample((int *) outputVAddr + outputChannels * i, thisFrames,
-                                            &provider);
+        int outFrames = resampler->resample((int*)outputVAddr + outputChannels * i, thisFrames, &provider);
         ALOGV("outFrames: %d", outFrames);
         i += thisFrames;
     }
@@ -204,8 +206,8 @@ bool AudioDecoder::resample()
     // stereo and multichannel preserve all channels.
 
     int channels = r.numChannels;
-    int32_t *out = (int32_t *) outputVAddr;
-    int16_t *convert = (int16_t *) malloc(outputFrames * channels * sizeof(int16_t));
+    int32_t* out = (int32_t*)outputVAddr;
+    int16_t* convert = (int16_t*)malloc(outputFrames * channels * sizeof(int16_t));
 
     const int volumeShift = 12; // shift requirement for Q4.27 to Q.15
     // round to half towards zero and saturate at int16 (non-dithered)
@@ -223,7 +225,8 @@ bool AudioDecoder::resample()
                 {
                     s = -32768;
                 }
-            } else
+            }
+            else
             {
                 s = s >> volumeShift;
                 if (s > 32767)
@@ -241,8 +244,7 @@ bool AudioDecoder::resample()
 
     auto buffer = std::make_shared<std::vector<char>>();
     buffer->reserve(_result.numFrames * _result.bitsPerSample / 8);
-    buffer->insert(buffer->end(), (char *) convert,
-                   (char *) convert + outputFrames * channels * sizeof(int16_t));
+    buffer->insert(buffer->end(), (char*)convert, (char*)convert + outputFrames * channels * sizeof(int16_t));
     _result.pcmBuffer = buffer;
 
     ALOGV("pcm buffer size: %d", (int)_result.pcmBuffer->size());
@@ -266,7 +268,7 @@ bool AudioDecoder::interleave()
         size_t newBufferSize = _result.pcmBuffer->size() * 2;
         auto newBuffer = std::make_shared<std::vector<char>>();
         newBuffer->reserve(newBufferSize);
-        size_t totalFrameSizeInBytes = (size_t) (_result.numFrames * _result.bitsPerSample / 8);
+        size_t totalFrameSizeInBytes = (size_t)(_result.numFrames * _result.bitsPerSample / 8);
 
         for (size_t i = 0; i < totalFrameSizeInBytes; i += 2)
         {
@@ -287,7 +289,8 @@ bool AudioDecoder::interleave()
         return true;
     }
 
-    ALOGE("Audio channel count (%d) is wrong, interleave only supports converting mono to stereo!", _result.numChannels);
+    ALOGE("Audio channel count (%d) is wrong, interleave only supports converting mono to stereo!",
+          _result.numChannels);
     return false;
 }
 

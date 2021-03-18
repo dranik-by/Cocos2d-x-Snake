@@ -38,13 +38,13 @@ bool EventListenerKeyboard::checkAvailable()
         CCASSERT(false, "Invalid EventListenerKeyboard!");
         return false;
     }
-    
+
     return true;
 }
 
 EventListenerKeyboard* EventListenerKeyboard::create()
 {
-    auto ret = new (std::nothrow) EventListenerKeyboard();
+    auto ret = new(std::nothrow) EventListenerKeyboard();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -58,7 +58,7 @@ EventListenerKeyboard* EventListenerKeyboard::create()
 
 EventListenerKeyboard* EventListenerKeyboard::clone()
 {
-    auto ret = new (std::nothrow) EventListenerKeyboard();
+    auto ret = new(std::nothrow) EventListenerKeyboard();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -80,7 +80,8 @@ EventListenerKeyboard::EventListenerKeyboard()
 
 bool EventListenerKeyboard::init()
 {
-    auto listener = [this](Event* event){
+    auto listener = [this](Event* event)
+    {
         auto keyboardEvent = static_cast<EventKeyboard*>(event);
         if (keyboardEvent->_isPressed)
         {
@@ -93,12 +94,12 @@ bool EventListenerKeyboard::init()
                 onKeyReleased(keyboardEvent->_keyCode, event);
         }
     };
-    
+
     if (EventListener::init(Type::KEYBOARD, LISTENER_ID, listener))
     {
         return true;
     }
-    
+
     return false;
 }
 

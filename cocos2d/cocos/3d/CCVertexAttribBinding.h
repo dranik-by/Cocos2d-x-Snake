@@ -72,7 +72,7 @@ public:
      * 
      * @return A VertexAttribBinding for the requested parameters.
      */
-    static VertexAttribBinding* create(MeshIndexData* meshIndexData, Pass *pass, MeshCommand *);
+    static VertexAttribBinding* create(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
 
     /**
      * Binds this vertex array object.
@@ -105,20 +105,20 @@ private:
     /**
      * Hidden copy assignment operator.
      */
-    VertexAttribBinding& operator=(const VertexAttribBinding&);
-    
-    bool init(MeshIndexData* meshIndexData, Pass *pass, MeshCommand *);
-    void setVertexAttribPointer(const std::string& name, backend::VertexFormat type, bool normalized, int offset, int flag);
+    VertexAttribBinding &operator=(const VertexAttribBinding &);
+
+    bool init(MeshIndexData* meshIndexData, Pass* pass, MeshCommand*);
+    void setVertexAttribPointer(const std::string &name, backend::VertexFormat type, bool normalized, int offset,
+                                int flag);
     backend::AttributeBindInfo* getVertexAttribValue(const std::string &name);
     void parseAttributes();
-    
+
     MeshIndexData* _meshIndexData;
     backend::ProgramState* _programState;
     std::shared_ptr<backend::VertexLayout> _vertexLayout = std::make_shared<backend::VertexLayout>();
     std::unordered_map<std::string, backend::AttributeBindInfo> _attributes;
     uint32_t _vertexAttribsFlags;
 };
-
 
 NS_CC_END
 

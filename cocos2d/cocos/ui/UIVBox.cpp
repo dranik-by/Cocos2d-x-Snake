@@ -27,8 +27,9 @@
 
 NS_CC_BEGIN
 
-namespace ui{
-    
+namespace ui
+{
+
 VBox::VBox()
 {
 }
@@ -39,7 +40,7 @@ VBox::~VBox()
 
 VBox* VBox::create()
 {
-    VBox* widget = new (std::nothrow) VBox();
+    VBox* widget = new(std::nothrow) VBox();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -51,7 +52,7 @@ VBox* VBox::create()
 
 VBox* VBox::create(const cocos2d::Size &size)
 {
-    VBox* widget = new (std::nothrow) VBox();
+    VBox* widget = new(std::nothrow) VBox();
     if (widget && widget->initWithSize(size))
     {
         widget->autorelease();
@@ -71,7 +72,7 @@ bool VBox::init()
     return false;
 }
 
-bool VBox::initWithSize(const Size& size)
+bool VBox::initWithSize(const Size &size)
 {
     if (init())
     {
@@ -80,7 +81,7 @@ bool VBox::initWithSize(const Size& size)
     }
     return false;
 }
-    
+
 }
 
 NS_CC_END

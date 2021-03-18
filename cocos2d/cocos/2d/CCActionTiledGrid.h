@@ -53,15 +53,21 @@ public:
     @param shakeZ Specify whether shake on the z axis.
     @return If the creation success, return a pointer of ShakyTiles3D action; otherwise, return nil.
     */
-    static ShakyTiles3D* create(float duration, const Size& gridSize, int range, bool shakeZ);
+    static ShakyTiles3D* create(float duration, const Size &gridSize, int range, bool shakeZ);
 
     // Override
     virtual ShakyTiles3D* clone() const override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    ShakyTiles3D() {}
-    virtual ~ShakyTiles3D() {}
+
+    ShakyTiles3D()
+    {
+    }
+
+    virtual ~ShakyTiles3D()
+    {
+    }
 
     /** 
     @brief Initializes the action with a range, shake Z vertices, grid size and duration.
@@ -71,14 +77,13 @@ CC_CONSTRUCTOR_ACCESS:
     @param shakeZ Specify whether shake on the z axis.
     @return If the Initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Size& gridSize, int range, bool shakeZ);
+    bool initWithDuration(float duration, const Size &gridSize, int range, bool shakeZ);
 
 protected:
     int _randrange;
     bool _shakeZ;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ShakyTiles3D);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ShakyTiles3D);
 };
 
 /**
@@ -98,15 +103,21 @@ public:
      * @param shatterZ Specify whether shatter on the z axis.
      * @return If the creation success, return a pointer of ShatteredTiles3D action; otherwise, return nil.
      */
-    static ShatteredTiles3D* create(float duration, const Size& gridSize, int range, bool shatterZ);
+    static ShatteredTiles3D* create(float duration, const Size &gridSize, int range, bool shatterZ);
 
     // Override
     virtual ShatteredTiles3D* clone() const override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    ShatteredTiles3D() {}
-    virtual ~ShatteredTiles3D() {}
+
+    ShatteredTiles3D()
+    {
+    }
+
+    virtual ~ShatteredTiles3D()
+    {
+    }
 
     /** 
     @brief Initializes the action with a range, shatter Z vertices, grid size and duration.
@@ -116,15 +127,14 @@ CC_CONSTRUCTOR_ACCESS:
     @param shatterZ Specify whether shake on the z axis.
     @return If the Initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Size& gridSize, int range, bool shatterZ);
+    bool initWithDuration(float duration, const Size &gridSize, int range, bool shatterZ);
 
 protected:
     int _randrange;
     bool _once;
     bool _shatterZ;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ShatteredTiles3D);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ShatteredTiles3D);
 };
 
 struct Tile;
@@ -144,19 +154,23 @@ public:
     * @param seed Specify the random seed.
     * @return If the creation success, return a pointer of ShuffleTiles action; otherwise, return nil.
     */
-    static ShuffleTiles* create(float duration, const Size& gridSize, unsigned int seed);
+    static ShuffleTiles* create(float duration, const Size &gridSize, unsigned int seed);
 
-    void shuffle(unsigned int *array, unsigned int len);
-    Size getDelta(const Size& pos) const;
-    void placeTile(const Vec2& pos, Tile *t);
+    void shuffle(unsigned int* array, unsigned int len);
+    Size getDelta(const Size &pos) const;
+    void placeTile(const Vec2 &pos, Tile* t);
 
     // Overrides
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
     virtual ShuffleTiles* clone() const override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    ShuffleTiles() {}
+
+    ShuffleTiles()
+    {
+    }
+
     virtual ~ShuffleTiles();
 
     /** 
@@ -166,7 +180,7 @@ CC_CONSTRUCTOR_ACCESS:
     * @param seed Specify the random seed.
     * @return If the Initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
+    bool initWithDuration(float duration, const Size &gridSize, unsigned int seed);
 
 protected:
     unsigned int _seed;
@@ -174,8 +188,7 @@ protected:
     unsigned int* _tilesOrder;
     Tile* _tiles;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ShuffleTiles);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ShuffleTiles);
 };
 
 /**
@@ -191,7 +204,7 @@ public:
     * @param gridSize Specify the size of the grid.
     * @return If the creation success, return a pointer of FadeOutTRTiles action; otherwise, return nil.
     */
-    static FadeOutTRTiles* create(float duration, const Size& gridSize);
+    static FadeOutTRTiles* create(float duration, const Size &gridSize);
 
     /**
     @brief Calculate the percentage a tile should be shown.
@@ -199,37 +212,42 @@ public:
     @param time The current percentage of the action.
     @return Return the percentage the tile should be shown.
     */
-    virtual float testFunc(const Size& pos, float time);
+    virtual float testFunc(const Size &pos, float time);
 
     /**
     @brief Show the tile at specified position.
     @param pos The position index of the tile should be shown.
     */
-    void turnOnTile(const Vec2& pos);
+    void turnOnTile(const Vec2 &pos);
 
     /**
     @brief Hide the tile at specified position.
     @param pos The position index of the tile should be hide.
     */
-    void turnOffTile(const Vec2& pos);
+    void turnOffTile(const Vec2 &pos);
 
     /**
     @brief Show part of the tile.
     @param pos The position index of the tile should be shown.
     @param distance The percentage that the tile should be shown.
     */
-    virtual void transformTile(const Vec2& pos, float distance);
+    virtual void transformTile(const Vec2 &pos, float distance);
 
     // Overrides
     virtual void update(float time) override;
     virtual FadeOutTRTiles* clone() const override;
 
 CC_CONSTRUCTOR_ACCESS:
-    FadeOutTRTiles() {}
-    virtual ~FadeOutTRTiles() {}
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutTRTiles);
+    FadeOutTRTiles()
+    {
+    }
+
+    virtual ~FadeOutTRTiles()
+    {
+    }
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(FadeOutTRTiles);
 };
 
 /**
@@ -245,18 +263,23 @@ public:
     * @param gridSize Specify the size of the grid.
     * @return If the creation success, return a pointer of FadeOutBLTiles action; otherwise, return nil.
     */
-    static FadeOutBLTiles* create(float duration, const Size& gridSize);
+    static FadeOutBLTiles* create(float duration, const Size &gridSize);
 
     // Overrides
-    virtual float testFunc(const Size& pos, float time) override;
+    virtual float testFunc(const Size &pos, float time) override;
     virtual FadeOutBLTiles* clone() const override;
 
 CC_CONSTRUCTOR_ACCESS:
-    FadeOutBLTiles() {}
-    virtual ~FadeOutBLTiles() {}
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
+    FadeOutBLTiles()
+    {
+    }
+
+    virtual ~FadeOutBLTiles()
+    {
+    }
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(FadeOutBLTiles);
 };
 
 /**
@@ -272,20 +295,25 @@ public:
     * @param gridSize Specify the size of the grid.
     * @return If the creation success, return a pointer of FadeOutUpTiles action; otherwise, return nil.
     */
-    static FadeOutUpTiles* create(float duration, const Size& gridSize);
+    static FadeOutUpTiles* create(float duration, const Size &gridSize);
 
-    virtual void transformTile(const Vec2& pos, float distance) override;
+    virtual void transformTile(const Vec2 &pos, float distance) override;
 
     // Overrides
     virtual FadeOutUpTiles* clone() const override;
-    virtual float testFunc(const Size& pos, float time) override;
+    virtual float testFunc(const Size &pos, float time) override;
 
 CC_CONSTRUCTOR_ACCESS:
-    FadeOutUpTiles() {}
-    virtual ~FadeOutUpTiles() {}
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutUpTiles);
+    FadeOutUpTiles()
+    {
+    }
+
+    virtual ~FadeOutUpTiles()
+    {
+    }
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(FadeOutUpTiles);
 };
 
 /**
@@ -301,18 +329,23 @@ public:
     * @param gridSize Specify the size of the grid.
     * @return If the creation success, return a pointer of FadeOutDownTiles action; otherwise, return nil.
     */
-    static FadeOutDownTiles* create(float duration, const Size& gridSize);
+    static FadeOutDownTiles* create(float duration, const Size &gridSize);
 
     // Overrides
     virtual FadeOutDownTiles* clone() const override;
-    virtual float testFunc(const Size& pos, float time) override;
+    virtual float testFunc(const Size &pos, float time) override;
 
 CC_CONSTRUCTOR_ACCESS:
-    FadeOutDownTiles() {}
-    virtual ~FadeOutDownTiles() {}
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(FadeOutDownTiles);
+    FadeOutDownTiles()
+    {
+    }
+
+    virtual ~FadeOutDownTiles()
+    {
+    }
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(FadeOutDownTiles);
 };
 
 /**
@@ -328,7 +361,7 @@ public:
     * @param gridSize Specify the size of the grid.
     * @return If the creation success, return a pointer of TurnOffTiles action; otherwise, return nil.
     */
-    static TurnOffTiles* create(float duration, const Size& gridSize);
+    static TurnOffTiles* create(float duration, const Size &gridSize);
     /** 
     * @brief Create the action with the grid size and the duration.
     * @param duration Specify the duration of the TurnOffTiles action. It's a value in seconds.
@@ -336,34 +369,38 @@ public:
     * @param seed Specify the random seed.
     * @return If the creation success, return a pointer of TurnOffTiles action; otherwise, return nil.
     */
-    static TurnOffTiles* create(float duration, const Size& gridSize, unsigned int seed);
+    static TurnOffTiles* create(float duration, const Size &gridSize, unsigned int seed);
 
     /**
     @brief Shuffle the array specified.
     @param array The array will be shuffled.
     @param len The size of the array.
     */
-    void shuffle(unsigned int *array, unsigned int len);
+    void shuffle(unsigned int* array, unsigned int len);
 
     /**
     @brief Show the tile at specified position.
     @param pos The position index of the tile should be shown.
     */
-    void turnOnTile(const Vec2& pos);
+    void turnOnTile(const Vec2 &pos);
 
     /**
     @brief Hide the tile at specified position.
     @param pos The position index of the tile should be hide.
     */
-    void turnOffTile(const Vec2& pos);
+    void turnOffTile(const Vec2 &pos);
 
     // Overrides
-	virtual TurnOffTiles* clone() const override;
-    virtual void startWithTarget(Node *target) override;
+    virtual TurnOffTiles* clone() const override;
+    virtual void startWithTarget(Node* target) override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    TurnOffTiles() {}
+
+    TurnOffTiles()
+    {
+    }
+
     virtual ~TurnOffTiles();
 
     /** 
@@ -373,15 +410,14 @@ CC_CONSTRUCTOR_ACCESS:
     * @param seed Specify the random seed.
     * @return If the Initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int seed);
+    bool initWithDuration(float duration, const Size &gridSize, unsigned int seed);
 
 protected:
-    unsigned int    _seed;
-    unsigned int    _tilesCount;
-    unsigned int*   _tilesOrder;
+    unsigned int _seed;
+    unsigned int _tilesCount;
+    unsigned int* _tilesOrder;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(TurnOffTiles);
+private: CC_DISALLOW_COPY_AND_ASSIGN(TurnOffTiles);
 };
 
 /**
@@ -399,37 +435,57 @@ public:
      * @param amplitude Specify the amplitude of the WavesTiles3D action.
      * @return If the creation success, return a pointer of WavesTiles3D action; otherwise, return nil.
      */
-    static WavesTiles3D* create(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    static WavesTiles3D* create(float duration, const Size &gridSize, unsigned int waves, float amplitude);
 
     /**
     @brief Get the amplitude of the effect.
     @return Return the amplitude of the effect.
     */
-    float getAmplitude() const { return _amplitude; }
+    float getAmplitude() const
+    {
+        return _amplitude;
+    }
+
     /**
     @brief Set the amplitude to the effect.
     @param amplitude The value of amplitude will be set.
     */
-    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    void setAmplitude(float amplitude)
+    {
+        _amplitude = amplitude;
+    }
 
     /**
     @brief Get the amplitude rate of the effect.
     @return Return the amplitude rate of the effect.
     */
-    float getAmplitudeRate() const { return _amplitudeRate; }
+    float getAmplitudeRate() const
+    {
+        return _amplitudeRate;
+    }
+
     /**
     @brief Set the amplitude rate of the effect.
     @param amplitudeRate The value of amplitude rate will be set.
     */
-    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    void setAmplitudeRate(float amplitudeRate)
+    {
+        _amplitudeRate = amplitudeRate;
+    }
 
     // Override
     virtual WavesTiles3D* clone() const override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    WavesTiles3D() {}
-    virtual ~WavesTiles3D() {}
+
+    WavesTiles3D()
+    {
+    }
+
+    virtual ~WavesTiles3D()
+    {
+    }
 
     /** 
     @brief Initializes an action with duration, grid size, waves count and amplitude.
@@ -439,15 +495,14 @@ CC_CONSTRUCTOR_ACCESS:
     @param amplitude Specify the amplitude of the WavesTiles3D action.
     @return If the initialization success, return true; otherwise, return false.
     */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int waves, float amplitude);
+    bool initWithDuration(float duration, const Size &gridSize, unsigned int waves, float amplitude);
 
 protected:
     unsigned int _waves;
     float _amplitude;
     float _amplitudeRate;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(WavesTiles3D);
+private: CC_DISALLOW_COPY_AND_ASSIGN(WavesTiles3D);
 };
 
 /**
@@ -465,37 +520,57 @@ public:
      * @param amplitude Specify the amplitude of the JumpTiles3D action.
      * @return If the creation success, return a pointer of JumpTiles3D action; otherwise, return nil.
      */
-    static JumpTiles3D* create(float duration, const Size& gridSize, unsigned int numberOfJumps, float amplitude);
+    static JumpTiles3D* create(float duration, const Size &gridSize, unsigned int numberOfJumps, float amplitude);
 
     /**
     @brief Get the amplitude of the effect.
     @return Return the amplitude of the effect.
     */
-    float getAmplitude() const { return _amplitude; }
+    float getAmplitude() const
+    {
+        return _amplitude;
+    }
+
     /**
     @brief Set the amplitude to the effect.
     @param amplitude The value of amplitude will be set.
     */
-    void setAmplitude(float amplitude) { _amplitude = amplitude; }
+    void setAmplitude(float amplitude)
+    {
+        _amplitude = amplitude;
+    }
 
     /**
     @brief Get the amplitude rate of the effect.
     @return Return the amplitude rate of the effect.
     */
-    float getAmplitudeRate() const { return _amplitudeRate; }
+    float getAmplitudeRate() const
+    {
+        return _amplitudeRate;
+    }
+
     /**
     @brief Set the amplitude rate of the effect.
     @param amplitudeRate The value of amplitude rate will be set.
     */
-    void setAmplitudeRate(float amplitudeRate) { _amplitudeRate = amplitudeRate; }
+    void setAmplitudeRate(float amplitudeRate)
+    {
+        _amplitudeRate = amplitudeRate;
+    }
 
     // Override
     virtual JumpTiles3D* clone() const override;
     virtual void update(float time) override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
-    JumpTiles3D() {}
-    virtual ~JumpTiles3D() {}
+
+    JumpTiles3D()
+    {
+    }
+
+    virtual ~JumpTiles3D()
+    {
+    }
 
     /** 
      * @brief Initializes the action with the number of jumps, the sin amplitude, the grid size and the duration.
@@ -505,15 +580,14 @@ CC_CONSTRUCTOR_ACCESS:
      * @param amplitude Specify the amplitude of the JumpTiles3D action.
      * @return If the initialization success, return true; otherwise, return false.
      */
-    bool initWithDuration(float duration, const Size& gridSize, unsigned int numberOfJumps, float amplitude);
+    bool initWithDuration(float duration, const Size &gridSize, unsigned int numberOfJumps, float amplitude);
 
 protected:
     unsigned int _jumps;
     float _amplitude;
     float _amplitudeRate;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(JumpTiles3D);
+private: CC_DISALLOW_COPY_AND_ASSIGN(JumpTiles3D);
 };
 
 /**
@@ -535,11 +609,17 @@ public :
     // Overrides
     virtual SplitRows* clone() const override;
     virtual void update(float time) override;
-    virtual void startWithTarget(Node *target) override;
-    
+    virtual void startWithTarget(Node* target) override;
+
 CC_CONSTRUCTOR_ACCESS:
-    SplitRows() {}
-    virtual ~SplitRows() {}
+
+    SplitRows()
+    {
+    }
+
+    virtual ~SplitRows()
+    {
+    }
 
     /** 
      * @brief Initializes the action with the number rows and the duration.
@@ -553,8 +633,7 @@ protected:
     unsigned int _rows;
     Size _winSize;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(SplitRows);
+private: CC_DISALLOW_COPY_AND_ASSIGN(SplitRows);
 };
 
 /**
@@ -565,7 +644,7 @@ private:
 class CC_DLL SplitCols : public TiledGrid3DAction
 {
 public:
-    
+
     /** 
      * @brief Create the action with the number of columns and the duration.
      * @param duration Specify the duration of the SplitCols action. It's a value in seconds.
@@ -580,11 +659,17 @@ public:
      * @param time in seconds
      */
     virtual void update(float time) override;
-    virtual void startWithTarget(Node *target) override;
-    
+    virtual void startWithTarget(Node* target) override;
+
 CC_CONSTRUCTOR_ACCESS:
-    SplitCols() {}
-    virtual ~SplitCols() {}
+
+    SplitCols()
+    {
+    }
+
+    virtual ~SplitCols()
+    {
+    }
 
     /** 
      * @brief Initializes the action with the number columns and the duration.
@@ -598,8 +683,7 @@ protected:
     unsigned int _cols;
     Size _winSize;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(SplitCols);
+private: CC_DISALLOW_COPY_AND_ASSIGN(SplitCols);
 };
 
 // end of actions group

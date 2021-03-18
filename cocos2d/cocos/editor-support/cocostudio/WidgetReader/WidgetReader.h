@@ -35,119 +35,112 @@
 
 namespace cocostudio
 {
-    class CocoLoader;
-    struct stExpCocoNode;
-    
-    class CC_STUDIO_DLL WidgetReader : public cocos2d::Ref, public WidgetReaderProtocol, public NodeReaderProtocol
-    {
-        DECLARE_CLASS_NODE_READER_INFO
-        
-    public:
-        WidgetReader();
-        virtual ~WidgetReader();
-        
-        static WidgetReader* getInstance();
-        /** @deprecated Use method destroyInstance() instead */
-        CC_DEPRECATED_ATTRIBUTE static void purge();
-        static void destroyInstance();
-        
-        virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget,
-                                                const rapidjson::Value& options);
-        
-        virtual void setColorPropsFromJsonDictionary(cocos2d::ui::Widget* widget,
-                                                     const rapidjson::Value& options);
-        
-        virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader,  stExpCocoNode*	pCocoNode);        
-        
-        /* flatbuffers refactoring */
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-                                                                             flatbuffers::FlatBufferBuilder* builder);
-        void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* widgetOptions);
-        void setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* widgetOptions);
-        cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* widgetOptions);
-        /**/
-        
-    protected:
-        std::string getResourcePath(const rapidjson::Value& dict,
-                                    const std::string& key,
-                                    cocos2d::ui::Widget::TextureResType texType);
-        void setAnchorPointForWidget(cocos2d::ui::Widget* widget, const rapidjson::Value&options);
-        
-        
-        std::string getResourcePath(CocoLoader* cocoLoader,
-                                    stExpCocoNode*	pCocoNode,
-                                    cocos2d::ui::Widget::TextureResType texType);                
-        
-        std::string getResourcePath(const std::string& path,
-                                    cocos2d::ui::Widget::TextureResType texType);
+class CocoLoader;
+struct stExpCocoNode;
 
-        void beginSetBasicProperties(cocos2d::ui::Widget *widget);
-        void endSetBasicProperties(cocos2d::ui::Widget *widget);
-        
-        
-        std::function<int(const std::string&)> valueToInt;
-        std::function<bool(const std::string&)> valueToBool;
-        std::function<float(const std::string&)> valueToFloat;
-        
-        float _sizePercentX;
-        float _sizePercentY;
-        float _positionPercentX;
-        float _positionPercentY;
-        float _width ;
-        float _height;
-        cocos2d::Color3B _color;
-        int _opacity;
-        cocos2d::Vec2 _position;
-        bool _isAdaptScreen;
-        cocos2d::Vec2 _originalAnchorPoint;
+class CC_STUDIO_DLL WidgetReader : public cocos2d::Ref, public WidgetReaderProtocol, public NodeReaderProtocol
+{
+DECLARE_CLASS_NODE_READER_INFO
 
-    };
-    
-    //property const define
-    extern const char* P_IgnoreSize;
-    extern const char* P_SizeType;
-    extern const char* P_PositionType;
-    extern const char* P_SizePercentX;
-    extern const char* P_SizePercentY;
-    extern const char* P_PositionPercentX;
-    extern const char* P_PositionPercentY;
-    extern const char* P_AdaptScreen;
-    extern const char* P_Width;
-    extern const char* P_Height;
-    extern const char* P_Tag;
-    extern const char* P_ActionTag;
-    extern const char* P_TouchAble;
-    extern const char* P_Name;
-    extern const char* P_X;
-    extern const char* P_Y;
-    extern const char* P_ScaleX;
-    extern const char* P_ScaleY;
-    extern const char* P_Rotation;
-    extern const char* P_Visbile;
-    extern const char* P_ZOrder;
-    extern const char* P_LayoutParameter;
-    extern const char* P_Type;
-    extern const char* P_Gravity;
-    extern const char* P_RelativeName;
-    extern const char* P_RelativeToName;
-    extern const char* P_Align;
-    extern const char* P_MarginLeft;
-    extern const char* P_MarginRight;
-    extern const char* P_MarginTop;
-    extern const char* P_MarginDown;
-    
-    extern const char* P_Opacity;
-    extern const char* P_ColorR;
-    extern const char* P_ColorG;
-    extern const char* P_ColorB;
-    extern const char* P_FlipX;
-    extern const char* P_FlipY;
-    extern const char* P_AnchorPointX;
-    extern const char* P_AnchorPointY;
-    
-    extern const char* P_ResourceType;
-    extern const char* P_Path;
-    
+public:
+    WidgetReader();
+    virtual ~WidgetReader();
+
+    static WidgetReader* getInstance();
+    /** @deprecated Use method destroyInstance() instead */
+    CC_DEPRECATED_ATTRIBUTE static void purge();
+    static void destroyInstance();
+
+    virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value &options);
+
+    virtual void setColorPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value &options);
+
+    virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+
+    /* flatbuffers refactoring */
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                         flatbuffers::FlatBufferBuilder* builder);
+    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* widgetOptions);
+    void setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* widgetOptions);
+    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* widgetOptions);
+    /**/
+
+protected:
+    std::string getResourcePath(const rapidjson::Value &dict, const std::string &key,
+                                cocos2d::ui::Widget::TextureResType texType);
+    void setAnchorPointForWidget(cocos2d::ui::Widget* widget, const rapidjson::Value &options);
+
+    std::string getResourcePath(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode,
+                                cocos2d::ui::Widget::TextureResType texType);
+
+    std::string getResourcePath(const std::string &path, cocos2d::ui::Widget::TextureResType texType);
+
+    void beginSetBasicProperties(cocos2d::ui::Widget* widget);
+    void endSetBasicProperties(cocos2d::ui::Widget* widget);
+
+    std::function<int(const std::string &)> valueToInt;
+    std::function<bool(const std::string &)> valueToBool;
+    std::function<float(const std::string &)> valueToFloat;
+
+    float _sizePercentX;
+    float _sizePercentY;
+    float _positionPercentX;
+    float _positionPercentY;
+    float _width;
+    float _height;
+    cocos2d::Color3B _color;
+    int _opacity;
+    cocos2d::Vec2 _position;
+    bool _isAdaptScreen;
+    cocos2d::Vec2 _originalAnchorPoint;
+
+};
+
+//property const define
+extern const char* P_IgnoreSize;
+extern const char* P_SizeType;
+extern const char* P_PositionType;
+extern const char* P_SizePercentX;
+extern const char* P_SizePercentY;
+extern const char* P_PositionPercentX;
+extern const char* P_PositionPercentY;
+extern const char* P_AdaptScreen;
+extern const char* P_Width;
+extern const char* P_Height;
+extern const char* P_Tag;
+extern const char* P_ActionTag;
+extern const char* P_TouchAble;
+extern const char* P_Name;
+extern const char* P_X;
+extern const char* P_Y;
+extern const char* P_ScaleX;
+extern const char* P_ScaleY;
+extern const char* P_Rotation;
+extern const char* P_Visbile;
+extern const char* P_ZOrder;
+extern const char* P_LayoutParameter;
+extern const char* P_Type;
+extern const char* P_Gravity;
+extern const char* P_RelativeName;
+extern const char* P_RelativeToName;
+extern const char* P_Align;
+extern const char* P_MarginLeft;
+extern const char* P_MarginRight;
+extern const char* P_MarginTop;
+extern const char* P_MarginDown;
+
+extern const char* P_Opacity;
+extern const char* P_ColorR;
+extern const char* P_ColorG;
+extern const char* P_ColorB;
+extern const char* P_FlipX;
+extern const char* P_FlipY;
+extern const char* P_AnchorPointX;
+extern const char* P_AnchorPointY;
+
+extern const char* P_ResourceType;
+extern const char* P_Path;
+
 #define CC_BASIC_PROPERTY_BINARY_READER  \
     if (key == P_IgnoreSize) {   \
         widget->ignoreContentAdaptWithSize(valueToBool(value)); \
@@ -233,7 +226,6 @@ namespace cocostudio
         }\
       }
 
-    
 #define CC_COLOR_PROPERTY_BINARY_READER \
     else if (key == P_Opacity) { \
         _opacity = valueToInt(value); \
@@ -254,7 +246,6 @@ namespace cocostudio
     }else if(key == P_AnchorPointY){ \
         _originalAnchorPoint.y = valueToFloat(value); \
     }
-
 
 }
 

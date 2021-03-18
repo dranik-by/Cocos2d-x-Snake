@@ -31,42 +31,38 @@
 using namespace cocos2d::ui;
 //-------------------------------------------------------------------------------------
 
-#include "platform/ios/CCEAGLView-ios.h"
-#import <AVKit/AVPlayerViewController.h>
-#import <CoreMedia/CMTime.h>
-#include "base/CCDirector.h"
-#include "platform/CCFileUtils.h"
+    #include "platform/ios/CCEAGLView-ios.h"
+    #import <AVKit/AVPlayerViewController.h>
+    #import <CoreMedia/CMTime.h>
+    #include "base/CCDirector.h"
+    #include "platform/CCFileUtils.h"
 
 @interface UIVideoViewWrapperIos : NSObject
 
-typedef NS_ENUM(NSInteger, PlayerbackState) {
-    PlayerbackStateUnknown = 0,
-    PlayerbackStatePaused,
-    PlayerbackStopped,
-    PlayerbackStatePlaying,
-    PlayerbackStateCompleted
+typedef NS_ENUM(NSInteger, PlayerbackState
+) {
+    PlayerbackStateUnknown = 0, PlayerbackStatePaused, PlayerbackStopped, PlayerbackStatePlaying, PlayerbackStateCompleted
 };
 
-@property (assign, nonatomic) AVPlayerViewController * playerController;
+@property(assign, nonatomic) AVPlayerViewController* playerController;
 
-- (void) setFrame:(int) left :(int) top :(int) width :(int) height;
-- (void) setURL:(int) videoSource :(std::string&) videoUrl;
-- (void) play;
-- (void) pause;
-- (void) resume;
-- (void) stop;
-- (void) seekTo:(float) sec;
-- (void) setVisible:(BOOL) visible;
-- (void) setKeepRatioEnabled:(BOOL) enabled;
-- (void) setFullScreenEnabled:(BOOL) enabled;
-- (BOOL) isFullScreenEnabled;
-- (void) showPlaybackControls:(BOOL) value;
-- (void) setRepeatEnabled:(BOOL)enabled;
-- (void) setUserInteractionEnabled:(BOOL)userInteractionEnabled;
+- (void)setFrame:(int)left :(int)top :(int)width :(int)height;
+- (void)setURL:(int)videoSource :(std::string &)videoUrl;
+- (void)play;
+- (void)pause;
+- (void)resume;
+- (void)stop;
+- (void)seekTo:(float)sec;
+- (void)setVisible:(BOOL)visible;
+- (void)setKeepRatioEnabled:(BOOL)enabled;
+- (void)setFullScreenEnabled:(BOOL)enabled;
+- (BOOL)isFullScreenEnabled;
+- (void)showPlaybackControls:(BOOL)value;
+- (void)setRepeatEnabled:(BOOL)enabled;
+- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled;
 
-
--(id) init:(void*) videoPlayer;
--(void) videoFinished:(NSNotification*) notification;
+- (id)init:(void*)videoPlayer;
+- (void)videoFinished:(NSNotification*)notification;
 
 @end
 
@@ -84,16 +80,16 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     VideoPlayer* _videoPlayer;
 }
 
--(id)init:(void*)videoPlayer
-{
-    if (self = [super init]) {
+- (id)init:(void*)videoPlayer {
+    if (self = [super init])
+    {
         self.playerController = [AVPlayerViewController new];
 
         [self setRepeatEnabled:FALSE];
         [self showPlaybackControls:TRUE];
         [self setUserInteractionEnabled:TRUE];
         [self setKeepRatioEnabled:FALSE];
-        
+
         _videoPlayer = (VideoPlayer*)videoPlayer;
         _state = PlayerbackStateUnknown;
     }
@@ -101,23 +97,20 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     return self;
 }
 
--(void) dealloc
-{
+- (void)dealloc {
     _videoPlayer = nullptr;
     [self clean];
     [self.playerController release];
     [super dealloc];
 }
 
--(void) clean
-{
+- (void)clean {
     [self stop];
     [self removePlayerEventListener];
     [self.playerController.view removeFromSuperview];
 }
 
--(void) setFrame:(int)left :(int)top :(int)width :(int)height
-{
+- (void)setFrame:(int)left :(int)top :(int)width :(int)height {
     _left = left;
     _width = width;
     _top = top;
@@ -125,28 +118,24 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     [self.playerController.view setFrame:CGRectMake(left, top, width, height)];
 }
 
--(void) setFullScreenEnabled:(BOOL) enabled
-{
+- (void)setFullScreenEnabled:(BOOL)enabled {
     // AVPlayerViewController doesn't provide API to enable fullscreen. But you can toggle
     // fullsreen by the playback controllers.
 }
 
--(BOOL) isFullScreenEnabled
-{
+- (BOOL)isFullScreenEnabled {
     return false;
 }
 
-
--(void) showPlaybackControls:(BOOL)value
-{
+- (void)showPlaybackControls:(BOOL)value {
     _showPlaybackControls = value;
     self.playerController.showsPlaybackControls = value;
 }
 
--(void) setRepeatEnabled:(BOOL)enabled
-{
+- (void)setRepeatEnabled:(BOOL)enabled {
     _repeatEnabled = enabled;
-    if (self.playerController.player) {
+    if (self.playerController.player)
+    {
         if (_repeatEnabled)
             self.playerController.player.actionAtItemEnd = AVPlayerActionAtItemEndNone;
         else
@@ -154,14 +143,12 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     }
 }
 
--(void) setUserInteractionEnabled:(BOOL)userInteractionEnabled
-{
+- (void)setUserInteractionEnabled:(BOOL)userInteractionEnabled {
     _userInteractionEnabled = userInteractionEnabled;
     self.playerController.view.userInteractionEnabled = _userInteractionEnabled;
 }
 
--(void) setURL:(int)videoSource :(std::string &)videoUrl
-{
+- (void)setURL:(int)videoSource :(std::string &)videoUrl {
     [self clean];
 
     if (videoSource == 1)
@@ -175,37 +162,35 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     [self showPlaybackControls:_showPlaybackControls];
 
     auto view = cocos2d::Director::getInstance()->getOpenGLView();
-    auto eaglview = (CCEAGLView *) view->getEAGLView();
+    auto eaglview = (CCEAGLView*)view->getEAGLView();
     [eaglview addSubview:self.playerController.view];
     [self registerPlayerEventListener];
 }
 
--(void) videoFinished:(NSNotification *)notification
-{
-    if(_videoPlayer != nullptr) {
+- (void)videoFinished:(NSNotification*)notification {
+    if (_videoPlayer != nullptr)
+    {
         _videoPlayer->onPlayEvent((int)VideoPlayer::EventType::COMPLETED);
         _state = PlayerbackStateCompleted;
 
-        if (_repeatEnabled) {
+        if (_repeatEnabled)
+        {
             [self seekTo:0];
             [self play];
         }
     }
 }
 
--(void) seekTo:(float)sec
-{
+- (void)seekTo:(float)sec {
     if (self.playerController.player)
         [self.playerController.player seekToTime:CMTimeMake(sec, 1)];
 }
 
--(void) setVisible:(BOOL)visible
-{
+- (void)setVisible:(BOOL)visible {
     [self.playerController.view setHidden:!visible];
 }
 
--(void) setKeepRatioEnabled:(BOOL)enabled
-{
+- (void)setKeepRatioEnabled:(BOOL)enabled {
     _keepRatioEnabled = enabled;
     if (_keepRatioEnabled)
         self.playerController.videoGravity = AVLayerVideoGravityResizeAspect;
@@ -213,38 +198,37 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
         self.playerController.videoGravity = AVLayerVideoGravityResizeAspectFill;
 }
 
--(void) play
-{
-    if (self.playerController.player && _state != PlayerbackStatePlaying) {
+- (void)play {
+    if (self.playerController.player && _state != PlayerbackStatePlaying)
+    {
         [self.playerController.player play];
         _state = PlayerbackStatePlaying;
         _videoPlayer->onPlayEvent((int)VideoPlayer::EventType::PLAYING);
     }
 }
 
--(void) pause
-{
-    if (self.playerController.player && _state == PlayerbackStatePlaying) {
+- (void)pause {
+    if (self.playerController.player && _state == PlayerbackStatePlaying)
+    {
         [self.playerController.player pause];
         _state = PlayerbackStatePaused;
         _videoPlayer->onPlayEvent((int)VideoPlayer::EventType::PAUSED);
     }
 }
 
--(void) resume
-{
+- (void)resume {
     if (self.playerController.player && _state == PlayerbackStatePaused)
         [self play];
 }
 
--(void) stop
-{
+- (void)stop {
     // AVPlayer doesn't have stop, so just pause it, and seek time to 0.
-    if (self.playerController.player && _state != PlayerbackStopped) {
+    if (self.playerController.player && _state != PlayerbackStopped)
+    {
         [self seekTo:0];
         [self.playerController.player pause];
         _state = PlayerbackStopped;
-        
+
         // stop() will be invoked in dealloc, which is invoked by _videoPlayer's destructor,
         // so do't send the message when _videoPlayer is being deleted.
         if (_videoPlayer)
@@ -252,21 +236,14 @@ typedef NS_ENUM(NSInteger, PlayerbackState) {
     }
 }
 
--(void) registerPlayerEventListener
-{
+- (void)registerPlayerEventListener {
     if (self.playerController.player)
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(videoFinished:)
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                                 object:self.playerController.player.currentItem];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoFinished:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerController.player.currentItem];
 }
 
--(void) removePlayerEventListener
-{
+- (void)removePlayerEventListener {
     if (self.playerController.player)
-        [[NSNotificationCenter defaultCenter] removeObserver:self
-                                              name:AVPlayerItemDidPlayToEndTimeNotification
-                                              object:self.playerController.player.currentItem];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:self.playerController.player.currentItem];
 }
 
 @end
@@ -276,32 +253,32 @@ VideoPlayer::VideoPlayer()
 {
     _videoView = [[UIVideoViewWrapperIos alloc] init:this];
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+    #if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
-#endif
+    #endif
 }
 
 VideoPlayer::~VideoPlayer()
 {
-    if(_videoView)
+    if (_videoView)
     {
         [((UIVideoViewWrapperIos*)_videoView) dealloc];
     }
 }
 
-void VideoPlayer::setFileName(const std::string& fileName)
+void VideoPlayer::setFileName(const std::string &fileName)
 {
     _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-    [((UIVideoViewWrapperIos*)_videoView) setURL:(int)_videoSource :_videoURL];
+    [((UIVideoViewWrapperIos*)_videoView) setURL:(int) _videoSource:_videoURL];
 }
 
-void VideoPlayer::setURL(const std::string& videoUrl)
+void VideoPlayer::setURL(const std::string &videoUrl)
 {
     _videoURL = videoUrl;
     _videoSource = VideoPlayer::Source::URL;
-    [((UIVideoViewWrapperIos*)_videoView) setURL:(int)_videoSource :_videoURL];
+    [((UIVideoViewWrapperIos*)_videoView) setURL:(int) _videoSource:_videoURL];
 }
 
 void VideoPlayer::setLooping(bool looping)
@@ -320,7 +297,8 @@ void VideoPlayer::setStyle(StyleType style)
 {
     _styleType = style;
 
-    switch (style) {
+    switch (style)
+    {
         case StyleType::DEFAULT:
             [((UIVideoViewWrapperIos*)_videoView) showPlaybackControls:TRUE];
             break;
@@ -333,29 +311,27 @@ void VideoPlayer::setStyle(StyleType style)
 
 void VideoPlayer::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags)
 {
-    cocos2d::ui::Widget::draw(renderer,transform,flags);
+    cocos2d::ui::Widget::draw(renderer, transform, flags);
 
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
         auto directorInstance = Director::getInstance();
         auto glView = directorInstance->getOpenGLView();
         auto frameSize = glView->getFrameSize();
-        auto scaleFactor = [static_cast<CCEAGLView *>(glView->getEAGLView()) contentScaleFactor];
+        auto scaleFactor = [static_cast<CCEAGLView*>(glView->getEAGLView()) contentScaleFactor];
 
         auto winSize = directorInstance->getWinSize();
 
         auto leftBottom = convertToWorldSpace(Vec2::ZERO);
-        auto rightTop = convertToWorldSpace(Vec2(_contentSize.width,_contentSize.height));
+        auto rightTop = convertToWorldSpace(Vec2(_contentSize.width, _contentSize.height));
 
-        auto uiLeft = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2 ) * glView->getScaleX()) / scaleFactor;
-        auto uiTop = (frameSize.height /2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;
+        auto uiLeft = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX()) / scaleFactor;
+        auto uiTop = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;
 
-        [((UIVideoViewWrapperIos*)_videoView) setFrame :uiLeft :uiTop
-                                                          :(rightTop.x - leftBottom.x) * glView->getScaleX() / scaleFactor
-                                                          :( (rightTop.y - leftBottom.y) * glView->getScaleY()/scaleFactor)];
+        [((UIVideoViewWrapperIos*)_videoView) setFrame:uiLeft :uiTop :(rightTop.x - leftBottom.x) * glView->getScaleX() / scaleFactor :((rightTop.y - leftBottom.y) * glView->getScaleY() / scaleFactor)];
     }
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+    #if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
     auto size = getContentSize();
     Point vertices[4]=
@@ -366,10 +342,10 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags
         Point(0, size.height)
     };
     _debugDrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
-#endif
+    #endif
 }
 
-bool VideoPlayer::isFullScreenEnabled()const
+bool VideoPlayer::isFullScreenEnabled() const
 {
     return [((UIVideoViewWrapperIos*)_videoView) isFullScreenEnabled];
 }
@@ -390,7 +366,7 @@ void VideoPlayer::setKeepAspectRatioEnabled(bool enable)
 
 void VideoPlayer::play()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         [((UIVideoViewWrapperIos*)_videoView) play];
     }
@@ -398,7 +374,7 @@ void VideoPlayer::play()
 
 void VideoPlayer::pause()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         [((UIVideoViewWrapperIos*)_videoView) pause];
     }
@@ -406,7 +382,7 @@ void VideoPlayer::pause()
 
 void VideoPlayer::resume()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         [((UIVideoViewWrapperIos*)_videoView) resume];
     }
@@ -414,7 +390,7 @@ void VideoPlayer::resume()
 
 void VideoPlayer::stop()
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         [((UIVideoViewWrapperIos*)_videoView) stop];
     }
@@ -422,7 +398,7 @@ void VideoPlayer::stop()
 
 void VideoPlayer::seekTo(float sec)
 {
-    if (! _videoURL.empty())
+    if (!_videoURL.empty())
     {
         [((UIVideoViewWrapperIos*)_videoView) seekTo:sec];
     }
@@ -451,7 +427,7 @@ void VideoPlayer::setVisible(bool visible)
     {
         [((UIVideoViewWrapperIos*)_videoView) setVisible:NO];
     }
-    else if(isRunning())
+    else if (isRunning())
     {
         [((UIVideoViewWrapperIos*)_videoView) setVisible:YES];
     }
@@ -462,26 +438,29 @@ void VideoPlayer::onEnter()
     Widget::onEnter();
     if (isVisible())
     {
-        [((UIVideoViewWrapperIos*)_videoView) setVisible: YES];
+        [((UIVideoViewWrapperIos*)_videoView) setVisible:YES];
     }
 }
 
 void VideoPlayer::onExit()
 {
     Widget::onExit();
-    [((UIVideoViewWrapperIos*)_videoView) setVisible: NO];
+    [((UIVideoViewWrapperIos*)_videoView) setVisible:NO];
 }
 
-void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback& callback)
+void VideoPlayer::addEventListener(const VideoPlayer::ccVideoPlayerCallback &callback)
 {
     _eventCallback = callback;
 }
 
 void VideoPlayer::onPlayEvent(int event)
 {
-    if (event == (int)VideoPlayer::EventType::PLAYING) {
+    if (event == (int)VideoPlayer::EventType::PLAYING)
+    {
         _isPlaying = true;
-    } else {
+    }
+    else
+    {
         _isPlaying = false;
     }
 
@@ -496,7 +475,7 @@ cocos2d::ui::Widget* VideoPlayer::createCloneInstance()
     return VideoPlayer::create();
 }
 
-void VideoPlayer::copySpecialProperties(Widget *widget)
+void VideoPlayer::copySpecialProperties(Widget* widget)
 {
     VideoPlayer* videoPlayer = dynamic_cast<VideoPlayer*>(widget);
     if (videoPlayer)

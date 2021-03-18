@@ -41,19 +41,20 @@
 extern "C" {
 #endif
 
-typedef struct spPathAttachment {
-	spVertexAttachment super;
-	int lengthsLength;
-	float* lengths;
-	int/*bool*/ closed, constantSpeed;
+typedef struct spPathAttachment
+{
+    spVertexAttachment super;
+    int lengthsLength;
+    float* lengths;
+    int/*bool*/ closed, constantSpeed;
 } spPathAttachment;
 
-SP_API spPathAttachment* spPathAttachment_create (const char* name);
+SP_API spPathAttachment* spPathAttachment_create(const char* name);
 
 #ifdef SPINE_SHORT_NAMES
 typedef spPathAttachment PathAttachment;
-#define PathAttachment_create(...) spPathAttachment_create(__VA_ARGS__)
-#define PathAttachment_computeWorldVertices(...) spPathAttachment_computeWorldVertices(__VA_ARGS__)
+    #define PathAttachment_create(...) spPathAttachment_create(__VA_ARGS__)
+    #define PathAttachment_computeWorldVertices(...) spPathAttachment_computeWorldVertices(__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

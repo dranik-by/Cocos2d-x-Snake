@@ -34,7 +34,7 @@ NS_CC_BEGIN
 //implementation TMXObjectGroup
 
 TMXObjectGroup::TMXObjectGroup()
-    : _groupName("")
+: _groupName("")
 {
 }
 
@@ -43,13 +43,13 @@ TMXObjectGroup::~TMXObjectGroup()
     CCLOGINFO("deallocing TMXObjectGroup: %p", this);
 }
 
-ValueMap TMXObjectGroup::getObject(const std::string& objectName) const
+ValueMap TMXObjectGroup::getObject(const std::string &objectName) const
 {
     if (!_objects.empty())
     {
-        for (const auto& v : _objects)
+        for (const auto &v : _objects)
         {
-            const ValueMap& dict = v.asValueMap();
+            const ValueMap &dict = v.asValueMap();
             if (dict.find("name") != dict.end())
             {
                 if (dict.at("name").asString() == objectName)
@@ -57,12 +57,12 @@ ValueMap TMXObjectGroup::getObject(const std::string& objectName) const
             }
         }
     }
-    
+
     // object not found
     return ValueMap();
 }
 
-Value TMXObjectGroup::getProperty(const std::string& propertyName) const
+Value TMXObjectGroup::getProperty(const std::string &propertyName) const
 {
     if (_properties.find(propertyName) != _properties.end())
         return _properties.at(propertyName);

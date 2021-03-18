@@ -44,33 +44,45 @@ class CC_DLL __Integer : public Ref, public Clonable
 public:
     static __Integer* create(int v)
     {
-        __Integer* pRet = new (std::nothrow) __Integer(v);
+        __Integer* pRet = new(std::nothrow) __Integer(v);
         pRet->autorelease();
         return pRet;
     }
+
     /**
      * @js NA
      */
     __Integer(int v)
-        : _value(v) {}
-    int getValue() const {return _value;}
+    : _value(v)
+    {
+    }
+
+    int getValue() const
+    {
+        return _value;
+    }
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~__Integer() {
+    virtual ~__Integer()
+    {
         CCLOGINFO("deallocing ~__Integer: %p", this);
     }
 
     /* override functions */
-    virtual void acceptVisitor(DataVisitor &visitor) { visitor.visit(this); }
+    virtual void acceptVisitor(DataVisitor &visitor)
+    {
+        visitor.visit(this);
+    }
 
     // overrides
     virtual __Integer* clone() const override
     {
         return __Integer::create(_value);
     }
-    
+
 private:
     int _value;
 };

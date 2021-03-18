@@ -27,12 +27,14 @@
 #define __CCNAV_MESH_AGENT_H__
 
 #include "base/ccConfig.h"
-#if CC_USE_NAVMESH
-#include "2d/CCComponent.h"
 
-#include "base/CCRef.h"
-#include "math/Vec3.h"
-#include "recast/DetourCrowd/DetourCrowd.h"
+#if CC_USE_NAVMESH
+
+    #include "2d/CCComponent.h"
+
+    #include "base/CCRef.h"
+    #include "math/Vec3.h"
+    #include "recast/DetourCrowd/DetourCrowd.h"
 
 class dtNavMeshQuery;
 NS_CC_BEGIN
@@ -45,15 +47,15 @@ struct CC_DLL NavMeshAgentParam
 {
     NavMeshAgentParam();
 
-    float radius;						///< Agent radius. [Limit: >= 0]
-    float height;						///< Agent height. [Limit: > 0]
-    float maxAcceleration;				///< Maximum allowed acceleration. [Limit: >= 0]
-    float maxSpeed;						///< Maximum allowed speed. [Limit: >= 0]
+    float radius;                        ///< Agent radius. [Limit: >= 0]
+    float height;                        ///< Agent height. [Limit: > 0]
+    float maxAcceleration;                ///< Maximum allowed acceleration. [Limit: >= 0]
+    float maxSpeed;                        ///< Maximum allowed speed. [Limit: >= 0]
 
     /// Defines how close a collision element must be before it is considered for steering behaviors. [Limits: > 0]
     float collisionQueryRange;
 
-    float pathOptimizationRange;		///< The path visibility optimization range. [Limit: > 0]
+    float pathOptimizationRange;        ///< The path visibility optimization range. [Limit: > 0]
 
     /// How aggressive the agent manager should be at avoiding collisions with this agent. [Limit: >= 0]
     float separationWeight;
@@ -89,7 +91,7 @@ public:
         NODE_AND_NODE = NODE_TO_AGENT | AGENT_TO_NODE,
     };
 
-    typedef std::function<void(NavMeshAgent *agent, float totalTimeAfterMove)> MoveCallback;
+    typedef std::function<void(NavMeshAgent* agent, float totalTimeAfterMove)> MoveCallback;
 
     /**
     Create agent
@@ -97,7 +99,7 @@ public:
     @param param The parameters of agent.
     */
     static NavMeshAgent* create(const NavMeshAgentParam &param);
-    static const std::string& getNavMeshAgentComponentName();
+    static const std::string &getNavMeshAgentComponentName();
 
     virtual void onEnter() override;
     virtual void onExit() override;
@@ -180,21 +182,35 @@ public:
     /**Get current OffMeshLink information*/
     OffMeshLinkData getCurrentOffMeshLinkData();
 
-    void setUserData(void *data) { _userData = data; };
-    void* getUserData() const { return _userData; };
+    void setUserData(void* data)
+    {
+        _userData = data;
+    };
+
+    void* getUserData() const
+    {
+        return _userData;
+    };
 
     /**
     * synchronization between node and agent is time consuming, you can skip some synchronization using this function
     */
-    void setSyncFlag(const NavMeshAgentSyncFlag &flag) { _syncFlag = flag;  }
-    NavMeshAgentSyncFlag getSyncFlag() const { return _syncFlag; }
+    void setSyncFlag(const NavMeshAgentSyncFlag &flag)
+    {
+        _syncFlag = flag;
+    }
+
+    NavMeshAgentSyncFlag getSyncFlag() const
+    {
+        return _syncFlag;
+    }
 
     /** synchronize parameter to agent. */
     void syncToAgent();
 
     /** synchronize parameter to node. */
     void syncToNode();
-    
+
     /** get current velocity */
     Vec3 getVelocity() const;
 
@@ -205,9 +221,9 @@ CC_CONSTRUCTOR_ACCESS:
 private:
 
     bool initWith(const NavMeshAgentParam &param);
-    void addTo(dtCrowd *crowed);
-    void removeFrom(dtCrowd *crowed);
-    void setNavMeshQuery(dtNavMeshQuery *query);
+    void addTo(dtCrowd* crowed);
+    void removeFrom(dtCrowd* crowed);
+    void setNavMeshQuery(dtNavMeshQuery* query);
     void preUpdate(float delta);
     void postUpdate(float delta);
     static void convertTodtAgentParam(const NavMeshAgentParam &inParam, dtCrowdAgentParams &outParam);
@@ -226,9 +242,9 @@ private:
     bool _needUpdateAgent;
     bool _needMove;
     float _totalTimeAfterMove;
-    void *_userData;
-    dtCrowd *_crowd;
-    dtNavMeshQuery *_navMeshQuery;
+    void* _userData;
+    dtCrowd* _crowd;
+    dtNavMeshQuery* _navMeshQuery;
 };
 
 /** @} */

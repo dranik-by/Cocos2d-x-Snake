@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <cstdint>
@@ -62,19 +62,19 @@ public:
      * @brief Indicate the begining of a frame
      */
     virtual void beginFrame() = 0;
-    
+
     /**
      * Begin a render pass, initial color, depth and stencil attachment.
      * @param descriptor Specifies a group of render targets that hold the results of a render pass.
      */
-    virtual void beginRenderPass(const RenderPassDescriptor& descriptor) = 0;
-    
+    virtual void beginRenderPass(const RenderPassDescriptor &descriptor) = 0;
+
     /**
      * Sets the current render pipeline state object.
      * @param renderPipeline An object that contains the graphics functions and configuration state used in a render pass.
      */
     virtual void setRenderPipeline(RenderPipeline* renderPipeline) = 0;
-    
+
     /**
      * Fixed-function state
      * @param x The x coordinate of the upper-left corner of the viewport.
@@ -122,7 +122,7 @@ public:
      * @param count For each instance, the number of indexes to draw
      * @see `drawElements(PrimitiveType primitiveType, IndexFormat indexType, unsigned int count, unsigned int offset)`
      */
-    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start,  std::size_t count) = 0;
+    virtual void drawArrays(PrimitiveType primitiveType, std::size_t start, std::size_t count) = 0;
 
     /**
      * Draw primitives with an index list.
@@ -133,8 +133,9 @@ public:
      * @see `setIndexBuffer(Buffer* buffer)`
      * @see `drawArrays(PrimitiveType primitiveType, unsigned int start,  unsigned int count)`
     */
-    virtual void drawElements(PrimitiveType primitiveType, IndexFormat indexType, std::size_t count, std::size_t offset) = 0;
-    
+    virtual void drawElements(PrimitiveType primitiveType, IndexFormat indexType, std::size_t count,
+                              std::size_t offset) = 0;
+
     /**
      * Do some resources release.
      */
@@ -144,7 +145,7 @@ public:
      * Present a drawable and commit a command buffer so it can be executed as soon as possible.
      */
     virtual void endFrame() = 0;
-    
+
     /**
      * Fixed-function state
      * @param lineWidth Specifies the width of rasterized lines.
@@ -170,7 +171,7 @@ public:
      * @param callback A callback to deal with screen snapshot image.
      */
     virtual void captureScreen(std::function<void(const unsigned char*, int, int)> callback) = 0;
-    
+
     /**
      * Update both front and back stencil reference value.
      * @param value Specifies stencil reference value.
@@ -186,7 +187,7 @@ public:
 
 protected:
     virtual ~CommandBuffer() = default;
-    
+
     unsigned int _stencilReferenceValueFront = 0; ///< front stencil reference value.
     unsigned int _stencilReferenceValueBack = 0; ///< back stencil reference value.
 };

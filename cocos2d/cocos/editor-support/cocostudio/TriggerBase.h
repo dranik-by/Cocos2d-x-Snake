@@ -32,12 +32,11 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/TriggerMng.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-
 #define DECLARE_CLASS_INFO \
     public: \
         static cocos2d::ObjectFactory::TInfo Type; \
         static cocos2d::Ref* createInstance(); \
-        
+
 #define IMPLEMENT_CLASS_INFO(className) \
         cocos2d::Ref* className::createInstance() \
         { \
@@ -49,6 +48,5 @@ THE SOFTWARE.
 
 
 void CC_STUDIO_DLL sendEvent(unsigned int event);
-
 
 #endif

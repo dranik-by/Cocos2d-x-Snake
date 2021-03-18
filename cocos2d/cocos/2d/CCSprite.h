@@ -47,13 +47,13 @@ class Texture2D;
 struct transformValues_;
 
 #ifdef SPRITE_RENDER_IN_SUBPIXEL
-#undef SPRITE_RENDER_IN_SUBPIXEL
+    #undef SPRITE_RENDER_IN_SUBPIXEL
 #endif
 
 #if CC_SPRITEBATCHNODE_RENDER_SUBPIXEL
-#define SPRITE_RENDER_IN_SUBPIXEL
+    #define SPRITE_RENDER_IN_SUBPIXEL
 #else
-#define SPRITE_RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
+    #define SPRITE_RENDER_IN_SUBPIXEL(__ARGS__) (ceil(__ARGS__))
 #endif
 
 /**
@@ -94,13 +94,14 @@ struct transformValues_;
 class CC_DLL Sprite : public Node, public TextureProtocol
 {
 public:
-    enum class RenderMode {
+    enum class RenderMode
+    {
         QUAD,
         POLYGON,
         SLICE9,
         QUAD_BATCHNODE
     };
-     /** Sprite invalid index on the SpriteBatchNode. */
+    /** Sprite invalid index on the SpriteBatchNode. */
     static const int INDEX_NOT_INITIALIZED = -1;
 
     /// @name Creators
@@ -123,8 +124,8 @@ public:
      * @param   filename A path to image file, e.g., "scene1/monster.png".
      * @return  An autoreleased sprite object.
      */
-    static Sprite* create(const std::string& filename);
-    
+    static Sprite* create(const std::string &filename);
+
     /**
      * Creates a polygon sprite with a polygon info.
      *
@@ -134,7 +135,7 @@ public:
      * @param   polygonInfo A path to image file, e.g., "scene1/monster.png".
      * @return  An autoreleased sprite object.
      */
-    static Sprite* create(const PolygonInfo& info);
+    static Sprite* create(const PolygonInfo &info);
 
     /**
      * Creates a sprite with an image filename and a rect.
@@ -143,7 +144,7 @@ public:
      * @param   rect     A subrect of the image file.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* create(const std::string& filename, const Rect& rect);
+    static Sprite* create(const std::string &filename, const Rect &rect);
 
     /**
      * Creates a sprite with a Texture2D object.
@@ -153,7 +154,7 @@ public:
      * @param   texture    A pointer to a Texture2D object.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* createWithTexture(Texture2D *texture);
+    static Sprite* createWithTexture(Texture2D* texture);
 
     /**
      * Creates a sprite with a texture and a rect.
@@ -166,7 +167,7 @@ public:
      * @param   rotated     Whether or not the rect is rotated.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* createWithTexture(Texture2D *texture, const Rect& rect, bool rotated=false);
+    static Sprite* createWithTexture(Texture2D* texture, const Rect &rect, bool rotated = false);
 
     /**
      * Creates a sprite with an sprite frame.
@@ -174,7 +175,7 @@ public:
      * @param   spriteFrame    A sprite frame which involves a texture and a rect.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* createWithSpriteFrame(SpriteFrame *spriteFrame);
+    static Sprite* createWithSpriteFrame(SpriteFrame* spriteFrame);
 
     /**
      * Creates a sprite with an sprite frame name.
@@ -185,7 +186,7 @@ public:
      * @param   spriteFrameName The name of sprite frame.
      * @return  An autoreleased sprite object.
      */
-    static Sprite* createWithSpriteFrameName(const std::string& spriteFrameName);
+    static Sprite* createWithSpriteFrameName(const std::string &spriteFrameName);
 
     //  end of creators group
     /// @}
@@ -216,7 +217,7 @@ public:
      * layer->addChild(batch);
      * @endcode
      */
-    virtual void setBatchNode(SpriteBatchNode *spriteBatchNode);
+    virtual void setBatchNode(SpriteBatchNode* spriteBatchNode);
 
     /// @} end of BatchNode methods
 
@@ -229,13 +230,13 @@ public:
      *  @memberof Sprite
      *  It will call `setTextureRect()` with the texture's content size.
      */
-    virtual void setTexture(const std::string &filename );
+    virtual void setTexture(const std::string &filename);
 
     /** @overload
      *
      *  The Texture's rect is not changed.
      */
-    virtual void setTexture(Texture2D *texture) override;
+    virtual void setTexture(Texture2D* texture) override;
 
     /** Returns the Texture2D object used by the sprite. */
     virtual Texture2D* getTexture() const override;
@@ -245,13 +246,13 @@ public:
      *
      * It will call setTextureRect(const Rect& rect, bool rotated, const Size& untrimmedSize) with \p rotated = false, and \p utrimmedSize = rect.size.
      */
-    virtual void setTextureRect(const Rect& rect);
+    virtual void setTextureRect(const Rect &rect);
 
     /** @overload
      *
      * It will update the texture coordinates and the vertex rectangle.
      */
-    virtual void setTextureRect(const Rect& rect, bool rotated, const Size& untrimmedSize);
+    virtual void setTextureRect(const Rect &rect, bool rotated, const Size &untrimmedSize);
 
     /**
      * Sets the vertex rect.
@@ -260,7 +261,7 @@ public:
      * Useful if you want to create 2x images from SD images in Retina Display.
      * Do not call it manually. Use setTextureRect instead.
      */
-    virtual void setVertexRect(const Rect& rect);
+    virtual void setVertexRect(const Rect &rect);
 
     /**
      * setCenterRectNormalized
@@ -274,7 +275,7 @@ public:
      *
      * Limitations: Does not work when the sprite is part of `SpriteBatchNode`.
      */
-    virtual void setCenterRectNormalized(const Rect& rect);
+    virtual void setCenterRectNormalized(const Rect &rect);
 
     /**
      * getCenterRectNormalized
@@ -287,7 +288,7 @@ public:
      *
      * Like `setCenterRectNormalized`, but instead of being in normalized coordinates, it is in points coordinates
      */
-    virtual void setCenterRect(const Rect& rect);
+    virtual void setCenterRect(const Rect &rect);
 
     /**
      * @brief Returns the Cap Insets rect
@@ -295,7 +296,6 @@ public:
      * @return Scale9Sprite's cap inset.
      */
     virtual Rect getCenterRect() const;
-
 
     /** @{
      * Sets a new SpriteFrame to the Sprite.
@@ -307,7 +307,7 @@ public:
     /**
      * Returns whether or not a SpriteFrame is being displayed.
      */
-    virtual bool isFrameDisplayed(SpriteFrame *frame) const;
+    virtual bool isFrameDisplayed(SpriteFrame* frame) const;
 
     /**
      * Returns the current displayed frame.
@@ -323,7 +323,7 @@ public:
      * Changes the display frame with animation name and index.
      * The animation name will be get from the AnimationCache.
      */
-    virtual void setDisplayFrameWithAnimationName(const std::string& animationName, unsigned int frameIndex);
+    virtual void setDisplayFrameWithAnimationName(const std::string &animationName, unsigned int frameIndex);
     /// @}
 
 
@@ -335,12 +335,18 @@ public:
      *
      * @return True if the sprite needs to be updated in the Atlas, false otherwise.
      */
-    virtual bool isDirty() const { return _dirty; }
+    virtual bool isDirty() const
+    {
+        return _dirty;
+    }
 
     /**
      * Makes the Sprite to be updated in the Atlas.
      */
-    virtual void setDirty(bool dirty) { _dirty = dirty; }
+    virtual void setDirty(bool dirty)
+    {
+        _dirty = dirty;
+    }
 
     /**
      * @js NA
@@ -356,7 +362,7 @@ public:
     * @js  NA
     * @lua NA
     */
-    virtual void setPosition(const Vec2& pos) override;
+    virtual void setPosition(const Vec2 &pos) override;
     virtual void setPosition(float x, float y) override;
     virtual void setRotation(float rotation) override;
     virtual void setRotationSkewX(float rotationX) override;
@@ -365,20 +371,20 @@ public:
     virtual void setSkewY(float sy) override;
     virtual void removeChild(Node* child, bool cleanup) override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void reorderChild(Node *child, int zOrder) override;
+    virtual void reorderChild(Node* child, int zOrder) override;
     using Node::addChild;
-    virtual void addChild(Node *child, int zOrder, int tag) override;
-    virtual void addChild(Node *child, int zOrder, const std::string &name) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string &name) override;
     virtual void sortAllChildren() override;
     virtual void setScale(float scale) override;
     virtual void setPositionZ(float positionZ) override;
-    virtual void setAnchorPoint(const Vec2& anchor) override;
-    virtual void setContentSize(const Size& size) override;
+    virtual void setAnchorPoint(const Vec2 &anchor) override;
+    virtual void setContentSize(const Size &size) override;
 
     virtual void setIgnoreAnchorPointForPosition(bool value) override;
 
     virtual void setVisible(bool bVisible) override;
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
     virtual void setOpacityModifyRGB(bool modify) override;
     virtual bool isOpacityModifyRGB() const override;
     /// @}
@@ -388,55 +394,78 @@ public:
      * @js  NA
      * @lua NA
      */
-    V3F_C4B_T2F_Quad getQuad() const { return _quad; }
+    V3F_C4B_T2F_Quad getQuad() const
+    {
+        return _quad;
+    }
 
     /**
      * Returns whether or not the texture rectangle is rotated.
      */
-    bool isTextureRectRotated() const { return _rectRotated; }
+    bool isTextureRectRotated() const
+    {
+        return _rectRotated;
+    }
 
     /**
      * Returns the index used on the TextureAtlas.
      */
-    unsigned int getAtlasIndex() const { return _atlasIndex; }
+    unsigned int getAtlasIndex() const
+    {
+        return _atlasIndex;
+    }
 
     /**
      * Sets the index used on the TextureAtlas.
      *
      * @warning Don't modify this value unless you know what you are doing.
      */
-    void setAtlasIndex(unsigned int atlasIndex) { _atlasIndex = atlasIndex; }
+    void setAtlasIndex(unsigned int atlasIndex)
+    {
+        _atlasIndex = atlasIndex;
+    }
 
     /**
      * Returns the rect of the Sprite in points.
      */
-    const Rect& getTextureRect() const { return _rect; }
+    const Rect &getTextureRect() const
+    {
+        return _rect;
+    }
 
     /**
      * Gets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode.
      */
-    TextureAtlas* getTextureAtlas() const { return _textureAtlas; }
+    TextureAtlas* getTextureAtlas() const
+    {
+        return _textureAtlas;
+    }
 
     /**
     * Set ProgramState
     */
-    virtual void setProgramState(backend::ProgramState *programState) override;
+    virtual void setProgramState(backend::ProgramState* programState) override;
 
     /**
     * Get current ProgramState
     */
-    virtual backend::ProgramState *getProgramState() const override;
+    virtual backend::ProgramState* getProgramState() const override;
 
     /**
      * Sets the weak reference of the TextureAtlas when the sprite is rendered using via SpriteBatchNode.
      */
-    void setTextureAtlas(TextureAtlas *textureAtlas) { _textureAtlas = textureAtlas; }
+    void setTextureAtlas(TextureAtlas* textureAtlas)
+    {
+        _textureAtlas = textureAtlas;
+    }
 
     /**
      * Gets the offset position of the sprite. Calculated automatically by editors like Zwoptex.
      */
-    const Vec2& getOffsetPosition() const { return _offsetPosition; }
-
+    const Vec2 &getOffsetPosition() const
+    {
+        return _offsetPosition;
+    }
 
     /**
      * Returns the flag which indicates whether the sprite is flipped horizontally or not.
@@ -481,14 +510,14 @@ public:
      *
      * @return a reference of PolygonInfo
      */
-    const PolygonInfo& getPolygonInfo() const;
+    const PolygonInfo &getPolygonInfo() const;
 
     /**
      * set the sprite to use this new PolygonInfo
      *
      * @param PolygonInfo the polygon information object
      */
-    void setPolygonInfo(const PolygonInfo& info);
+    void setPolygonInfo(const PolygonInfo &info);
 
     /** whether or not contentSize stretches the sprite's texture */
     void setStretchEnabled(bool enabled);
@@ -508,19 +537,33 @@ public:
     *In lua: local setBlendFunc(local src, local dst).
     *@endcode
     */
-    void setBlendFunc(const BlendFunc &blendFunc) override { _blendFunc = blendFunc; }
+    void setBlendFunc(const BlendFunc &blendFunc) override
+    {
+        _blendFunc = blendFunc;
+    }
+
     /**
     * @js  NA
     * @lua NA
     */
-    const BlendFunc& getBlendFunc() const override { return _blendFunc; }
+    const BlendFunc &getBlendFunc() const override
+    {
+        return _blendFunc;
+    }
     /// @}
 
-    int getResourceType() const { return _fileType; }
-    const std::string& getResourceName() const { return _fileName; }
+    int getResourceType() const
+    {
+        return _fileType;
+    }
+
+    const std::string &getResourceName() const
+    {
+        return _fileName;
+    }
 
 CC_CONSTRUCTOR_ACCESS :
-	/**
+    /**
      * @js ctor
      */
     Sprite();
@@ -538,9 +581,8 @@ CC_CONSTRUCTOR_ACCESS :
      *                      You can use a Texture2D object for many sprites.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithTexture(Texture2D *texture);
-    
-    
+    virtual bool initWithTexture(Texture2D* texture);
+
     /**
      * Initializes a sprite with a PolygonInfo.
      *
@@ -549,7 +591,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @param   PolygonInfo    a Polygon info contains the structure of the polygon.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithPolygon(const PolygonInfo& info);
+    virtual bool initWithPolygon(const PolygonInfo &info);
 
     /**
      * Initializes a sprite with a texture and a rect.
@@ -561,7 +603,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @param   rect        Only the contents inside rect of this texture will be applied for this sprite.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithTexture(Texture2D *texture, const Rect& rect);
+    virtual bool initWithTexture(Texture2D* texture, const Rect &rect);
 
     /**
      * Initializes a sprite with a texture and a rect in points, optionally rotated.
@@ -574,7 +616,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @param   rotated     Whether or not the texture rectangle is rotated.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithTexture(Texture2D *texture, const Rect& rect, bool rotated);
+    virtual bool initWithTexture(Texture2D* texture, const Rect &rect, bool rotated);
 
     /**
      * Initializes a sprite with an SpriteFrame. The texture and rect in SpriteFrame will be applied on this sprite.
@@ -582,7 +624,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @param   spriteFrame  A SpriteFrame object. It should includes a valid texture and a rect.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithSpriteFrame(SpriteFrame *spriteFrame);
+    virtual bool initWithSpriteFrame(SpriteFrame* spriteFrame);
 
     /**
      * Initializes a sprite with an sprite frame name.
@@ -593,7 +635,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @param   spriteFrameName  A key string that can fetched a valid SpriteFrame from SpriteFrameCache.
      * @return  True if the sprite is initialized properly, false otherwise.
      */
-    virtual bool initWithSpriteFrameName(const std::string& spriteFrameName);
+    virtual bool initWithSpriteFrameName(const std::string &spriteFrameName);
 
     /**
      * Initializes a sprite with an image filename.
@@ -606,7 +648,7 @@ CC_CONSTRUCTOR_ACCESS :
      * @return  True if the sprite is initialized properly, false otherwise.
      * @lua     init
      */
-    virtual bool initWithFile(const std::string& filename);
+    virtual bool initWithFile(const std::string &filename);
 
     /**
      * Initializes a sprite with an image filename, and a rect.
@@ -620,16 +662,16 @@ CC_CONSTRUCTOR_ACCESS :
      * @return  True if the sprite is initialized properly, false otherwise.
      * @lua     init
      */
-    virtual bool initWithFile(const std::string& filename, const Rect& rect);
+    virtual bool initWithFile(const std::string &filename, const Rect &rect);
 
     virtual void setVertexLayout();
     virtual void updateShaders(const char* vert, const char* frag);
-    
+
 protected:
     virtual void updateColor() override;
-    virtual void setTextureCoords(const Rect& rect);
-    virtual void setTextureCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad);
-    virtual void setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad);
+    virtual void setTextureCoords(const Rect &rect);
+    virtual void setTextureCoords(const Rect &rect, V3F_C4B_T2F_Quad* outQuad);
+    virtual void setVertexCoords(const Rect &rect, V3F_C4B_T2F_Quad* outQuad);
     virtual void updateBlendFunc();
     virtual void setReorderChildDirtyRecursively();
     virtual void setDirtyRecursively(bool value);
@@ -639,7 +681,7 @@ protected:
 
     void updatePoly();
     void updateStretchFactor();
-    void populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad& quad);
+    void populateTriangle(int quadIndex, const V3F_C4B_T2F_Quad &quad);
     void setMVPMatrixUniform();
     void setProgramState(backend::ProgramType type);
     //
@@ -661,14 +703,14 @@ protected:
     Texture2D* _texture = nullptr;   /// Texture2D object that is used to render the sprite
     SpriteFrame* _spriteFrame = nullptr;
     TrianglesCommand _trianglesCommand;
-    
+
     backend::UniformLocation _mvpMatrixLocation;
     backend::UniformLocation _textureLocation;
     backend::UniformLocation _alphaTextureLocation;
-        
-#if CC_SPRITE_DEBUG_DRAW
+
+    #if CC_SPRITE_DEBUG_DRAW
     DrawNode *_debugDrawNode = nullptr;
-#endif //CC_SPRITE_DEBUG_DRAW
+    #endif //CC_SPRITE_DEBUG_DRAW
     //
     // Shared data
     //
@@ -677,7 +719,7 @@ protected:
     Rect _rect;                             /// Rectangle of Texture2D
     bool _rectRotated = false;              /// Whether the texture is rotated
 
-    Rect _centerRectNormalized = {0,0,1,1}; /// Rectangle to implement "slice 9"
+    Rect _centerRectNormalized = {0, 0, 1, 1}; /// Rectangle to implement "slice 9"
     RenderMode _renderMode = Sprite::RenderMode::QUAD;   /// render mode used by the Sprite: Quad, Slice9, Polygon or Quad_Batchnode
     Vec2 _stretchFactor = Vec2::ONE;                     /// stretch factor to match the contentSize. for 1- and 9- slice sprites
     Size _originalContentSize = Size::ZERO;              /// original content size
@@ -691,7 +733,7 @@ protected:
     V3F_C4B_T2F_Quad _quad;
     V3F_C4B_T2F* _trianglesVertex = nullptr;
     unsigned short* _trianglesIndex = nullptr;
-    PolygonInfo  _polyInfo;
+    PolygonInfo _polyInfo;
 
     // opacity and RGB protocol
     bool _opacityModifyRGB = false;
@@ -706,9 +748,8 @@ protected:
     int _fileType = 0;
 
     bool _stretchEnabled = true;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Sprite);
+
+private: CC_DISALLOW_COPY_AND_ASSIGN(Sprite);
 };
 
 

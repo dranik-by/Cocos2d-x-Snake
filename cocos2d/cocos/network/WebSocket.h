@@ -52,7 +52,8 @@ NS_CC_BEGIN
 
 class EventListenerCustom;
 
-namespace network {
+namespace network
+{
 
 class WsThreadHelper;
 
@@ -68,7 +69,7 @@ public:
      * @note This method has to be invoked on Cocos Thread
      */
     static void closeAllConnections();
-    
+
     /**
      * Constructor of WebSocket.
      *
@@ -88,7 +89,15 @@ public:
      */
     struct Data
     {
-        Data():bytes(nullptr), len(0), issued(0), isBinary(false), ext(nullptr){}
+        Data()
+        : bytes(nullptr)
+        , len(0)
+        , issued(0)
+        , isBinary(false)
+        , ext(nullptr)
+        {
+        }
+
         char* bytes;
         ssize_t len, issued;
         bool isBinary;
@@ -126,7 +135,10 @@ public:
     {
     public:
         /** Destructor of Delegate. */
-        virtual ~Delegate() {}
+        virtual ~Delegate()
+        {
+        }
+
         /**
          * This function to be called after the client connection complete a handshake with the remote server.
          * This means that the WebSocket connection is ready to send and receive data.
@@ -140,7 +152,7 @@ public:
          * @param ws The WebSocket object connected.
          * @param data Data object for message.
          */
-        virtual void onMessage(WebSocket* ws, const Data& data) = 0;
+        virtual void onMessage(WebSocket* ws, const Data &data) = 0;
         /**
          * When the WebSocket object connected wants to close or the protocol won't get used at all and current _readyState is State::CLOSING,this function is to be called.
          *
@@ -157,7 +169,7 @@ public:
          * @param ws The WebSocket object connected.
          * @param error WebSocket::ErrorCode enum,would be ErrorCode::TIME_OUT or ErrorCode::CONNECTION_FAILURE.
          */
-        virtual void onError(WebSocket* ws, const ErrorCode& error) = 0;
+        virtual void onError(WebSocket* ws, const ErrorCode &error) = 0;
     };
 
     /**
@@ -170,10 +182,8 @@ public:
      *  @return true: Success, false: Failure.
      *  @lua NA
      */
-    bool init(const Delegate& delegate,
-              const std::string& url,
-              const std::vector<std::string>* protocols = nullptr,
-              const std::string& caFilePath = "");
+    bool init(const Delegate &delegate, const std::string &url, const std::vector<std::string>* protocols = nullptr,
+              const std::string &caFilePath = "");
 
     /**
      *  @brief Sends string data to websocket server.
@@ -181,7 +191,7 @@ public:
      *  @param message string data.
      *  @lua sendstring
      */
-    void send(const std::string& message);
+    void send(const std::string &message);
 
     /**
      *  @brief Sends binary data to websocket server.
@@ -197,7 +207,7 @@ public:
      *  @note It's a synchronous method, it will not return until websocket thread exits.
      */
     void close();
-    
+
     /**
      *  @brief Closes the connection to server asynchronously.
      *  @note It's an asynchronous method, it just notifies websocket thread to exit and returns directly,
@@ -215,18 +225,24 @@ public:
     /**
      *  @brief Gets the URL of websocket connection.
      */
-    inline const std::string& getUrl() const { return _url; }
+    inline const std::string &getUrl() const
+    {
+        return _url;
+    }
 
     /**
      *  @brief Gets the protocol selected by websocket server.
      */
-    inline const std::string& getProtocol() const { return _selectedProtocol; }
+    inline const std::string &getProtocol() const
+    {
+        return _selectedProtocol;
+    }
 
 private:
 
     // The following callback functions are invoked in websocket thread
     void onClientOpenConnectionRequest();
-    int onSocketCallback(struct lws *wsi, int reason, void *in, ssize_t len);
+    int onSocketCallback(struct lws* wsi, int reason, void* in, ssize_t len);
 
     int onClientWritable();
     int onClientReceivedData(void* in, ssize_t len);
@@ -234,12 +250,12 @@ private:
     int onConnectionError();
     int onConnectionClosed();
 
-    struct lws_vhost* createVhost(struct lws_protocols* protocols, int& sslConnection);
+    struct lws_vhost* createVhost(struct lws_protocols* protocols, int &sslConnection);
 
 private:
 
-    std::mutex   _readyStateMutex;
-    State        _readyState;
+    std::mutex _readyStateMutex;
+    State _readyState;
 
     std::string _url;
 

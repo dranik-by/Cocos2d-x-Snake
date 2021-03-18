@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "../Device.h"
 
 CC_BACKEND_BEGIN
@@ -59,14 +59,14 @@ public:
      * @param descriptor Specifies texture description.
      * @return A TextureBackend object.
      */
-    virtual TextureBackend* newTexture(const TextureDescriptor& descriptor) override;
+    virtual TextureBackend* newTexture(const TextureDescriptor &descriptor) override;
 
     /**
      * Create an auto released DepthStencilState object.
      * @param descriptor Specifies depth and stencil description.
      * @return An auto release DepthStencilState object.
      */
-    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor& descriptor) override;
+    virtual DepthStencilState* createDepthStencilState(const DepthStencilDescriptor &descriptor) override;
 
     /**
      * New a RenderPipeline object, not auto released.
@@ -78,7 +78,9 @@ public:
     /**
      * Design for metal.
      */
-    virtual void setFrameBufferOnly(bool frameBufferOnly) override {}
+    virtual void setFrameBufferOnly(bool frameBufferOnly) override
+    {
+    }
 
     /**
      * New a Program, not auto released.
@@ -86,7 +88,7 @@ public:
      * @param fragmentShader Specifes this is a fragment shader source.
      * @return A Program instance.
      */
-    virtual Program* newProgram(const std::string& vertexShader, const std::string& fragmentShader) override;
+    virtual Program* newProgram(const std::string &vertexShader, const std::string &fragmentShader) override;
 
 protected:
     /**
@@ -95,7 +97,7 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string& source) override;
+    virtual ShaderModule* newShaderModule(ShaderStage stage, const std::string &source) override;
 
 };
 //end of _opengl group

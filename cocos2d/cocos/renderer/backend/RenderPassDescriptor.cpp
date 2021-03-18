@@ -21,12 +21,12 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "RenderPassDescriptor.h"
 
 CC_BACKEND_BEGIN
 
-RenderPassDescriptor& RenderPassDescriptor::operator=(const RenderPassDescriptor& descriptor)
+RenderPassDescriptor &RenderPassDescriptor::operator=(const RenderPassDescriptor &descriptor)
 {
     clearDepthValue = descriptor.clearDepthValue;
     clearStencilValue = descriptor.clearStencilValue;
@@ -40,24 +40,13 @@ RenderPassDescriptor& RenderPassDescriptor::operator=(const RenderPassDescriptor
     depthAttachmentTexture = descriptor.depthAttachmentTexture;
     stencilAttachmentTexture = descriptor.stencilAttachmentTexture;
     colorAttachmentsTexture[0] = descriptor.colorAttachmentsTexture[0];
-    
+
     return *this;
 }
 
-bool RenderPassDescriptor::operator==(const RenderPassDescriptor& descriptor) const
+bool RenderPassDescriptor::operator==(const RenderPassDescriptor &descriptor) const
 {
-    if( clearDepthValue == descriptor.clearDepthValue &&
-        clearStencilValue == descriptor.clearStencilValue &&
-        clearColorValue == descriptor.clearColorValue &&
-        needColorAttachment == descriptor.needColorAttachment &&
-        depthTestEnabled == descriptor.depthTestEnabled &&
-        stencilTestEnabled == descriptor.stencilTestEnabled &&
-        needClearColor == descriptor.needClearColor &&
-        needClearDepth == descriptor.needClearDepth &&
-        needClearStencil == descriptor.needClearStencil &&
-        depthAttachmentTexture == descriptor.depthAttachmentTexture &&
-        stencilAttachmentTexture == descriptor.stencilAttachmentTexture &&
-        colorAttachmentsTexture[0] == descriptor.colorAttachmentsTexture[0])
+    if (clearDepthValue == descriptor.clearDepthValue && clearStencilValue == descriptor.clearStencilValue && clearColorValue == descriptor.clearColorValue && needColorAttachment == descriptor.needColorAttachment && depthTestEnabled == descriptor.depthTestEnabled && stencilTestEnabled == descriptor.stencilTestEnabled && needClearColor == descriptor.needClearColor && needClearDepth == descriptor.needClearDepth && needClearStencil == descriptor.needClearStencil && depthAttachmentTexture == descriptor.depthAttachmentTexture && stencilAttachmentTexture == descriptor.stencilAttachmentTexture && colorAttachmentsTexture[0] == descriptor.colorAttachmentsTexture[0])
     {
         return true;
     }

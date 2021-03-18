@@ -23,17 +23,18 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMeshDebugDraw.h"
-#if CC_USE_NAVMESH
-#include <stddef.h> // offsetof
-#include "base/ccTypes.h"
-#include "renderer/backend/ProgramState.h"
-#include "renderer/backend/Device.h"
-#include "renderer/CCRenderer.h"
-#include "renderer/CCRenderState.h"
-#include "renderer/ccShaders.h"
-#include "base/CCDirector.h"
-#include "base/ccMacros.h"
 
+#if CC_USE_NAVMESH
+
+    #include <stddef.h> // offsetof
+    #include "base/ccTypes.h"
+    #include "renderer/backend/ProgramState.h"
+    #include "renderer/backend/Device.h"
+    #include "renderer/CCRenderer.h"
+    #include "renderer/CCRenderState.h"
+    #include "renderer/ccShaders.h"
+    #include "base/CCDirector.h"
+    #include "base/ccMacros.h"
 
 NS_CC_BEGIN
 
@@ -44,26 +45,20 @@ NavMeshDebugDraw::NavMeshDebugDraw()
     _locMVP = _programState->getUniformLocation("u_MVPMatrix");
 
     auto vertexLayout = _programState->getVertexLayout();
-    vertexLayout->setAttribute("a_position", 
-                                _programState->getAttributeLocation("a_position"),
-                                backend::VertexFormat::FLOAT3,
-                                offsetof(V3F_C4F, position), 
-                                false);
-    vertexLayout->setAttribute("a_color", 
-                                _programState->getAttributeLocation("a_color"), 
-                                backend::VertexFormat::FLOAT4, 
-                                offsetof(V3F_C4F, color), 
-                                false);
+    vertexLayout->setAttribute("a_position", _programState->getAttributeLocation("a_position"),
+                               backend::VertexFormat::FLOAT3, offsetof(V3F_C4F, position), false);
+    vertexLayout->setAttribute("a_color", _programState->getAttributeLocation("a_color"), backend::VertexFormat::FLOAT4,
+                               offsetof(V3F_C4F, color), false);
     vertexLayout->setLayout(sizeof(V3F_C4F));
 
     _beforeCommand.func = CC_CALLBACK_0(NavMeshDebugDraw::onBeforeVisitCmd, this);
-    _afterCommand.func  = CC_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
+    _afterCommand.func = CC_CALLBACK_0(NavMeshDebugDraw::onAfterVisitCmd, this);
 
     _beforeCommand.set3D(true);
     _beforeCommand.setTransparent(true);
     _afterCommand.set3D(true);
     _afterCommand.setTransparent(true);
-    
+
 }
 
 void NavMeshDebugDraw::initCustomCommand(CustomCommand &command)
@@ -81,7 +76,8 @@ void NavMeshDebugDraw::initCustomCommand(CustomCommand &command)
     blend.destinationRGBBlendFactor = blend.destinationAlphaBlendFactor = BlendFunc::ALPHA_NON_PREMULTIPLIED.dst;
 }
 
-void NavMeshDebugDraw::vertex(const float /*x*/, const float /*y*/, const float /*z*/, unsigned int /*color*/, const float /*u*/, const float /*v*/)
+void NavMeshDebugDraw::vertex(const float /*x*/, const float /*y*/, const float /*z*/, unsigned int /*color*/,
+                              const float /*u*/, const float /*v*/)
 {
 
 }
@@ -93,8 +89,9 @@ void NavMeshDebugDraw::vertex(const float* pos, unsigned int color, const float*
 
 void NavMeshDebugDraw::vertex(const float x, const float y, const float z, unsigned int color)
 {
-    if (!_currentPrimitive) return;
-    V3F_C4F vertex = { Vec3(x, y, z), getColor(color) };
+    if (!_currentPrimitive)
+        return;
+    V3F_C4F vertex = {Vec3(x, y, z), getColor(color)};
     _vertices.push_back(vertex);
     _dirtyBuffer = true;
 }
@@ -106,7 +103,8 @@ void NavMeshDebugDraw::vertex(const float* pos, unsigned int color)
 
 NavMeshDebugDraw::~NavMeshDebugDraw()
 {
-    for (auto iter : _primitiveList){
+    for (auto iter : _primitiveList)
+    {
         delete iter;
     }
     CC_SAFE_RELEASE_NULL(_programState);
@@ -120,8 +118,9 @@ void NavMeshDebugDraw::depthMask(bool state)
 
 void NavMeshDebugDraw::begin(duDebugDrawPrimitives prim, float size /*= 1.0f*/)
 {
-    if (_currentPrimitive) return;
-    _currentPrimitive = new (std::nothrow) Primitive;
+    if (_currentPrimitive)
+        return;
+    _currentPrimitive = new(std::nothrow) Primitive;
     _currentPrimitive->type = getPrimitiveType(prim);
     _currentPrimitive->depthMask = _currentDepthMask;
     _currentPrimitive->start = _vertices.size();
@@ -130,7 +129,8 @@ void NavMeshDebugDraw::begin(duDebugDrawPrimitives prim, float size /*= 1.0f*/)
 
 void NavMeshDebugDraw::end()
 {
-    if (!_currentPrimitive) return;
+    if (!_currentPrimitive)
+        return;
     _currentPrimitive->end = _vertices.size();
     _primitiveList.push_back(_currentPrimitive);
     _currentPrimitive = nullptr;
@@ -151,14 +151,14 @@ backend::PrimitiveType NavMeshDebugDraw::getPrimitiveType(duDebugDrawPrimitives 
 {
     switch (prim)
     {
-    case DU_DRAW_POINTS:
-        return backend::PrimitiveType::POINT;
-    case DU_DRAW_LINES:
-        return backend::PrimitiveType::LINE;
-    case DU_DRAW_TRIS:
-        return backend::PrimitiveType::TRIANGLE;
-    default:
-        return backend::PrimitiveType::POINT;
+        case DU_DRAW_POINTS:
+            return backend::PrimitiveType::POINT;
+        case DU_DRAW_LINES:
+            return backend::PrimitiveType::LINE;
+        case DU_DRAW_TRIS:
+            return backend::PrimitiveType::TRIANGLE;
+        default:
+            return backend::PrimitiveType::POINT;
     }
 }
 
@@ -175,7 +175,9 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
 
     if (!_vertexBuffer || _vertexBuffer->getSize() < _vertices.size() * sizeof(_vertices[0]))
     {
-        _vertexBuffer = backend::Device::getInstance()->newBuffer(_vertices.size() * sizeof(_vertices[0]), backend::BufferType::VERTEX, backend::BufferUsage::STATIC);
+        _vertexBuffer = backend::Device::getInstance()->newBuffer(_vertices.size() * sizeof(_vertices[0]),
+                                                                  backend::BufferType::VERTEX,
+                                                                  backend::BufferUsage::STATIC);
         _dirtyBuffer = true;
     }
 
@@ -189,7 +191,8 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     {
         _commands.resize(_primitiveList.size());
     }
-    for (auto &iter : _primitiveList) {
+    for (auto &iter : _primitiveList)
+    {
         if (iter->type == backend::PrimitiveType::POINT)
             continue;
         if (iter->end - iter->start <= 0)
@@ -200,7 +203,8 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
         initCustomCommand(command);
         command.setBeforeCallback(CC_CALLBACK_0(NavMeshDebugDraw::onBeforeEachCommand, this, iter->depthMask));
 
-        if (iter->type == backend::PrimitiveType::LINE) {
+        if (iter->type == backend::PrimitiveType::LINE)
+        {
             command.setLineWidth(iter->size);
         }
 
@@ -217,11 +221,10 @@ void NavMeshDebugDraw::draw(Renderer* renderer)
     renderer->addCommand(&_afterCommand);
 }
 
-
 void NavMeshDebugDraw::onBeforeVisitCmd()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
-    
+    auto* renderer = Director::getInstance()->getRenderer();
+
     _rendererDepthTestEnabled = renderer->getDepthTest();
     _rendererDepthCmpFunc = renderer->getDepthCompareFunction();
     _rendererCullMode = renderer->getCullMode();
@@ -235,7 +238,7 @@ void NavMeshDebugDraw::onBeforeVisitCmd()
 
 void NavMeshDebugDraw::onAfterVisitCmd()
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setDepthTest(_rendererDepthTestEnabled);
     renderer->setDepthCompareFunction(_rendererDepthCmpFunc);
     renderer->setCullMode(_rendererCullMode);
@@ -245,14 +248,15 @@ void NavMeshDebugDraw::onAfterVisitCmd()
 
 void NavMeshDebugDraw::onBeforeEachCommand(bool enableDepthWrite)
 {
-    auto *renderer = Director::getInstance()->getRenderer();
+    auto* renderer = Director::getInstance()->getRenderer();
     renderer->setDepthWrite(enableDepthWrite);
 }
 
 void NavMeshDebugDraw::clear()
 {
     _vertices.clear();
-    for (auto iter : _primitiveList){
+    for (auto iter : _primitiveList)
+    {
         delete iter;
     }
     _primitiveList.clear();

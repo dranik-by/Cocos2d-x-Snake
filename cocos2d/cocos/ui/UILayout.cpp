@@ -37,46 +37,46 @@ THE SOFTWARE.
 #include "base/CCStencilStateManager.h"
 #include "editor-support/cocostudio/CocosStudioExtension.h"
 
-
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 static const int BACKGROUNDIMAGE_Z = (-1);
 static const int BCAKGROUNDCOLORRENDERER_Z = (-2);
-    
+
 IMPLEMENT_CLASS_GUI_INFO(Layout)
 
-Layout::Layout():
-_backGroundScale9Enabled(false),
-_backGroundImage(nullptr),
-_backGroundImageFileName(""),
-_backGroundImageCapInsets(Rect::ZERO),
-_colorType(BackGroundColorType::NONE),
-_bgImageTexType(TextureResType::LOCAL),
-_backGroundImageTextureSize(Size::ZERO),
-_backGroundImageColor(Color3B::WHITE),
-_backGroundImageOpacity(255),
-_colorRender(nullptr),
-_gradientRender(nullptr),
-_cColor(Color3B::WHITE),
-_gStartColor(Color3B::WHITE),
-_gEndColor(Color3B::WHITE),
-_alongVector(Vec2(0.0f, -1.0f)),
-_cOpacity(255),
-_clippingEnabled(false),
-_layoutType(Type::ABSOLUTE),
-_clippingType(ClippingType::STENCIL),
-_clippingStencil(nullptr),
-_clippingRect(Rect::ZERO),
-_clippingParent(nullptr),
-_clippingRectDirty(true),
-_stencilStateManager(new StencilStateManager()),
-_doLayoutDirty(true),
-_isInterceptTouch(false),
-_loopFocus(false),
-_passFocusToChild(true),
-_isFocusPassing(false)
+Layout::Layout()
+: _backGroundScale9Enabled(false)
+, _backGroundImage(nullptr)
+, _backGroundImageFileName("")
+, _backGroundImageCapInsets(Rect::ZERO)
+, _colorType(BackGroundColorType::NONE)
+, _bgImageTexType(TextureResType::LOCAL)
+, _backGroundImageTextureSize(Size::ZERO)
+, _backGroundImageColor(Color3B::WHITE)
+, _backGroundImageOpacity(255)
+, _colorRender(nullptr)
+, _gradientRender(nullptr)
+, _cColor(Color3B::WHITE)
+, _gStartColor(Color3B::WHITE)
+, _gEndColor(Color3B::WHITE)
+, _alongVector(Vec2(0.0f, -1.0f))
+, _cOpacity(255)
+, _clippingEnabled(false)
+, _layoutType(Type::ABSOLUTE)
+, _clippingType(ClippingType::STENCIL)
+, _clippingStencil(nullptr)
+, _clippingRect(Rect::ZERO)
+, _clippingParent(nullptr)
+, _clippingRectDirty(true)
+, _stencilStateManager(new StencilStateManager())
+, _doLayoutDirty(true)
+, _isInterceptTouch(false)
+, _loopFocus(false)
+, _passFocusToChild(true)
+, _isFocusPassing(false)
 {
     //no-op
 }
@@ -86,17 +86,17 @@ Layout::~Layout()
     CC_SAFE_RELEASE(_clippingStencil);
     CC_SAFE_DELETE(_stencilStateManager);
 }
-    
+
 void Layout::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
             return;
     }
-#endif
-    
+    #endif
+
     Widget::onEnter();
     if (_clippingStencil)
     {
@@ -105,24 +105,24 @@ void Layout::onEnter()
     _doLayoutDirty = true;
     _clippingRectDirty = true;
 }
-    
+
 void Layout::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
             return;
     }
-#endif
-    
+    #endif
+
     Widget::onExit();
     if (_clippingStencil)
     {
         _clippingStencil->onExit();
     }
 }
-    
+
 void Layout::setGlobalZOrder(float globalZOrder)
 {
     // _protectedChildren's global z order is set in ProtectedNode::setGlobalZOrder()
@@ -130,14 +130,14 @@ void Layout::setGlobalZOrder(float globalZOrder)
     Widget::setGlobalZOrder(globalZOrder);
     if (_clippingStencil)
         _clippingStencil->setGlobalZOrder(globalZOrder);
-    
+
     for (auto &child : _children)
         child->setGlobalZOrder(globalZOrder);
 }
 
 Layout* Layout::create()
 {
-    Layout* layout = new (std::nothrow) Layout();
+    Layout* layout = new(std::nothrow) Layout();
     if (layout && layout->init())
     {
         layout->autorelease();
@@ -159,70 +159,72 @@ bool Layout::init()
     }
     return false;
 }
-    
+
 void Layout::addChild(Node* child)
 {
     Layout::addChild(child, child->getLocalZOrder(), child->getTag());
 }
-    
-void Layout::addChild(Node * child, int localZOrder)
+
+void Layout::addChild(Node* child, int localZOrder)
 {
     Layout::addChild(child, localZOrder, child->getTag());
 }
 
-void Layout::addChild(Node *child, int zOrder, int tag)
+void Layout::addChild(Node* child, int zOrder, int tag)
 {
-    if (dynamic_cast<Widget*>(child)) {
+    if (dynamic_cast<Widget*>(child))
+    {
         supplyTheLayoutParameterLackToChild(static_cast<Widget*>(child));
     }
     child->setGlobalZOrder(_globalZOrder);
     Widget::addChild(child, zOrder, tag);
     _doLayoutDirty = true;
 }
-    
+
 void Layout::addChild(Node* child, int zOrder, const std::string &name)
 {
-    if (dynamic_cast<Widget*>(child)) {
+    if (dynamic_cast<Widget*>(child))
+    {
         supplyTheLayoutParameterLackToChild(static_cast<Widget*>(child));
     }
     child->setGlobalZOrder(_globalZOrder);
     Widget::addChild(child, zOrder, name);
     _doLayoutDirty = true;
 }
-    
-void Layout::removeChild(Node *child, bool cleanup)
+
+void Layout::removeChild(Node* child, bool cleanup)
 {
     Widget::removeChild(child, cleanup);
     _doLayoutDirty = true;
 }
-    
+
 void Layout::removeAllChildren()
 {
     Widget::removeAllChildren();
     _doLayoutDirty = true;
 }
-    
+
 void Layout::removeAllChildrenWithCleanup(bool cleanup)
 {
     Widget::removeAllChildrenWithCleanup(cleanup);
     _doLayoutDirty = true;
 }
 
-bool Layout::isClippingEnabled()const
+bool Layout::isClippingEnabled() const
 {
     return _clippingEnabled;
 }
 
-void Layout::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void Layout::visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     if (!_visible)
     {
         return;
     }
-    
+
     adaptRenderers();
     doLayout();
-    
+
     if (_clippingEnabled)
     {
         switch (_clippingType)
@@ -242,12 +244,12 @@ void Layout::visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t par
         Widget::visit(renderer, parentTransform, parentFlags);
     }
 }
-    
-void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
+
+void Layout::stencilClippingVisit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
-    if(!_visible)
+    if (!_visible)
         return;
-    
+
     uint32_t flags = processParentFlags(parentTransform, parentFlags);
 
     // IMPORTANT:
@@ -261,73 +263,72 @@ void Layout::stencilClippingVisit(Renderer *renderer, const Mat4& parentTransfor
 
     _groupCommand.init(_globalZOrder);
     renderer->addCommand(&_groupCommand);
-    
+
     renderer->pushGroup(_groupCommand.getRenderQueueID());
-    
-//    _beforeVisitCmdStencil.init(_globalZOrder);
-//    _beforeVisitCmdStencil.func = CC_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
-//    renderer->addCommand(&_beforeVisitCmdStencil);
+
+    //    _beforeVisitCmdStencil.init(_globalZOrder);
+    //    _beforeVisitCmdStencil.func = CC_CALLBACK_0(StencilStateManager::onBeforeVisit, _stencilStateManager);
+    //    renderer->addCommand(&_beforeVisitCmdStencil);
     _stencilStateManager->onBeforeVisit(_globalZOrder);
-    
+
     _clippingStencil->visit(renderer, _modelViewTransform, flags);
-    
+
     _afterDrawStencilCmd.init(_globalZOrder);
     _afterDrawStencilCmd.func = CC_CALLBACK_0(StencilStateManager::onAfterDrawStencil, _stencilStateManager);
     renderer->addCommand(&_afterDrawStencilCmd);
-    
+
     int i = 0;      // used by _children
     int j = 0;      // used by _protectedChildren
-    
+
     sortAllChildren();
     sortAllProtectedChildren();
-    
+
     //
     // draw children and protectedChildren zOrder < 0
     //
-    for(auto size = _children.size(); i < size; i++)
+    for (auto size = _children.size(); i < size; i++)
     {
         auto node = _children.at(i);
-        
+
         if (node && node->getLocalZOrder() < 0)
             node->visit(renderer, _modelViewTransform, flags);
         else
             break;
     }
-    
-    for(auto size = _protectedChildren.size(); j < size; j++)
+
+    for (auto size = _protectedChildren.size(); j < size; j++)
     {
         auto node = _protectedChildren.at(j);
-        
+
         if (node && node->getLocalZOrder() < 0)
             node->visit(renderer, _modelViewTransform, flags);
         else
             break;
     }
-    
+
     //
     // draw self
     //
     this->draw(renderer, _modelViewTransform, flags);
-    
+
     //
     // draw children and protectedChildren zOrder >= 0
     //
-    for(auto it=_protectedChildren.cbegin()+j, itCend = _protectedChildren.cend(); it != itCend; ++it)
-        (*it)->visit(renderer, _modelViewTransform, flags);
-    
-    for(auto it=_children.cbegin()+i, itCend = _children.cend(); it != itCend; ++it)
+    for (auto it = _protectedChildren.cbegin() + j, itCend = _protectedChildren.cend(); it != itCend; ++it)
         (*it)->visit(renderer, _modelViewTransform, flags);
 
-    
+    for (auto it = _children.cbegin() + i, itCend = _children.cend(); it != itCend; ++it)
+        (*it)->visit(renderer, _modelViewTransform, flags);
+
     _afterVisitCmdStencil.init(_globalZOrder);
     _afterVisitCmdStencil.func = CC_CALLBACK_0(StencilStateManager::onAfterVisit, _stencilStateManager);
     renderer->addCommand(&_afterVisitCmdStencil);
-    
+
     renderer->popGroup();
-    
+
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
-    
+
 void Layout::onBeforeVisitScissor()
 {
     auto glview = Director::getInstance()->getOpenGLView();
@@ -344,9 +345,7 @@ void Layout::onBeforeVisitScissor()
     _clippingOldRect = glview->getScissorRect();
     if (false == _clippingOldRect.equals(clippingRect))
     {
-        glview->setScissorInPoints(clippingRect.origin.x,
-                                   clippingRect.origin.y,
-                                   clippingRect.size.width,
+        glview->setScissorInPoints(clippingRect.origin.x, clippingRect.origin.y, clippingRect.size.width,
                                    clippingRect.size.height);
     }
 }
@@ -359,10 +358,8 @@ void Layout::onAfterVisitScissor()
         if (false == _clippingOldRect.equals(_clippingRect))
         {
             auto glview = Director::getInstance()->getOpenGLView();
-            glview->setScissorInPoints(_clippingOldRect.origin.x,
-                                       _clippingOldRect.origin.y,
-                                       _clippingOldRect.size.width,
-                                       _clippingOldRect.size.height);
+            glview->setScissorInPoints(_clippingOldRect.origin.x, _clippingOldRect.origin.y,
+                                       _clippingOldRect.size.width, _clippingOldRect.size.height);
         }
     }
     else
@@ -372,19 +369,19 @@ void Layout::onAfterVisitScissor()
         renderer->setScissorTest(false);
     }
 }
-    
-void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags)
+
+void Layout::scissorClippingVisit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     if (parentFlags & FLAGS_DIRTY_MASK)
     {
         _clippingRectDirty = true;
     }
-    
+
     Director* director = Director::getInstance();
     CCASSERT(nullptr != director, "Director is null when setting matrix stack");
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-    
+
     _groupCommand.init(_globalZOrder);
     renderer->addCommand(&_groupCommand);
     renderer->pushGroup(_groupCommand.getRenderQueueID());
@@ -394,11 +391,11 @@ void Layout::scissorClippingVisit(Renderer *renderer, const Mat4& parentTransfor
     renderer->addCommand(&_beforeVisitCmdScissor);
 
     ProtectedNode::visit(renderer, parentTransform, parentFlags);
-    
+
     _afterVisitCmdScissor.init(_globalZOrder);
     _afterVisitCmdScissor.func = CC_CALLBACK_0(Layout::onAfterVisitScissor, this);
     renderer->addCommand(&_afterVisitCmdScissor);
-    
+
     renderer->popGroup();
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 }
@@ -438,7 +435,7 @@ void Layout::setClippingEnabled(bool able)
             break;
     }
 }
-    
+
 void Layout::setClippingType(ClippingType type)
 {
     if (type == _clippingType)
@@ -450,13 +447,13 @@ void Layout::setClippingType(ClippingType type)
     _clippingType = type;
     setClippingEnabled(clippingEnabled);
 }
-    
-Layout::ClippingType Layout::getClippingType()const
+
+Layout::ClippingType Layout::getClippingType() const
 {
     return _clippingType;
 }
-    
-void Layout::setStencilClippingSize(const Size& /*size*/)
+
+void Layout::setStencilClippingSize(const Size & /*size*/)
 {
     if (_clippingEnabled && _clippingType == ClippingType::STENCIL)
     {
@@ -470,22 +467,22 @@ void Layout::setStencilClippingSize(const Size& /*size*/)
         _clippingStencil->drawPolygon(rect, 4, green, 0, green);
     }
 }
-    
-const Rect& Layout::getClippingRect() 
+
+const Rect &Layout::getClippingRect()
 {
     if (_clippingRectDirty)
     {
         Vec2 worldPos = convertToWorldSpace(Vec2::ZERO);
         AffineTransform t = getNodeToWorldAffineTransform();
-        float scissorWidth = _contentSize.width*t.a;
-        float scissorHeight = _contentSize.height*t.d;
+        float scissorWidth = _contentSize.width * t.a;
+        float scissorHeight = _contentSize.height * t.d;
         Rect parentClippingRect;
         Layout* parent = this;
 
         while (parent)
         {
             parent = dynamic_cast<Layout*>(parent->getParent());
-            if(parent)
+            if (parent)
             {
                 if (parent->isClippingEnabled())
                 {
@@ -494,7 +491,7 @@ const Rect& Layout::getClippingRect()
                 }
             }
         }
-        
+
         if (_clippingParent)
         {
             parentClippingRect = _clippingParent->getClippingRect();
@@ -502,7 +499,7 @@ const Rect& Layout::getClippingRect()
             float finalY = worldPos.y - (scissorHeight * _anchorPoint.y);
             float finalWidth = scissorWidth;
             float finalHeight = scissorHeight;
-            
+
             float leftOffset = worldPos.x - parentClippingRect.origin.x;
             if (leftOffset < 0.0f)
             {
@@ -558,11 +555,13 @@ void Layout::onSizeChanged()
     _clippingRectDirty = true;
     if (_backGroundImage)
     {
-        _backGroundImage->setPosition(_contentSize.width/2.0f, _contentSize.height/2.0f);
-        if (_backGroundScale9Enabled){
+        _backGroundImage->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
+        if (_backGroundScale9Enabled)
+        {
             _backGroundImage->setPreferredSize(_contentSize);
         }
-        else{
+        else
+        {
             _backGroundImage->setPreferredSize(_backGroundImageTextureSize);
         }
     }
@@ -586,25 +585,28 @@ void Layout::setBackGroundImageScale9Enabled(bool able)
     if (nullptr == _backGroundImage)
     {
         addBackGroundImage();
-        setBackGroundImage(_backGroundImageFileName,_bgImageTexType);
+        setBackGroundImage(_backGroundImageFileName, _bgImageTexType);
     }
-    if(_backGroundScale9Enabled){
+    if (_backGroundScale9Enabled)
+    {
         _backGroundImage->setRenderingType(Scale9Sprite::RenderingType::SLICE);
         _backGroundImage->setPreferredSize(_contentSize);
-    }else{
+    }
+    else
+    {
         _backGroundImage->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
         _backGroundImage->setPreferredSize(_backGroundImageTextureSize);
     }
-    
+
     setBackGroundImageCapInsets(_backGroundImageCapInsets);
 }
-    
-bool Layout::isBackGroundImageScale9Enabled()const
+
+bool Layout::isBackGroundImageScale9Enabled() const
 {
     return _backGroundScale9Enabled;
 }
 
-void Layout::setBackGroundImage(const std::string& fileName,TextureResType texType)
+void Layout::setBackGroundImage(const std::string &fileName, TextureResType texType)
 {
     if (fileName.empty())
     {
@@ -613,15 +615,18 @@ void Layout::setBackGroundImage(const std::string& fileName,TextureResType texTy
     if (_backGroundImage == nullptr)
     {
         addBackGroundImage();
-        if(_backGroundScale9Enabled){
+        if (_backGroundScale9Enabled)
+        {
             _backGroundImage->setRenderingType(Scale9Sprite::RenderingType::SLICE);
-        }else{
+        }
+        else
+        {
             _backGroundImage->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
         }
     }
     _backGroundImageFileName = fileName;
     _bgImageTexType = texType;
-   
+
     switch (_bgImageTexType)
     {
         case TextureResType::LOCAL:
@@ -633,13 +638,15 @@ void Layout::setBackGroundImage(const std::string& fileName,TextureResType texTy
         default:
             break;
     }
-    
+
     _backGroundImageTextureSize = _backGroundImage->getContentSize();
-    _backGroundImage->setPosition(_contentSize.width/2.0f, _contentSize.height/2.0f);
-    if (_backGroundScale9Enabled) {
+    _backGroundImage->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
+    if (_backGroundScale9Enabled)
+    {
         _backGroundImage->setPreferredSize(_contentSize);
     }
-    else{
+    else
+    {
         _backGroundImage->setPreferredSize(_backGroundImageTextureSize);
     }
     updateBackGroundImageRGBA();
@@ -653,13 +660,13 @@ void Layout::setBackGroundImageCapInsets(const Rect &capInsets)
         _backGroundImage->setCapInsets(capInsets);
     }
 }
-    
-const Rect& Layout::getBackGroundImageCapInsets()const
+
+const Rect &Layout::getBackGroundImageCapInsets() const
 {
     return _backGroundImageCapInsets;
 }
 
-void Layout::supplyTheLayoutParameterLackToChild(Widget *child)
+void Layout::supplyTheLayoutParameterLackToChild(Widget* child)
 {
     if (!child)
     {
@@ -697,10 +704,10 @@ void Layout::addBackGroundImage()
 {
     _backGroundImage = Scale9Sprite::create();
     _backGroundImage->setRenderingType(Scale9Sprite::RenderingType::SIMPLE);
-    
+
     addProtectedChild(_backGroundImage, BACKGROUNDIMAGE_Z, -1);
-   
-    _backGroundImage->setPosition(_contentSize.width/2.0f, _contentSize.height/2.0f);
+
+    _backGroundImage->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
 }
 
 void Layout::removeBackGroundImage()
@@ -777,8 +784,8 @@ void Layout::setBackGroundColorType(BackGroundColorType type)
             break;
     }
 }
-    
-Layout::BackGroundColorType Layout::getBackGroundColorType()const
+
+Layout::BackGroundColorType Layout::getBackGroundColorType() const
 {
     return _colorType;
 }
@@ -791,8 +798,8 @@ void Layout::setBackGroundColor(const Color3B &color)
         _colorRender->setColor(color);
     }
 }
-    
-const Color3B& Layout::getBackGroundColor()const
+
+const Color3B &Layout::getBackGroundColor() const
 {
     return _cColor;
 }
@@ -810,13 +817,13 @@ void Layout::setBackGroundColor(const Color3B &startColor, const Color3B &endCol
         _gradientRender->setEndColor(endColor);
     }
 }
-    
-const Color3B& Layout::getBackGroundStartColor()const
+
+const Color3B &Layout::getBackGroundStartColor() const
 {
     return _gStartColor;
 }
 
-const Color3B& Layout::getBackGroundEndColor()const
+const Color3B &Layout::getBackGroundEndColor() const
 {
     return _gEndColor;
 }
@@ -838,8 +845,8 @@ void Layout::setBackGroundColorOpacity(uint8_t opacity)
             break;
     }
 }
-    
-uint8_t Layout::getBackGroundColorOpacity()const
+
+uint8_t Layout::getBackGroundColorOpacity() const
 {
     return _cOpacity;
 }
@@ -852,8 +859,8 @@ void Layout::setBackGroundColorVector(const Vec2 &vector)
         _gradientRender->setVector(vector);
     }
 }
-    
-const Vec2& Layout::getBackGroundColorVector()const
+
+const Vec2 &Layout::getBackGroundColorVector() const
 {
     return _alongVector;
 }
@@ -870,12 +877,12 @@ void Layout::setBackGroundImageOpacity(uint8_t opacity)
     updateBackGroundImageOpacity();
 }
 
-const Color3B& Layout::getBackGroundImageColor()const
+const Color3B &Layout::getBackGroundImageColor() const
 {
     return _backGroundImageColor;
 }
 
-uint8_t Layout::getBackGroundImageOpacity()const
+uint8_t Layout::getBackGroundImageOpacity() const
 {
     return _backGroundImageOpacity;
 }
@@ -905,7 +912,7 @@ void Layout::updateBackGroundImageRGBA()
     }
 }
 
-const Size& Layout::getBackGroundImageTextureSize() const
+const Size &Layout::getBackGroundImageTextureSize() const
 {
     return _backGroundImageTextureSize;
 }
@@ -913,8 +920,8 @@ const Size& Layout::getBackGroundImageTextureSize() const
 void Layout::setLayoutType(Type type)
 {
     _layoutType = type;
-   
-    for (auto& child : _children)
+
+    for (auto &child : _children)
     {
         Widget* widgetChild = dynamic_cast<Widget*>(child);
         if (widgetChild)
@@ -924,8 +931,6 @@ void Layout::setLayoutType(Type type)
     }
     _doLayoutDirty = true;
 }
-    
-
 
 Layout::Type Layout::getLayoutType() const
 {
@@ -937,22 +942,22 @@ void Layout::forceDoLayout()
     this->requestDoLayout();
     this->doLayout();
 }
-    
+
 void Layout::requestDoLayout()
 {
     _doLayoutDirty = true;
 }
-    
-Size Layout::getLayoutContentSize()const
+
+Size Layout::getLayoutContentSize() const
 {
     return this->getContentSize();
 }
-    
-const Vector<Node*>& Layout::getLayoutElements()const
+
+const Vector<Node*> &Layout::getLayoutElements() const
 {
     return this->getChildren();
 }
-    
+
 LayoutManager* Layout::createLayoutManager()
 {
     LayoutManager* exe = nullptr;
@@ -976,21 +981,21 @@ LayoutManager* Layout::createLayoutManager()
 
 void Layout::doLayout()
 {
-    
+
     if (!_doLayoutDirty)
     {
         return;
     }
-    
+
     sortAllChildren();
 
     LayoutManager* executant = this->createLayoutManager();
-    
+
     if (executant)
     {
         executant->doLayout(this);
     }
-    
+
     _doLayoutDirty = false;
 }
 
@@ -1009,13 +1014,13 @@ void Layout::copyClonedWidgetChildren(Widget* model)
     Widget::copyClonedWidgetChildren(model);
 }
 
-void Layout::copySpecialProperties(Widget *widget)
+void Layout::copySpecialProperties(Widget* widget)
 {
     Layout* layout = dynamic_cast<Layout*>(widget);
     if (layout)
     {
         setBackGroundImageScale9Enabled(layout->_backGroundScale9Enabled);
-        setBackGroundImage(layout->_backGroundImageFileName,layout->_bgImageTexType);
+        setBackGroundImage(layout->_backGroundImageFileName, layout->_bgImageTexType);
         setBackGroundImageCapInsets(layout->_backGroundImageCapInsets);
         setBackGroundColorType(layout->_colorType);
         setBackGroundColor(layout->_cColor);
@@ -1030,83 +1035,82 @@ void Layout::copySpecialProperties(Widget *widget)
         _isInterceptTouch = layout->_isInterceptTouch;
     }
 }
-    
+
 void Layout::setLoopFocus(bool loop)
 {
     _loopFocus = loop;
 }
 
-bool Layout::isLoopFocus()const
+bool Layout::isLoopFocus() const
 {
     return _loopFocus;
 }
-
 
 void Layout::setPassFocusToChild(bool pass)
 {
     _passFocusToChild = pass;
 }
 
-bool Layout::isPassFocusToChild()const
+bool Layout::isPassFocusToChild() const
 {
     return _passFocusToChild;
 }
 
-Size Layout::getLayoutAccumulatedSize()const
+Size Layout::getLayoutAccumulatedSize() const
 {
-    const auto& children = this->getChildren();
+    const auto &children = this->getChildren();
     Size layoutSize = Size::ZERO;
-    int widgetCount =0;
-    for(const auto& widget : children)
+    int widgetCount = 0;
+    for (const auto &widget : children)
     {
-        Layout *layout = dynamic_cast<Layout*>(widget);
+        Layout* layout = dynamic_cast<Layout*>(widget);
         if (nullptr != layout)
         {
             layoutSize = layoutSize + layout->getLayoutAccumulatedSize();
         }
         else
         {
-            Widget *w = dynamic_cast<Widget*>(widget);
+            Widget* w = dynamic_cast<Widget*>(widget);
             if (w)
             {
                 widgetCount++;
                 Margin m = w->getLayoutParameter()->getMargin();
-                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
+                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left, m.top + m.bottom) * 0.5;
             }
         }
     }
-    
+
     //subtract extra size
     Type type = this->getLayoutType();
     if (type == Type::HORIZONTAL)
     {
-        layoutSize = layoutSize - Size(0, layoutSize.height/widgetCount * (widgetCount-1));
+        layoutSize = layoutSize - Size(0, layoutSize.height / widgetCount * (widgetCount - 1));
     }
     if (type == Type::VERTICAL)
     {
-        layoutSize = layoutSize - Size(layoutSize.width/widgetCount * (widgetCount-1), 0);
+        layoutSize = layoutSize - Size(layoutSize.width / widgetCount * (widgetCount - 1), 0);
     }
     return layoutSize;
 }
 
-Vec2 Layout::getWorldCenterPoint(Widget* widget)const
+Vec2 Layout::getWorldCenterPoint(Widget* widget) const
 {
-    Layout *layout = dynamic_cast<Layout*>(widget);
+    Layout* layout = dynamic_cast<Layout*>(widget);
     //FIXEDME: we don't need to calculate the content size of layout anymore
-    Size widgetSize = layout ? layout->getLayoutAccumulatedSize() :  widget->getContentSize();
-//    CCLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
-    return widget->convertToWorldSpace(Vec2(widgetSize.width/2, widgetSize.height/2));
+    Size widgetSize = layout ? layout->getLayoutAccumulatedSize() : widget->getContentSize();
+    //    CCLOG("content size : width = %f, height = %f", widgetSize.width, widgetSize.height);
+    return widget->convertToWorldSpace(Vec2(widgetSize.width / 2, widgetSize.height / 2));
 }
 
 float Layout::calculateNearestDistance(Widget* baseWidget)
 {
     float distance = FLT_MAX;
-    
-    Vec2 widgetPosition =  this->getWorldCenterPoint(baseWidget);
-    
+
+    Vec2 widgetPosition = this->getWorldCenterPoint(baseWidget);
+
     for (Node* node : _children)
     {
-        Layout *layout = dynamic_cast<Layout*>(node);
+        Layout* layout = dynamic_cast<Layout*>(node);
         int length;
         if (layout)
         {
@@ -1125,26 +1129,25 @@ float Layout::calculateNearestDistance(Widget* baseWidget)
                 continue;
             }
         }
-        
+
         if (length < distance)
         {
             distance = length;
         }
-        
-        
+
     }
     return distance;
 }
-    
-float Layout::calculateFarthestDistance(cocos2d::ui::Widget *baseWidget)
+
+float Layout::calculateFarthestDistance(cocos2d::ui::Widget* baseWidget)
 {
     float distance = -FLT_MAX;
-    
-    Vec2 widgetPosition =  this->getWorldCenterPoint(baseWidget);
-    
+
+    Vec2 widgetPosition = this->getWorldCenterPoint(baseWidget);
+
     for (Node* node : _children)
     {
-        Layout *layout = dynamic_cast<Layout*>(node);
+        Layout* layout = dynamic_cast<Layout*>(node);
         int length;
         if (layout)
         {
@@ -1153,7 +1156,8 @@ float Layout::calculateFarthestDistance(cocos2d::ui::Widget *baseWidget)
         else
         {
             Widget* w = dynamic_cast<Widget*>(node);
-            if (w && w->isFocusEnabled()) {
+            if (w && w->isFocusEnabled())
+            {
                 Vec2 wPosition = this->getWorldCenterPoint(w);
                 length = (wPosition - widgetPosition).length();
             }
@@ -1162,7 +1166,7 @@ float Layout::calculateFarthestDistance(cocos2d::ui::Widget *baseWidget)
                 continue;
             }
         }
-        
+
         if (length > distance)
         {
             distance = length;
@@ -1177,7 +1181,7 @@ int Layout::findFirstFocusEnabledWidgetIndex()
     ssize_t count = this->getChildren().size();
     while (index < count)
     {
-        Widget* w =  dynamic_cast<Widget*>(_children.at(index));
+        Widget* w = dynamic_cast<Widget*>(_children.at(index));
         if (w && w->isFocusEnabled())
         {
             return (int)index;
@@ -1196,21 +1200,20 @@ int Layout::findNearestChildWidgetIndex(FocusDirection direction, Widget* baseWi
     }
     int index = 0;
     ssize_t count = this->getChildren().size();
-    
+
     float distance = FLT_MAX;
     int found = 0;
-    if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT ||
-        direction == FocusDirection::DOWN || direction == FocusDirection::UP)
+    if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT || direction == FocusDirection::DOWN || direction == FocusDirection::UP)
     {
-        Vec2 widgetPosition =  this->getWorldCenterPoint(baseWidget);
-        while (index <  count)
+        Vec2 widgetPosition = this->getWorldCenterPoint(baseWidget);
+        while (index < count)
         {
-            Widget *w = dynamic_cast<Widget*>(this->getChildren().at(index));
+            Widget* w = dynamic_cast<Widget*>(this->getChildren().at(index));
             if (w && w->isFocusEnabled())
             {
                 Vec2 wPosition = this->getWorldCenterPoint(w);
                 float length;
-                Layout *layout = dynamic_cast<Layout*>(w);
+                Layout* layout = dynamic_cast<Layout*>(w);
                 if (layout)
                 {
                     length = layout->calculateNearestDistance(baseWidget);
@@ -1219,24 +1222,23 @@ int Layout::findNearestChildWidgetIndex(FocusDirection direction, Widget* baseWi
                 {
                     length = (wPosition - widgetPosition).getLength();
                 }
-               
+
                 if (length < distance)
                 {
-                        found = index;
-                        distance = length;
+                    found = index;
+                    distance = length;
                 }
             }
             index++;
         }
-        return  found;
+        return found;
     }
-    
-    
+
     CCASSERT(0, "invalid focus direction!!!");
     return 0;
 }
-    
-int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::Widget *baseWidget)
+
+int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::Widget* baseWidget)
 {
     if (baseWidget == nullptr || baseWidget == this)
     {
@@ -1244,21 +1246,20 @@ int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::
     }
     int index = 0;
     ssize_t count = this->getChildren().size();
-    
+
     float distance = -FLT_MAX;
     int found = 0;
-    if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT
-        || direction == FocusDirection::DOWN || direction == FocusDirection::UP)
+    if (direction == FocusDirection::LEFT || direction == FocusDirection::RIGHT || direction == FocusDirection::DOWN || direction == FocusDirection::UP)
     {
-        Vec2 widgetPosition =  this->getWorldCenterPoint(baseWidget);
-        while (index <  count)
+        Vec2 widgetPosition = this->getWorldCenterPoint(baseWidget);
+        while (index < count)
         {
-            Widget *w = dynamic_cast<Widget*>(this->getChildren().at(index));
+            Widget* w = dynamic_cast<Widget*>(this->getChildren().at(index));
             if (w && w->isFocusEnabled())
             {
                 Vec2 wPosition = this->getWorldCenterPoint(w);
                 float length;
-                Layout *layout = dynamic_cast<Layout*>(w);
+                Layout* layout = dynamic_cast<Layout*>(w);
                 if (layout)
                 {
                     length = layout->calculateFarthestDistance(baseWidget);
@@ -1267,7 +1268,7 @@ int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::
                 {
                     length = (wPosition - widgetPosition).getLength();
                 }
-                
+
                 if (length > distance)
                 {
                     found = index;
@@ -1276,20 +1277,18 @@ int Layout::findFarthestChildWidgetIndex(FocusDirection direction, cocos2d::ui::
             }
             index++;
         }
-        return  found;
+        return found;
     }
-    
+
     CCASSERT(0, "invalid focus direction!!!");
     return 0;
 }
-    
-
 
 Widget* Layout::findFocusEnabledChildWidgetByIndex(ssize_t index)
 {
-  
-    Widget *widget = this->getChildWidgetByIndex(index);
-    
+
+    Widget* widget = this->getChildWidgetByIndex(index);
+
     if (widget)
     {
         if (widget->isFocusEnabled())
@@ -1301,11 +1300,11 @@ Widget* Layout::findFocusEnabledChildWidgetByIndex(ssize_t index)
     }
     return nullptr;
 }
-    
-Widget *Layout::findFirstNonLayoutWidget()
+
+Widget* Layout::findFirstNonLayoutWidget()
 {
     Widget* widget = nullptr;
-    for(Node *node : _children)
+    for (Node* node : _children)
     {
         Layout* layout = dynamic_cast<Layout*>(node);
         if (layout)
@@ -1318,30 +1317,30 @@ Widget *Layout::findFirstNonLayoutWidget()
         }
         else
         {
-            Widget *w = dynamic_cast<Widget*>(node);
+            Widget* w = dynamic_cast<Widget*>(node);
             if (w)
             {
                 widget = w;
                 break;
             }
         }
-        
+
     }
-    
+
     return widget;
 }
-    
+
 void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
 {
     if (baseWidget == nullptr)
     {
         return;
     }
-    
+
     Vec2 previousWidgetPosition = this->getWorldCenterPoint(baseWidget);
-    
+
     Vec2 widgetPosition = this->getWorldCenterPoint(this->findFirstNonLayoutWidget());
-    
+
     if (dir == FocusDirection::LEFT)
     {
         if (previousWidgetPosition.x > widgetPosition.x)
@@ -1353,7 +1352,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
             onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
     }
-    else if(dir == FocusDirection::RIGHT)
+    else if (dir == FocusDirection::RIGHT)
     {
         if (previousWidgetPosition.x > widgetPosition.x)
         {
@@ -1364,7 +1363,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
             onPassFocusToChild = CC_CALLBACK_2(Layout::findNearestChildWidgetIndex, this);
         }
     }
-    else if(dir == FocusDirection::DOWN)
+    else if (dir == FocusDirection::DOWN)
     {
         if (previousWidgetPosition.y > widgetPosition.y)
         {
@@ -1375,7 +1374,7 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
             onPassFocusToChild = CC_CALLBACK_2(Layout::findFarthestChildWidgetIndex, this);
         }
     }
-    else if(dir == FocusDirection::UP)
+    else if (dir == FocusDirection::UP)
     {
         if (previousWidgetPosition.y < widgetPosition.y)
         {
@@ -1393,19 +1392,18 @@ void Layout::findProperSearchingFunctor(FocusDirection dir, Widget* baseWidget)
 
 }
 
-
-Widget* Layout::passFocusToChild(FocusDirection dir, cocos2d::ui::Widget *current)
+Widget* Layout::passFocusToChild(FocusDirection dir, cocos2d::ui::Widget* current)
 {
     if (checkFocusEnabledChild())
     {
         Widget* previousWidget = this->getCurrentFocusedWidget();
-        
+
         this->findProperSearchingFunctor(dir, previousWidget);
-        
+
         int index = onPassFocusToChild(dir, previousWidget);
-        
-        Widget *widget = this->getChildWidgetByIndex(index);
-        Layout *layout = dynamic_cast<Layout*>(widget);
+
+        Widget* widget = this->getChildWidgetByIndex(index);
+        Layout* layout = dynamic_cast<Layout*>(widget);
         if (layout)
         {
             layout->_isFocusPassing = true;
@@ -1421,13 +1419,13 @@ Widget* Layout::passFocusToChild(FocusDirection dir, cocos2d::ui::Widget *curren
     {
         return this;
     }
-        
+
 }
 
-bool Layout::checkFocusEnabledChild()const
+bool Layout::checkFocusEnabledChild() const
 {
     bool ret = false;
-    for(Node* node : _children)
+    for (Node* node : _children)
     {
         Widget* widget = dynamic_cast<Widget*>(node);
         if (widget && widget->isFocusEnabled())
@@ -1439,12 +1437,12 @@ bool Layout::checkFocusEnabledChild()const
     return ret;
 }
 
-Widget* Layout::getChildWidgetByIndex(ssize_t index)const
+Widget* Layout::getChildWidgetByIndex(ssize_t index) const
 {
     ssize_t size = _children.size();
     int count = 0;
     ssize_t oldIndex = index;
-    Widget *widget = nullptr;
+    Widget* widget = nullptr;
     while (index < size)
     {
         Widget* firstChild = dynamic_cast<Widget*>(_children.at(index));
@@ -1456,7 +1454,7 @@ Widget* Layout::getChildWidgetByIndex(ssize_t index)const
         count++;
         index++;
     }
-    
+
     if (nullptr == widget)
     {
         int begin = 0;
@@ -1472,14 +1470,13 @@ Widget* Layout::getChildWidgetByIndex(ssize_t index)const
             begin++;
         }
     }
-    
-    
+
     return widget;
 }
 
-Widget* Layout::getPreviousFocusedWidget(FocusDirection direction, Widget *current)
+Widget* Layout::getPreviousFocusedWidget(FocusDirection direction, Widget* current)
 {
-    Widget *nextWidget = nullptr;
+    Widget* nextWidget = nullptr;
     ssize_t previousWidgetPos = _children.getIndex(current);
     previousWidgetPos = previousWidgetPos - 1;
     if (previousWidgetPos >= 0)
@@ -1508,7 +1505,7 @@ Widget* Layout::getPreviousFocusedWidget(FocusDirection direction, Widget *curre
         {
             if (checkFocusEnabledChild())
             {
-                previousWidgetPos = _children.size()-1;
+                previousWidgetPos = _children.size() - 1;
                 nextWidget = this->getChildWidgetByIndex(previousWidgetPos);
                 if (nextWidget->isFocusEnabled())
                 {
@@ -1566,9 +1563,9 @@ Widget* Layout::getPreviousFocusedWidget(FocusDirection direction, Widget *curre
     }
 }
 
-Widget* Layout::getNextFocusedWidget(FocusDirection direction, Widget *current)
+Widget* Layout::getNextFocusedWidget(FocusDirection direction, Widget* current)
 {
-    Widget *nextWidget = nullptr;
+    Widget* nextWidget = nullptr;
     ssize_t previousWidgetPos = _children.getIndex(current);
     previousWidgetPos = previousWidgetPos + 1;
     if (previousWidgetPos < _children.size())
@@ -1630,7 +1627,8 @@ Widget* Layout::getNextFocusedWidget(FocusDirection direction, Widget *current)
             }
             else
             {
-                if (dynamic_cast<Layout*>(current)) {
+                if (dynamic_cast<Layout*>(current))
+                {
                     return current;
                 }
                 else
@@ -1647,7 +1645,8 @@ Widget* Layout::getNextFocusedWidget(FocusDirection direction, Widget *current)
                 {
                     return Widget::findNextFocusedWidget(direction, this);
                 }
-                if (dynamic_cast<Layout*>(current)) {
+                if (dynamic_cast<Layout*>(current))
+                {
                     return current;
                 }
                 else
@@ -1663,15 +1662,15 @@ Widget* Layout::getNextFocusedWidget(FocusDirection direction, Widget *current)
     }
 }
 
-bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)const
+bool Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction) const
 {
     Layout* parent = dynamic_cast<Layout*>(widget->getParent());
     if (parent == nullptr)
     {
         return true;
     }
-    
-    auto& container = parent->getChildren();
+
+    auto &container = parent->getChildren();
     ssize_t index = container.getIndex(widget);
     if (parent->getLayoutType() == Type::HORIZONTAL)
     {
@@ -1688,7 +1687,7 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
         }
         if (direction == FocusDirection::RIGHT)
         {
-            if (index == container.size()-1)
+            if (index == container.size() - 1)
             {
                 return isLastWidgetInContainer(parent, direction);
             }
@@ -1701,20 +1700,20 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
         {
             return isLastWidgetInContainer(parent, direction);
         }
-        
+
         if (direction == FocusDirection::UP)
         {
             return isLastWidgetInContainer(parent, direction);
         }
     }
-    else if(parent->getLayoutType() == Type::VERTICAL)
+    else if (parent->getLayoutType() == Type::VERTICAL)
     {
         if (direction == FocusDirection::UP)
         {
             if (index == 0)
             {
                 return isLastWidgetInContainer(parent, direction);
-                
+
             }
             else
             {
@@ -1736,7 +1735,7 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
         {
             return isLastWidgetInContainer(parent, direction);
         }
-        
+
         if (direction == FocusDirection::RIGHT)
         {
             return isLastWidgetInContainer(parent, direction);
@@ -1747,11 +1746,11 @@ bool  Layout::isLastWidgetInContainer(Widget* widget, FocusDirection direction)c
         CCASSERT(0, "invalid layout Type");
         return false;
     }
-    
+
     return false;
 }
 
-bool  Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection direction)const
+bool Layout::isWidgetAncestorSupportLoopFocus(Widget* widget, FocusDirection direction) const
 {
     Layout* parent = dynamic_cast<Layout*>(widget->getParent());
     if (parent == nullptr)
@@ -1801,10 +1800,10 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
     {
         Layout* parent = dynamic_cast<Layout*>(this->getParent());
         _isFocusPassing = false;
-        
+
         if (_passFocusToChild)
         {
-            Widget * w = this->passFocusToChild(direction, current);
+            Widget* w = this->passFocusToChild(direction, current);
             if (dynamic_cast<Layout*>(w))
             {
                 if (parent)
@@ -1815,16 +1814,16 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
             }
             return w;
         }
-        
+
         if (nullptr == parent)
         {
             return this;
         }
         parent->_isFocusPassing = true;
         return parent->findNextFocusedWidget(direction, this);
-            
+
     }
-    else if(current->isFocused() || dynamic_cast<Layout*>(current))
+    else if (current->isFocused() || dynamic_cast<Layout*>(current))
     {
         if (_layoutType == Type::HORIZONTAL)
         {
@@ -1833,11 +1832,13 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
                 case FocusDirection::LEFT:
                 {
                     return this->getPreviousFocusedWidget(direction, current);
-                }break;
+                }
+                    break;
                 case FocusDirection::RIGHT:
                 {
                     return this->getNextFocusedWidget(direction, current);
-                }break;
+                }
+                    break;
                 case FocusDirection::DOWN:
                 case FocusDirection::UP:
                 {
@@ -1853,7 +1854,8 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
                     {
                         return Widget::findNextFocusedWidget(direction, this);
                     }
-                }break;
+                }
+                    break;
                 default:
                 {
                     CCASSERT(0, "Invalid Focus Direction");
@@ -1881,7 +1883,8 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
                     {
                         return Widget::findNextFocusedWidget(direction, this);
                     }
-                } break;
+                }
+                    break;
                 case FocusDirection::DOWN:
                 {
                     return getNextFocusedWidget(direction, current);
@@ -1911,15 +1914,16 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
         return current;
     }
 }
-    
+
 void Layout::setCameraMask(unsigned short mask, bool applyChildren)
 {
     Widget::setCameraMask(mask, applyChildren);
-    if (_clippingStencil){
+    if (_clippingStencil)
+    {
         _clippingStencil->setCameraMask(mask, applyChildren);
     }
 }
-    
+
 ResourceData Layout::getRenderFile()
 {
     ResourceData rData;

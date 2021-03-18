@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <memory>
 #include <condition_variable>
 
-namespace cocos2d {
+namespace cocos2d
+{
 // Manage PcmAudioPlayer& UrlAudioPlayer
 
 class PcmAudioPlayer;
@@ -53,10 +54,10 @@ public:
 
     virtual ~AudioPlayerProvider();
 
-    IAudioPlayer *getAudioPlayer(const std::string &audioFilePath);
+    IAudioPlayer* getAudioPlayer(const std::string &audioFilePath);
 
     typedef std::function<void(bool/* succeed */, PcmData /* data */)> PreloadCallback;
-    void preloadEffect(const std::string &audioFilePath, const PreloadCallback& cb);
+    void preloadEffect(const std::string &audioFilePath, const PreloadCallback &cb);
 
     void clearPcmCache(const std::string &audioFilePath);
 
@@ -76,8 +77,11 @@ private:
         off_t length;
 
         AudioFileInfo()
-                : assetFd(nullptr), start(0), length(0)
-        { };
+        : assetFd(nullptr)
+        , start(0)
+        , length(0)
+        {
+        };
 
         inline bool isValid() const
         {
@@ -85,11 +89,11 @@ private:
         }
     };
 
-    PcmAudioPlayer *obtainPcmAudioPlayer(const std::string &url, const PcmData &pcmData);
+    PcmAudioPlayer* obtainPcmAudioPlayer(const std::string &url, const PcmData &pcmData);
 
-    UrlAudioPlayer *createUrlAudioPlayer(const AudioFileInfo &info);
+    UrlAudioPlayer* createUrlAudioPlayer(const AudioFileInfo &info);
 
-    void preloadEffect(const AudioFileInfo &info, const PreloadCallback& cb, bool isPreloadInPlay2d);
+    void preloadEffect(const AudioFileInfo &info, const PreloadCallback &cb, bool isPreloadInPlay2d);
 
     AudioFileInfo getFileInfo(const std::string &audioFilePath);
 
@@ -119,7 +123,7 @@ private:
     std::condition_variable _preloadWaitCond;
 
     PcmAudioService* _pcmAudioService;
-    AudioMixerController *_mixController;
+    AudioMixerController* _mixController;
 
     ThreadPool* _threadPool;
 };

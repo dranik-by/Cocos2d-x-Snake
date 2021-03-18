@@ -35,7 +35,7 @@ const std::string EventListenerController::LISTENER_ID = "__cc_controller";
 
 EventListenerController* EventListenerController::create()
 {
-    auto ret = new (std::nothrow) EventListenerController();
+    auto ret = new(std::nothrow) EventListenerController();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -49,26 +49,27 @@ EventListenerController* EventListenerController::create()
 
 bool EventListenerController::init()
 {
-    auto listener = [this](Event* event){
+    auto listener = [this](Event* event)
+    {
         auto evtController = static_cast<EventController*>(event);
         switch (evtController->getControllerEventType())
         {
-        case EventController::ControllerEventType::CONNECTION:
-            if (evtController->isConnected())
+            case EventController::ControllerEventType::CONNECTION:
+                if (evtController->isConnected())
+                {
+                    if (this->onConnected)
+                        this->onConnected(evtController->getController(), event);
+                }
+                else
+                {
+                    if (this->onDisconnected)
+                        this->onDisconnected(evtController->getController(), event);
+                }
+                break;
+            case EventController::ControllerEventType::BUTTON_STATUS_CHANGED:
             {
-                if (this->onConnected)
-                    this->onConnected(evtController->getController(), event);
-            }
-            else
-            {
-                if (this->onDisconnected)
-                    this->onDisconnected(evtController->getController(), event);
-            }
-            break;
-        case EventController::ControllerEventType::BUTTON_STATUS_CHANGED:
-            {
-                const auto&  keyStatus = evtController->_controller->_allKeyStatus[evtController->_keyCode];
-                const auto&  keyPrevStatus = evtController->_controller->_allKeyPrevStatus[evtController->_keyCode];
+                const auto &keyStatus = evtController->_controller->_allKeyStatus[evtController->_keyCode];
+                const auto &keyPrevStatus = evtController->_controller->_allKeyPrevStatus[evtController->_keyCode];
 
                 if (this->onKeyDown && keyStatus.isPressed && !keyPrevStatus.isPressed)
                 {
@@ -83,18 +84,18 @@ bool EventListenerController::init()
                     this->onKeyRepeat(evtController->_controller, evtController->_keyCode, event);
                 }
             }
-            break;
-        case EventController::ControllerEventType::AXIS_STATUS_CHANGED:
+                break;
+            case EventController::ControllerEventType::AXIS_STATUS_CHANGED:
             {
                 if (this->onAxisEvent)
                 {
                     this->onAxisEvent(evtController->_controller, evtController->_keyCode, event);
                 }
             }
-            break;
-        default:
-            CCASSERT(false, "Invalid EventController type");
-            break;
+                break;
+            default:
+                CCASSERT(false, "Invalid EventController type");
+                break;
         }
     };
 

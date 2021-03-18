@@ -61,7 +61,7 @@ public:
         MOUSE,
         ACCELERATION,
         FOCUS,
-		GAME_CONTROLLER,
+        GAME_CONTROLLER,
         CUSTOM
     };
 
@@ -78,7 +78,7 @@ CC_CONSTRUCTOR_ACCESS:
      * Initializes event with type and callback function
      * @js NA
      */
-    bool init(Type t, const ListenerID& listenerID, const std::function<void(Event*)>& callback);
+    bool init(Type t, const ListenerID &listenerID, const std::function<void(Event*)> &callback);
 public:
     /** Destructor.
      * @js NA 
@@ -103,13 +103,19 @@ public:
      *
      * @param enabled True if enables the listener.
      */
-    void setEnabled(bool enabled) { _isEnabled = enabled; }
+    void setEnabled(bool enabled)
+    {
+        _isEnabled = enabled;
+    }
 
     /** Checks whether the listener is enabled.
      *
      * @return True if the listener is enabled.
      */
-    bool isEnabled() const { return _isEnabled; }
+    bool isEnabled() const
+    {
+        return _isEnabled;
+    }
 
 protected:
 
@@ -121,45 +127,75 @@ protected:
      *           call `setEnabled(false)` instead.
      *        2) In `Node`'s onEnter and onExit, the `paused state` of the listeners which associated with that node will be automatically updated.
      */
-    void setPaused(bool paused) { _paused = paused; }
+    void setPaused(bool paused)
+    {
+        _paused = paused;
+    }
 
     /** Checks whether the listener is paused */
-    bool isPaused() const { return _paused; }
+    bool isPaused() const
+    {
+        return _paused;
+    }
 
     /** Marks the listener was registered by EventDispatcher */
-    void setRegistered(bool registered) { _isRegistered = registered; }
+    void setRegistered(bool registered)
+    {
+        _isRegistered = registered;
+    }
 
     /** Checks whether the listener was registered by EventDispatcher */
-    bool isRegistered() const { return _isRegistered; }
+    bool isRegistered() const
+    {
+        return _isRegistered;
+    }
 
     /** Gets the type of this listener
      *  @note It's different from `EventType`, e.g. TouchEvent has two kinds of event listeners - EventListenerOneByOne, EventListenerAllAtOnce
      */
-    Type getType() const { return _type; }
+    Type getType() const
+    {
+        return _type;
+    }
 
     /** Gets the listener ID of this listener
      *  When event is being dispatched, listener ID is used as key for searching listeners according to event type.
      */
-    const ListenerID& getListenerID() const { return _listenerID; }
+    const ListenerID &getListenerID() const
+    {
+        return _listenerID;
+    }
 
     /** Sets the fixed priority for this listener
      *  @note This method is only used for `fixed priority listeners`, it needs to access a non-zero value.
      *  0 is reserved for scene graph priority listeners
      */
-    void setFixedPriority(int fixedPriority) { _fixedPriority = fixedPriority; }
+    void setFixedPriority(int fixedPriority)
+    {
+        _fixedPriority = fixedPriority;
+    }
 
     /** Gets the fixed priority of this listener
      *  @return 0 if it's a scene graph priority listener, non-zero for fixed priority listener
      */
-    int getFixedPriority() const { return _fixedPriority; }
+    int getFixedPriority() const
+    {
+        return _fixedPriority;
+    }
 
     /** Sets the node associated with this listener */
-    void setAssociatedNode(Node* node) { _node = node; }
+    void setAssociatedNode(Node* node)
+    {
+        _node = node;
+    }
 
     /** Gets the node associated with this listener
      *  @return nullptr if it's a fixed priority listener, otherwise return non-nullptr
      */
-    Node* getAssociatedNode() const { return _node; }
+    Node* getAssociatedNode() const
+    {
+        return _node;
+    }
 
     ///////////////
     // Properties
@@ -170,7 +206,7 @@ protected:
     ListenerID _listenerID;                 /// Event listener ID
     bool _isRegistered;                     /// Whether the listener has been added to dispatcher.
 
-    int   _fixedPriority;   // The higher the number, the higher the priority, 0 is for scene graph base priority.
+    int _fixedPriority;   // The higher the number, the higher the priority, 0 is for scene graph base priority.
     Node* _node;            // scene graph based priority
     bool _paused;           // Whether the listener is paused
     bool _isEnabled;        // Whether the listener is enabled

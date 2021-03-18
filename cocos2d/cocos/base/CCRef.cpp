@@ -30,10 +30,10 @@ THE SOFTWARE.
 #include "base/CCScriptSupport.h"
 
 #if CC_REF_LEAK_DETECTION
-#include <algorithm>    // std::find
-#include <thread>
-#include <mutex>
-#include <vector>
+    #include <algorithm>    // std::find
+    #include <thread>
+    #include <mutex>
+    #include <vector>
 #endif
 
 NS_CC_BEGIN
@@ -46,31 +46,31 @@ static void untrackRef(Ref* ref);
 Ref::Ref()
 : _referenceCount(1) // when the Ref is created, the reference count of it is 1
 #if CC_ENABLE_SCRIPT_BINDING
-, _luaID (0)
+, _luaID(0)
 , _scriptObject(nullptr)
 , _rooted(false)
 #endif
 {
-#if CC_ENABLE_SCRIPT_BINDING
+        #if CC_ENABLE_SCRIPT_BINDING
     static unsigned int uObjectCount = 0;
     _ID = ++uObjectCount;
-#endif
-    
-#if CC_REF_LEAK_DETECTION
+        #endif
+
+        #if CC_REF_LEAK_DETECTION
     trackRef(this);
-#endif
+        #endif
 }
 
 Ref::~Ref()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+        #if CC_ENABLE_SCRIPT_BINDING
     ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
     if (pEngine != nullptr && _luaID)
     {
         // if the object is referenced by Lua engine, remove it
         pEngine->removeScriptObjectByObject(this);
     }
-#if !CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #if !CC_ENABLE_GC_FOR_NATIVE_OBJECTS
     else
     {
         if (pEngine != nullptr && pEngine->getScriptType() == kScriptTypeJavascript)
@@ -78,14 +78,13 @@ Ref::~Ref()
             pEngine->removeScriptObjectByObject(this);
         }
     }
-#endif // !CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-#endif // CC_ENABLE_SCRIPT_BINDING
+        #endif // !CC_ENABLE_GC_FOR_NATIVE_OBJECTS
+    #endif // CC_ENABLE_SCRIPT_BINDING
 
-
-#if CC_REF_LEAK_DETECTION
+    #if CC_REF_LEAK_DETECTION
     if (_referenceCount != 0)
         untrackRef(this);
-#endif
+    #endif
 }
 
 void Ref::retain()
@@ -101,7 +100,7 @@ void Ref::release()
 
     if (_referenceCount == 0)
     {
-#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+            #if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
         auto poolManager = PoolManager::getInstance();
         if (!poolManager->getCurrentPool()->isClearing() && poolManager->isObjectInPools(this))
         {
@@ -134,19 +133,19 @@ void Ref::release()
             // obj->release();   // This `release` is the pair of `retain` of previous line.
             CCASSERT(false, "The reference shouldn't be 0 because it is still in autorelease pool.");
         }
-#endif
+            #endif
 
-#if CC_ENABLE_SCRIPT_BINDING
+            #if CC_ENABLE_SCRIPT_BINDING
         ScriptEngineProtocol* pEngine = ScriptEngineManager::getInstance()->getScriptEngine();
         if (pEngine != nullptr && pEngine->getScriptType() == kScriptTypeJavascript)
         {
             pEngine->removeObjectProxy(this);
         }
-#endif // CC_ENABLE_SCRIPT_BINDING
+            #endif // CC_ENABLE_SCRIPT_BINDING
 
-#if CC_REF_LEAK_DETECTION
+            #if CC_REF_LEAK_DETECTION
         untrackRef(this);
-#endif
+            #endif
         delete this;
     }
 }
@@ -211,6 +210,5 @@ static void untrackRef(Ref* ref)
 }
 
 #endif // #if CC_REF_LEAK_DETECTION
-
 
 NS_CC_END

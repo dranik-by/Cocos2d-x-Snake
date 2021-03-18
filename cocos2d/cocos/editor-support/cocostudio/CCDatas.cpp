@@ -29,26 +29,26 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
+namespace cocostudio
+{
 
 BaseData::BaseData()
-    : x(0.0f)
-    , y(0.0f)
-    , zOrder(0)
+: x(0.0f)
+, y(0.0f)
+, zOrder(0)
 
-    , skewX(0.0f)
-    , skewY(0.0f)
-    , scaleX(1.0f)
-    , scaleY(1.0f)
+, skewX(0.0f)
+, skewY(0.0f)
+, scaleX(1.0f)
+, scaleY(1.0f)
 
-    , tweenRotate(0.0f)
+, tweenRotate(0.0f)
 
-    , isUseColorInfo(false)
-    , a(255)
-    , r(255)
-    , g(255)
-    , b(255)
+, isUseColorInfo(false)
+, a(255)
+, r(255)
+, g(255)
+, b(255)
 {
 }
 
@@ -56,7 +56,7 @@ BaseData::~BaseData()
 {
 }
 
-void BaseData::copy(const BaseData *node )
+void BaseData::copy(const BaseData* node)
 {
     x = node->x;
     y = node->y;
@@ -76,8 +76,7 @@ void BaseData::copy(const BaseData *node )
     a = node->a;
 }
 
-
-void BaseData::subtract(BaseData *from, BaseData *to, bool limit)
+void BaseData::subtract(BaseData* from, BaseData* to, bool limit)
 {
     x = to->x - from->x;
     y = to->y - from->y;
@@ -86,7 +85,7 @@ void BaseData::subtract(BaseData *from, BaseData *to, bool limit)
     skewX = to->skewX - from->skewX;
     skewY = to->skewY - from->skewY;
 
-    if(isUseColorInfo || from->isUseColorInfo || to->isUseColorInfo)
+    if (isUseColorInfo || from->isUseColorInfo || to->isUseColorInfo)
     {
         a = to->a - from->a;
         r = to->r - from->r;
@@ -101,8 +100,8 @@ void BaseData::subtract(BaseData *from, BaseData *to, bool limit)
         isUseColorInfo = false;
     }
 
-	if (limit)
-	{
+    if (limit)
+    {
         if (skewX > M_PI)
         {
             skewX -= (float)CC_DOUBLE_PI;
@@ -127,7 +126,7 @@ void BaseData::subtract(BaseData *from, BaseData *to, bool limit)
         skewX += to->tweenRotate * M_PI * 2;
         skewY -= to->tweenRotate * M_PI * 2;
     }
-	
+
 }
 
 void BaseData::setColor(const Color4B &color)
@@ -143,13 +142,13 @@ Color4B BaseData::getColor()
     return Color4B(r, g, b, a);
 }
 
-std::string DisplayData::changeDisplayToTexture(const std::string& displayName)
+std::string DisplayData::changeDisplayToTexture(const std::string &displayName)
 {
     // remove .xxx
     std::string textureName = displayName;
     size_t startPos = textureName.find_last_of('.');
 
-    if(startPos != std::string::npos)
+    if (startPos != std::string::npos)
     {
         textureName = textureName.erase(startPos);
     }
@@ -158,12 +157,12 @@ std::string DisplayData::changeDisplayToTexture(const std::string& displayName)
 }
 
 DisplayData::DisplayData()
-    : displayType(CS_DISPLAY_MAX)
-    , displayName("")
+: displayType(CS_DISPLAY_MAX)
+, displayName("")
 {
 }
 
-void DisplayData::copy(DisplayData *displayData)
+void DisplayData::copy(DisplayData* displayData)
 {
     displayName = displayData->displayName;
     displayType = displayData->displayType;
@@ -174,12 +173,11 @@ SpriteDisplayData::SpriteDisplayData()
     displayType = CS_DISPLAY_SPRITE;
 }
 
-
-void SpriteDisplayData::copy(DisplayData *displayData)
+void SpriteDisplayData::copy(DisplayData* displayData)
 {
     DisplayData::copy(displayData);
 
-    if (SpriteDisplayData *sdd = dynamic_cast<SpriteDisplayData*>(displayData))
+    if (SpriteDisplayData* sdd = dynamic_cast<SpriteDisplayData*>(displayData))
     {
         skinData = sdd->skinData;
     }
@@ -195,11 +193,9 @@ ParticleDisplayData::ParticleDisplayData()
     displayType = CS_DISPLAY_PARTICLE;
 }
 
-
-
 BoneData::BoneData()
-    : name("")
-    , parentName("")
+: name("")
+, parentName("")
 {
 }
 
@@ -212,19 +208,18 @@ bool BoneData::init()
     return true;
 }
 
-void BoneData::addDisplayData(DisplayData *displayData)
+void BoneData::addDisplayData(DisplayData* displayData)
 {
     displayDataList.pushBack(displayData);
 }
 
-DisplayData *BoneData::getDisplayData(int index)
+DisplayData* BoneData::getDisplayData(int index)
 {
     return displayDataList.at(index);
 }
 
-
 ArmatureData::ArmatureData()
-    : dataVersion(0.1f)
+: dataVersion(0.1f)
 {
 }
 
@@ -237,30 +232,30 @@ bool ArmatureData::init()
     return true;
 }
 
-void ArmatureData::addBoneData(BoneData *boneData)
+void ArmatureData::addBoneData(BoneData* boneData)
 {
     boneDataDic.insert(boneData->name, boneData);
 }
 
-BoneData *ArmatureData::getBoneData(const std::string& boneName)
+BoneData* ArmatureData::getBoneData(const std::string &boneName)
 {
     return static_cast<BoneData*>(boneDataDic.at(boneName));
 }
 
 FrameData::FrameData()
-    : frameID(0)
-    , duration(1)
-    , tweenEasing(cocos2d::tweenfunc::Linear)
-    , easingParamNumber(0)
-    , easingParams(nullptr)
-    , isTween(true)
-    , displayIndex(0)
-    , blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
+: frameID(0)
+, duration(1)
+, tweenEasing(cocos2d::tweenfunc::Linear)
+, easingParamNumber(0)
+, easingParams(nullptr)
+, isTween(true)
+, displayIndex(0)
+, blendFunc(BlendFunc::ALPHA_PREMULTIPLIED)
 
-    , strEvent("")
-    , strMovement("")
-    , strSound("")
-    , strSoundEffect("")
+, strEvent("")
+, strMovement("")
+, strSound("")
+, strSoundEffect("")
 {
 }
 
@@ -269,23 +264,23 @@ FrameData::~FrameData()
     CC_SAFE_DELETE_ARRAY(easingParams);
 }
 
-void FrameData::copy(const BaseData *baseData)
+void FrameData::copy(const BaseData* baseData)
 {
     BaseData::copy(baseData);
-    
-    if (const FrameData *frameData = dynamic_cast<const FrameData*>(baseData))
+
+    if (const FrameData* frameData = dynamic_cast<const FrameData*>(baseData))
     {
         duration = frameData->duration;
         displayIndex = frameData->displayIndex;
-        
+
         tweenEasing = frameData->tweenEasing;
         easingParamNumber = frameData->easingParamNumber;
-        
+
         CC_SAFE_DELETE_ARRAY(easingParams);
         if (easingParamNumber != 0)
         {
-            easingParams = new (std::nothrow) float[easingParamNumber];
-            for (int i = 0; i<easingParamNumber; i++)
+            easingParams = new(std::nothrow) float[easingParamNumber];
+            for (int i = 0; i < easingParamNumber; i++)
             {
                 easingParams[i] = frameData->easingParams[i];
             }
@@ -297,10 +292,10 @@ void FrameData::copy(const BaseData *baseData)
 }
 
 MovementBoneData::MovementBoneData()
-    : delay(0.0f)
-    , scale(1.0f)
-    , duration(0)
-    , name("")
+: delay(0.0f)
+, scale(1.0f)
+, duration(0)
+, name("")
 {
 }
 
@@ -313,26 +308,24 @@ bool MovementBoneData::init()
     return true;
 }
 
-void MovementBoneData::addFrameData(FrameData *frameData)
+void MovementBoneData::addFrameData(FrameData* frameData)
 {
     frameList.pushBack(frameData);
 }
 
-FrameData *MovementBoneData::getFrameData(int index)
+FrameData* MovementBoneData::getFrameData(int index)
 {
     return frameList.at(index);
 }
 
-
-
 MovementData::MovementData()
-    : name("")
-    , duration(0)
-    , scale(1.0f)
-    , durationTo(0)
-    , durationTween(0)
-    , loop(true)
-    , tweenEasing(cocos2d::tweenfunc::Linear)
+: name("")
+, duration(0)
+, scale(1.0f)
+, durationTo(0)
+, durationTween(0)
+, loop(true)
+, tweenEasing(cocos2d::tweenfunc::Linear)
 {
 }
 
@@ -340,17 +333,15 @@ MovementData::~MovementData()
 {
 }
 
-void MovementData::addMovementBoneData(MovementBoneData *movBoneData)
+void MovementData::addMovementBoneData(MovementBoneData* movBoneData)
 {
     movBoneDataDic.insert(movBoneData->name, movBoneData);
 }
 
-MovementBoneData *MovementData::getMovementBoneData(const std::string& boneName)
+MovementBoneData* MovementData::getMovementBoneData(const std::string &boneName)
 {
     return movBoneDataDic.at(boneName);
 }
-
-
 
 AnimationData::AnimationData()
 {
@@ -360,13 +351,13 @@ AnimationData::~AnimationData()
 {
 }
 
-void AnimationData::addMovement(MovementData *movData)
+void AnimationData::addMovement(MovementData* movData)
 {
     movementDataDic.insert(movData->name, movData);
     movementNames.push_back(movData->name);
 }
 
-MovementData *AnimationData::getMovement(const std::string& movementName)
+MovementData* AnimationData::getMovement(const std::string &movementName)
 {
     return movementDataDic.at(movementName);
 }
@@ -375,8 +366,6 @@ ssize_t AnimationData::getMovementCount()
 {
     return movementDataDic.size();
 }
-
-
 
 ContourData::ContourData()
 {
@@ -397,11 +386,11 @@ void ContourData::addVertex(Vec2 &vertex)
 }
 
 TextureData::TextureData()
-    : height(0.0f)
-    , width(0.0f)
-    , pivotX(0.5f)
-    , pivotY(0.5f)
-    , name("")
+: height(0.0f)
+, width(0.0f)
+, pivotX(0.5f)
+, pivotY(0.5f)
+, name("")
 {
 }
 
@@ -414,15 +403,14 @@ bool TextureData::init()
     return true;
 }
 
-void TextureData::addContourData(ContourData *contourData)
+void TextureData::addContourData(ContourData* contourData)
 {
     contourDataList.pushBack(contourData);
 }
 
-ContourData *TextureData::getContourData(int index)
+ContourData* TextureData::getContourData(int index)
 {
     return contourDataList.at(index);
 }
-
 
 }

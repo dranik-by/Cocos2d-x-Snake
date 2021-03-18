@@ -35,19 +35,19 @@ THE SOFTWARE.
 #include "base/CCDirector.h"
 
 #if ENABLE_PHYSICS_BOX2D_DETECT
-#include "Box2D/Box2D.h"
+    #include "Box2D/Box2D.h"
 #elif ENABLE_PHYSICS_CHIPMUNK_DETECT
-#include "chipmunk/chipmunk.h"
+    #include "chipmunk/chipmunk.h"
 #endif
 
 using namespace cocos2d;
 
-
-namespace cocostudio {
-
-Armature *Armature::create()
+namespace cocostudio
 {
-    Armature *armature = new (std::nothrow) Armature();
+
+Armature* Armature::create()
+{
+    Armature* armature = new(std::nothrow) Armature();
     if (armature && armature->init())
     {
         armature->autorelease();
@@ -57,10 +57,9 @@ Armature *Armature::create()
     return nullptr;
 }
 
-
-Armature *Armature::create(const std::string& name)
+Armature* Armature::create(const std::string &name)
 {
-    Armature *armature = new (std::nothrow) Armature();
+    Armature* armature = new(std::nothrow) Armature();
     if (armature && armature->init(name))
     {
         armature->autorelease();
@@ -70,9 +69,9 @@ Armature *Armature::create(const std::string& name)
     return nullptr;
 }
 
-Armature *Armature::create(const std::string& name, Bone *parentBone)
+Armature* Armature::create(const std::string &name, Bone* parentBone)
 {
-    Armature *armature = new (std::nothrow) Armature();
+    Armature* armature = new(std::nothrow) Armature();
     if (armature && armature->init(name, parentBone))
     {
         armature->autorelease();
@@ -83,14 +82,13 @@ Armature *Armature::create(const std::string& name, Bone *parentBone)
 }
 
 Armature::Armature()
-    : _armatureData(nullptr)
-    , _batchNode(nullptr)
-    , _parentBone(nullptr)
-    , _armatureTransformDirty(true)
-    , _animation(nullptr)
+: _armatureData(nullptr)
+, _batchNode(nullptr)
+, _parentBone(nullptr)
+, _armatureTransformDirty(true)
+, _animation(nullptr)
 {
 }
-
 
 Armature::~Armature()
 {
@@ -100,14 +98,12 @@ Armature::~Armature()
     CC_SAFE_DELETE(_animation);
 }
 
-
 bool Armature::init()
 {
     return init("");
 }
 
-
-bool Armature::init(const std::string& name)
+bool Armature::init(const std::string &name)
 {
     bool bRet = false;
     do
@@ -115,7 +111,7 @@ bool Armature::init(const std::string& name)
         removeAllChildren();
 
         CC_SAFE_DELETE(_animation);
-        _animation = new (std::nothrow) ArmatureAnimation();
+        _animation = new(std::nothrow) ArmatureAnimation();
         _animation->init(this);
 
         _boneDic.clear();
@@ -125,41 +121,39 @@ bool Armature::init(const std::string& name)
 
         _name = name;
 
-        ArmatureDataManager *armatureDataManager = ArmatureDataManager::getInstance();
+        ArmatureDataManager* armatureDataManager = ArmatureDataManager::getInstance();
 
-        if(!_name.empty())
+        if (!_name.empty())
         {
-            AnimationData *animationData = armatureDataManager->getAnimationData(name);
+            AnimationData* animationData = armatureDataManager->getAnimationData(name);
             CCASSERT(animationData, "AnimationData not exist! ");
 
             _animation->setAnimationData(animationData);
 
-
-            ArmatureData *armatureData = armatureDataManager->getArmatureData(name);
+            ArmatureData* armatureData = armatureDataManager->getArmatureData(name);
             CCASSERT(armatureData, "armatureData doesn't exists!");
 
             _armatureData = armatureData;
 
-            for (auto& element : armatureData->boneDataDic)
+            for (auto &element : armatureData->boneDataDic)
             {
-                Bone *bone = createBone(element.first);
+                Bone* bone = createBone(element.first);
 
                 //! init bone's  Tween to 1st movement's 1st frame
                 do
                 {
-                    MovementData *movData = animationData->getMovement(animationData->movementNames.at(0));
+                    MovementData* movData = animationData->getMovement(animationData->movementNames.at(0));
                     CC_BREAK_IF(!movData);
 
-                    MovementBoneData *movBoneData = movData->getMovementBoneData(bone->getName());
+                    MovementBoneData* movBoneData = movData->getMovementBoneData(bone->getName());
                     CC_BREAK_IF(!movBoneData || movBoneData->frameList.size() <= 0);
 
-                    FrameData *frameData = movBoneData->getFrameData(0);
+                    FrameData* frameData = movBoneData->getFrameData(0);
                     CC_BREAK_IF(!frameData);
 
                     bone->getTweenData()->copy(frameData);
                     bone->changeDisplayWithIndex(frameData->displayIndex, false);
-                }
-                while (0);
+                } while (0);
             }
 
             update(0);
@@ -171,7 +165,7 @@ bool Armature::init(const std::string& name)
             _armatureData = ArmatureData::create();
             _armatureData->name = _name;
 
-            AnimationData *animationData = AnimationData::create();
+            AnimationData* animationData = AnimationData::create();
             animationData->name = _name;
 
             armatureDataManager->addArmatureData(_name, _armatureData);
@@ -185,31 +179,29 @@ bool Armature::init(const std::string& name)
         setCascadeColorEnabled(true);
 
         bRet = true;
-    }
-    while (0);
+    } while (0);
 
     return bRet;
 }
 
-bool Armature::init(const std::string& name, Bone *parentBone)
+bool Armature::init(const std::string &name, Bone* parentBone)
 {
     _parentBone = parentBone;
     return init(name);
 }
 
-
-Bone *Armature::createBone(const std::string& boneName)
+Bone* Armature::createBone(const std::string &boneName)
 {
-    Bone *existedBone = getBone(boneName);
-    if(existedBone != nullptr)
+    Bone* existedBone = getBone(boneName);
+    if (existedBone != nullptr)
         return existedBone;
 
-    BoneData *boneData = (BoneData *)_armatureData->getBoneData(boneName);
+    BoneData* boneData = (BoneData*)_armatureData->getBoneData(boneName);
     std::string parentName = boneData->parentName;
 
-    Bone *bone = nullptr;
+    Bone* bone = nullptr;
 
-    if( !parentName.empty())
+    if (!parentName.empty())
     {
         createBone(parentName);
         bone = Bone::create(boneName);
@@ -227,15 +219,14 @@ Bone *Armature::createBone(const std::string& boneName)
     return bone;
 }
 
-
-void Armature::addBone(Bone *bone, const std::string& parentName)
+void Armature::addBone(Bone* bone, const std::string &parentName)
 {
-    CCASSERT( bone != nullptr, "Argument must be non-nil");
+    CCASSERT(bone != nullptr, "Argument must be non-nil");
     CCASSERT(_boneDic.at(bone->getName()) == nullptr, "bone already added. It can't be added again");
 
     if (!parentName.empty())
     {
-        Bone *boneParent = _boneDic.at(parentName);
+        Bone* boneParent = _boneDic.at(parentName);
         if (boneParent)
         {
             boneParent->addChildBone(bone);
@@ -256,8 +247,7 @@ void Armature::addBone(Bone *bone, const std::string& parentName)
     addChild(bone);
 }
 
-
-void Armature::removeBone(Bone *bone, bool recursion)
+void Armature::removeBone(Bone* bone, bool recursion)
 {
     CCASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
 
@@ -272,18 +262,16 @@ void Armature::removeBone(Bone *bone, bool recursion)
     removeChild(bone, true);
 }
 
-
-Bone *Armature::getBone(const std::string& name) const
+Bone* Armature::getBone(const std::string &name) const
 {
     return _boneDic.at(name);
 }
 
-
-void Armature::changeBoneParent(Bone *bone, const std::string& parentName)
+void Armature::changeBoneParent(Bone* bone, const std::string &parentName)
 {
     CCASSERT(bone != nullptr, "bone must be added to the bone dictionary!");
 
-    if(bone->getParentBone())
+    if (bone->getParentBone())
     {
         bone->getParentBone()->getChildren().eraseObject(bone);
         bone->setParentBone(nullptr);
@@ -291,7 +279,7 @@ void Armature::changeBoneParent(Bone *bone, const std::string& parentName)
 
     if (!parentName.empty())
     {
-        Bone *boneParent = _boneDic.at(parentName);
+        Bone* boneParent = _boneDic.at(parentName);
 
         if (boneParent)
         {
@@ -308,12 +296,12 @@ void Armature::changeBoneParent(Bone *bone, const std::string& parentName)
     }
 }
 
-const cocos2d::Map<std::string, Bone*>& Armature::getBoneDic() const
+const cocos2d::Map<std::string, Bone*> &Armature::getBoneDic() const
 {
     return _boneDic;
 }
 
-const Mat4& Armature::getNodeToParentTransform() const
+const Mat4 &Armature::getNodeToParentTransform() const
 {
     if (_transformDirty)
         _armatureTransformDirty = true;
@@ -333,38 +321,39 @@ void Armature::updateOffsetPoint()
     }
 }
 
-void Armature::setAnchorPoint(const Vec2& point)
+void Armature::setAnchorPoint(const Vec2 &point)
 {
-    if( ! point.equals(_anchorPoint))
+    if (!point.equals(_anchorPoint))
     {
         _anchorPoint = point;
-        _anchorPointInPoints.set(_contentSize.width * _anchorPoint.x - _offsetPoint.x, _contentSize.height * _anchorPoint.y - _offsetPoint.y);
+        _anchorPointInPoints.set(_contentSize.width * _anchorPoint.x - _offsetPoint.x,
+                                 _contentSize.height * _anchorPoint.y - _offsetPoint.y);
         _realAnchorPointInPoints.set(_contentSize.width * _anchorPoint.x, _contentSize.height * _anchorPoint.y);
         _transformDirty = _inverseDirty = true;
     }
 }
 
-const Vec2& Armature::getAnchorPointInPoints() const
+const Vec2 &Armature::getAnchorPointInPoints() const
 {
     return _realAnchorPointInPoints;
 }
 
-const Vec2& Armature::getOffsetPoints() const
+const Vec2 &Armature::getOffsetPoints() const
 {
     return _offsetPoint;
 }
 
-void Armature::setAnimation(ArmatureAnimation *animation)
+void Armature::setAnimation(ArmatureAnimation* animation)
 {
     _animation = animation;
 }
 
-ArmatureAnimation *Armature::getAnimation() const 
+ArmatureAnimation* Armature::getAnimation() const
 {
     return _animation;
 }
 
-bool Armature::getArmatureTransformDirty() const 
+bool Armature::getArmatureTransformDirty() const
 {
     return _armatureTransformDirty;
 }
@@ -373,108 +362,107 @@ void Armature::update(float dt)
 {
     _animation->update(dt);
 
-    for(const auto &bone : _topBoneList) {
+    for (const auto &bone : _topBoneList)
+    {
         bone->update(dt);
     }
 
     _armatureTransformDirty = false;
 }
 
-void Armature::draw(cocos2d::Renderer *renderer, const Mat4 &transform, uint32_t flags)
+void Armature::draw(cocos2d::Renderer* renderer, const Mat4 &transform, uint32_t flags)
 {
     if (_parentBone == nullptr && _batchNode == nullptr)
     {
-//        CC_NODE_DRAW_SETUP();
+        //        CC_NODE_DRAW_SETUP();
     }
 
-
-    for (auto& object : _children)
+    for (auto &object : _children)
     {
-        if (Bone *bone = dynamic_cast<Bone *>(object))
+        if (Bone* bone = dynamic_cast<Bone*>(object))
         {
-            Node *node = bone->getDisplayRenderNode();
+            Node* node = bone->getDisplayRenderNode();
 
             if (nullptr == node)
                 continue;
 
             switch (bone->getDisplayRenderNodeType())
             {
-            case CS_DISPLAY_SPRITE:
-            {
-                Skin *skin = static_cast<Skin *>(node);
-                skin->updateTransform();
-                
-                BlendFunc func = bone->getBlendFunc();
-                
-                if (func.src != BlendFunc::ALPHA_PREMULTIPLIED.src || func.dst != BlendFunc::ALPHA_PREMULTIPLIED.dst)
+                case CS_DISPLAY_SPRITE:
                 {
-                    skin->setBlendFunc(bone->getBlendFunc());
-                }
-                else
-                {
-                    if (_blendFunc == BlendFunc::ALPHA_PREMULTIPLIED && !skin->getTexture()->hasPremultipliedAlpha())
+                    Skin* skin = static_cast<Skin*>(node);
+                    skin->updateTransform();
+
+                    BlendFunc func = bone->getBlendFunc();
+
+                    if (func.src != BlendFunc::ALPHA_PREMULTIPLIED.src || func.dst != BlendFunc::ALPHA_PREMULTIPLIED.dst)
                     {
-                        skin->setBlendFunc(_blendFunc.ALPHA_NON_PREMULTIPLIED);
+                        skin->setBlendFunc(bone->getBlendFunc());
                     }
                     else
                     {
-                        skin->setBlendFunc(_blendFunc);
+                        if (_blendFunc == BlendFunc::ALPHA_PREMULTIPLIED && !skin->getTexture()->hasPremultipliedAlpha())
+                        {
+                            skin->setBlendFunc(_blendFunc.ALPHA_NON_PREMULTIPLIED);
+                        }
+                        else
+                        {
+                            skin->setBlendFunc(_blendFunc);
+                        }
                     }
+                    skin->draw(renderer, transform, flags);
                 }
-                skin->draw(renderer, transform, flags);
-            }
-            break;
-            case CS_DISPLAY_ARMATURE:
-            {
-                node->draw(renderer, transform, flags);
-            }
-            break;
-            default:
-            {
-                node->visit(renderer, transform, flags);
-//                CC_NODE_DRAW_SETUP();
-            }
-            break;
+                    break;
+                case CS_DISPLAY_ARMATURE:
+                {
+                    node->draw(renderer, transform, flags);
+                }
+                    break;
+                default:
+                {
+                    node->visit(renderer, transform, flags);
+                    //                CC_NODE_DRAW_SETUP();
+                }
+                    break;
             }
         }
-        else if(Node *node = dynamic_cast<Node *>(object))
+        else if (Node* node = dynamic_cast<Node*>(object))
         {
             node->visit(renderer, transform, flags);
-//            CC_NODE_DRAW_SETUP();
+            //            CC_NODE_DRAW_SETUP();
         }
     }
 }
 
 void Armature::onEnter()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnEnter))
             return;
     }
-#endif
-    
+    #endif
+
     Node::onEnter();
     scheduleUpdate();
 }
 
 void Armature::onExit()
 {
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
     if (_scriptType == kScriptTypeJavascript)
     {
         if (ScriptEngineManager::sendNodeEventToJSExtended(this, kNodeOnExit))
             return;
     }
-#endif
-    
+    #endif
+
     Node::onExit();
     unscheduleUpdate();
 }
 
-
-void Armature::visit(cocos2d::Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags)
+void Armature::visit(cocos2d::Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags)
 {
     // quick return if not visible. children won't be drawn.
     if (!_visible)
@@ -493,15 +481,14 @@ void Armature::visit(cocos2d::Renderer *renderer, const Mat4 &parentTransform, u
         CCASSERT(nullptr != director, "Director is null when setting matrix stack");
         director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
         director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _modelViewTransform);
-        
-        
+
         sortAllChildren();
         draw(renderer, _modelViewTransform, flags);
-        
+
         // FIX ME: Why need to set _orderOfArrival to 0??
         // Please refer to https://github.com/cocos2d/cocos2d-x/pull/6920
         // setOrderOfArrival(0);
-        
+
         director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     }
 }
@@ -514,15 +501,15 @@ Rect Armature::getBoundingBox() const
 
     Rect boundingBox = Rect(0, 0, 0, 0);
 
-    for (const auto& object : _children)
+    for (const auto &object : _children)
     {
-        if (Bone *bone = dynamic_cast<Bone *>(object))
+        if (Bone* bone = dynamic_cast<Bone*>(object))
         {
             Rect r = bone->getDisplayManager()->getBoundingBox();
-            if (r.equals(Rect::ZERO)) 
+            if (r.equals(Rect::ZERO))
                 continue;
 
-            if(first)
+            if (first)
             {
                 minx = r.getMinX();
                 miny = r.getMinY();
@@ -547,15 +534,15 @@ Rect Armature::getBoundingBox() const
     return RectApplyTransform(boundingBox, getNodeToParentTransform());
 }
 
-Bone *Armature::getBoneAtPoint(float x, float y) const 
+Bone* Armature::getBoneAtPoint(float x, float y) const
 {
     long length = _children.size();
-    Bone *bs;
+    Bone* bs;
 
-    for(long i = length - 1; i >= 0; i--)
+    for (long i = length - 1; i >= 0; i--)
     {
         bs = static_cast<Bone*>( _children.at(i) );
-        if(bs->getDisplayManager()->containPoint(x, y))
+        if (bs->getDisplayManager()->containPoint(x, y))
         {
             return bs;
         }
@@ -563,18 +550,17 @@ Bone *Armature::getBoneAtPoint(float x, float y) const
     return nullptr;
 }
 
-
-void Armature::setParentBone(Bone *parentBone)
+void Armature::setParentBone(Bone* parentBone)
 {
     _parentBone = parentBone;
 
-    for (auto& element : _boneDic)
+    for (auto &element : _boneDic)
     {
         element.second->setArmature(this);
     }
 }
 
-Bone *Armature::getParentBone() const
+Bone* Armature::getParentBone() const
 {
     return _parentBone;
 }
@@ -592,45 +578,45 @@ void Armature::setColliderFilter(ColliderFilter *filter)
 
 void Armature::drawContour()
 {
-    for(auto& element : _boneDic)
+    for (auto &element : _boneDic)
     {
-        Bone *bone = element.second;
-        ColliderDetector *detector = bone->getColliderDetector();
+        Bone* bone = element.second;
+        ColliderDetector* detector = bone->getColliderDetector();
 
         if (!detector)
             continue;
 
-        const cocos2d::Vector<ColliderBody*>& bodyList = detector->getColliderBodyList();
+        const cocos2d::Vector<ColliderBody*> &bodyList = detector->getColliderBodyList();
 
-        for (auto& object : bodyList)
+        for (auto &object : bodyList)
         {
-            ColliderBody *body = static_cast<ColliderBody*>(object);
+            ColliderBody* body = static_cast<ColliderBody*>(object);
             const std::vector<Vec2> &vertexList = body->getCalculatedVertexList();
 
             unsigned long length = vertexList.size();
-            Vec2 *points = new (std::nothrow) Vec2[length];
-            for (unsigned long i = 0; i<length; i++)
+            Vec2* points = new(std::nothrow) Vec2[length];
+            for (unsigned long i = 0; i < length; i++)
             {
                 Vec2 p = vertexList.at(i);
                 points[i].x = p.x;
                 points[i].y = p.y;
             }
-            
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#elif _MSC_VER >= 1400 //vs 2005 or higher
-#pragma warning (push)
-#pragma warning (disable: 4996)
-#endif
+
+            #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+                #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+            #elif _MSC_VER >= 1400 //vs 2005 or higher
+                #pragma warning (push)
+                #pragma warning (disable: 4996)
+            #endif
             cocos2d::log("TODO in %s %s %d", __FILE__, __FUNCTION__, __LINE__);
 
-#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
-#pragma GCC diagnostic warning "-Wdeprecated-declarations"
-#elif _MSC_VER >= 1400 //vs 2005 or higher
-#pragma warning (pop)
-#endif
-            
-            delete []points;
+            #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+                #pragma GCC diagnostic warning "-Wdeprecated-declarations"
+            #elif _MSC_VER >= 1400 //vs 2005 or higher
+                #pragma warning (pop)
+            #endif
+
+            delete[]points;
         }
     }
 }
@@ -729,6 +715,5 @@ cpShape *Armature::getShapeList()
     }
 }
 #endif
-
 
 }

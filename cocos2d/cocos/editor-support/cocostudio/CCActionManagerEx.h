@@ -30,12 +30,13 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/DictionaryHelper.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 class CocoLoader;
 struct stExpCocoNode;
 
-class CC_STUDIO_DLL ActionManagerEx:public cocos2d::Ref
+class CC_STUDIO_DLL ActionManagerEx : public cocos2d::Ref
 {
 public:
 
@@ -75,7 +76,7 @@ public:
     *
     * @return  ActionObject which named as the param name
     */
-    ActionObject* getActionByName(const char* jsonName,const char* actionName);
+    ActionObject* getActionByName(const char* jsonName, const char* actionName);
 
     /**
     * Play an Action with a name.
@@ -86,7 +87,7 @@ public:
     *
     * @return  ActionObject which named as the param name
     */
-    ActionObject* playActionByName(const char* jsonName,const char* actionName);
+    ActionObject* playActionByName(const char* jsonName, const char* actionName);
 
     /**
     * Play an Action with a name.
@@ -97,7 +98,7 @@ public:
     *
     * @param func ui action call back
     */
-    ActionObject* playActionByName(const char* jsonName,const char* actionName, cocos2d::CallFunc* func);
+    ActionObject* playActionByName(const char* jsonName, const char* actionName, cocos2d::CallFunc* func);
 
     /**
     * Stop an Action with a name.
@@ -108,11 +109,11 @@ public:
     *
     * @return  ActionObject which named as the param name
     */
-    ActionObject* stopActionByName(const char* jsonName,const char* actionName);
+    ActionObject* stopActionByName(const char* jsonName, const char* actionName);
 
     /*init properties with json dictionary*/
-    void initWithDictionary(const char* jsonName,const rapidjson::Value &dic, Ref* root, int version = 1600);
-    void initWithBinary(const char* file, Ref* root,  CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode);
+    void initWithDictionary(const char* jsonName, const rapidjson::Value &dic, Ref* root, int version = 1600);
+    void initWithBinary(const char* file, Ref* root, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
 
     /**
     * Release all actions.

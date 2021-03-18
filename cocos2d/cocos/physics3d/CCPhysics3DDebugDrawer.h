@@ -36,8 +36,9 @@
 
 #if CC_USE_3D_PHYSICS
 
-#if (CC_ENABLE_BULLET_INTEGRATION)
-#include "bullet/LinearMath/btIDebugDraw.h"
+    #if (CC_ENABLE_BULLET_INTEGRATION)
+
+        #include "bullet/LinearMath/btIDebugDraw.h"
 
 NS_CC_BEGIN
 
@@ -56,15 +57,16 @@ public:
     Physics3DDebugDrawer();
     virtual ~Physics3DDebugDrawer();
 
-    void draw(cocos2d::Renderer *renderer);
+    void draw(cocos2d::Renderer* renderer);
 
     // override function
-    virtual void	drawLine(const btVector3& from,const btVector3& to,const btVector3& color) override;
-    virtual void	drawContactPoint(const btVector3& PointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color) override;
-    virtual void	reportErrorWarning(const char* warningString) override;
-    virtual void	draw3dText(const btVector3& location,const char* textString) override;
-    virtual void	setDebugMode(int debugMode) override;
-    virtual int		getDebugMode() const override;
+    virtual void drawLine(const btVector3 &from, const btVector3 &to, const btVector3 &color) override;
+    virtual void drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance,
+                                  int lifeTime, const btVector3 &color) override;
+    virtual void reportErrorWarning(const char* warningString) override;
+    virtual void draw3dText(const btVector3 &location, const char* textString) override;
+    virtual void setDebugMode(int debugMode) override;
+    virtual int getDebugMode() const override;
 
     void clear();
 
@@ -82,18 +84,18 @@ protected:
         cocos2d::Vec4 color;
     };
 
-    std::vector<V3F_V4F>                _buffer;
-    cocos2d::backend::UniformLocation   _locMVP;
+    std::vector<V3F_V4F> _buffer;
+    cocos2d::backend::UniformLocation _locMVP;
 
-    cocos2d::BlendFunc                  _blendFunc      = BlendFunc::DISABLE;
-    cocos2d::CustomCommand              _customCommand;
-    cocos2d::backend::ProgramState *    _programState   = nullptr;
+    cocos2d::BlendFunc _blendFunc = BlendFunc::DISABLE;
+    cocos2d::CustomCommand _customCommand;
+    cocos2d::backend::ProgramState* _programState = nullptr;
 
-    bool                                _dirty          = true;
-    int                                 _debugMode      = DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits;
+    bool _dirty = true;
+    int _debugMode = DBG_DrawWireframe | DBG_DrawConstraints | DBG_DrawConstraintLimits;
 
 private:
-    bool                                _oldDepthTestEnabled    = false;
+    bool _oldDepthTestEnabled = false;
 };
 
 // end of 3d group
@@ -101,7 +103,7 @@ private:
 
 NS_CC_END
 
-#endif // CC_ENABLE_BULLET_INTEGRATION
+    #endif // CC_ENABLE_BULLET_INTEGRATION
 
 #endif // CC_USE_3D_PHYSICS
 

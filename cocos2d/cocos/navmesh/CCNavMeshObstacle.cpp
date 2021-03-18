@@ -24,18 +24,19 @@
  ****************************************************************************/
 
 #include "navmesh/CCNavMeshObstacle.h"
+
 #if CC_USE_NAVMESH
 
-#include "navmesh/CCNavMesh.h"
-#include "2d/CCNode.h"
-#include "2d/CCScene.h"
-#include "recast/DetourTileCache/DetourTileCache.h"
+    #include "navmesh/CCNavMesh.h"
+    #include "2d/CCNode.h"
+    #include "2d/CCScene.h"
+    #include "recast/DetourTileCache/DetourTileCache.h"
 
 NS_CC_BEGIN
 
 NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
 {
-    auto ref = new (std::nothrow) NavMeshObstacle();
+    auto ref = new(std::nothrow) NavMeshObstacle();
     if (ref && ref->initWith(radius, height))
     {
         ref->autorelease();
@@ -45,7 +46,7 @@ NavMeshObstacle* NavMeshObstacle::create(float radius, float height)
     return nullptr;
 }
 
-const std::string& NavMeshObstacle::getNavMeshObstacleComponentName()
+const std::string &NavMeshObstacle::getNavMeshObstacleComponentName()
 {
     static std::string comName = "___NavMeshObstacleComponent___";
     return comName;
@@ -81,7 +82,7 @@ void cocos2d::NavMeshObstacle::removeFrom(dtTileCache* /*tileCache*/)
     _obstacleID = -1;
 }
 
-void cocos2d::NavMeshObstacle::addTo(dtTileCache *tileCache)
+void cocos2d::NavMeshObstacle::addTo(dtTileCache* tileCache)
 {
     _tileCache = tileCache;
     Mat4 mat = _owner->getNodeToWorldTransform();
@@ -90,20 +91,24 @@ void cocos2d::NavMeshObstacle::addTo(dtTileCache *tileCache)
 
 void cocos2d::NavMeshObstacle::onExit()
 {
-    if (_obstacleID == -1) return;
+    if (_obstacleID == -1)
+        return;
     Component::onExit();
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->removeNavMeshObstacle(this);
     }
 }
 
 void cocos2d::NavMeshObstacle::onEnter()
 {
-    if (_obstacleID != -1) return;
+    if (_obstacleID != -1)
+        return;
     Component::onEnter();
     auto scene = _owner->getScene();
-    if (scene && scene->getNavMesh()){
+    if (scene && scene->getNavMesh())
+    {
         scene->getNavMesh()->addNavMeshObstacle(this);
     }
 }
@@ -122,9 +127,11 @@ void cocos2d::NavMeshObstacle::preUpdate(float /*delta*/)
 
 void NavMeshObstacle::syncToNode()
 {
-    if (_tileCache){
+    if (_tileCache)
+    {
         auto obstacle = _tileCache->getObstacleByRef(_obstacleID);
-        if (obstacle){
+        if (obstacle)
+        {
             Vec3 localPos = Vec3(obstacle->pos[0], obstacle->pos[1], obstacle->pos[2]);
             if (_owner->getParent())
                 _owner->getParent()->getWorldToNodeTransform().transformPoint(localPos, &localPos);
@@ -147,13 +154,14 @@ void cocos2d::NavMeshObstacle::setHeight(float height)
 
 void NavMeshObstacle::syncToObstacle()
 {
-    if (_tileCache){
+    if (_tileCache)
+    {
         auto obstacle = _tileCache->getObstacleByRef(_obstacleID);
-        if (obstacle){
+        if (obstacle)
+        {
             Mat4 mat = _owner->getNodeToWorldTransform();
-            if ((mat.m[12] != obstacle->pos[0] && mat.m[13] != obstacle->pos[1] && mat.m[14] != obstacle->pos[2])
-                || obstacle->radius != _radius
-                || obstacle->height != _height){
+            if ((mat.m[12] != obstacle->pos[0] && mat.m[13] != obstacle->pos[1] && mat.m[14] != obstacle->pos[2]) || obstacle->radius != _radius || obstacle->height != _height)
+            {
                 _tileCache->removeObstacle(_obstacleID);
                 _tileCache->addObstacle(&mat.m[12], _radius, _height, &_obstacleID);
             }

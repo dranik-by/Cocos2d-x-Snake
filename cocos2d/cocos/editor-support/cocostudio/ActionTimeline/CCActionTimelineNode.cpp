@@ -32,7 +32,7 @@ NS_TIMELINE_BEGIN
 
 ActionTimelineNode* ActionTimelineNode::create(Node* root, ActionTimeline* action)
 {
-    ActionTimelineNode* object = new (std::nothrow) ActionTimelineNode();
+    ActionTimelineNode* object = new(std::nothrow) ActionTimelineNode();
     if (object && object->init(root, action))
     {
         object->autorelease();
@@ -61,13 +61,13 @@ bool ActionTimelineNode::init(Node* root, ActionTimeline* action)
 {
     _root = root;
     _action = action;
-    
-    if(_root)
+
+    if (_root)
     {
         _root->removeFromParent();
         addChild(_root);
     }
-    
+
     return true;
 }
 
@@ -75,6 +75,7 @@ void ActionTimelineNode::setRoot(cocos2d::Node* root)
 {
     _root = root;
 }
+
 cocos2d::Node* ActionTimelineNode::getRoot()
 {
     return _root;
@@ -84,6 +85,7 @@ void ActionTimelineNode::setActionTimeline(ActionTimeline* action)
 {
     _action = action;
 }
+
 ActionTimeline* ActionTimelineNode::getActionTimeline()
 {
     return _action;

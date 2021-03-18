@@ -18,23 +18,23 @@
 
 #include "audio/android/cutils/log.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 /* Behavior of is_same<>::value is true if the types are identical,
  * false otherwise. Identical to the STL std::is_same.
  */
-template<typename T, typename U>
+template <typename T, typename U>
 struct is_same
 {
     static const bool value = false;
 };
 
-template<typename T>
+template <typename T>
 struct is_same<T, T>  // partial specialization
 {
     static const bool value = true;
 };
-
 
 /* MixMul is a multiplication operator to scale an audio input signal
  * by a volume gain, with the formula:
@@ -61,76 +61,90 @@ template <typename TO, typename TI, typename TV>
 TO MixMul(TI value, TV volume);
 
 template <>
-inline int32_t MixMul<int32_t, int16_t, int16_t>(int16_t value, int16_t volume) {
+inline int32_t MixMul<int32_t, int16_t, int16_t>(int16_t value, int16_t volume)
+{
     return value * volume;
 }
 
 template <>
-inline int32_t MixMul<int32_t, int32_t, int16_t>(int32_t value, int16_t volume) {
+inline int32_t MixMul<int32_t, int32_t, int16_t>(int32_t value, int16_t volume)
+{
     return (value >> 12) * volume;
 }
 
 template <>
-inline int32_t MixMul<int32_t, int16_t, int32_t>(int16_t value, int32_t volume) {
+inline int32_t MixMul<int32_t, int16_t, int32_t>(int16_t value, int32_t volume)
+{
     return value * (volume >> 16);
 }
 
 template <>
-inline int32_t MixMul<int32_t, int32_t, int32_t>(int32_t value, int32_t volume) {
+inline int32_t MixMul<int32_t, int32_t, int32_t>(int32_t value, int32_t volume)
+{
     return (value >> 12) * (volume >> 16);
 }
 
 template <>
-inline float MixMul<float, float, int16_t>(float value, int16_t volume) {
+inline float MixMul<float, float, int16_t>(float value, int16_t volume)
+{
     static const float norm = 1. / (1 << 12);
     return value * volume * norm;
 }
 
 template <>
-inline float MixMul<float, float, int32_t>(float value, int32_t volume) {
+inline float MixMul<float, float, int32_t>(float value, int32_t volume)
+{
     static const float norm = 1. / (1 << 28);
     return value * volume * norm;
 }
 
 template <>
-inline int16_t MixMul<int16_t, float, int16_t>(float value, int16_t volume) {
+inline int16_t MixMul<int16_t, float, int16_t>(float value, int16_t volume)
+{
     return clamp16_from_float(MixMul<float, float, int16_t>(value, volume));
 }
 
 template <>
-inline int16_t MixMul<int16_t, float, int32_t>(float value, int32_t volume) {
+inline int16_t MixMul<int16_t, float, int32_t>(float value, int32_t volume)
+{
     return clamp16_from_float(MixMul<float, float, int32_t>(value, volume));
 }
 
 template <>
-inline float MixMul<float, int16_t, int16_t>(int16_t value, int16_t volume) {
+inline float MixMul<float, int16_t, int16_t>(int16_t value, int16_t volume)
+{
     static const float norm = 1. / (1 << (15 + 12));
     return static_cast<float>(value) * static_cast<float>(volume) * norm;
 }
 
 template <>
-inline float MixMul<float, int16_t, int32_t>(int16_t value, int32_t volume) {
+inline float MixMul<float, int16_t, int32_t>(int16_t value, int32_t volume)
+{
     static const float norm = 1. / (1ULL << (15 + 28));
     return static_cast<float>(value) * static_cast<float>(volume) * norm;
 }
 
 template <>
-inline int16_t MixMul<int16_t, int16_t, int16_t>(int16_t value, int16_t volume) {
+inline int16_t MixMul<int16_t, int16_t, int16_t>(int16_t value, int16_t volume)
+{
     return clamp16(MixMul<int32_t, int16_t, int16_t>(value, volume) >> 12);
 }
 
 template <>
-inline int16_t MixMul<int16_t, int32_t, int16_t>(int32_t value, int16_t volume) {
+inline int16_t MixMul<int16_t, int32_t, int16_t>(int32_t value, int16_t volume)
+{
     return clamp16(MixMul<int32_t, int32_t, int16_t>(value, volume) >> 12);
 }
 
 template <>
-inline int16_t MixMul<int16_t, int16_t, int32_t>(int16_t value, int32_t volume) {
+inline int16_t MixMul<int16_t, int16_t, int32_t>(int16_t value, int32_t volume)
+{
     return clamp16(MixMul<int32_t, int16_t, int32_t>(value, volume) >> 12);
 }
 
 template <>
-inline int16_t MixMul<int16_t, int32_t, int32_t>(int32_t value, int32_t volume) {
+inline int16_t MixMul<int16_t, int32_t, int32_t>(int32_t value, int32_t volume)
+{
     return clamp16(MixMul<int32_t, int32_t, int32_t>(value, volume) >> 12);
 }
 
@@ -139,37 +153,43 @@ inline int16_t MixMul<int16_t, int32_t, int32_t>(int32_t value, int32_t volume) 
  * an optimizing compiler.
  */
 template <>
-inline float MixMul<float, float, float>(float value, float volume) {
+inline float MixMul<float, float, float>(float value, float volume)
+{
     return value * volume;
 }
 
 template <>
-inline float MixMul<float, int16_t, float>(int16_t value, float volume) {
+inline float MixMul<float, int16_t, float>(int16_t value, float volume)
+{
     static const float float_from_q_15 = 1. / (1 << 15);
     return value * volume * float_from_q_15;
 }
 
 template <>
-inline int32_t MixMul<int32_t, int32_t, float>(int32_t value, float volume) {
+inline int32_t MixMul<int32_t, int32_t, float>(int32_t value, float volume)
+{
     LOG_ALWAYS_FATAL("MixMul<int32_t, int32_t, float> Runtime Should not be here");
     return value * volume;
 }
 
 template <>
-inline int32_t MixMul<int32_t, int16_t, float>(int16_t value, float volume) {
+inline int32_t MixMul<int32_t, int16_t, float>(int16_t value, float volume)
+{
     LOG_ALWAYS_FATAL("MixMul<int32_t, int16_t, float> Runtime Should not be here");
     static const float u4_12_from_float = (1 << 12);
     return value * volume * u4_12_from_float;
 }
 
 template <>
-inline int16_t MixMul<int16_t, int16_t, float>(int16_t value, float volume) {
+inline int16_t MixMul<int16_t, int16_t, float>(int16_t value, float volume)
+{
     LOG_ALWAYS_FATAL("MixMul<int16_t, int16_t, float> Runtime Should not be here");
     return clamp16_from_float(MixMul<float, int16_t, float>(value, volume));
 }
 
 template <>
-inline int16_t MixMul<int16_t, float, float>(float value, float volume) {
+inline int16_t MixMul<int16_t, float, float>(float value, float volume)
+{
     return clamp16_from_float(value * volume);
 }
 
@@ -179,33 +199,38 @@ inline int16_t MixMul<int16_t, float, float>(float value, float volume) {
  */
 
 template <typename TO, typename TI>
-inline void MixAccum(TO *auxaccum, TI value) {
-    if (!is_same<TO, TI>::value) {
-        LOG_ALWAYS_FATAL("MixAccum type not properly specialized: %zu %zu\n",
-                sizeof(TO), sizeof(TI));
+inline void MixAccum(TO* auxaccum, TI value)
+{
+    if (!is_same<TO, TI>::value)
+    {
+        LOG_ALWAYS_FATAL("MixAccum type not properly specialized: %zu %zu\n", sizeof(TO), sizeof(TI));
     }
     *auxaccum += value;
 }
 
-template<>
-inline void MixAccum<float, int16_t>(float *auxaccum, int16_t value) {
+template <>
+inline void MixAccum<float, int16_t>(float* auxaccum, int16_t value)
+{
     static const float norm = 1. / (1 << 15);
     *auxaccum += norm * value;
 }
 
-template<>
-inline void MixAccum<float, int32_t>(float *auxaccum, int32_t value) {
+template <>
+inline void MixAccum<float, int32_t>(float* auxaccum, int32_t value)
+{
     static const float norm = 1. / (1 << 27);
     *auxaccum += norm * value;
 }
 
-template<>
-inline void MixAccum<int32_t, int16_t>(int32_t *auxaccum, int16_t value) {
+template <>
+inline void MixAccum<int32_t, int16_t>(int32_t* auxaccum, int16_t value)
+{
     *auxaccum += value << 12;
 }
 
-template<>
-inline void MixAccum<int32_t, float>(int32_t *auxaccum, float value) {
+template <>
+inline void MixAccum<int32_t, float>(int32_t* auxaccum, float value)
+{
     *auxaccum += clampq4_27_from_float(value);
 }
 
@@ -214,7 +239,8 @@ inline void MixAccum<int32_t, float>(int32_t *auxaccum, float value) {
  */
 
 template <typename TO, typename TI, typename TV, typename TA>
-inline TO MixMulAux(TI value, TV volume, TA *auxaccum) {
+inline TO MixMulAux(TI value, TV volume, TA* auxaccum)
+{
     MixAccum<TA, TI>(auxaccum, value);
     return MixMul<TO, TI, TV>(value, volume);
 }
@@ -223,7 +249,8 @@ inline TO MixMulAux(TI value, TV volume, TA *auxaccum) {
  * are mixed with volume gain into the output frame.
  * See the volumeRampMulti functions below for more details.
  */
-enum {
+enum
+{
     MIXTYPE_MULTI,
     MIXTYPE_MONOEXPAND,
     MIXTYPE_MULTI_SAVEONLY,
@@ -271,176 +298,207 @@ enum {
  *
  */
 
-template <int MIXTYPE, int NCHAN,
-        typename TO, typename TI, typename TV, typename TA, typename TAV>
-inline void volumeRampMulti(TO* out, size_t frameCount,
-        const TI* in, TA* aux, TV *vol, const TV *volinc, TAV *vola, TAV volainc)
+template <int MIXTYPE, int NCHAN, typename TO, typename TI, typename TV, typename TA, typename TAV>
+inline void volumeRampMulti(TO* out, size_t frameCount, const TI* in, TA* aux, TV* vol, const TV* volinc, TAV* vola,
+                            TAV volainc)
 {
-#ifdef ALOGVV
+    #ifdef ALOGVV
     ALOGVV("volumeRampMulti, MIXTYPE:%d\n", MIXTYPE);
-#endif
-    if (aux != NULL) {
-        do {
+    #endif
+    if (aux != NULL)
+    {
+        do
+        {
             TA auxaccum = 0;
-            switch (MIXTYPE) {
-            case MIXTYPE_MULTI:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
-                    vol[i] += volinc[i];
-                }
-                break;
-            case MIXTYPE_MONOEXPAND:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in, vol[i], &auxaccum);
-                    vol[i] += volinc[i];
-                }
-                in++;
-                break;
-            case MIXTYPE_MULTI_SAVEONLY:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
-                    vol[i] += volinc[i];
-                }
-                break;
-            case MIXTYPE_MULTI_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
-                }
-                vol[0] += volinc[0];
-                break;
-            case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
-                }
-                vol[0] += volinc[0];
-                break;
-            default:
-                LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
-                break;
+            switch (MIXTYPE)
+            {
+                case MIXTYPE_MULTI:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
+                        vol[i] += volinc[i];
+                    }
+                    break;
+                case MIXTYPE_MONOEXPAND:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in, vol[i], &auxaccum);
+                        vol[i] += volinc[i];
+                    }
+                    in++;
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
+                        vol[i] += volinc[i];
+                    }
+                    break;
+                case MIXTYPE_MULTI_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
+                    }
+                    vol[0] += volinc[0];
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
+                    }
+                    vol[0] += volinc[0];
+                    break;
+                default:
+                    LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
+                    break;
             }
             auxaccum /= NCHAN;
             *aux++ += MixMul<TA, TA, TAV>(auxaccum, *vola);
             vola[0] += volainc;
         } while (--frameCount);
-    } else {
-        do {
-            switch (MIXTYPE) {
-            case MIXTYPE_MULTI:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in++, vol[i]);
-                    vol[i] += volinc[i];
-                }
-                break;
-            case MIXTYPE_MONOEXPAND:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in, vol[i]);
-                    vol[i] += volinc[i];
-                }
-                in++;
-                break;
-            case MIXTYPE_MULTI_SAVEONLY:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMul<TO, TI, TV>(*in++, vol[i]);
-                    vol[i] += volinc[i];
-                }
-                break;
-            case MIXTYPE_MULTI_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in++, vol[0]);
-                }
-                vol[0] += volinc[0];
-                break;
-            case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMul<TO, TI, TV>(*in++, vol[0]);
-                }
-                vol[0] += volinc[0];
-                break;
-            default:
-                LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
-                break;
+    }
+    else
+    {
+        do
+        {
+            switch (MIXTYPE)
+            {
+                case MIXTYPE_MULTI:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in++, vol[i]);
+                        vol[i] += volinc[i];
+                    }
+                    break;
+                case MIXTYPE_MONOEXPAND:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in, vol[i]);
+                        vol[i] += volinc[i];
+                    }
+                    in++;
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMul<TO, TI, TV>(*in++, vol[i]);
+                        vol[i] += volinc[i];
+                    }
+                    break;
+                case MIXTYPE_MULTI_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in++, vol[0]);
+                    }
+                    vol[0] += volinc[0];
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMul<TO, TI, TV>(*in++, vol[0]);
+                    }
+                    vol[0] += volinc[0];
+                    break;
+                default:
+                    LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
+                    break;
             }
         } while (--frameCount);
     }
 }
 
-template <int MIXTYPE, int NCHAN,
-        typename TO, typename TI, typename TV, typename TA, typename TAV>
-inline void volumeMulti(TO* out, size_t frameCount,
-        const TI* in, TA* aux, const TV *vol, TAV vola)
+template <int MIXTYPE, int NCHAN, typename TO, typename TI, typename TV, typename TA, typename TAV>
+inline void volumeMulti(TO* out, size_t frameCount, const TI* in, TA* aux, const TV* vol, TAV vola)
 {
-#ifdef ALOGVV
+    #ifdef ALOGVV
     ALOGVV("volumeMulti MIXTYPE:%d\n", MIXTYPE);
-#endif
-    if (aux != NULL) {
-        do {
+    #endif
+    if (aux != NULL)
+    {
+        do
+        {
             TA auxaccum = 0;
-            switch (MIXTYPE) {
-            case MIXTYPE_MULTI:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
-                }
-                break;
-            case MIXTYPE_MONOEXPAND:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in, vol[i], &auxaccum);
-                }
-                in++;
-                break;
-            case MIXTYPE_MULTI_SAVEONLY:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
-                }
-                break;
-            case MIXTYPE_MULTI_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
-                }
-                break;
-            case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
-                }
-                break;
-            default:
-                LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
-                break;
+            switch (MIXTYPE)
+            {
+                case MIXTYPE_MULTI:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
+                    }
+                    break;
+                case MIXTYPE_MONOEXPAND:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in, vol[i], &auxaccum);
+                    }
+                    in++;
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[i], &auxaccum);
+                    }
+                    break;
+                case MIXTYPE_MULTI_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
+                    }
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMulAux<TO, TI, TV, TA>(*in++, vol[0], &auxaccum);
+                    }
+                    break;
+                default:
+                    LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
+                    break;
             }
             auxaccum /= NCHAN;
             *aux++ += MixMul<TA, TA, TAV>(auxaccum, vola);
         } while (--frameCount);
-    } else {
-        do {
-            switch (MIXTYPE) {
-            case MIXTYPE_MULTI:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in++, vol[i]);
-                }
-                break;
-            case MIXTYPE_MONOEXPAND:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in, vol[i]);
-                }
-                in++;
-                break;
-            case MIXTYPE_MULTI_SAVEONLY:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMul<TO, TI, TV>(*in++, vol[i]);
-                }
-                break;
-            case MIXTYPE_MULTI_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ += MixMul<TO, TI, TV>(*in++, vol[0]);
-                }
-                break;
-            case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
-                for (int i = 0; i < NCHAN; ++i) {
-                    *out++ = MixMul<TO, TI, TV>(*in++, vol[0]);
-                }
-                break;
-            default:
-                LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
-                break;
+    }
+    else
+    {
+        do
+        {
+            switch (MIXTYPE)
+            {
+                case MIXTYPE_MULTI:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in++, vol[i]);
+                    }
+                    break;
+                case MIXTYPE_MONOEXPAND:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in, vol[i]);
+                    }
+                    in++;
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMul<TO, TI, TV>(*in++, vol[i]);
+                    }
+                    break;
+                case MIXTYPE_MULTI_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ += MixMul<TO, TI, TV>(*in++, vol[0]);
+                    }
+                    break;
+                case MIXTYPE_MULTI_SAVEONLY_MONOVOL:
+                    for (int i = 0; i < NCHAN; ++i)
+                    {
+                        *out++ = MixMul<TO, TI, TV>(*in++, vol[0]);
+                    }
+                    break;
+                default:
+                    LOG_ALWAYS_FATAL("invalid mixtype %d", MIXTYPE);
+                    break;
             }
         } while (--frameCount);
     }

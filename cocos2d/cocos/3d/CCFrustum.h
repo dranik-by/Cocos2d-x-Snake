@@ -49,8 +49,15 @@ public:
     /**
      * Constructor & Destructor.
      */
-    Frustum(): _clipZ(true), _initialized(false) {}
-    ~Frustum(){}
+    Frustum()
+    : _clipZ(true)
+    , _initialized(false)
+    {
+    }
+
+    ~Frustum()
+    {
+    }
 
     /**
      * init frustum from camera.
@@ -60,18 +67,25 @@ public:
     /**
      * is aabb out of frustum.
      */
-    bool isOutOfFrustum(const AABB& aabb) const;
+    bool isOutOfFrustum(const AABB &aabb) const;
     /**
      * is obb out of frustum
      */
-    bool isOutOfFrustum(const OBB& obb) const;
+    bool isOutOfFrustum(const OBB &obb) const;
 
     /**
      * get & set z clip. if bclipZ == true use near and far plane
      */
-    void setClipZ(bool clipZ) { _clipZ = clipZ; }
-    bool isClipZ() { return _clipZ; }
-    
+    void setClipZ(bool clipZ)
+    {
+        _clipZ = clipZ;
+    }
+
+    bool isClipZ()
+    {
+        return _clipZ;
+    }
+
 protected:
     /**
      * create clip plane

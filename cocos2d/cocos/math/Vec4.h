@@ -24,7 +24,9 @@
 #define MATH_VEC4_H
 
 #ifdef __SSE__
-#include <xmmintrin.h>
+
+    #include <xmmintrin.h>
+
 #endif
 
 #include "math/CCMathBase.h"
@@ -44,9 +46,11 @@ class Mat4;
 class CC_DLL Vec4
 {
 public:
-#ifdef __SSE__
-    union {
-        struct {
+    #ifdef __SSE__
+    union
+    {
+        struct
+        {
             float x;
             float y;
             float z;
@@ -54,7 +58,7 @@ public:
         };
         __m128 v;
     };
-#else
+    #else
     /**
      * The x-coordinate.
      */
@@ -74,7 +78,7 @@ public:
      * The w-coordinate.
      */
     float w;
-#endif
+    #endif
     /**
      * Constructs a new vector initialized to all zeros.
      */
@@ -103,7 +107,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    Vec4(const Vec4& p1, const Vec4& p2);
+    Vec4(const Vec4 &p1, const Vec4 &p2);
 
     /**
      * Constructor.
@@ -112,7 +116,7 @@ public:
      *
      * @param copy The vector to copy.
      */
-    Vec4(const Vec4& copy);
+    Vec4(const Vec4 &copy);
 
     /**
      * Creates a new vector from an integer interpreted as an RGBA value.
@@ -151,14 +155,14 @@ public:
      * 
      * @return The angle between the two vectors (in radians).
      */
-    static float angle(const Vec4& v1, const Vec4& v2);
+    static float angle(const Vec4 &v1, const Vec4 &v2);
 
     /**
      * Adds the elements of the specified vector to this one.
      *
      * @param v The vector to add.
      */
-    void add(const Vec4& v);
+    void add(const Vec4 &v);
 
     /**
      * Adds the specified vectors and stores the result in dst.
@@ -167,7 +171,7 @@ public:
      * @param v2 The second vector.
      * @param dst A vector to store the result in.
      */
-    static void add(const Vec4& v1, const Vec4& v2, Vec4* dst);
+    static void add(const Vec4 &v1, const Vec4 &v2, Vec4* dst);
 
     /**
      * Clamps this vector within the specified range.
@@ -175,7 +179,7 @@ public:
      * @param min The minimum value.
      * @param max The maximum value.
      */
-    void clamp(const Vec4& min, const Vec4& max);
+    void clamp(const Vec4 &min, const Vec4 &max);
 
     /**
      * Clamps the specified vector within the specified range and returns it in dst.
@@ -185,7 +189,7 @@ public:
      * @param max The maximum value.
      * @param dst A vector to store the result in.
      */
-    static void clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst);
+    static void clamp(const Vec4 &v, const Vec4 &min, const Vec4 &max, Vec4* dst);
 
     /**
      * Returns the distance between this vector and v.
@@ -196,7 +200,7 @@ public:
      * 
      * @see distanceSquared
      */
-    float distance(const Vec4& v) const;
+    float distance(const Vec4 &v) const;
 
     /**
      * Returns the squared distance between this vector and v.
@@ -212,7 +216,7 @@ public:
      * 
      * @see distance
      */
-    float distanceSquared(const Vec4& v) const;
+    float distanceSquared(const Vec4 &v) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
@@ -221,7 +225,7 @@ public:
      * 
      * @return The dot product.
      */
-    float dot(const Vec4& v) const;
+    float dot(const Vec4 &v) const;
 
     /**
      * Returns the dot product between the specified vectors.
@@ -231,7 +235,7 @@ public:
      * 
      * @return The dot product between the vectors.
      */
-    static float dot(const Vec4& v1, const Vec4& v2);
+    static float dot(const Vec4 &v1, const Vec4 &v2);
 
     /**
      * Computes the length of this vector.
@@ -308,7 +312,7 @@ public:
      *
      * @param v The vector to copy.
      */
-    void set(const Vec4& v);
+    void set(const Vec4 &v);
 
     /**
      * Sets this vector to the directional vector between the specified points.
@@ -316,7 +320,7 @@ public:
      * @param p1 The first point.
      * @param p2 The second point.
      */
-    void set(const Vec4& p1, const Vec4& p2);
+    void set(const Vec4 &p1, const Vec4 &p2);
 
     /**
      * Subtracts this vector and the specified vector as (this - v)
@@ -324,7 +328,7 @@ public:
      *
      * @param v The vector to subtract.
      */
-    void subtract(const Vec4& v);
+    void subtract(const Vec4 &v);
 
     /**
      * Subtracts the specified vectors and stores the result in dst.
@@ -334,7 +338,7 @@ public:
      * @param v2 The second vector.
      * @param dst The destination vector.
      */
-    static void subtract(const Vec4& v1, const Vec4& v2, Vec4* dst);
+    static void subtract(const Vec4 &v1, const Vec4 &v2, Vec4* dst);
 
     /**
      * Calculates the sum of this vector with the given vector.
@@ -344,7 +348,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vec4 operator+(const Vec4& v) const;
+    inline Vec4 operator+(const Vec4 &v) const;
 
     /**
      * Adds the given vector to this vector.
@@ -352,7 +356,7 @@ public:
      * @param v The vector to add.
      * @return This vector, after the addition occurs.
      */
-    inline Vec4& operator+=(const Vec4& v);
+    inline Vec4 &operator+=(const Vec4 &v);
 
     /**
      * Calculates the sum of this vector with the given vector.
@@ -362,7 +366,7 @@ public:
      * @param v The vector to add.
      * @return The vector sum.
      */
-    inline Vec4 operator-(const Vec4& v) const;
+    inline Vec4 operator-(const Vec4 &v) const;
 
     /**
      * Subtracts the given vector from this vector.
@@ -370,7 +374,7 @@ public:
      * @param v The vector to subtract.
      * @return This vector, after the subtraction occurs.
      */
-    inline Vec4& operator-=(const Vec4& v);
+    inline Vec4 &operator-=(const Vec4 &v);
 
     /**
      * Calculates the negation of this vector.
@@ -397,8 +401,8 @@ public:
      * @param s The value to scale by.
      * @return This vector, after the scale occurs.
      */
-    inline Vec4& operator*=(float s);
-    
+    inline Vec4 &operator*=(float s);
+
     /**
      * Returns the components of this vector divided by the given constant
      *
@@ -416,7 +420,7 @@ public:
      * 
      * @return True if this vector is less than the given vector, false otherwise.
      */
-    inline bool operator<(const Vec4& v) const;
+    inline bool operator<(const Vec4 &v) const;
 
     /**
      * Determines if this vector is equal to the given vector.
@@ -425,7 +429,7 @@ public:
      * 
      * @return True if this vector is equal to the given vector, false otherwise.
      */
-    inline bool operator==(const Vec4& v) const;
+    inline bool operator==(const Vec4 &v) const;
 
     /**
      * Determines if this vector is not equal to the given vector.
@@ -434,8 +438,8 @@ public:
      * 
      * @return True if this vector is not equal to the given vector, false otherwise.
      */
-    inline bool operator!=(const Vec4& v) const;
-    
+    inline bool operator!=(const Vec4 &v) const;
+
     /** equals to Vec4(0,0,0,0) */
     static const Vec4 ZERO;
     /** equals to Vec4(1,1,1,1) */
@@ -457,7 +461,7 @@ public:
  * @param v The vector to scale.
  * @return The scaled vector.
  */
-inline Vec4 operator*(float x, const Vec4& v);
+inline Vec4 operator*(float x, const Vec4 &v);
 
 NS_CC_MATH_END
 /**

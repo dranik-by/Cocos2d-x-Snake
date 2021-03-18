@@ -28,21 +28,23 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 static ActionManagerEx* sharedActionManager = nullptr;
 
 ActionManagerEx* ActionManagerEx::getInstance()
 {
-    if (!sharedActionManager) {
-        sharedActionManager = new (std::nothrow) ActionManagerEx();
+    if (!sharedActionManager)
+    {
+        sharedActionManager = new(std::nothrow) ActionManagerEx();
     }
     return sharedActionManager;
 }
 
 void ActionManagerEx::destroyInstance()
 {
-    if(sharedActionManager != nullptr)
+    if (sharedActionManager != nullptr)
     {
         sharedActionManager->releaseActions();
         CC_SAFE_DELETE(sharedActionManager);
@@ -59,65 +61,66 @@ ActionManagerEx::~ActionManagerEx()
     _actionDic.clear();
 }
 
-void ActionManagerEx::initWithDictionary(const char* jsonName,const rapidjson::Value &dic, Ref* root, int version)
+void ActionManagerEx::initWithDictionary(const char* jsonName, const rapidjson::Value &dic, Ref* root, int version)
 {
     std::string path = jsonName;
     this->_studioVersionNumber = version;
     ssize_t pos = path.find_last_of('/');
-    std::string fileName = path.substr(pos+1,path.length());
+    std::string fileName = path.substr(pos + 1, path.length());
     cocos2d::Vector<ActionObject*> actionList;
     int actionCount = DICTOOL->getArrayCount_json(dic, "actionlist");
-    for (int i=0; i<actionCount; i++) {
-        ActionObject* action = new (std::nothrow) ActionObject();
+    for (int i = 0; i < actionCount; i++)
+    {
+        ActionObject* action = new(std::nothrow) ActionObject();
         action->autorelease();
         const rapidjson::Value &actionDic = DICTOOL->getDictionaryFromArray_json(dic, "actionlist", i);
-        action->initWithDictionary(actionDic,root);
+        action->initWithDictionary(actionDic, root);
         actionList.pushBack(action);
     }
     _actionDic[fileName] = actionList;
 }
-    
-    void ActionManagerEx::initWithBinary(const char* file,
-                                         cocos2d::Ref *root,
-                                         CocoLoader* cocoLoader,
-                                         stExpCocoNode*     pCocoNode)
+
+void ActionManagerEx::initWithBinary(const char* file, cocos2d::Ref* root, CocoLoader* cocoLoader,
+                                     stExpCocoNode* pCocoNode)
+{
+    std::string path = file;
+    ssize_t pos = path.find_last_of('/');
+    std::string fileName = path.substr(pos + 1, path.length());
+    cocos2d::Vector<ActionObject*> actionList;
+
+    stExpCocoNode* stChildArray = pCocoNode->GetChildArray(cocoLoader);
+    stExpCocoNode* actionNode = nullptr;
+    for (int i = 0; i < pCocoNode->GetChildNum(); ++i)
     {
-        std::string path = file;
-        ssize_t pos = path.find_last_of('/');
-        std::string fileName = path.substr(pos+1,path.length());
-        cocos2d::Vector<ActionObject*> actionList;
-        
-        stExpCocoNode *stChildArray = pCocoNode->GetChildArray(cocoLoader);
-        stExpCocoNode *actionNode = nullptr;
-        for (int i=0; i < pCocoNode->GetChildNum(); ++i) {
-            std::string key = stChildArray[i].GetName(cocoLoader);
-            if (key == "actionlist") {
-                actionNode = &stChildArray[i];
-                break;
-            }
-        }
-        if (nullptr != actionNode)
+        std::string key = stChildArray[i].GetName(cocoLoader);
+        if (key == "actionlist")
         {
-            int actionCount = actionNode->GetChildNum();
-            for (int i = 0; i < actionCount; ++i) {
-                ActionObject* action = new (std::nothrow) ActionObject();
-                action->autorelease();
-                
-                action->initWithBinary(cocoLoader, &actionNode->GetChildArray(cocoLoader)[i], root);
-                
-                actionList.pushBack(action);
-            }
+            actionNode = &stChildArray[i];
+            break;
         }
-        _actionDic[fileName] = actionList;
-        
     }
+    if (nullptr != actionNode)
+    {
+        int actionCount = actionNode->GetChildNum();
+        for (int i = 0; i < actionCount; ++i)
+        {
+            ActionObject* action = new(std::nothrow) ActionObject();
+            action->autorelease();
 
+            action->initWithBinary(cocoLoader, &actionNode->GetChildArray(cocoLoader)[i], root);
 
-ActionObject* ActionManagerEx::getActionByName(const char* jsonName,const char* actionName)
+            actionList.pushBack(action);
+        }
+    }
+    _actionDic[fileName] = actionList;
+
+}
+
+ActionObject* ActionManagerEx::getActionByName(const char* jsonName, const char* actionName)
 {
     std::string path = jsonName;
     ssize_t pos = path.find_last_of('/');
-    std::string fileName = path.substr(pos+1,path.length());
+    std::string fileName = path.substr(pos + 1, path.length());
     auto iterator = _actionDic.find(fileName);
     if (iterator == _actionDic.end())
     {
@@ -135,9 +138,9 @@ ActionObject* ActionManagerEx::getActionByName(const char* jsonName,const char* 
     return nullptr;
 }
 
-ActionObject* ActionManagerEx::playActionByName(const char* jsonName,const char* actionName)
+ActionObject* ActionManagerEx::playActionByName(const char* jsonName, const char* actionName)
 {
-    ActionObject* action = getActionByName(jsonName,actionName);
+    ActionObject* action = getActionByName(jsonName, actionName);
     if (action)
     {
         action->play();
@@ -145,9 +148,9 @@ ActionObject* ActionManagerEx::playActionByName(const char* jsonName,const char*
     return action;
 }
 
-ActionObject* ActionManagerEx::playActionByName(const char* jsonName,const char* actionName, CallFunc* func)
+ActionObject* ActionManagerEx::playActionByName(const char* jsonName, const char* actionName, CallFunc* func)
 {
-    ActionObject* action = getActionByName(jsonName,actionName);
+    ActionObject* action = getActionByName(jsonName, actionName);
     if (action)
     {
         action->play(func);
@@ -155,31 +158,33 @@ ActionObject* ActionManagerEx::playActionByName(const char* jsonName,const char*
     return action;
 }
 
-ActionObject* ActionManagerEx::stopActionByName(const char* jsonName,const char* actionName)
+ActionObject* ActionManagerEx::stopActionByName(const char* jsonName, const char* actionName)
 {
-    ActionObject* action = getActionByName(jsonName,actionName);
+    ActionObject* action = getActionByName(jsonName, actionName);
     if (action)
     {
         action->stop();
     }
     return action;
 }
-    
+
 void ActionManagerEx::releaseActions()
 {
-    for (auto& iter : _actionDic)
+    for (auto &iter : _actionDic)
     {
         cocos2d::Vector<ActionObject*> objList = iter.second;
         ssize_t listCount = objList.size();
-        for (ssize_t i = 0; i < listCount; i++) {
+        for (ssize_t i = 0; i < listCount; i++)
+        {
             ActionObject* action = objList.at(i);
-            if (action != nullptr) {
+            if (action != nullptr)
+            {
                 action->stop();
             }
         }
         objList.clear();
     }
-    
+
     _actionDic.clear();
 }
 

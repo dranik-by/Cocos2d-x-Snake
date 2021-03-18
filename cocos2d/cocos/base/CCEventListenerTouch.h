@@ -47,17 +47,17 @@ class CC_DLL EventListenerTouchOneByOne : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a one by one touch event listener.
      */
     static EventListenerTouchOneByOne* create();
-    
+
     /**
      * Destructor.
      * @js NA
      */
     virtual ~EventListenerTouchOneByOne();
-    
+
     /** Whether or not to swall touches.
      *
      * @param needSwallow True if needs to swall touches.
@@ -68,7 +68,7 @@ public:
      * @return True if needs to swall touches.
      */
     bool isSwallowTouches();
-    
+
     /// Overrides
     virtual EventListenerTouchOneByOne* clone() override;
     virtual bool checkAvailable() override;
@@ -83,15 +83,15 @@ public:
     ccTouchCallback onTouchMoved;
     ccTouchCallback onTouchEnded;
     ccTouchCallback onTouchCancelled;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     EventListenerTouchOneByOne();
     bool init();
-    
+
 private:
     std::vector<Touch*> _claimedTouches;
     bool _needSwallow;
-    
+
     friend class EventDispatcher;
 };
 
@@ -102,7 +102,7 @@ class CC_DLL EventListenerTouchAllAtOnce : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a all at once event listener.
      *
      * @return An autoreleased EventListenerTouchAllAtOnce object.
@@ -112,25 +112,25 @@ public:
      * @js NA
      */
     virtual ~EventListenerTouchAllAtOnce();
-    
+
     /// Overrides
     virtual EventListenerTouchAllAtOnce* clone() override;
     virtual bool checkAvailable() override;
     //
 public:
 
-    typedef std::function<void(const std::vector<Touch*>&, Event*)> ccTouchesCallback;
+    typedef std::function<void(const std::vector<Touch*> &, Event*)> ccTouchesCallback;
 
     ccTouchesCallback onTouchesBegan;
     ccTouchesCallback onTouchesMoved;
     ccTouchesCallback onTouchesEnded;
     ccTouchesCallback onTouchesCancelled;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     EventListenerTouchAllAtOnce();
     bool init();
 private:
-    
+
     friend class EventDispatcher;
 };
 

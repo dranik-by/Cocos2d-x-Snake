@@ -27,11 +27,11 @@
 #include "base/CCController.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <functional>
-#include "base/ccMacros.h"
-#include "base/CCDirector.h"
-#include "platform/android/jni/JniHelper.h"
-#include "base/CCEventController.h"
+    #include <functional>
+    #include "base/ccMacros.h"
+    #include "base/CCDirector.h"
+    #include "platform/android/jni/JniHelper.h"
+    #include "base/CCEventController.h"
 
 NS_CC_BEGIN
 

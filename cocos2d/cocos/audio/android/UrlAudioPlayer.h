@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include <memory>
 #include <thread>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class ICallerThreadUtils;
 class AssetFd;
@@ -44,16 +45,24 @@ public:
 
     // Override Functions Begin
     virtual int getId() const override
-    { return _id; };
+    {
+        return _id;
+    };
 
     virtual void setId(int id) override
-    { _id = id; };
+    {
+        _id = id;
+    };
 
     virtual std::string getUrl() const override
-    { return _url; };
+    {
+        return _url;
+    };
 
     virtual State getState() const override
-    { return _state; };
+    {
+        return _state;
+    };
 
     virtual void play() override;
 
@@ -96,7 +105,9 @@ private:
     void destroy();
 
     inline void setState(State state)
-    { _state = state; };
+    {
+        _state = state;
+    };
 
     void playEventCallback(SLPlayItf caller, SLuint32 playEvent);
 

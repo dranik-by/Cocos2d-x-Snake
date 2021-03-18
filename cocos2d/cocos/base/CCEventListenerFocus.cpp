@@ -30,14 +30,12 @@
 
 NS_CC_BEGIN
 
-
 const std::string EventListenerFocus::LISTENER_ID = "__cc_focus_event";
 
-
 EventListenerFocus::EventListenerFocus()
-:onFocusChanged(nullptr)
+: onFocusChanged(nullptr)
 {
-    
+
 }
 
 EventListenerFocus::~EventListenerFocus()
@@ -47,8 +45,9 @@ EventListenerFocus::~EventListenerFocus()
 
 EventListenerFocus* EventListenerFocus::create()
 {
-    EventListenerFocus* ret = new (std::nothrow) EventListenerFocus;
-    if (ret && ret->init()) {
+    EventListenerFocus* ret = new(std::nothrow) EventListenerFocus;
+    if (ret && ret->init())
+    {
         ret->autorelease();
         return ret;
     }
@@ -58,10 +57,11 @@ EventListenerFocus* EventListenerFocus::create()
 
 EventListenerFocus* EventListenerFocus::clone()
 {
-    EventListenerFocus* ret = new (std::nothrow) EventListenerFocus;
-    if (ret && ret->init()) {
+    EventListenerFocus* ret = new(std::nothrow) EventListenerFocus;
+    if (ret && ret->init())
+    {
         ret->autorelease();
-        
+
         ret->onFocusChanged = onFocusChanged;
     }
     else
@@ -73,11 +73,13 @@ EventListenerFocus* EventListenerFocus::clone()
 
 bool EventListenerFocus::init()
 {
-    auto listener = [this](Event* event){
+    auto listener = [this](Event* event)
+    {
         auto focusEvent = static_cast<EventFocus*>(event);
         onFocusChanged(focusEvent->_widgetLoseFocus, focusEvent->_widgetGetFocus);
     };
-    if (EventListener::init(Type::FOCUS, LISTENER_ID, listener)) {
+    if (EventListener::init(Type::FOCUS, LISTENER_ID, listener))
+    {
         return true;
     }
     return false;
@@ -90,10 +92,8 @@ bool EventListenerFocus::checkAvailable()
         CCASSERT(false, "Invalid EventListenerFocus!");
         return false;
     }
-    
+
     return true;
 }
-
-
 
 NS_CC_END

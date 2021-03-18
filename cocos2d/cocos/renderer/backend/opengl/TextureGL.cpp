@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "TextureGL.h"
 #include "base/ccMacros.h"
 #include "base/CCEventListenerCustom.h"
@@ -35,24 +35,25 @@ CC_BACKEND_BEGIN
 
 #define ISPOW2(n) (((n) & (n-1)) == 0)
 
-namespace {
-    bool isMipmapEnabled(GLint filter)
+namespace
+{
+bool isMipmapEnabled(GLint filter)
+{
+    switch (filter)
     {
-        switch(filter)
-        {
-            case GL_LINEAR_MIPMAP_LINEAR:
-            case GL_LINEAR_MIPMAP_NEAREST:
-            case GL_NEAREST_MIPMAP_NEAREST:
-            case GL_NEAREST_MIPMAP_LINEAR:
-                return true;
-            default:
-                break;
-        }
-        return false;
+        case GL_LINEAR_MIPMAP_LINEAR:
+        case GL_LINEAR_MIPMAP_NEAREST:
+        case GL_NEAREST_MIPMAP_NEAREST:
+        case GL_NEAREST_MIPMAP_LINEAR:
+            return true;
+        default:
+            break;
     }
+    return false;
+}
 }
 
-void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor& descriptor, bool isPow2, bool hasMipmaps)
+void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor &descriptor, bool isPow2, bool hasMipmaps)
 {
     if (descriptor.magFilter != SamplerFilter::DONT_CARE)
     {
@@ -75,20 +76,21 @@ void TextureInfoGL::applySamplerDescriptor(const SamplerDescriptor& descriptor, 
     }
 }
 
-Texture2DGL::Texture2DGL(const TextureDescriptor& descriptor) : Texture2DBackend(descriptor)
+Texture2DGL::Texture2DGL(const TextureDescriptor &descriptor)
+: Texture2DBackend(descriptor)
 {
     glGenTextures(1, &_textureInfo.texture);
 
     updateTextureDescriptor(descriptor);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_RENDERER_RECREATED, [this](EventCustom*){
         glGenTextures(1, &(this->_textureInfo.texture));
         this->initWithZeros();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    #endif
 }
 
 void Texture2DGL::initWithZeros()
@@ -103,7 +105,8 @@ void Texture2DGL::initWithZeros()
 void Texture2DGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor)
 {
     TextureBackend::updateTextureDescriptor(descriptor);
-    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
+    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type,
+                       _isCompressed);
 
     bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
     _textureInfo.magFilterGL = UtilsGL::toGLMagFilter(descriptor.samplerDescriptor.magFilter);
@@ -124,12 +127,13 @@ Texture2DGL::~Texture2DGL()
     if (_textureInfo.texture)
         glDeleteTextures(1, &_textureInfo.texture);
     _textureInfo.texture = 0;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
+    #endif
 }
 
-void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler) {
+void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler)
+{
     bool isPow2 = ISPOW2(_width) && ISPOW2(_height);
     _textureInfo.applySamplerDescriptor(sampler, isPow2, _hasMipmaps);
 
@@ -157,23 +161,23 @@ void Texture2DGL::updateSamplerDescriptor(const SamplerDescriptor &sampler) {
     }
 }
 
-void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t height, std::size_t level)
+void Texture2DGL::updateData(uint8_t* data, std::size_t width, std::size_t height, std::size_t level)
 {
     //Set the row align only when mipmapsNum == 1 and the data is uncompressed
     auto mipmapEnalbed = isMipmapEnabled(_textureInfo.minFilterGL) || isMipmapEnabled(_textureInfo.magFilterGL);
-    if(!mipmapEnalbed)
+    if (!mipmapEnalbed)
     {
         unsigned int bytesPerRow = width * _bitsPerElement / 8;
 
-        if(bytesPerRow % 8 == 0)
+        if (bytesPerRow % 8 == 0)
         {
             glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
         }
-        else if(bytesPerRow % 4 == 0)
+        else if (bytesPerRow % 4 == 0)
         {
             glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
         }
-        else if(bytesPerRow % 2 == 0)
+        else if (bytesPerRow % 2 == 0)
         {
             glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
         }
@@ -194,24 +198,16 @@ void Texture2DGL::updateData(uint8_t* data, std::size_t width , std::size_t heig
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _textureInfo.sAddressModeGL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _textureInfo.tAddressModeGL);
 
-
-    glTexImage2D(GL_TEXTURE_2D,
-                level,
-                _textureInfo.internalFormat,
-                width,
-                height,
-                0,
-                _textureInfo.format,
-                _textureInfo.type,
-                data);
+    glTexImage2D(GL_TEXTURE_2D, level, _textureInfo.internalFormat, width, height, 0, _textureInfo.format,
+                 _textureInfo.type, data);
     CHECK_GL_ERROR_DEBUG();
 
-    if(!_hasMipmaps && level > 0)
+    if (!_hasMipmaps && level > 0)
         _hasMipmaps = true;
 }
 
-void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::size_t height,
-                                       std::size_t dataLen, std::size_t level)
+void Texture2DGL::updateCompressedData(uint8_t* data, std::size_t width, std::size_t height, std::size_t dataLen,
+                                       std::size_t level)
 {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -222,60 +218,39 @@ void Texture2DGL::updateCompressedData(uint8_t *data, std::size_t width, std::si
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _textureInfo.sAddressModeGL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _textureInfo.tAddressModeGL);
 
-
-    glCompressedTexImage2D(GL_TEXTURE_2D,
-                           level,
-                           _textureInfo.internalFormat,
-                           (GLsizei)width,
-                           (GLsizei)height,
-                           0,
-                           dataLen,
-                           data);
+    glCompressedTexImage2D(GL_TEXTURE_2D, level, _textureInfo.internalFormat, (GLsizei)width, (GLsizei)height, 0,
+                           dataLen, data);
     CHECK_GL_ERROR_DEBUG();
 
-    if(!_hasMipmaps && level > 0)
+    if (!_hasMipmaps && level > 0)
         _hasMipmaps = true;
 }
 
-void Texture2DGL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height, std::size_t level, uint8_t* data)
+void Texture2DGL::updateSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width, std::size_t height,
+                                std::size_t level, uint8_t* data)
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
 
-    glTexSubImage2D(GL_TEXTURE_2D,
-                    level,
-                    xoffset,
-                    yoffset,
-                    width,
-                    height,
-                    _textureInfo.format,
-                    _textureInfo.type,
+    glTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _textureInfo.format, _textureInfo.type,
                     data);
     CHECK_GL_ERROR_DEBUG();
 
-    if(!_hasMipmaps && level > 0)
+    if (!_hasMipmaps && level > 0)
         _hasMipmaps = true;
 }
 
 void Texture2DGL::updateCompressedSubData(std::size_t xoffset, std::size_t yoffset, std::size_t width,
-                                          std::size_t height, std::size_t dataLen, std::size_t level,
-                                          uint8_t *data)
+                                          std::size_t height, std::size_t dataLen, std::size_t level, uint8_t* data)
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
 
-    glCompressedTexSubImage2D(GL_TEXTURE_2D,
-                              level,
-                              xoffset,
-                              yoffset,
-                              width,
-                              height,
-                              _textureInfo.format,
-                              dataLen,
+    glCompressedTexSubImage2D(GL_TEXTURE_2D, level, xoffset, yoffset, width, height, _textureInfo.format, dataLen,
                               data);
     CHECK_GL_ERROR_DEBUG();
 
-    if(!_hasMipmaps && level > 0)
+    if (!_hasMipmaps && level > 0)
         _hasMipmaps = true;
 }
 
@@ -290,7 +265,7 @@ void Texture2DGL::generateMipmaps()
     if (TextureUsage::RENDER_TARGET == _textureUsage)
         return;
 
-    if(!_hasMipmaps)
+    if (!_hasMipmaps)
     {
         _hasMipmaps = true;
         glBindTexture(GL_TEXTURE_2D, _textureInfo.texture);
@@ -298,7 +273,8 @@ void Texture2DGL::generateMipmaps()
     }
 }
 
-void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage,
+                           std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
 {
     GLint defaultFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
@@ -311,20 +287,19 @@ void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std:
 
     auto bytePerRow = width * _bitsPerElement / 8;
     unsigned char* image = new unsigned char[bytePerRow * height];
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
-    if(flipImage)
+    if (flipImage)
     {
         unsigned char* flippedImage = new unsigned char[bytePerRow * height];
         for (int i = 0; i < height; ++i)
         {
-            memcpy(&flippedImage[i * bytePerRow],
-                   &image[(height - i - 1) * bytePerRow],
-                   bytePerRow);
+            memcpy(&flippedImage[i * bytePerRow], &image[(height - i - 1) * bytePerRow], bytePerRow);
         }
         callback(flippedImage, width, height);
         CC_SAFE_DELETE_ARRAY(flippedImage);
-    } else
+    }
+    else
     {
         callback(image, width, height);
         CC_SAFE_DELETE_ARRAY(image);
@@ -334,23 +309,24 @@ void Texture2DGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std:
     glDeleteFramebuffers(1, &frameBuffer);
 }
 
-TextureCubeGL::TextureCubeGL(const TextureDescriptor& descriptor)
-    :TextureCubemapBackend(descriptor)
+TextureCubeGL::TextureCubeGL(const TextureDescriptor &descriptor)
+: TextureCubemapBackend(descriptor)
 {
     assert(_width == _height);
     _textureType = TextureType::TEXTURE_CUBE;
-    UtilsGL::toGLTypes(_textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
+    UtilsGL::toGLTypes(_textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type,
+                       _isCompressed);
     glGenTextures(1, &_textureInfo.texture);
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to restored texture id after coming to foreground on Android.
     _backToForegroundListener = EventListenerCustom::create(EVENT_COME_TO_FOREGROUND, [this](EventCustom*){
         glGenTextures(1, &(this->_textureInfo.texture));
         this->setTexParameters();
     });
     Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(_backToForegroundListener, -1);
-#endif
+    #endif
     CHECK_GL_ERROR_DEBUG();
 }
 
@@ -369,20 +345,21 @@ void TextureCubeGL::setTexParameters()
 
 void TextureCubeGL::updateTextureDescriptor(const cocos2d::backend::TextureDescriptor &descriptor)
 {
-    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type, _isCompressed);
+    UtilsGL::toGLTypes(descriptor.textureFormat, _textureInfo.internalFormat, _textureInfo.format, _textureInfo.type,
+                       _isCompressed);
     _textureFormat = descriptor.textureFormat;
     updateSamplerDescriptor(descriptor.samplerDescriptor);
 }
 
 TextureCubeGL::~TextureCubeGL()
 {
-    if(_textureInfo.texture)
+    if (_textureInfo.texture)
         glDeleteTextures(1, &_textureInfo.texture);
     _textureInfo.texture = 0;
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     Director::getInstance()->getEventDispatcher()->removeEventListener(_backToForegroundListener);
-#endif
+    #endif
 }
 
 void TextureCubeGL::updateSamplerDescriptor(const SamplerDescriptor &sampler)
@@ -393,32 +370,32 @@ void TextureCubeGL::updateSamplerDescriptor(const SamplerDescriptor &sampler)
 
 void TextureCubeGL::apply(int index) const
 {
-    glActiveTexture(GL_TEXTURE0+ index);
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_CUBE_MAP, _textureInfo.texture);
     CHECK_GL_ERROR_DEBUG();
 }
 
-void TextureCubeGL::updateFaceData(TextureCubeFace side, void *data)
+void TextureCubeGL::updateFaceData(TextureCubeFace side, void* data)
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, _textureInfo.texture);
     CHECK_GL_ERROR_DEBUG();
     int i = static_cast<int>(side);
-    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-        0,                  // level
-        GL_RGBA,            // internal format
-        _width,              // width
-        _height,              // height
-        0,                  // border
-        _textureInfo.internalFormat,            // format
-        _textureInfo.type,  // type
-        data);              // pixel data
+    glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,                  // level
+                 GL_RGBA,            // internal format
+                 _width,              // width
+                 _height,              // height
+                 0,                  // border
+                 _textureInfo.internalFormat,            // format
+                 _textureInfo.type,  // type
+                 data);              // pixel data
 
     CHECK_GL_ERROR_DEBUG();
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 }
 
-void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage, std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
+void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, std::size_t height, bool flipImage,
+                             std::function<void(const unsigned char*, std::size_t, std::size_t)> callback)
 {
     GLint defaultFBO = 0;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBO);
@@ -430,20 +407,19 @@ void TextureCubeGL::getBytes(std::size_t x, std::size_t y, std::size_t width, st
 
     auto bytePerRow = width * _bitsPerElement / 8;
     unsigned char* image = new unsigned char[bytePerRow * height];
-    glReadPixels(x,y,width, height,GL_RGBA,GL_UNSIGNED_BYTE, image);
+    glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, image);
 
-    if(flipImage)
+    if (flipImage)
     {
         unsigned char* flippedImage = new unsigned char[bytePerRow * height];
         for (int i = 0; i < height; ++i)
         {
-            memcpy(&flippedImage[i * bytePerRow],
-                   &image[(height - i - 1) * bytePerRow],
-                   bytePerRow);
+            memcpy(&flippedImage[i * bytePerRow], &image[(height - i - 1) * bytePerRow], bytePerRow);
         }
         callback(flippedImage, width, height);
         CC_SAFE_DELETE_ARRAY(flippedImage);
-    } else
+    }
+    else
     {
         callback(image, width, height);
         CC_SAFE_DELETE_ARRAY(image);
@@ -458,7 +434,7 @@ void TextureCubeGL::generateMipmaps()
     if (TextureUsage::RENDER_TARGET == _textureUsage)
         return;
 
-    if(!_hasMipmaps)
+    if (!_hasMipmaps)
     {
         _hasMipmaps = true;
         glBindTexture(GL_TEXTURE_CUBE_MAP, _textureInfo.texture);

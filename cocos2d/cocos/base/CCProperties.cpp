@@ -39,40 +39,60 @@ USING_NS_CC;
 
 // Utility functions (shared with SceneLoader).
 /** @script{ignore} */
-void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath);
+void calculateNamespacePath(const std::string &urlString, std::string &fileString,
+                            std::vector<std::string> &namespacePath);
 /** @script{ignore} */
-Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath);
+Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string> &namespacePath);
 
 Properties::Properties()
-    :  _dataIdx(nullptr), _data(nullptr), _variables(nullptr), _dirPath(nullptr), _parent(nullptr)
+: _dataIdx(nullptr)
+, _data(nullptr)
+, _variables(nullptr)
+, _dirPath(nullptr)
+, _parent(nullptr)
 {
     _properties.reserve(32);
 }
 
-Properties::Properties(const Properties& copy)
-    : _dataIdx(copy._dataIdx), _data(copy._data), _namespace(copy._namespace),
-      _id(copy._id), _parentID(copy._parentID), _properties(copy._properties),
-      _variables(nullptr), _dirPath(nullptr), _parent(copy._parent)
-      
+Properties::Properties(const Properties &copy)
+: _dataIdx(copy._dataIdx)
+, _data(copy._data)
+, _namespace(copy._namespace)
+, _id(copy._id)
+, _parentID(copy._parentID)
+, _properties(copy._properties)
+, _variables(nullptr)
+, _dirPath(nullptr)
+, _parent(copy._parent)
 {
     setDirectoryPath(copy._dirPath);
 
     for (const auto space: copy._namespaces)
     {
-        _namespaces.push_back(new (std::nothrow) Properties(*space));
+        _namespaces.push_back(new(std::nothrow) Properties(*space));
     }
     rewind();
 }
 
 Properties::Properties(Data* data, ssize_t* dataIdx)
-    : _dataIdx(dataIdx), _data(data), _variables(NULL), _dirPath(NULL), _parent(NULL)
+: _dataIdx(dataIdx)
+, _data(data)
+, _variables(NULL)
+, _dirPath(NULL)
+, _parent(NULL)
 {
     readProperties();
     rewind();
 }
 
-Properties::Properties(Data* data, ssize_t* dataIdx, const std::string& name, const char* id, const char* parentID, Properties* parent)
-    : _dataIdx(dataIdx), _data(data), _namespace(name), _variables(NULL), _dirPath(NULL), _parent(parent)
+Properties::Properties(Data* data, ssize_t* dataIdx, const std::string &name, const char* id, const char* parentID,
+                       Properties* parent)
+: _dataIdx(dataIdx)
+, _data(data)
+, _namespace(name)
+, _variables(NULL)
+, _dirPath(NULL)
+, _parent(parent)
 {
     if (id)
     {
@@ -86,7 +106,7 @@ Properties::Properties(Data* data, ssize_t* dataIdx, const std::string& name, co
     rewind();
 }
 
-Properties* Properties::createNonRefCounted(const std::string& url)
+Properties* Properties::createNonRefCounted(const std::string &url)
 {
     if (url.size() == 0)
     {
@@ -105,7 +125,7 @@ Properties* Properties::createNonRefCounted(const std::string& url)
     // so we pass data as weak pointer
     auto data = FileUtils::getInstance()->getDataFromFile(fileString);
     ssize_t dataIdx = 0;
-    Properties* properties = new (std::nothrow) Properties(&data, &dataIdx);
+    Properties* properties = new(std::nothrow) Properties(&data, &dataIdx);
     properties->resolveInheritance();
 
     // Get the specified properties object.
@@ -126,7 +146,7 @@ Properties* Properties::createNonRefCounted(const std::string& url)
         CC_SAFE_DELETE(properties);
     }
     // XXX
-//    p->setDirectoryPath(FileSystem::getDirectoryName(fileString));
+    //    p->setDirectoryPath(FileSystem::getDirectoryName(fileString));
     p->setDirectoryPath("");
     return p;
 }
@@ -149,7 +169,7 @@ static bool isVariable(const char* str, char* outName, size_t outSize)
 
 void Properties::readProperties()
 {
-    CCASSERT(_data->getSize() >0, "Invalid data");
+    CCASSERT(_data->getSize() > 0, "Invalid data");
 
     char line[2048];
     char variable[256];
@@ -256,7 +276,7 @@ void Properties::readProperties()
 
                 // Check for '}' on same line.
                 rccc = strchr(line, '}');
-            
+
                 // Get the name of the namespace.
                 name = strtok(line, " \t\n{");
                 name = trimWhiteSpace(name);
@@ -308,7 +328,7 @@ void Properties::readProperties()
                     }
 
                     // New namespace without an ID.
-                    Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, NULL, parentID, this);
+                    Properties* space = new(std::nothrow) Properties(_data, _dataIdx, name, NULL, parentID, this);
                     _namespaces.push_back(space);
 
                     // If the namespace ends on this line, seek to right after the '}' character.
@@ -350,7 +370,7 @@ void Properties::readProperties()
                         }
 
                         // Create new namespace.
-                        Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, value, parentID, this);
+                        Properties* space = new(std::nothrow) Properties(_data, _dataIdx, name, value, parentID, this);
                         _namespaces.push_back(space);
 
                         // If the namespace ends on this line, seek to right after the '}' character.
@@ -371,14 +391,16 @@ void Properties::readProperties()
                         if (c == '{')
                         {
                             // Create new namespace.
-                            Properties* space = new (std::nothrow) Properties(_data, _dataIdx, name, value, parentID, this);
+                            Properties* space = new(std::nothrow) Properties(_data, _dataIdx, name, value, parentID,
+                                                                             this);
                             _namespaces.push_back(space);
                         }
                         else
                         {
                             // Back up from fgetc()
                             if (seekFromCurrent(-1) == false)
-                                CCLOGERROR("Failed to seek backwards a single character after testing if the next line starts with '{'.");
+                                CCLOGERROR(
+                                "Failed to seek backwards a single character after testing if the next line starts with '{'.");
 
                             // Store "name value" as a name/value pair, or even just "name".
                             if (value != NULL)
@@ -427,9 +449,9 @@ char* Properties::readLine(char* output, int num)
     const ssize_t dataIdx = *_dataIdx;
     int i;
 
-    for (i=0; i<num && dataIdx+i < _data->_size; i++)
+    for (i = 0; i < num && dataIdx + i < _data->_size; i++)
     {
-        auto c = _data->_bytes[dataIdx+i];
+        auto c = _data->_bytes[dataIdx + i];
         if (c == '\n')
             break;
         output[i] = c;
@@ -438,7 +460,7 @@ char* Properties::readLine(char* output, int num)
     output[i] = '\0';
 
     // restore value
-    *_dataIdx = dataIdx+i;
+    *_dataIdx = dataIdx + i;
 
     return output;
 }
@@ -474,7 +496,7 @@ void Properties::skipWhiteSpace()
     }
 }
 
-char* Properties::trimWhiteSpace(char *str)
+char* Properties::trimWhiteSpace(char* str)
 {
     if (str == NULL)
     {
@@ -486,18 +508,18 @@ char* Properties::trimWhiteSpace(char *str)
         str++;
 
     // All spaces?
-    if (*str == 0)  
+    if (*str == 0)
     {
         return str;
     }
 
     // Trim trailing space.
-    char *end = str + strlen(str) - 1;
+    char* end = str + strlen(str) - 1;
     while (end > str && isspace(*end))
         end--;
 
     // Write new null terminator.
-    *(end+1) = 0;
+    *(end + 1) = 0;
 
     return str;
 }
@@ -529,7 +551,7 @@ void Properties::resolveInheritance(const char* id)
                 resolveInheritance(parent->getId());
 
                 // Copy the child.
-                Properties* overrides = new (std::nothrow) Properties(*derived);
+                Properties* overrides = new(std::nothrow) Properties(*derived);
 
                 // Delete the child's data.
                 for (size_t i = 0, count = derived->_namespaces.size(); i < count; i++)
@@ -543,7 +565,7 @@ void Properties::resolveInheritance(const char* id)
                 std::vector<Properties*>::const_iterator itt;
                 for (const auto space: parent->_namespaces)
                 {
-                    derived->_namespaces.push_back(new (std::nothrow) Properties(*space));
+                    derived->_namespaces.push_back(new(std::nothrow) Properties(*space));
                 }
                 derived->rewind();
 
@@ -594,9 +616,9 @@ void Properties::mergeWith(Properties* overrides)
         Properties* derivedNamespace = getNextNamespace();
         while (derivedNamespace)
         {
-            if (strcmp(derivedNamespace->getNamespace(), overridesNamespace->getNamespace()) == 0 &&
-                strcmp(derivedNamespace->getId(), overridesNamespace->getId()) == 0)
-            {   
+            if (strcmp(derivedNamespace->getNamespace(), overridesNamespace->getNamespace()) == 0 && strcmp(
+            derivedNamespace->getId(), overridesNamespace->getId()) == 0)
+            {
                 derivedNamespace->mergeWith(overridesNamespace);
                 merged = true;
             }
@@ -607,7 +629,7 @@ void Properties::mergeWith(Properties* overrides)
         if (!merged)
         {
             // Add this new namespace.
-            Properties* newNamespace = new (std::nothrow) Properties(*overridesNamespace);
+            Properties* newNamespace = new(std::nothrow) Properties(*overridesNamespace);
 
             this->_namespaces.push_back(newNamespace);
             this->_namespacesItr = this->_namespaces.end();
@@ -664,12 +686,12 @@ Properties* Properties::getNamespace(const char* id, bool searchNames, bool recu
 {
     CCASSERT(id, "invalid id");
 
-    for (const auto& it : _namespaces)
+    for (const auto &it : _namespaces)
     {
         Properties* p = it;
         if (strcmp(searchNames ? p->_namespace.c_str() : p->_id.c_str(), id) == 0)
             return p;
-        
+
         if (recurse)
         {
             // Search recursively.
@@ -697,7 +719,7 @@ bool Properties::exists(const char* name) const
     if (name == NULL)
         return false;
 
-    for (const auto& itr : _properties)
+    for (const auto &itr : _properties)
     {
         if (itr.name == name)
             return true;
@@ -759,18 +781,18 @@ Properties::Type Properties::getType(const char* name) const
 
     switch (commaCount)
     {
-    case 0:
-        return isStringNumeric(value) ? Properties::NUMBER : Properties::STRING;
-    case 1:
-        return Properties::VECTOR2;
-    case 2:
-        return Properties::VECTOR3;
-    case 3:
-        return Properties::VECTOR4;
-    case 15:
-        return Properties::MATRIX;
-    default:
-        return Properties::STRING;
+        case 0:
+            return isStringNumeric(value) ? Properties::NUMBER : Properties::STRING;
+        case 1:
+            return Properties::VECTOR2;
+        case 2:
+            return Properties::VECTOR3;
+        case 3:
+            return Properties::VECTOR4;
+        case 15:
+            return Properties::MATRIX;
+        default:
+            return Properties::STRING;
     }
 }
 
@@ -787,7 +809,7 @@ const char* Properties::getString(const char* name, const char* defaultValue) co
             return getVariable(variable, defaultValue);
         }
 
-        for (const auto& itr : _properties)
+        for (const auto &itr : _properties)
         {
             if (itr.name == name)
             {
@@ -821,7 +843,7 @@ bool Properties::setString(const char* name, const char* value)
 {
     if (name)
     {
-        for (auto& itr : _properties)
+        for (auto &itr : _properties)
         {
             if (itr.name == name)
             {
@@ -923,9 +945,8 @@ bool Properties::getMat4(const char* name, Mat4* out) const
     {
         float m[16];
         int scanned;
-        scanned = sscanf(valueString, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
-                &m[0], &m[1], &m[2], &m[3], &m[4], &m[5], &m[6], &m[7],
-                &m[8], &m[9], &m[10], &m[11], &m[12], &m[13], &m[14], &m[15]);
+        scanned = sscanf(valueString, "%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f", &m[0], &m[1], &m[2], &m[3],
+                         &m[4], &m[5], &m[6], &m[7], &m[8], &m[9], &m[10], &m[11], &m[12], &m[13], &m[14], &m[15]);
 
         if (scanned != 16)
         {
@@ -1017,7 +1038,7 @@ const char* Properties::getVariable(const char* name, const char* defaultValue) 
     {
         for (size_t i = 0, count = _variables->size(); i < count; ++i)
         {
-            Property& prop = (*_variables)[i];
+            Property &prop = (*_variables)[i];
             if (prop.name == name)
                 return prop.value.c_str();
         }
@@ -1061,15 +1082,15 @@ void Properties::setVariable(const char* name, const char* value)
     {
         // Add a new variable with this name
         if (!_variables)
-            _variables = new (std::nothrow) std::vector<Property>();
+            _variables = new(std::nothrow) std::vector<Property>();
         _variables->push_back(Property(name, value ? value : ""));
     }
 }
 
 Properties* Properties::clone()
 {
-    Properties* p = new (std::nothrow) Properties();
-    
+    Properties* p = new(std::nothrow) Properties();
+
     p->_namespace = _namespace;
     p->_id = _id;
     p->_parentID = _parentID;
@@ -1101,11 +1122,11 @@ void Properties::setDirectoryPath(const std::string* path)
     }
 }
 
-void Properties::setDirectoryPath(const std::string& path)
+void Properties::setDirectoryPath(const std::string &path)
 {
     if (_dirPath == NULL)
     {
-        _dirPath = new (std::nothrow) std::string(path);
+        _dirPath = new(std::nothrow) std::string(path);
     }
     else
     {
@@ -1113,7 +1134,8 @@ void Properties::setDirectoryPath(const std::string& path)
     }
 }
 
-void calculateNamespacePath(const std::string& urlString, std::string& fileString, std::vector<std::string>& namespacePath)
+void calculateNamespacePath(const std::string &urlString, std::string &fileString,
+                            std::vector<std::string> &namespacePath)
 {
     // If the url references a specific namespace within the file,
     // calculate the full namespace path to the final namespace.
@@ -1135,7 +1157,7 @@ void calculateNamespacePath(const std::string& urlString, std::string& fileStrin
     }
 }
 
-Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string>& namespacePath)
+Properties* getPropertiesFromNamespacePath(Properties* properties, const std::vector<std::string> &namespacePath)
 {
     // If the url references a specific namespace within the file,
     // return the specified namespace or notify the user if it cannot be found.
@@ -1144,7 +1166,7 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
         size_t size = namespacePath.size();
         properties->rewind();
         Properties* iter = properties->getNextNamespace();
-        for (size_t i = 0; i < size; )
+        for (size_t i = 0; i < size;)
         {
             while (true)
             {
@@ -1167,7 +1189,7 @@ Properties* getPropertiesFromNamespacePath(Properties* properties, const std::ve
                     i++;
                     break;
                 }
-                
+
                 iter = properties->getNextNamespace();
             }
         }

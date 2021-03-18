@@ -66,8 +66,7 @@ public:
      * Binds the render state for this RenderState and any of its parents, top-down,
      * for the given pass.
      */
-    void bindPass(Pass* pass, MeshCommand *);
-
+    void bindPass(Pass* pass, MeshCommand*);
 
     /**
      * Defines a block of fixed-function render states that can be applied to a
@@ -79,7 +78,7 @@ public:
         friend class Pass;
         friend class RenderQueue;
         friend class Renderer;
-        
+
     public:
         /**
          * Creates a new StateBlock with default render state settings.
@@ -99,7 +98,7 @@ public:
          * This method handles both setting and restoring of render states to ensure that
          * only the state explicitly defined by this StateBlock is applied to the renderer.
          */
-        void bind(PipelineDescriptor *programState);
+        void bind(PipelineDescriptor* programState);
 
         /**
          * Explicitly sets the source and destination used in the blend function for this render state.
@@ -108,7 +107,7 @@ public:
          *
          * @param blendFunc Specifies how the blending factors are computed.
          */
-        void setBlendFunc(const BlendFunc& blendFunc);
+        void setBlendFunc(const BlendFunc &blendFunc);
 
         /**
          * Toggles blending.
@@ -196,7 +195,7 @@ public:
          * @param name Name of the render state to set.
          * @param value Value of the specified render state.
          */
-        void setState(const std::string& name, const std::string& value);
+        void setState(const std::string &name, const std::string &value);
 
         uint32_t getHash() const;
         bool isDirty() const;
@@ -211,24 +210,23 @@ public:
             RS_DEPTH_WRITE = (1 << 4),
             RS_DEPTH_FUNC = (1 << 5),
             RS_CULL_FACE_SIDE = (1 << 6),
-//            RS_STENCIL_TEST = (1 << 7),
-//            RS_STENCIL_WRITE = (1 << 8),
-//            RS_STENCIL_FUNC = (1 << 9),
-//            RS_STENCIL_OP = (1 << 10),
+            //            RS_STENCIL_TEST = (1 << 7),
+            //            RS_STENCIL_WRITE = (1 << 8),
+            //            RS_STENCIL_FUNC = (1 << 9),
+            //            RS_STENCIL_OP = (1 << 10),
             RS_FRONT_FACE = (1 << 11),
-            
+
             RS_ALL_ONES = 0xFFFFFFFF,
         };
 
     protected:
-        
+
         /**
         * update internal states of ProgramState
         */
-        void apply(PipelineDescriptor *pipelineDescriptor);
+        void apply(PipelineDescriptor* pipelineDescriptor);
 
-        static void restoreUnmodifiedStates(long flags, PipelineDescriptor *pipelineDescriptor);
-
+        static void restoreUnmodifiedStates(long flags, PipelineDescriptor* pipelineDescriptor);
 
         bool _cullFaceEnabled = false;
         bool _depthTestEnabled = true;
@@ -245,11 +243,11 @@ public:
         mutable bool _hashDirty;
     };
 
-    StateBlock& getStateBlock() const;
+    StateBlock &getStateBlock() const;
 
 protected:
     RenderState() = default;
-    
+
     mutable uint32_t _hash = 0;
     mutable bool _hashDirty = true;
 

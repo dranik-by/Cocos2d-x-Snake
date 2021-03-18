@@ -43,7 +43,6 @@
 #include "math/Mat4.h"
 #include "platform/CCPlatformMacros.h"
 
-
 NS_CC_BEGIN
 
 class Technique;
@@ -55,11 +54,11 @@ class RenderState;
 
 namespace backend
 {
-    class ProgramState;
+class ProgramState;
 }
 
 /// Material
-class CC_DLL Material :public Ref
+class CC_DLL Material : public Ref
 {
     friend class Node;
     friend class Technique;
@@ -79,7 +78,7 @@ public:
      *
      * @return A new Material or NULL if there was an error.
      */
-    static Material* createWithFilename(const std::string& path);
+    static Material* createWithFilename(const std::string &path);
 
     /** Creates a Material with a GLProgramState.
      It will only contain one Technique and one Pass.
@@ -97,18 +96,18 @@ public:
     static Material* createWithProperties(Properties* materialProperties);
 
     void draw(MeshCommand* meshCommand, float globalZOrder, backend::Buffer* vertexBuffer, backend::Buffer* indexBuffer,
-              CustomCommand::PrimitiveType primitive, CustomCommand::IndexFormat indexFormat,
-              unsigned int indexCount, const Mat4& modelView);
+              CustomCommand::PrimitiveType primitive, CustomCommand::IndexFormat indexFormat, unsigned int indexCount,
+              const Mat4 &modelView);
 
     /// returns the material name
     std::string getName() const;
     /// sets the material name
-    void setName(const std::string& name);
+    void setName(const std::string &name);
 
     /** Returns a Technique by its name.
      returns `nullptr` if the Technique can't be found.
      */
-    Technique* getTechniqueByName(const std::string& name);
+    Technique* getTechniqueByName(const std::string &name);
 
     /** Returns a Technique by index. 
      returns `nullptr` if the index is invalid.
@@ -119,7 +118,7 @@ public:
     Technique* getTechnique() const;
 
     /** Returns the list of Techniques */
-    const Vector<Technique*>& getTechniques() const;
+    const Vector<Technique*> &getTechniques() const;
 
     /** Returns the number of Techniques in the Material. */
     ssize_t getTechniqueCount() const;
@@ -128,24 +127,31 @@ public:
     void addTechnique(Technique* technique);
 
     /** Sets the current technique */
-    void setTechnique(const std::string& techniqueName);
+    void setTechnique(const std::string &techniqueName);
 
     /** returns a clone (deep-copy) of the material */
     virtual Material* clone() const;
 
-    inline RenderState::StateBlock &getStateBlock() { return _renderState._state; }
-
-    inline void setStateBlock(const RenderState::StateBlock &state) { 
-        _renderState._state = state; 
+    inline RenderState::StateBlock &getStateBlock()
+    {
+        return _renderState._state;
     }
 
-    RenderState * getRenderState() { return &_renderState; }
+    inline void setStateBlock(const RenderState::StateBlock &state)
+    {
+        _renderState._state = state;
+    }
+
+    RenderState* getRenderState()
+    {
+        return &_renderState;
+    }
 
 protected:
     Material();
     ~Material();
     bool initWithProgramState(backend::ProgramState* state);
-    bool initWithFile(const std::string& file);
+    bool initWithFile(const std::string &file);
     bool initWithProperties(Properties* materialProperties);
 
     void setTarget(Node* target);
@@ -156,7 +162,7 @@ protected:
     bool parseShader(Pass* pass, Properties* properties);
     bool parseSampler(backend::ProgramState* programState, Properties* properties);
     bool parseUniform(backend::ProgramState* programState, Properties* properties, const char* uniformName);
-    bool parseRenderState(RenderState::StateBlock *state, Properties* properties);
+    bool parseRenderState(RenderState::StateBlock* state, Properties* properties);
 
     // material name
     std::string _name;

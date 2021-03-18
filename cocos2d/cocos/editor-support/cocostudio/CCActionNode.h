@@ -30,8 +30,9 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/DictionaryHelper.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
-    
+namespace cocostudio
+{
+
 class CocoLoader;
 struct stExpCocoNode;
 /**
@@ -113,7 +114,7 @@ public:
     *
     * @param frame  the ActionFrame which will be removed
     */
-    void deleteFrame(ActionFrame* frame );
+    void deleteFrame(ActionFrame* frame);
 
     /**
     * Remove all ActionFrames from ActionNode.
@@ -152,8 +153,8 @@ public:
     virtual void stopAction();
 
     /*init properties with a json dictionary*/
-    virtual void initWithDictionary(const rapidjson::Value& dic, cocos2d::Ref* root);
-    virtual void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode*    pCocoNode, Ref* root);
+    virtual void initWithDictionary(const rapidjson::Value &dic, cocos2d::Ref* root);
+    virtual void initWithBinary(CocoLoader* cocoLoader, stExpCocoNode* pCocoNode, Ref* root);
 
     /**
     * Gets if the action is done once time.
@@ -162,17 +163,17 @@ public:
     */
     virtual bool isActionDoneOnce();
 protected:
-    int valueToInt(const std::string& value);
-    bool valueToBool(const std::string& value);
-    float valueToFloat(const std::string& value);
-    
+    int valueToInt(const std::string &value);
+    bool valueToBool(const std::string &value);
+    float valueToFloat(const std::string &value);
+
     int _currentFrameIndex;
     int _destFrameIndex;
 
     float _fUnitTime;
 
     int _actionTag;
-    cocos2d::Spawn * _actionSpawn;
+    cocos2d::Spawn* _actionSpawn;
     cocos2d::Action* _action;
     cocos2d::Ref* _object;
 
@@ -181,10 +182,10 @@ protected:
 
 protected:
     virtual cocos2d::Node* getActionNode();
-    virtual cocos2d::Spawn * refreshActionProperty();
+    virtual cocos2d::Spawn* refreshActionProperty();
     virtual void runAction();
     virtual void initActionNodeFromRoot(cocos2d::Ref* root);
-    virtual void easingToFrame(float duration,float delayTime,ActionFrame* srcFrame,ActionFrame* destFrame);
+    virtual void easingToFrame(float duration, float delayTime, ActionFrame* srcFrame, ActionFrame* destFrame);
 };
 
 }

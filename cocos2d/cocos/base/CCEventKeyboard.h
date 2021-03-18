@@ -219,7 +219,7 @@ public:
         KEY_ENTER,
         KEY_PLAY
     };
-    
+
     /** Constructor.
      *
      * @param keyCode A given keycode.
@@ -227,11 +227,11 @@ public:
      * @js ctor
      */
     EventKeyboard(KeyCode keyCode, bool isPressed);
-    
+
 private:
     KeyCode _keyCode;
     bool _isPressed;
-    
+
     friend class EventListenerKeyboard;
 };
 

@@ -31,27 +31,27 @@
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL TextAtlasReader : public WidgetReader
-    {
-        DECLARE_CLASS_NODE_READER_INFO
-        
-    public:
-        TextAtlasReader();
-        virtual ~TextAtlasReader();
-        
-        static TextAtlasReader* getInstance();
-        /** @deprecated Use method destroyInstance() instead */
-        CC_DEPRECATED_ATTRIBUTE static void purge();
-        static void destroyInstance();
-        
-        virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value& options);
-        virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader,  stExpCocoNode*	pCocoNode) ;
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-                                                                             flatbuffers::FlatBufferBuilder* builder);
-        void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textAtlasOptions);
-        cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textAtlasOptions);
+class CC_STUDIO_DLL TextAtlasReader : public WidgetReader
+{
+DECLARE_CLASS_NODE_READER_INFO
 
-    };
+public:
+    TextAtlasReader();
+    virtual ~TextAtlasReader();
+
+    static TextAtlasReader* getInstance();
+    /** @deprecated Use method destroyInstance() instead */
+    CC_DEPRECATED_ATTRIBUTE static void purge();
+    static void destroyInstance();
+
+    virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value &options);
+    virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode);
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                         flatbuffers::FlatBufferBuilder* builder);
+    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* textAtlasOptions);
+    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* textAtlasOptions);
+
+};
 }
 
 #endif /* defined(__TestCpp__TextAtlasReader__) */

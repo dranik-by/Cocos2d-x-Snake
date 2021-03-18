@@ -32,7 +32,6 @@ THE SOFTWARE.
 
 #include <vector>
 
-
 #include "2d/CCSprite.h"
 #include "2d/CCAutoPolygon.h"
 #include "platform/CCFileUtils.h"
@@ -49,13 +48,13 @@ using namespace std;
 
 NS_CC_BEGIN
 
-static SpriteFrameCache *_sharedSpriteFrameCache = nullptr;
+static SpriteFrameCache* _sharedSpriteFrameCache = nullptr;
 
 SpriteFrameCache* SpriteFrameCache::getInstance()
 {
-    if (! _sharedSpriteFrameCache)
+    if (!_sharedSpriteFrameCache)
     {
-        _sharedSpriteFrameCache = new (std::nothrow) SpriteFrameCache();
+        _sharedSpriteFrameCache = new(std::nothrow) SpriteFrameCache();
         _sharedSpriteFrameCache->init();
     }
 
@@ -78,30 +77,26 @@ SpriteFrameCache::~SpriteFrameCache()
 {
 }
 
-void SpriteFrameCache::initializePolygonInfo(const Size &textureSize,
-                                             const Size &spriteSize,
-                                             const std::vector<int> &vertices,
-                                             const std::vector<int> &verticesUV,
-                                             const std::vector<int> &triangleIndices,
-                                             PolygonInfo &info)
+void SpriteFrameCache::initializePolygonInfo(const Size &textureSize, const Size &spriteSize,
+                                             const std::vector<int> &vertices, const std::vector<int> &verticesUV,
+                                             const std::vector<int> &triangleIndices, PolygonInfo &info)
 {
     size_t vertexCount = vertices.size();
     size_t indexCount = triangleIndices.size();
-    
+
     float scaleFactor = CC_CONTENT_SCALE_FACTOR();
 
-    V3F_C4B_T2F *vertexData = new (std::nothrow) V3F_C4B_T2F[vertexCount];
-    for (size_t i = 0; i < vertexCount/2; i++)
+    V3F_C4B_T2F* vertexData = new(std::nothrow) V3F_C4B_T2F[vertexCount];
+    for (size_t i = 0; i < vertexCount / 2; i++)
     {
         vertexData[i].colors = Color4B::WHITE;
-        vertexData[i].vertices = Vec3(vertices[i*2] / scaleFactor,
-                                      (spriteSize.height - vertices[i*2+1]) / scaleFactor,
-                                      0);
-        vertexData[i].texCoords = Tex2F(verticesUV[i*2] / textureSize.width,
-                                        verticesUV[i*2+1] / textureSize.height);
+        vertexData[i].vertices = Vec3(vertices[i * 2] / scaleFactor,
+                                      (spriteSize.height - vertices[i * 2 + 1]) / scaleFactor, 0);
+        vertexData[i].texCoords = Tex2F(verticesUV[i * 2] / textureSize.width,
+                                        verticesUV[i * 2 + 1] / textureSize.height);
     }
 
-    unsigned short *indexData = new unsigned short[indexCount];
+    unsigned short* indexData = new unsigned short[indexCount];
     for (size_t i = 0; i < indexCount; i++)
     {
         indexData[i] = static_cast<unsigned short>(triangleIndices[i]);
@@ -114,7 +109,7 @@ void SpriteFrameCache::initializePolygonInfo(const Size &textureSize,
     info.setRect(Rect(0, 0, spriteSize.width, spriteSize.height));
 }
 
-void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D* texture, const std::string &plist)
+void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap &dictionary, Texture2D* texture, const std::string &plist)
 {
     /*
     Supported Zwoptex Formats:
@@ -130,7 +125,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
     if (dictionary["frames"].getType() != cocos2d::Value::Type::MAP)
         return;
 
-    ValueMap& framesDict = dictionary["frames"].asValueMap();
+    ValueMap &framesDict = dictionary["frames"].asValueMap();
     int format = 0;
 
     Size textureSize;
@@ -139,32 +134,33 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
     auto metaItr = dictionary.find("metadata");
     if (metaItr != dictionary.end())
     {
-        ValueMap& metadataDict = metaItr->second.asValueMap();
+        ValueMap &metadataDict = metaItr->second.asValueMap();
         format = metadataDict["format"].asInt();
 
-        if(metadataDict.find("size") != metadataDict.end())
+        if (metadataDict.find("size") != metadataDict.end())
         {
             textureSize = SizeFromString(metadataDict["size"].asString());
         }
     }
 
     // check the format
-    CCASSERT(format >=0 && format <= 3, "format is not supported for SpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
+    CCASSERT(format >= 0 && format <= 3,
+             "format is not supported for SpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
 
     auto textureFileName = Director::getInstance()->getTextureCache()->getTextureFilePath(texture);
     Image* image = nullptr;
     NinePatchImageParser parser;
-    for (auto& iter : framesDict)
+    for (auto &iter : framesDict)
     {
-        ValueMap& frameDict = iter.second.asValueMap();
+        ValueMap &frameDict = iter.second.asValueMap();
         std::string spriteFrameName = iter.first;
         SpriteFrame* spriteFrame = _spriteFramesCache.at(spriteFrameName);
         if (spriteFrame)
         {
             continue;
         }
-        
-        if(format == 0) 
+
+        if (format == 0)
         {
             float x = frameDict["x"].asFloat();
             float y = frameDict["y"].asFloat();
@@ -175,22 +171,19 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             int ow = frameDict["originalWidth"].asInt();
             int oh = frameDict["originalHeight"].asInt();
             // check ow/oh
-            if(!ow || !oh)
+            if (!ow || !oh)
             {
-                CCLOGWARN("cocos2d: WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as expected. Regenerate the .plist");
+                CCLOGWARN(
+                "cocos2d: WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as expected. Regenerate the .plist");
             }
             // abs ow/oh
             ow = std::abs(ow);
             oh = std::abs(oh);
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                                                         Rect(x, y, w, h),
-                                                         false,
-                                                         Vec2(ox, oy),
-                                                         Size((float)ow, (float)oh)
-                                                         );
-        } 
-        else if(format == 1 || format == 2) 
+            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(x, y, w, h), false, Vec2(ox, oy),
+                                                         Size((float)ow, (float)oh));
+        }
+        else if (format == 1 || format == 2)
         {
             Rect frame = RectFromString(frameDict["frame"].asString());
             bool rotated = false;
@@ -205,13 +198,8 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             Size sourceSize = SizeFromString(frameDict["sourceSize"].asString());
 
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                                                         frame,
-                                                         rotated,
-                                                         offset,
-                                                         sourceSize
-                                                         );
-        } 
+            spriteFrame = SpriteFrame::createWithTexture(texture, frame, rotated, offset, sourceSize);
+        }
         else if (format == 3)
         {
             // get values
@@ -222,9 +210,10 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             bool textureRotated = frameDict["textureRotated"].asBool();
 
             // get aliases
-            ValueVector& aliases = frameDict["aliases"].asValueVector();
+            ValueVector &aliases = frameDict["aliases"].asValueVector();
 
-            for(const auto &value : aliases) {
+            for (const auto &value : aliases)
+            {
                 std::string oneAlias = value.asString();
                 if (_spriteFramesAliases.find(oneAlias) != _spriteFramesAliases.end())
                 {
@@ -235,13 +224,11 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
             }
 
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                                                         Rect(textureRect.origin.x, textureRect.origin.y, spriteSize.width, spriteSize.height),
-                                                         textureRotated,
-                                                         spriteOffset,
-                                                         spriteSourceSize);
+            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(textureRect.origin.x, textureRect.origin.y,
+                                                                       spriteSize.width, spriteSize.height),
+                                                         textureRotated, spriteOffset, spriteSourceSize);
 
-            if(frameDict.find("vertices") != frameDict.end())
+            if (frameDict.find("vertices") != frameDict.end())
             {
                 using cocos2d::utils::parseIntegerList;
                 std::vector<int> vertices = parseIntegerList(frameDict["vertices"].asString());
@@ -259,10 +246,11 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
         }
 
         bool flag = NinePatchImageParser::isNinePatchImage(spriteFrameName);
-        if(flag)
+        if (flag)
         {
-            if (image == nullptr) {
-                image = new (std::nothrow) Image();
+            if (image == nullptr)
+            {
+                image = new(std::nothrow) Image();
                 image->initWithImageFile(textureFileName);
             }
             parser.setSpriteFrameInfo(image, spriteFrame->getRectInPixels(), spriteFrame->isRotated());
@@ -275,32 +263,34 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dictionary, Textu
     CC_SAFE_DELETE(image);
 }
 
-void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::string &texturePath, const std::string &plist)
+void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap &dict, const std::string &texturePath,
+                                                     const std::string &plist)
 {
     std::string pixelFormatName;
     if (dict.find("metadata") != dict.end())
     {
-        ValueMap& metadataDict = dict.at("metadata").asValueMap();
+        ValueMap &metadataDict = dict.at("metadata").asValueMap();
         if (metadataDict.find("pixelFormat") != metadataDict.end())
         {
             pixelFormatName = metadataDict.at("pixelFormat").asString();
         }
     }
-    
-    Texture2D *texture = nullptr;
+
+    Texture2D* texture = nullptr;
     static std::unordered_map<std::string, backend::PixelFormat> pixelFormats = {
-        {"RGBA8888", backend::PixelFormat::RGBA8888},
-        {"RGBA4444", backend::PixelFormat::RGBA4444},
-        {"RGB5A1", backend::PixelFormat::RGB5A1},
-        {"RGBA5551", backend::PixelFormat::RGB5A1},
-        {"RGB565", backend::PixelFormat::RGB565},
-        {"A8", backend::PixelFormat::A8},
-        {"ALPHA", backend::PixelFormat::A8},
-        {"I8", backend::PixelFormat::I8},
-        {"AI88", backend::PixelFormat::AI88},
-        {"ALPHA_INTENSITY", backend::PixelFormat::AI88},
-        //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
-        {"RGB888", backend::PixelFormat::RGB888}
+    {  "RGBA8888"       , backend::PixelFormat::RGBA8888}
+    , {"RGBA4444"       , backend::PixelFormat::RGBA4444}
+    , {"RGB5A1"         , backend::PixelFormat::RGB5A1}
+    , {"RGBA5551"       , backend::PixelFormat::RGB5A1}
+    , {"RGB565"         , backend::PixelFormat::RGB565}
+    , {"A8"             , backend::PixelFormat::A8}
+    , {"ALPHA"          , backend::PixelFormat::A8}
+    , {"I8"             , backend::PixelFormat::I8}
+    , {"AI88"           , backend::PixelFormat::AI88}
+    , {"ALPHA_INTENSITY", backend::PixelFormat::AI88}
+    ,
+    //{"BGRA8888", backend::PixelFormat::BGRA8888}, no Image conversion RGBA -> BGRA
+    {  "RGB888"         , backend::PixelFormat::RGB888}
     };
 
     auto pixelFormatIt = pixelFormats.find(pixelFormatName);
@@ -316,7 +306,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::
     {
         texture = Director::getInstance()->getTextureCache()->addImage(texturePath);
     }
-    
+
     if (texture)
     {
         addSpriteFramesWithDictionary(dict, texture, plist);
@@ -327,7 +317,7 @@ void SpriteFrameCache::addSpriteFramesWithDictionary(ValueMap& dict, const std::
     }
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist, Texture2D *texture)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string &plist, Texture2D* texture)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
@@ -335,24 +325,25 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist, Texture
     addSpriteFramesWithDictionary(dict, texture, plist);
 }
 
-void SpriteFrameCache::addSpriteFramesWithFileContent(const std::string& plist_content, Texture2D *texture)
+void SpriteFrameCache::addSpriteFramesWithFileContent(const std::string &plist_content, Texture2D* texture)
 {
-    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(plist_content.c_str(), static_cast<int>(plist_content.size()));
+    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(plist_content.c_str(),
+                                                                  static_cast<int>(plist_content.size()));
     addSpriteFramesWithDictionary(dict, texture, "by#addSpriteFramesWithFileContent()");
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist, const std::string& textureFileName)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string &plist, const std::string &textureFileName)
 {
-    CCASSERT(textureFileName.size()>0, "texture name should not be null");
+    CCASSERT(textureFileName.size() > 0, "texture name should not be null");
     const std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
     addSpriteFramesWithDictionary(dict, textureFileName, plist);
 }
 
-void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
+void SpriteFrameCache::addSpriteFramesWithFile(const std::string &plist)
 {
     CCASSERT(!plist.empty(), "plist filename should not be nullptr");
-    
+
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
     if (fullPath.empty())
     {
@@ -367,7 +358,7 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
 
     if (dict.find("metadata") != dict.end())
     {
-        ValueMap& metadataDict = dict["metadata"].asValueMap();
+        ValueMap &metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
         texturePath = metadataDict["textureFileName"].asString();
     }
@@ -383,8 +374,8 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
         texturePath = plist;
 
         // remove .xxx
-        size_t startPos = texturePath.find_last_of('.'); 
-        if(startPos != string::npos)
+        size_t startPos = texturePath.find_last_of('.');
+        if (startPos != string::npos)
         {
             texturePath = texturePath.erase(startPos);
         }
@@ -397,12 +388,12 @@ void SpriteFrameCache::addSpriteFramesWithFile(const std::string& plist)
     addSpriteFramesWithDictionary(dict, texturePath, plist);
 }
 
-bool SpriteFrameCache::isSpriteFramesWithFileLoaded(const std::string& plist) const
+bool SpriteFrameCache::isSpriteFramesWithFileLoaded(const std::string &plist) const
 {
     return _spriteFramesCache.isPlistUsed(plist) && _spriteFramesCache.isPlistFull(plist);
 }
 
-void SpriteFrameCache::addSpriteFrame(SpriteFrame* frame, const std::string& frameName)
+void SpriteFrameCache::addSpriteFrame(SpriteFrame* frame, const std::string &frameName)
 {
     CCASSERT(frame, "frame should not be nil");
     _spriteFramesCache.insertFrame("by#addSpriteFrame()", frameName, frame);
@@ -418,11 +409,11 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
 {
     bool removed = false;
     std::vector<std::string> toRemoveFrames;
-    
-    for (auto& iter : _spriteFramesCache.getSpriteFrames())
+
+    for (auto &iter : _spriteFramesCache.getSpriteFrames())
     {
         SpriteFrame* spriteFrame = iter.second;
-        if( spriteFrame->getReferenceCount() == 1 )
+        if (spriteFrame->getReferenceCount() == 1)
         {
             toRemoveFrames.push_back(iter.first);
             spriteFrame->getTexture()->removeSpriteFrameCapInset(spriteFrame);
@@ -431,15 +422,13 @@ void SpriteFrameCache::removeUnusedSpriteFrames()
         }
     }
 
- 
-    if( removed )
+    if (removed)
     {
         _spriteFramesCache.eraseFrames(toRemoveFrames);
     }
 }
 
-
-void SpriteFrameCache::removeSpriteFrameByName(const std::string& name)
+void SpriteFrameCache::removeSpriteFrameByName(const std::string &name)
 {
     // explicit nil handling
     if (name.empty())
@@ -457,13 +446,13 @@ void SpriteFrameCache::removeSpriteFrameByName(const std::string& name)
     _spriteFramesCache.eraseFrame(name);
 }
 
-void SpriteFrameCache::removeSpriteFramesFromFile(const std::string& plist)
+void SpriteFrameCache::removeSpriteFramesFromFile(const std::string &plist)
 {
     std::string fullPath = FileUtils::getInstance()->fullPathForFilename(plist);
     ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(fullPath);
     if (dict.empty())
     {
-        CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.",plist.c_str());
+        CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFile: create dict by %s fail.", plist.c_str());
         return;
     }
     removeSpriteFramesFromDictionary(dict);
@@ -472,9 +461,10 @@ void SpriteFrameCache::removeSpriteFramesFromFile(const std::string& plist)
     _spriteFramesCache.erasePlistIndex(plist);
 }
 
-void SpriteFrameCache::removeSpriteFramesFromFileContent(const std::string& plist_content)
+void SpriteFrameCache::removeSpriteFramesFromFileContent(const std::string &plist_content)
 {
-    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(plist_content.data(), static_cast<int>(plist_content.size()));
+    ValueMap dict = FileUtils::getInstance()->getValueMapFromData(plist_content.data(),
+                                                                  static_cast<int>(plist_content.size()));
     if (dict.empty())
     {
         CCLOG("cocos2d:SpriteFrameCache:removeSpriteFramesFromFileContent: create dict by fail.");
@@ -483,15 +473,15 @@ void SpriteFrameCache::removeSpriteFramesFromFileContent(const std::string& plis
     removeSpriteFramesFromDictionary(dict);
 }
 
-void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap& dictionary)
+void SpriteFrameCache::removeSpriteFramesFromDictionary(ValueMap &dictionary)
 {
     if (dictionary["frames"].getType() != cocos2d::Value::Type::MAP)
         return;
 
-    const ValueMap& framesDict = dictionary["frames"].asValueMap();
+    const ValueMap &framesDict = dictionary["frames"].asValueMap();
     std::vector<std::string> keysToRemove;
 
-    for (const auto& iter : framesDict)
+    for (const auto &iter : framesDict)
     {
         if (_spriteFramesCache.at(iter.first))
         {
@@ -506,7 +496,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
 {
     std::vector<std::string> keysToRemove;
 
-    for (auto& iter : _spriteFramesCache.getSpriteFrames())
+    for (auto &iter : _spriteFramesCache.getSpriteFrames())
     {
         std::string key = iter.first;
         SpriteFrame* frame = _spriteFramesCache.at(key);
@@ -519,7 +509,7 @@ void SpriteFrameCache::removeSpriteFramesFromTexture(Texture2D* texture)
     _spriteFramesCache.eraseFrames(keysToRemove);
 }
 
-SpriteFrame* SpriteFrameCache::getSpriteFrameByName(const std::string& name)
+SpriteFrame* SpriteFrameCache::getSpriteFrameByName(const std::string &name)
 {
     SpriteFrame* frame = _spriteFramesCache.at(name);
     if (!frame)
@@ -545,24 +535,26 @@ SpriteFrame* SpriteFrameCache::getSpriteFrameByName(const std::string& name)
     return frame;
 }
 
-void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Texture2D *texture, const std::string &plist)
+void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap &dictionary, Texture2D* texture,
+                                                        const std::string &plist)
 {
-    ValueMap& framesDict = dictionary["frames"].asValueMap();
+    ValueMap &framesDict = dictionary["frames"].asValueMap();
     int format = 0;
 
     // get the format
     if (dictionary.find("metadata") != dictionary.end())
     {
-        ValueMap& metadataDict = dictionary["metadata"].asValueMap();
+        ValueMap &metadataDict = dictionary["metadata"].asValueMap();
         format = metadataDict["format"].asInt();
     }
 
     // check the format
-    CCASSERT(format >= 0 && format <= 3, "format is not supported for SpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
+    CCASSERT(format >= 0 && format <= 3,
+             "format is not supported for SpriteFrameCache addSpriteFramesWithDictionary:textureFilename:");
 
-    for (auto& iter : framesDict)
+    for (auto &iter : framesDict)
     {
-        ValueMap& frameDict = iter.second.asValueMap();
+        ValueMap &frameDict = iter.second.asValueMap();
         std::string spriteFrameName = iter.first;
 
         _spriteFramesCache.eraseFrame(spriteFrameName);
@@ -582,18 +574,15 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             // check ow/oh
             if (!ow || !oh)
             {
-                CCLOGWARN("cocos2d: WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as expected. Regenerate the .plist");
+                CCLOGWARN(
+                "cocos2d: WARNING: originalWidth/Height not found on the SpriteFrame. AnchorPoint won't work as expected. Regenerate the .plist");
             }
             // abs ow/oh
             ow = std::abs(ow);
             oh = std::abs(oh);
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                Rect(x, y, w, h),
-                false,
-                Vec2(ox, oy),
-                Size((float)ow, (float)oh)
-                );
+            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(x, y, w, h), false, Vec2(ox, oy),
+                                                         Size((float)ow, (float)oh));
         }
         else if (format == 1 || format == 2)
         {
@@ -610,12 +599,7 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             Size sourceSize = SizeFromString(frameDict["sourceSize"].asString());
 
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                frame,
-                rotated,
-                offset,
-                sourceSize
-                );
+            spriteFrame = SpriteFrame::createWithTexture(texture, frame, rotated, offset, sourceSize);
         }
         else if (format == 3)
         {
@@ -627,9 +611,10 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             bool textureRotated = frameDict["textureRotated"].asBool();
 
             // get aliases
-            ValueVector& aliases = frameDict["aliases"].asValueVector();
+            ValueVector &aliases = frameDict["aliases"].asValueVector();
 
-            for (const auto &value : aliases) {
+            for (const auto &value : aliases)
+            {
                 std::string oneAlias = value.asString();
                 if (_spriteFramesAliases.find(oneAlias) != _spriteFramesAliases.end())
                 {
@@ -640,11 +625,9 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
             }
 
             // create frame
-            spriteFrame = SpriteFrame::createWithTexture(texture,
-                Rect(textureRect.origin.x, textureRect.origin.y, spriteSize.width, spriteSize.height),
-                textureRotated,
-                spriteOffset,
-                spriteSourceSize);
+            spriteFrame = SpriteFrame::createWithTexture(texture, Rect(textureRect.origin.x, textureRect.origin.y,
+                                                                       spriteSize.width, spriteSize.height),
+                                                         textureRotated, spriteOffset, spriteSourceSize);
         }
 
         // add sprite frame
@@ -652,11 +635,12 @@ void SpriteFrameCache::reloadSpriteFramesWithDictionary(ValueMap& dictionary, Te
     }
 }
 
-bool SpriteFrameCache::reloadTexture(const std::string& plist)
+bool SpriteFrameCache::reloadTexture(const std::string &plist)
 {
-    CCASSERT(plist.size()>0, "plist filename should not be nullptr");
+    CCASSERT(plist.size() > 0, "plist filename should not be nullptr");
 
-    if (_spriteFramesCache.isPlistUsed(plist)) {
+    if (_spriteFramesCache.isPlistUsed(plist))
+    {
         _spriteFramesCache.erasePlistIndex(plist);
     }
     else
@@ -672,7 +656,7 @@ bool SpriteFrameCache::reloadTexture(const std::string& plist)
 
     if (dict.find("metadata") != dict.end())
     {
-        ValueMap& metadataDict = dict["metadata"].asValueMap();
+        ValueMap &metadataDict = dict["metadata"].asValueMap();
         // try to read  texture file name from meta data
         texturePath = metadataDict["textureFileName"].asString();
     }
@@ -689,16 +673,16 @@ bool SpriteFrameCache::reloadTexture(const std::string& plist)
 
         // remove .xxx
         size_t startPos = texturePath.find_last_of('.');
-        if(startPos != string::npos)
+        if (startPos != string::npos)
         {
             texturePath = texturePath.erase(startPos);
         }
-        
+
         // append .png
         texturePath = texturePath.append(".png");
     }
 
-    Texture2D *texture = nullptr;
+    Texture2D* texture = nullptr;
     if (Director::getInstance()->getTextureCache()->reloadTexture(texturePath))
         texture = Director::getInstance()->getTextureCache()->getTextureForKey(texturePath);
 
@@ -713,8 +697,8 @@ bool SpriteFrameCache::reloadTexture(const std::string& plist)
     return true;
 }
 
-
-void SpriteFrameCache::PlistFramesCache::insertFrame(const std::string &plist, const std::string &frame, SpriteFrame *spriteFrame)
+void SpriteFrameCache::PlistFramesCache::insertFrame(const std::string &plist, const std::string &frame,
+                                                     SpriteFrame* spriteFrame)
 {
     _spriteFrames.insert(frame, spriteFrame);   //add SpriteFrame
 
@@ -745,7 +729,7 @@ bool SpriteFrameCache::PlistFramesCache::eraseFrame(const std::string &frame)
 bool SpriteFrameCache::PlistFramesCache::eraseFrames(const std::vector<std::string> &frames)
 {
     auto ret = false;
-    for (const auto & frame : frames)
+    for (const auto &frame : frames)
     {
         ret |= eraseFrame(frame);
     }
@@ -757,10 +741,11 @@ bool SpriteFrameCache::PlistFramesCache::eraseFrames(const std::vector<std::stri
 bool SpriteFrameCache::PlistFramesCache::erasePlistIndex(const std::string &plist)
 {
     auto it = _indexPlist2Frames.find(plist);
-    if (it == _indexPlist2Frames.end()) return false;
+    if (it == _indexPlist2Frames.end())
+        return false;
 
     auto &frames = it->second;
-    for (const auto& f : frames)
+    for (const auto &f : frames)
     {
         // !!do not!! call `_spriteFrames.erase(f);` to erase SpriteFrame
         // only erase index here
@@ -788,13 +773,14 @@ bool SpriteFrameCache::PlistFramesCache::isPlistUsed(const std::string &plist) c
 {
     auto frames = _indexPlist2Frames.find(plist);
     return frames != _indexPlist2Frames.end() && frames->second.size() > 0;
-} 
+}
 
-SpriteFrame * SpriteFrameCache::PlistFramesCache::at(const std::string &frame)
+SpriteFrame* SpriteFrameCache::PlistFramesCache::at(const std::string &frame)
 {
     return _spriteFrames.at(frame);
 }
-Map<std::string, SpriteFrame*>&  SpriteFrameCache::PlistFramesCache::getSpriteFrames()
+
+Map<std::string, SpriteFrame*> &SpriteFrameCache::PlistFramesCache::getSpriteFrames()
 {
     return _spriteFrames;
 }

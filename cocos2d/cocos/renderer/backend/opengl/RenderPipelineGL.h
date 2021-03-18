@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../RenderPipeline.h"
@@ -51,15 +51,20 @@ public:
     RenderPipelineGL() = default;
     ~RenderPipelineGL();
 
-    virtual void update(const PipelineDescriptor & pipelineDescirptor, const RenderPassDescriptor& renderpassDescriptor) override;
+    virtual void update(const PipelineDescriptor &pipelineDescirptor,
+                        const RenderPassDescriptor &renderpassDescriptor) override;
+
     /**
      * Get program instance.
      * @return Program instance.
      */
-    inline ProgramGL* getProgram() const { return _programGL; }
+    inline ProgramGL* getProgram() const
+    {
+        return _programGL;
+    }
 
 private:
-    void updateBlendState(const BlendDescriptor& descriptor);
+    void updateBlendState(const BlendDescriptor &descriptor);
 
     ProgramGL* _programGL = nullptr;
 };

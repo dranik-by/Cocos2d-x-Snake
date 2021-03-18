@@ -41,12 +41,18 @@ class CC_DLL __Float : public Ref, public Clonable
 {
 public:
     __Float(float v)
-        : _value(v) {}
-    float getValue() const {return _value;}
+    : _value(v)
+    {
+    }
+
+    float getValue() const
+    {
+        return _value;
+    }
 
     static __Float* create(float v)
     {
-        __Float* pRet = new (std::nothrow) __Float(v);
+        __Float* pRet = new(std::nothrow) __Float(v);
         if (pRet)
         {
             pRet->autorelease();
@@ -55,13 +61,16 @@ public:
     }
 
     /* override functions */
-    virtual void acceptVisitor(DataVisitor &visitor) { visitor.visit(this); }
-    
+    virtual void acceptVisitor(DataVisitor &visitor)
+    {
+        visitor.visit(this);
+    }
+
     virtual __Float* clone() const override
     {
         return __Float::create(_value);
     }
-    
+
 private:
     float _value;
 };

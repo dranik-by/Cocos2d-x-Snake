@@ -38,7 +38,6 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-
 class Ref;
 
 /** 
@@ -51,12 +50,14 @@ class CC_DLL Clonable
 public:
     /** Returns a copy of the Ref. */
     virtual Clonable* clone() const = 0;
-    
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual ~Clonable() {};
+    virtual ~Clonable()
+    {
+    };
 };
 
 /**
@@ -139,12 +140,12 @@ protected:
 
     friend class AutoreleasePool;
 
-#if CC_ENABLE_SCRIPT_BINDING
+    #if CC_ENABLE_SCRIPT_BINDING
 public:
     /// object id, ScriptSupport need public _ID
-    unsigned int        _ID;
+    unsigned int _ID;
     /// Lua reference id
-    int                 _luaID;
+    int _luaID;
     /// scriptObject, support for swift
     void* _scriptObject;
 
@@ -152,13 +153,13 @@ public:
      When true, it means that the object was already rooted.
      */
     bool _rooted;
-#endif
+    #endif
 
     // Memory leak diagnostic data (only included when CC_REF_LEAK_DETECTION is defined and its value isn't zero)
-#if CC_REF_LEAK_DETECTION
-public:
-    static void printLeaks();
-#endif
+    #if CC_REF_LEAK_DETECTION
+    public:
+        static void printLeaks();
+    #endif
 };
 
 class Node;

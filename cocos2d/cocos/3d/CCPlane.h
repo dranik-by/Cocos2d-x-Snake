@@ -49,57 +49,63 @@ public:
     /**
     * create plane from tree point.
     */
-    Plane(const Vec3& p1, const Vec3& p2, const Vec3& p3);
+    Plane(const Vec3 &p1, const Vec3 &p2, const Vec3 &p3);
 
     /**
     * create plane from normal and dist.
     */
-    Plane(const Vec3& normal, float dist);
+    Plane(const Vec3 &normal, float dist);
 
     /**
     * create plane from normal and a point on plane.
     */
-    Plane(const Vec3& normal, const Vec3& point);
-    
+    Plane(const Vec3 &normal, const Vec3 &point);
+
     /**
      * create a default plan whose normal is (0, 0, 1), and _dist is 0, xoy plan in fact.
      */
     Plane();
-    
+
     /**
     * init plane from tree point.
     */
-    void initPlane(const Vec3& p1, const Vec3& p2, const Vec3& p3);
+    void initPlane(const Vec3 &p1, const Vec3 &p2, const Vec3 &p3);
 
     /**
     * init plane from normal and dist.
     */
-    void initPlane(const Vec3& normal, float dist);
+    void initPlane(const Vec3 &normal, float dist);
 
     /**
     * init plane from normal and a point on plane.
     */
-    void initPlane(const Vec3& normal, const Vec3& point);
+    void initPlane(const Vec3 &normal, const Vec3 &point);
 
     /**
     * dist to plane, > 0 normal direction
     */
-    float dist2Plane(const Vec3& p) const;
+    float dist2Plane(const Vec3 &p) const;
 
     /**
     * Gets the plane's normal.
     */
-    const Vec3& getNormal() const { return _normal; }
+    const Vec3 &getNormal() const
+    {
+        return _normal;
+    }
 
     /**
     * Gets the plane's distance to the origin along its normal.
     */
-    float getDist() const  { return _dist; }
+    float getDist() const
+    {
+        return _dist;
+    }
 
     /**
     * Return the side where the point is.
     */
-    PointSide getSide(const Vec3& point) const;
+    PointSide getSide(const Vec3 &point) const;
 
 protected:
     Vec3 _normal; // the normal line of the plane

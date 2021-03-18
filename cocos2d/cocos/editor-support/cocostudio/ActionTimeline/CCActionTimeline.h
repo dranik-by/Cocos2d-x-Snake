@@ -36,15 +36,15 @@ NS_TIMELINE_BEGIN
 typedef struct AnimationInfo
 {
     AnimationInfo()
-        :startIndex(0)
-        ,endIndex(0)
+    : startIndex(0)
+    , endIndex(0)
     {
     }
 
-    AnimationInfo(const std::string& otherName, int otherStartIndex, int otherEndIndex)
-    :name(otherName)
-    ,startIndex(otherStartIndex)
-    ,endIndex(otherEndIndex)
+    AnimationInfo(const std::string &otherName, int otherStartIndex, int otherEndIndex)
+    : name(otherName)
+    , startIndex(otherStartIndex)
+    , endIndex(otherEndIndex)
     {
     }
 
@@ -62,15 +62,22 @@ class CC_STUDIO_DLL ActionTimelineData : public cocos2d::Ref
 public:
     static ActionTimelineData* create(int actionTag);
 
-    virtual void setActionTag(int actionTag) { _actionTag = actionTag; }
-    virtual int getActionTag() const { return _actionTag; }
+    virtual void setActionTag(int actionTag)
+    {
+        _actionTag = actionTag;
+    }
+
+    virtual int getActionTag() const
+    {
+        return _actionTag;
+    }
+
 CC_CONSTRUCTOR_ACCESS:
     ActionTimelineData();
     virtual bool init(int actionTag);
 protected:
     int _actionTag;
 };
-
 
 class CC_STUDIO_DLL ActionTimeline : public cocos2d::Action, public cocos2d::PlayableProtocol
 {
@@ -126,38 +133,65 @@ public:
     virtual bool isPlaying() const;
 
     /** Set the animation speed, this will speed up or slow down the speed. */
-    virtual void  setTimeSpeed(float speed) { _timeSpeed = speed; }
+    virtual void setTimeSpeed(float speed)
+    {
+        _timeSpeed = speed;
+    }
+
     /** Get current animation speed. */
-    virtual float getTimeSpeed() const { return _timeSpeed; }
+    virtual float getTimeSpeed() const
+    {
+        return _timeSpeed;
+    }
 
     /** duration of the whole action*/
-    virtual void setDuration(int duration) { _duration = duration; }
-    virtual int  getDuration() const { return _duration; }
+    virtual void setDuration(int duration)
+    {
+        _duration = duration;
+    }
+
+    virtual int getDuration() const
+    {
+        return _duration;
+    }
 
     /** Start frame index of this action*/
-    virtual int getStartFrame() const { return _startFrame; }
+    virtual int getStartFrame() const
+    {
+        return _startFrame;
+    }
 
     /** End frame of this action.
       * When action play to this frame, if action is not loop, then it will stop, 
       * or it will play from start frame again. */
-    virtual int  getEndFrame() const { return _endFrame; }
+    virtual int getEndFrame() const
+    {
+        return _endFrame;
+    }
 
     /** Set current frame index, this will cause action plays to this frame. */
     virtual void setCurrentFrame(int frameIndex);
+
     /** Get current frame. */
-    virtual int  getCurrentFrame() const { return _currentFrame; }
+    virtual int getCurrentFrame() const
+    {
+        return _currentFrame;
+    }
 
     /** add Timeline to ActionTimeline */
     virtual void addTimeline(Timeline* timeline);
     virtual void removeTimeline(Timeline* timeline);
 
-    virtual const cocos2d::Vector<Timeline*>& getTimelines() const { return _timelineList; }
-    
+    virtual const cocos2d::Vector<Timeline*> &getTimelines() const
+    {
+        return _timelineList;
+    }
+
     /** AnimationInfo*/
-    virtual void addAnimationInfo(const AnimationInfo& animationInfo);
+    virtual void addAnimationInfo(const AnimationInfo &animationInfo);
     virtual void removeAnimationInfo(std::string animationName);
-    virtual bool IsAnimationInfoExists(const std::string& animationName);
-    virtual const AnimationInfo& getAnimationInfo(const std::string& animationName);
+    virtual bool IsAnimationInfoExists(const std::string &animationName);
+    virtual const AnimationInfo &getAnimationInfo(const std::string &animationName);
     /**add a frame end call back to animation's end frame
      * @param animationName  @addFrameEndCallFunc, make the animationName as funcKey
      * @param func the callback function
@@ -165,7 +199,7 @@ public:
     virtual void setAnimationEndCallFunc(const std::string animationName, std::function<void()> func);
 
     /** Set ActionTimeline's frame event callback function */
-    void setFrameEventCallFunc(std::function<void(Frame *)> listener);
+    void setFrameEventCallFunc(std::function<void(Frame*)> listener);
     void clearFrameEventCallFunc();
 
     /** Last frame callback will call when arriving last frame */
@@ -177,9 +211,9 @@ public:
      * @param funcKey for identity the callback function
      * @param func the callback function
      */
-    virtual void addFrameEndCallFunc(int frameIndex, const std::string& funcKey, std::function<void()> func);
+    virtual void addFrameEndCallFunc(int frameIndex, const std::string &funcKey, std::function<void()> func);
     // remove callback function after frameIndex which identified with funcKey
-    virtual void removeFrameEndCallFunc(int frameIndex, const std::string& funcKey);
+    virtual void removeFrameEndCallFunc(int frameIndex, const std::string &funcKey);
     // clear callback functions after frameIndex
     virtual void removeFrameEndCallFuncs(int frameIndex);
     // clear all the callback functions after frameIndexs in this actiontimeline
@@ -188,17 +222,24 @@ public:
     /** Inherit from Action. */
 
     /** Returns a clone of ActionTimeline */
-    virtual ActionTimeline* clone() const override; 
+    virtual ActionTimeline* clone() const override;
 
     /** Returns a reverse of ActionTimeline. 
      *  Not implement yet.
      */
-    virtual ActionTimeline* reverse() const override { return nullptr; }
+    virtual ActionTimeline* reverse() const override
+    {
+        return nullptr;
+    }
 
-    virtual void step(float delta) override; 
-    virtual void startWithTarget(cocos2d::Node *target) override;  
-    virtual bool isDone() const override { return false; }
-    
+    virtual void step(float delta) override;
+    virtual void startWithTarget(cocos2d::Node* target) override;
+
+    virtual bool isDone() const override
+    {
+        return false;
+    }
+
     /// @{
     /// @name implement Playable Protocol
     virtual void start() override;
@@ -218,15 +259,15 @@ protected:
     std::map<int, cocos2d::Vector<Timeline*>> _timelineMap;
     cocos2d::Vector<Timeline*> _timelineList;
 
-    int     _duration;
-    double  _time;
-    float   _timeSpeed;
-    float   _frameInternal;
-    bool    _playing;
-    int     _currentFrame;
-    int     _startFrame;
-    int     _endFrame;
-    bool    _loop;
+    int _duration;
+    double _time;
+    float _timeSpeed;
+    float _frameInternal;
+    bool _playing;
+    int _currentFrame;
+    int _startFrame;
+    int _endFrame;
+    bool _loop;
 
     std::function<void(Frame*)> _frameEventListener;
     std::function<void()> _lastFrameListener;
@@ -235,6 +276,5 @@ protected:
 };
 
 NS_TIMELINE_END
-
 
 #endif /*__CCTIMELINE_ACTION_H__*/

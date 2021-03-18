@@ -30,35 +30,41 @@
 
 namespace flatbuffers
 {
-    class FlatBufferBuilder;
-    template<typename T> struct Offset;
-    
-    class Table;
+class FlatBufferBuilder;
+template <typename T>
+struct Offset;
+
+class Table;
 }
 
 namespace tinyxml2
 {
-    class XMLElement;
+class XMLElement;
 }
 
 namespace cocos2d
 {
-    class Node;
+class Node;
 }
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL NodeReaderProtocol
+class CC_STUDIO_DLL NodeReaderProtocol
+{
+public:
+    NodeReaderProtocol()
     {
-    public:
-        NodeReaderProtocol() {};
-        virtual ~NodeReaderProtocol() {};
-        
-        virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-                                                                                     flatbuffers::FlatBufferBuilder* builder) = 0;
-        virtual void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions) = 0;
-        virtual cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) = 0;
     };
+
+    virtual ~NodeReaderProtocol()
+    {
+    };
+
+    virtual flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                                 flatbuffers::FlatBufferBuilder* builder) = 0;
+    virtual void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions) = 0;
+    virtual cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions) = 0;
+};
 }
 
 #endif /* defined(__cocos2d_libs__NodeReaderProtocol__) */

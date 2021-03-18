@@ -35,7 +35,8 @@ NS_CC_BEGIN
 
 class Node;
 
-enum {
+enum
+{
     kComponentOnEnter,
     kComponentOnExit,
     kComponentOnAdd,
@@ -56,14 +57,29 @@ public:
 
     virtual bool init();
 
-    bool isEnabled() const { return _enabled; }
+    bool isEnabled() const
+    {
+        return _enabled;
+    }
+
     virtual void setEnabled(bool enabled);
-    
-    const std::string& getName() const { return _name; }
-    virtual void setName(const std::string& name) { _name = name; }
-    
-    Node* getOwner() const { return _owner; }
-    virtual void setOwner(Node *owner);
+
+    const std::string &getName() const
+    {
+        return _name;
+    }
+
+    virtual void setName(const std::string &name)
+    {
+        _name = name;
+    }
+
+    Node* getOwner() const
+    {
+        return _owner;
+    }
+
+    virtual void setOwner(Node* owner);
 
     virtual void update(float delta);
     virtual bool serialize(void* r);
@@ -83,10 +99,10 @@ protected:
     Node* _owner;
     std::string _name;
     bool _enabled;
-    
-#if CC_ENABLE_SCRIPT_BINDING
+
+    #if CC_ENABLE_SCRIPT_BINDING
     ccScriptType _scriptType;         ///< type of script binding, lua or javascript
-#endif
+    #endif
 };
 
 NS_CC_END

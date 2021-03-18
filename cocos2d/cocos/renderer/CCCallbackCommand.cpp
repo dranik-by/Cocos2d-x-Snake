@@ -43,10 +43,10 @@ void CallbackCommand::init(float globalOrder, const Mat4 &transform, unsigned in
 
 void CallbackCommand::execute()
 {
-   if(func)
-   {
-       func();
-   }
+    if (func)
+    {
+        func();
+    }
 }
 
 CaptureScreenCallbackCommand::CaptureScreenCallbackCommand()

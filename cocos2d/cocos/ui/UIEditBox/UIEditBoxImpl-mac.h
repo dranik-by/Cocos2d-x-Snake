@@ -31,15 +31,16 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
 
-#include "ui/UIEditBox/UIEditBoxImpl-common.h"
+    #include "ui/UIEditBox/UIEditBoxImpl-common.h"
 
 @class UIEditBoxImplMac;
 @class NSFont;
 
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 class EditBox;
 
 class EditBoxImplMac : public EditBoxImplCommon
@@ -54,33 +55,32 @@ public:
      * @lua NA
      */
     virtual ~EditBoxImplMac();
-    
+
     virtual bool isEditing() override;
-    virtual void createNativeControl(const Rect& frame) override;
+    virtual void createNativeControl(const Rect &frame) override;
     virtual void setNativeFont(const char* pFontName, int fontSize) override;
-    virtual void setNativeFontColor(const Color4B& color) override;
+    virtual void setNativeFontColor(const Color4B &color) override;
     virtual void setNativePlaceholderFont(const char* pFontName, int fontSize) override;
-    virtual void setNativePlaceholderFontColor(const Color4B& color) override;
+    virtual void setNativePlaceholderFontColor(const Color4B &color) override;
     virtual void setNativeInputMode(EditBox::InputMode inputMode) override;
     virtual void setNativeInputFlag(EditBox::InputFlag inputFlag) override;
-    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType)override;
+    virtual void setNativeReturnType(EditBox::KeyboardReturnType returnType) override;
     virtual void setNativeTextHorizontalAlignment(cocos2d::TextHAlignment alignment) override;
     virtual void setNativeText(const char* pText) override;
     virtual void setNativePlaceHolder(const char* pText) override;
     virtual void setNativeVisible(bool visible) override;
-    virtual void updateNativeFrame(const Rect& rect) override;
+    virtual void updateNativeFrame(const Rect &rect) override;
     virtual const char* getNativeDefaultFontName() override;
     virtual void nativeOpenKeyboard() override;
     virtual void nativeCloseKeyboard() override;
     virtual void setNativeMaxLength(int maxLength) override;
 
 private:
-    NSFont*    constructFont(const char* fontName, int fontSize);
-    
-    bool              _inRetinaMode;
+    NSFont* constructFont(const char* fontName, int fontSize);
+
+    bool _inRetinaMode;
     UIEditBoxImplMac* _sysEdit;
 };
-
 
 }
 

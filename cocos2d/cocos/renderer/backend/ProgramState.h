@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <vector>
@@ -46,26 +46,26 @@ class VertexLayout;
  * @{
  */
 
- /**
-  * Store texture information.
-  */
+/**
+ * Store texture information.
+ */
 struct TextureInfo
 {
-    TextureInfo(const std::vector<uint32_t>& _slots, const std::vector<backend::TextureBackend*> _textures);
+    TextureInfo(const std::vector<uint32_t> &_slots, const std::vector<backend::TextureBackend*> _textures);
     TextureInfo() = default;
     TextureInfo(const TextureInfo &);
     ~TextureInfo();
-    TextureInfo& operator=(TextureInfo&& rhs);
-    TextureInfo& operator=(const TextureInfo& rhs);
+    TextureInfo &operator=(TextureInfo &&rhs);
+    TextureInfo &operator=(const TextureInfo &rhs);
 
     void retainTextures();
     void releaseTextures();
 
     std::vector<uint32_t> slot;
     std::vector<backend::TextureBackend*> textures;
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     int location = -1;
-#endif
+    #endif
 };
 
 /**
@@ -81,27 +81,30 @@ public:
      * @param program Specifies the program.
      */
     ProgramState(Program* program);
-    
+
     ///destructor
     virtual ~ProgramState();
-    
+
     /**
      * Deep clone ProgramState
      */
-    ProgramState *clone() const;
-    
+    ProgramState* clone() const;
+
     /**
      * Get the program object.
      */
-    backend::Program* getProgram() const { return _program; }
-    
+    backend::Program* getProgram() const
+    {
+        return _program;
+    }
+
     /**
      * Specify the value of a uniform variable for the current program state object.
      * @param uniformLocation Specifies the uniform location.
      * @param data Specifies the new values to be used for the specified uniform variable.
      * @param size Specifies the uniform data size.
      */
-    void setUniform(const backend::UniformLocation& uniformLocation, const void* data, std::size_t size);
+    void setUniform(const backend::UniformLocation &uniformLocation, const void* data, std::size_t size);
 
     /**
      * Get uniform location in given uniform name.
@@ -109,7 +112,7 @@ public:
      * @return Uniform location.
      * @see `backend::UniformLocation getUniformLocation(backend::Uniform name) const`
      */
-    backend::UniformLocation getUniformLocation(const std::string& uniform) const;
+    backend::UniformLocation getUniformLocation(const std::string &uniform) const;
 
     /**
      * Get uniform location in a more efficient way by the given built-in uniform name.
@@ -125,7 +128,10 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(const std::string& name) const`
      */
-    inline int getAttributeLocation(const std::string& name) const { return _program->getAttributeLocation(name); }
+    inline int getAttributeLocation(const std::string &name) const
+    {
+        return _program->getAttributeLocation(name);
+    }
 
     /**
      * Get an attribute location by the engine built-in attribute name.
@@ -133,14 +139,17 @@ public:
      * @return Attribute location.
      * @see `int getAttributeLocation(const std::string& name) const`
      */
-    inline int getAttributeLocation(Attribute name) const { return _program->getAttributeLocation(name); }
+    inline int getAttributeLocation(Attribute name) const
+    {
+        return _program->getAttributeLocation(name);
+    }
 
     /**
      * A callback to update unifrom.
      * @param uniformLocation Specifies the uniform location.
      * @param unifromCallback Specifies a callback function to update the uniform.
      */
-    void setCallbackUniform(const backend::UniformLocation&, const UniformCallback &);
+    void setCallbackUniform(const backend::UniformLocation &, const UniformCallback &);
 
     /**
      * Set texture.
@@ -148,7 +157,7 @@ public:
      * @param slot Specifies texture slot selector.
      * @param texture Specifies a pointer to backend texture.
      */
-    void setTexture(const backend::UniformLocation& uniformLocation, uint32_t slot, backend::TextureBackend* texture);
+    void setTexture(const backend::UniformLocation &uniformLocation, uint32_t slot, backend::TextureBackend* texture);
 
     /**
      * Set textures in array.
@@ -156,40 +165,50 @@ public:
      * @param slots Specifies texture slot selector.
      * @param textures Specifies a vector of backend texture object.
      */
-    void setTextureArray(const backend::UniformLocation& uniformLocation, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures);
+    void setTextureArray(const backend::UniformLocation &uniformLocation, const std::vector<uint32_t> &slots,
+                         const std::vector<backend::TextureBackend*> textures);
 
     /**
      * Get vertex texture informations
      * @return Vertex texture informations. Key is the texture location, Value store the texture informations
      */
-    inline const std::unordered_map<int, TextureInfo>& getVertexTextureInfos() const { return _vertexTextureInfos; }
+    inline const std::unordered_map<int, TextureInfo> &getVertexTextureInfos() const
+    {
+        return _vertexTextureInfos;
+    }
 
     /**
      * Get fragment texture informations
      * @return Fragment texture informations. Key is the texture location, Value store the texture informations
      */
-    inline const std::unordered_map<int, TextureInfo>& getFragmentTextureInfos() const { return _fragmentTextureInfos; }
+    inline const std::unordered_map<int, TextureInfo> &getFragmentTextureInfos() const
+    {
+        return _fragmentTextureInfos;
+    }
 
     /**
      * Get the uniform callback function.
      * @return Uniform callback funciton.
      */
-    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocation>& getCallbackUniforms() const { return _callbackUniforms; }
+    inline const std::unordered_map<UniformLocation, UniformCallback, UniformLocation> &getCallbackUniforms() const
+    {
+        return _callbackUniforms;
+    }
 
     /**
      * Get vertex uniform buffer. The buffer store all the vertex uniform's data.
      * @param[out] buffer Specifies the pointer points to a vertex uniform storage.
      * @param[out] size Specifies the size of the buffer in bytes.
      */
-    void getVertexUniformBuffer(char** buffer, std::size_t& size) const;
+    void getVertexUniformBuffer(char** buffer, std::size_t &size) const;
 
     /**
      * Get fragment uniform buffer. The buffer store all the fragment uniform's data for metal.
      * @param[out] buffer Specifies the pointer points to a fragment uniform storage.
      * @param[out] size Specifies the size of the buffer in bytes.
      */
-    void getFragmentUniformBuffer(char** buffer, std::size_t& size) const;
-    
+    void getFragmentUniformBuffer(char** buffer, std::size_t &size) const;
+
     /**
     * An abstract base class that can be extended to support custom material auto bindings.
     *
@@ -217,7 +236,8 @@ public:
     *
     * @script{ignore}
     */
-    class CC_DLL AutoBindingResolver {
+    class CC_DLL AutoBindingResolver
+    {
     public:
         AutoBindingResolver();
         virtual ~AutoBindingResolver();
@@ -238,7 +258,8 @@ public:
         * @return True if the auto binding is handled and the associated parameter is
         *      bound, false otherwise.
         */
-        virtual bool resolveAutoBinding(ProgramState *, const std::string &uniformName, const std::string &autoBinding) = 0;
+        virtual bool resolveAutoBinding(ProgramState*, const std::string &uniformName,
+                                        const std::string &autoBinding) = 0;
     };
     /**
     * Sets a uniform auto-binding.
@@ -252,7 +273,11 @@ public:
     */
     void setParameterAutoBinding(const std::string &uniformName, const std::string &autoBinding);
 
-    inline std::shared_ptr<VertexLayout> getVertexLayout() const { return _vertexLayout; }
+    inline std::shared_ptr<VertexLayout> getVertexLayout() const
+    {
+        return _vertexLayout;
+    }
+
 protected:
 
     ProgramState();
@@ -280,8 +305,9 @@ protected:
      * @param texture Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTexture(int location, uint32_t slot, backend::TextureBackend* texture, std::unordered_map<int, TextureInfo>& textureInfo);
-    
+    void setTexture(int location, uint32_t slot, backend::TextureBackend* texture,
+                    std::unordered_map<int, TextureInfo> &textureInfo);
+
     /**
      * Set textures in array.
      * @param location Specifies the location of texture.
@@ -289,8 +315,10 @@ protected:
      * @param textures Specifies the texture to set in given location.
      * @param textureInfo Specifies the texture information to update.
      */
-    void setTextureArray(int location, const std::vector<uint32_t>& slots, const std::vector<backend::TextureBackend*> textures, std::unordered_map<int, TextureInfo>& textureInfo);
-    
+    void setTextureArray(int location, const std::vector<uint32_t> &slots,
+                         const std::vector<backend::TextureBackend*> textures,
+                         std::unordered_map<int, TextureInfo> &textureInfo);
+
     /**
      * Reset uniform informations when EGL context lost
      */
@@ -298,8 +326,8 @@ protected:
 
     ///Initialize.
     bool init(Program* program);
-    
-#ifdef CC_USE_METAL
+
+    #ifdef CC_USE_METAL
     /**
      * float3 etc in Metal has both sizeof and alignment same as float4, convert it before fill into uniform buffer
      * @param uniformInfo Specifies the uniform information.
@@ -308,7 +336,7 @@ protected:
      * @param uniformBuffer Specifies the uniform buffer to update.
      */
     void convertAndCopyUniformData(const backend::UniformInfo& uniformInfo, const void* srcData, std::size_t srcSize, void* buffer);
-#endif
+    #endif
     /**
     * Applies the specified custom auto-binding.
     *
@@ -317,24 +345,24 @@ protected:
     */
     void applyAutoBinding(const std::string &, const std::string &);
 
-    backend::Program*                                       _program = nullptr;
-    std::unordered_map<UniformLocation, UniformCallback, UniformLocation>   _callbackUniforms;
+    backend::Program* _program = nullptr;
+    std::unordered_map<UniformLocation, UniformCallback, UniformLocation> _callbackUniforms;
     char* _vertexUniformBuffer = nullptr;
     char* _fragmentUniformBuffer = nullptr;
     std::size_t _vertexUniformBufferSize = 0;
     std::size_t _fragmentUniformBufferSize = 0;
 
-    std::unordered_map<int, TextureInfo>                    _vertexTextureInfos;
-    std::unordered_map<int, TextureInfo>                    _fragmentTextureInfos;
+    std::unordered_map<int, TextureInfo> _vertexTextureInfos;
+    std::unordered_map<int, TextureInfo> _fragmentTextureInfos;
 
-    std::unordered_map<std::string, std::string>            _autoBindings;
+    std::unordered_map<std::string, std::string> _autoBindings;
 
-    static std::vector<AutoBindingResolver*>                _customAutoBindingResolvers;
+    static std::vector<AutoBindingResolver*> _customAutoBindingResolvers;
     std::shared_ptr<VertexLayout> _vertexLayout = std::make_shared<VertexLayout>();
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener = nullptr;
-#endif
+    #endif
 };
 
 //end of _backend group

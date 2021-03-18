@@ -29,18 +29,20 @@
 using namespace CocosDenshion;
 using namespace cocos2d;
 
-struct SimpleAudioEngineDelegate {
-    SimpleAudioEngine * engine = nullptr;
+struct SimpleAudioEngineDelegate
+{
+    SimpleAudioEngine* engine = nullptr;
     int musicid;
     float effectsvolume;
     std::string musicpath;
 };
 
-SimpleAudioEngineDelegate * g_SimpleAudioEngine = nullptr;
+SimpleAudioEngineDelegate* g_SimpleAudioEngine = nullptr;
 
 SimpleAudioEngine* SimpleAudioEngine::getInstance()
 {
-    if (!g_SimpleAudioEngine) {
+    if (!g_SimpleAudioEngine)
+    {
         g_SimpleAudioEngine = new SimpleAudioEngineDelegate();
         g_SimpleAudioEngine->engine = new SimpleAudioEngine();
     }
@@ -49,7 +51,8 @@ SimpleAudioEngine* SimpleAudioEngine::getInstance()
 
 void SimpleAudioEngine::end()
 {
-    if (g_SimpleAudioEngine) {
+    if (g_SimpleAudioEngine)
+    {
         delete g_SimpleAudioEngine->engine;
         delete g_SimpleAudioEngine;
     }
@@ -81,7 +84,8 @@ void SimpleAudioEngine::playBackgroundMusic(const char* filePath, bool loop)
 void SimpleAudioEngine::stopBackgroundMusic(bool releaseData)
 {
     AudioEngine::stop(g_SimpleAudioEngine->musicid);
-    if (releaseData) {
+    if (releaseData)
+    {
         AudioEngine::uncache(g_SimpleAudioEngine->musicpath.c_str());
     }
 }

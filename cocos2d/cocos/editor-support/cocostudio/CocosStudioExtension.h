@@ -32,7 +32,7 @@ NS_CC_BEGIN
 
 struct CC_DLL ResourceData
 {
-    int         type;
+    int type;
     std::string file;
     std::string plist;
 
@@ -61,8 +61,6 @@ private:
 
 };
 
-
 NS_CC_END
-
 
 #endif

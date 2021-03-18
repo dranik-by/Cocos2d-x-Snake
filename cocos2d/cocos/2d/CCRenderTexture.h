@@ -38,7 +38,7 @@ NS_CC_BEGIN
 
 namespace backend
 {
-    class TextureBackend;
+class TextureBackend;
 }
 
 class EventCustom;
@@ -57,7 +57,7 @@ class EventCustom;
  * There are also functions for saving the render texture to disk in PNG or JPG format.
  * @since v0.8.1
  */
-class CC_DLL RenderTexture : public Node 
+class CC_DLL RenderTexture : public Node
 {
 public:
     /** Initializes a RenderTexture object with width and height in Points and a pixel format( only RGB and RGBA formats are valid ) and depthStencil format. 
@@ -67,7 +67,7 @@ public:
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      * @param depthStencilFormat The depthStencil format.
      */
-    static RenderTexture * create(int w ,int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat);
 
     /** Creates a RenderTexture object with width and height in Points and a pixel format, only RGB and RGBA formats are valid. 
      *
@@ -75,19 +75,19 @@ public:
      * @param h The RenderTexture object height.
      * @param format In Points and a pixel format( only RGB and RGBA formats are valid ).
      */
-    static RenderTexture * create(int w, int h, backend::PixelFormat format);
+    static RenderTexture* create(int w, int h, backend::PixelFormat format);
 
     /** Creates a RenderTexture object with width and height in Points, pixel format is RGBA8888. 
      *
      * @param w The RenderTexture object width.
      * @param h The RenderTexture object height.
      */
-    static RenderTexture * create(int w, int h);
+    static RenderTexture* create(int w, int h);
 
     // Overrides
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
-    
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
 
     /** Starts grabbing. */
     virtual void begin();
@@ -150,7 +150,7 @@ public:
      * @param stencilValue A specified stencil value.
      */
     virtual void clearStencil(int stencilValue);
-    
+
     /* Creates a new Image from with the texture's data.
      * Caller is responsible for releasing it by calling delete.
      *
@@ -159,16 +159,6 @@ public:
      * @js NA
      */
     void newImage(std::function<void(Image*)> imageCallback, bool flipImage = true);
-    
-    /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
-     * Returns true if the operation is successful.
-     *
-     * @param filename The file name.
-     * @param isRGBA The file is RGBA or not.
-     * @param callback When the file is save finished,it will callback this function.
-     * @return Returns true if the operation is successful.
-     */
-    bool saveToFileAsNonPMA(const std::string& filename, bool isRGBA = true, std::function<void(RenderTexture*, const std::string&)> callback = nullptr);
 
     /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
      * Returns true if the operation is successful.
@@ -178,21 +168,34 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFile(const std::string& filename, bool isRGBA = true, std::function<void (RenderTexture*, const std::string&)> callback = nullptr);
+    bool saveToFileAsNonPMA(const std::string &filename, bool isRGBA = true,
+                            std::function<void(RenderTexture*, const std::string &)> callback = nullptr);
 
-   /** saves the texture into a file in non-PMA. The format could be JPG or PNG. The file will be saved in the Documents folder.
-        Returns true if the operation is successful.
-     * Notes: since v3.x, saveToFile will generate a custom command, which will be called in the following render->render().
-     * So if this function is called in a event handler, the actual save file will be called in the next frame. If we switch to a different scene, the game will crash.
-     * To solve this, add Director::getInstance()->getRenderer()->render(); after this function.
+    /** Saves the texture into a file using JPEG format. The file will be saved in the Documents folder.
+     * Returns true if the operation is successful.
      *
      * @param filename The file name.
-     * @param format The image format.
      * @param isRGBA The file is RGBA or not.
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFileAsNonPMA(const std::string& fileName, Image::Format format, bool isRGBA, std::function<void(RenderTexture*, const std::string&)> callback);
+    bool saveToFile(const std::string &filename, bool isRGBA = true,
+                    std::function<void(RenderTexture*, const std::string &)> callback = nullptr);
+
+    /** saves the texture into a file in non-PMA. The format could be JPG or PNG. The file will be saved in the Documents folder.
+         Returns true if the operation is successful.
+      * Notes: since v3.x, saveToFile will generate a custom command, which will be called in the following render->render().
+      * So if this function is called in a event handler, the actual save file will be called in the next frame. If we switch to a different scene, the game will crash.
+      * To solve this, add Director::getInstance()->getRenderer()->render(); after this function.
+      *
+      * @param filename The file name.
+      * @param format The image format.
+      * @param isRGBA The file is RGBA or not.
+      * @param callback When the file is save finished,it will callback this function.
+      * @return Returns true if the operation is successful.
+      */
+    bool saveToFileAsNonPMA(const std::string &fileName, Image::Format format, bool isRGBA,
+                            std::function<void(RenderTexture*, const std::string &)> callback);
 
     /** saves the texture into a file. The format could be JPG or PNG. The file will be saved in the Documents folder.
         Returns true if the operation is successful.
@@ -206,89 +209,120 @@ public:
      * @param callback When the file is save finished,it will callback this function.
      * @return Returns true if the operation is successful.
      */
-    bool saveToFile(const std::string& filename, Image::Format format, bool isRGBA = true, std::function<void (RenderTexture*, const std::string&)> callback = nullptr);
-    
+    bool saveToFile(const std::string &filename, Image::Format format, bool isRGBA = true,
+                    std::function<void(RenderTexture*, const std::string &)> callback = nullptr);
+
     /** Listen "come to background" message, and save render texture.
      * It only has effect on Android.
      * 
      * @param event Event Custom.
      */
-    void listenToBackground(EventCustom *event);
-    
+    void listenToBackground(EventCustom* event);
+
     /** Listen "come to foreground" message and restore the frame buffer object.
      * It only has effect on Android.
      *
      * @param event Event Custom.
      */
-    void listenToForeground(EventCustom *event);
+    void listenToForeground(EventCustom* event);
 
     /** Valid when "autoDraw" is true.
      *
      * @return Clear flags.
      */
-    inline ClearFlag getClearFlags() const { return _clearFlags; }
+    inline ClearFlag getClearFlags() const
+    {
+        return _clearFlags;
+    }
 
     /** Set flags.
      *
      * @param clearFlags set clear flags.
      */
     void setClearFlags(ClearFlag clearFlags);
-    
+
     /** Clear color value. Valid only when "autoDraw" is true. 
      *
      * @return Color value.
      */
-    inline const Color4F& getClearColor() const { return _clearColor; }
-    
+    inline const Color4F &getClearColor() const
+    {
+        return _clearColor;
+    }
+
     /** Set color value. 
      *
      * @param clearColor Color value.
      */
-    inline void setClearColor(const Color4F &clearColor) { _clearColor = clearColor; }
-    
+    inline void setClearColor(const Color4F &clearColor)
+    {
+        _clearColor = clearColor;
+    }
+
     /** Value for clearDepth. Valid only when "autoDraw" is true. 
      *
      * @return Value for clearDepth.
      */
-    inline float getClearDepth() const { return _clearDepth; }
-    
+    inline float getClearDepth() const
+    {
+        return _clearDepth;
+    }
+
     /** Set Value for clearDepth.
      *
      * @param clearDepth Value for clearDepth.
      */
-    inline void setClearDepth(float clearDepth) { _clearDepth = clearDepth; }
-    
+    inline void setClearDepth(float clearDepth)
+    {
+        _clearDepth = clearDepth;
+    }
+
     /** Value for clear Stencil. Valid only when "autoDraw" is true.
      *
      * @return Value for clear Stencil.
      */
-    inline int getClearStencil() const { return _clearStencil; }
-    
+    inline int getClearStencil() const
+    {
+        return _clearStencil;
+    }
+
     /** Set Value for clear Stencil.
      *
      * @param clearStencil Value for clear Stencil.
      */
-    inline void setClearStencil(int clearStencil) { _clearStencil = clearStencil; }
-    
+    inline void setClearStencil(int clearStencil)
+    {
+        _clearStencil = clearStencil;
+    }
+
     /** When enabled, it will render its children into the texture automatically. Disabled by default for compatibility reasons.
      * Will be enabled in the future.
      *
      * @return Return the autoDraw value.
      */
-    inline bool isAutoDraw() const { return _autoDraw; }
-    
+    inline bool isAutoDraw() const
+    {
+        return _autoDraw;
+    }
+
     /** Set a valve to control whether or not render its children into the texture automatically. 
      *
      * @param isAutoDraw Whether or not render its children into the texture automatically.
      */
-    inline void setAutoDraw(bool isAutoDraw) { _autoDraw = isAutoDraw; }
+    inline void setAutoDraw(bool isAutoDraw)
+    {
+        _autoDraw = isAutoDraw;
+    }
 
     /** Gets the Sprite being used. 
      *
      * @return A Sprite.
      */
-    inline Sprite* getSprite() const { return _sprite; }
-    
+    inline Sprite* getSprite() const
+    {
+        return _sprite;
+    }
+
     /** Sets the Sprite being used. 
      *
      * @param sprite A Sprite.
@@ -300,13 +334,17 @@ public:
      * @param keepMatrix Whether or not use stack matrix computed from scene hierarchy or generate new modelView and projection matrix.
      * @js NA
      */
-    inline void setKeepMatrix(bool keepMatrix) { _keepMatrix = keepMatrix; }
-    /**Used for grab part of screen to a texture. 
+    inline void setKeepMatrix(bool keepMatrix)
+    {
+        _keepMatrix = keepMatrix;
+    }
+
+    /**Used for grab part of screen to a texture.
      * @param rtBegin The position of renderTexture on the fullRect.
      * @param fullRect The total size of screen.
      * @param fullViewport The total viewportSize.
      */
-    void setVirtualViewport(const Vec2& rtBegin, const Rect& fullRect, const Rect& fullViewport);
+    void setVirtualViewport(const Vec2 &rtBegin, const Rect &fullRect, const Rect &fullViewport);
 
 public:
     /** FIXME: should be protected.
@@ -340,21 +378,22 @@ public:
     bool initWithWidthAndHeight(int w, int h, backend::PixelFormat format, backend::PixelFormat depthStencilFormat);
 
 protected:
-    virtual void beginWithClear(float r, float g, float b, float a, float depthValue, int stencilValue, ClearFlag flags);
+    virtual void beginWithClear(float r, float g, float b, float a, float depthValue, int stencilValue,
+                                ClearFlag flags);
     //renderer caches and callbacks
     void onBegin();
     void onEnd();
     void clearColorAttachment();
 
-    void onSaveToFile(const std::string& fileName, bool isRGBA = true, bool forceNonPMA = false);
+    void onSaveToFile(const std::string &fileName, bool isRGBA = true, bool forceNonPMA = false);
 
-    bool         _keepMatrix = false;
-    Rect         _rtTextureRect;
-    Rect         _fullRect;
-    Rect         _fullviewPort;
+    bool _keepMatrix = false;
+    Rect _rtTextureRect;
+    Rect _fullRect;
+    Rect _fullviewPort;
 
-    Viewport     _oldViewport;
-    
+    Viewport _oldViewport;
+
     Texture2D* _texture2D = nullptr;
     Texture2D* _depthStencilTexture = nullptr;
     Texture2D* _texture2DCopy = nullptr;    // a copy of _texture
@@ -363,9 +402,9 @@ protected:
     Texture2D* _oldStencilAttachment = nullptr;
     RenderTargetFlag _renderTargetFlags;
     RenderTargetFlag _oldRenderTargetFlag;
-    Image*     _UITextureImage = nullptr;
+    Image* _UITextureImage = nullptr;
     backend::PixelFormat _pixelFormat = backend::PixelFormat::RGBA8888;
-    
+
     Color4F _clearColor;
     float _clearDepth = 1.f;
     int _clearStencil = 0;
@@ -378,7 +417,7 @@ protected:
      - renderTexture->getSprite()->setBlendFunc((BlendFunc){BlendFactor::ONE, BlendFactor::ONE_MINUS_SRC_ALPHA});
      */
     Sprite* _sprite = nullptr;
-    
+
     GroupCommand _groupCommand;
     CallbackCommand _beginCommand;
     CallbackCommand _endCommand;
@@ -390,13 +429,12 @@ protected:
      and the command and callback will be executed twice.
     */
     CallbackCommand _saveToFileCommand;
-    std::function<void (RenderTexture*, const std::string&)> _saveFileCallback = nullptr;
-    
+    std::function<void(RenderTexture*, const std::string &)> _saveFileCallback = nullptr;
+
     Mat4 _oldTransMatrix, _oldProjMatrix;
     Mat4 _transformMatrix, _projectionMatrix;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(RenderTexture);
+private: CC_DISALLOW_COPY_AND_ASSIGN(RenderTexture);
 };
 
 // end of textures group

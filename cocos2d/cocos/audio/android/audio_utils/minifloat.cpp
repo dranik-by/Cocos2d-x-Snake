@@ -29,7 +29,7 @@
 #define MINIFLOAT_MAX   ((EXPONENT_MAX << MANTISSA_BITS) | MANTISSA_MAX)
 
 #if EXPONENT_BITS + MANTISSA_BITS != 16
-#error EXPONENT_BITS and MANTISSA_BITS must sum to 16
+    #error EXPONENT_BITS and MANTISSA_BITS must sum to 16
 #endif
 
 extern "C" {
@@ -54,17 +54,15 @@ gain_minifloat_t gain_from_float(float v)
     {
         return 0;
     }
-    int mantissa = (int) (r * ONE_FLOAT);
-    return exp > 0 ? (exp << MANTISSA_BITS) | (mantissa & ~HIDDEN_BIT) :
-           (mantissa >> (1 - exp)) & MANTISSA_MAX;
+    int mantissa = (int)(r * ONE_FLOAT);
+    return exp > 0 ? (exp << MANTISSA_BITS) | (mantissa & ~HIDDEN_BIT) : (mantissa >> (1 - exp)) & MANTISSA_MAX;
 }
 
 float float_from_gain(gain_minifloat_t a)
 {
     int mantissa = a & MANTISSA_MAX;
     int exponent = (a >> MANTISSA_BITS) & EXPONENT_MAX;
-    return ldexpf((exponent > 0 ? HIDDEN_BIT | mantissa : mantissa << 1) / ONE_FLOAT,
-                  exponent - EXCESS);
+    return ldexpf((exponent > 0 ? HIDDEN_BIT | mantissa : mantissa << 1) / ONE_FLOAT, exponent - EXCESS);
 }
 
 } // extern "C" {

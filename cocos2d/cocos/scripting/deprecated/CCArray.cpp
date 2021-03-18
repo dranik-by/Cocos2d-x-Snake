@@ -385,12 +385,12 @@ void __Array::acceptVisitor(DataVisitor &visitor)
 __Array::__Array()
 : data(nullptr)
 {
-//    init();
+    //    init();
 }
 
 __Array* __Array::create()
 {
-    __Array* array = new (std::nothrow) __Array();
+    __Array* array = new(std::nothrow) __Array();
 
     if (array && array->initWithCapacity(7))
     {
@@ -406,7 +406,7 @@ __Array* __Array::create()
 
 __Array* __Array::createWithObject(Ref* object)
 {
-    __Array* array = new (std::nothrow) __Array();
+    __Array* array = new(std::nothrow) __Array();
 
     if (array && array->initWithObject(object))
     {
@@ -423,13 +423,13 @@ __Array* __Array::createWithObject(Ref* object)
 __Array* __Array::create(Ref* object, ...)
 {
     va_list args;
-    va_start(args,object);
+    va_start(args, object);
 
     __Array* array = create();
     if (array && object)
     {
         array->addObject(object);
-        Ref *i = va_arg(args, Ref*);
+        Ref* i = va_arg(args, Ref*);
         while (i)
         {
             array->addObject(i);
@@ -453,9 +453,9 @@ __Array* __Array::createWithArray(__Array* otherArray)
 
 __Array* __Array::createWithCapacity(ssize_t capacity)
 {
-    CCASSERT(capacity>=0, "Invalid capacity");
+    CCASSERT(capacity >= 0, "Invalid capacity");
 
-    __Array* array = new (std::nothrow) __Array();
+    __Array* array = new(std::nothrow) __Array();
 
     if (array && array->initWithCapacity(capacity))
     {
@@ -469,7 +469,7 @@ __Array* __Array::createWithCapacity(ssize_t capacity)
     return array;
 }
 
-__Array* __Array::createWithContentsOfFile(const std::string& fileName)
+__Array* __Array::createWithContentsOfFile(const std::string &fileName)
 {
     __Array* ret = __Array::createWithContentsOfFileThreadSafe(fileName);
     if (ret != nullptr)
@@ -479,16 +479,17 @@ __Array* __Array::createWithContentsOfFile(const std::string& fileName)
     return ret;
 }
 
-__Array* __Array::createWithContentsOfFileThreadSafe(const std::string& fileName)
+__Array* __Array::createWithContentsOfFileThreadSafe(const std::string &fileName)
 {
     ValueVector arr = FileUtils::getInstance()->getValueVectorFromFile(fileName);
-    
+
     __Array* ret = __Array::createWithCapacity(static_cast<int>(arr.size()));
 
-    for(const auto &value : arr) {
+    for (const auto &value : arr)
+    {
         ret->addObject(__String::create(value.asString()));
     }
-    
+
     return ret;
 }
 
@@ -521,7 +522,7 @@ bool __Array::initWithObjects(Ref* object, ...)
     {
         CC_BREAK_IF(object == nullptr);
         CC_BREAK_IF(!initWithCapacity(1));
-        
+
         va_list args;
         va_start(args, object);
 
@@ -545,7 +546,7 @@ bool __Array::initWithObjects(Ref* object, ...)
 
 bool __Array::initWithCapacity(ssize_t capacity)
 {
-    CCASSERT(capacity>=0 && !data, "Array cannot be re-initialized");
+    CCASSERT(capacity >= 0 && !data, "Array cannot be re-initialized");
 
     data = ccArrayNew(capacity);
     return true;
@@ -558,7 +559,7 @@ bool __Array::initWithArray(__Array* otherArray)
     bool ret = false;
     do
     {
-        CC_BREAK_IF(! initWithCapacity(otherArray->data->num));
+        CC_BREAK_IF(!initWithCapacity(otherArray->data->num));
 
         addObjectsFromArray(otherArray);
         ret = true;
@@ -598,7 +599,7 @@ bool __Array::isEqualToArray(__Array* otherArray)
 {
     for (int i = 0; i < this->count(); ++i)
     {
-//FIXME:james
+        //FIXME:james
         if (this->getObjectAtIndex(i) != otherArray->getObjectAtIndex(i))
         {
             return false;
@@ -607,7 +608,7 @@ bool __Array::isEqualToArray(__Array* otherArray)
     return true;
 }
 
-void __Array::addObject(Ref* object) 
+void __Array::addObject(Ref* object)
 {
     CCASSERT(data, "Array not initialized");
     ccArrayAppendObjectWithResize(data, object);
@@ -628,7 +629,7 @@ void __Array::insertObject(Ref* object, ssize_t index)
 void __Array::setObject(Ref* object, ssize_t index)
 {
     CCASSERT(index >= 0 && index < count(), "Invalid index");
-    
+
     if (object != data->arr[index])
     {
         data->arr[index]->release();
@@ -706,10 +707,10 @@ void __Array::reverseObjects()
     if (data->num > 1)
     {
         // floorf(), since in the case of an even number, the number of swaps stays the same
-        auto count = static_cast<ssize_t>(floorf(data->num/2.f));
+        auto count = static_cast<ssize_t>(floorf(data->num / 2.f));
         ssize_t maxIndex = data->num - 1;
 
-        for (ssize_t i = 0; i < count ; ++i)
+        for (ssize_t i = 0; i < count; ++i)
         {
             ccArraySwapObjectsAtIndexes(data, i, maxIndex);
             --maxIndex;
@@ -724,18 +725,19 @@ void __Array::reduceMemoryFootprint()
 
 __Array::~__Array()
 {
-    CCLOGINFO("deallocing Array: %p - len: %d", this, count() );
+    CCLOGINFO("deallocing Array: %p - len: %d", this, count());
 
     ccArrayFree(data);
 }
 
 __Array* __Array::clone() const
 {
-    __Array* ret = new (std::nothrow) __Array();
+    __Array* ret = new(std::nothrow) __Array();
     ret->autorelease();
     ret->initWithCapacity(this->data->num > 0 ? this->data->num : 1);
 
-    if (data->num <= 0) {
+    if (data->num <= 0)
+    {
         return ret;
     }
 
@@ -743,8 +745,7 @@ __Array* __Array::clone() const
     Ref* tmpObj = nullptr;
     Clonable* clonable = nullptr;
     CC_ASSERT(data->num > 0);
-    for (Ref** arr = data->arr, **end = data->arr + data->num - 1;
-        arr <= end && ((obj = *arr) != nullptr); arr++)
+    for (Ref** arr = data->arr, ** end = data->arr + data->num - 1; arr <= end && ((obj = *arr) != nullptr); arr++)
     {
         clonable = dynamic_cast<Clonable*>(obj);
         if (clonable)

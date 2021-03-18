@@ -32,7 +32,7 @@ NS_TIMELINE_BEGIN
 
 Timeline* Timeline::create()
 {
-    Timeline* object = new (std::nothrow) Timeline();
+    Timeline* object = new(std::nothrow) Timeline();
     if (object)
     {
         object->autorelease();
@@ -43,14 +43,14 @@ Timeline* Timeline::create()
 }
 
 Timeline::Timeline()
-    : _currentKeyFrame(nullptr)
-    , _currentKeyFrameIndex(0)
-    , _fromIndex(0)
-    , _toIndex(0)
-    , _betweenDuration(0)
-    , _actionTag(0)
-    , _ActionTimeline(nullptr)
-    , _node(nullptr)
+: _currentKeyFrame(nullptr)
+, _currentKeyFrameIndex(0)
+, _fromIndex(0)
+, _toIndex(0)
+, _betweenDuration(0)
+, _actionTag(0)
+, _ActionTimeline(nullptr)
+, _node(nullptr)
 {
 }
 
@@ -60,7 +60,7 @@ Timeline::~Timeline()
 
 void Timeline::gotoFrame(int frameIndex)
 {
-    if(_frames.size() == 0)
+    if (_frames.size() == 0)
         return;
 
     binarySearchKeyFrame(frameIndex);
@@ -69,7 +69,7 @@ void Timeline::gotoFrame(int frameIndex)
 
 void Timeline::stepToFrame(int frameIndex)
 {
-    if(_frames.size() == 0)
+    if (_frames.size() == 0)
         return;
 
     updateCurrentKeyFrame(frameIndex);
@@ -132,33 +132,33 @@ void Timeline::apply(unsigned int frameIndex)
 
 void Timeline::binarySearchKeyFrame(unsigned int frameIndex)
 {
-    Frame *from = nullptr;
-    Frame *to   = nullptr;
+    Frame* from = nullptr;
+    Frame* to = nullptr;
 
     long length = _frames.size();
     bool needEnterFrame = false;
 
-    do 
+    do
     {
         if (frameIndex < _frames.at(0)->getFrameIndex())
         {
-            if(_currentKeyFrameIndex >= _frames.at(0)->getFrameIndex())
+            if (_currentKeyFrameIndex >= _frames.at(0)->getFrameIndex())
                 needEnterFrame = true;
 
             _fromIndex = 0;
             _toIndex = 0;
-            
+
             from = to = _frames.at(0);
             _currentKeyFrameIndex = 0;
             _betweenDuration = _frames.at(0)->getFrameIndex();
             break;
         }
-        else if(frameIndex >= _frames.at(length - 1)->getFrameIndex())
+        else if (frameIndex >= _frames.at(length - 1)->getFrameIndex())
         {
             _fromIndex = (int)(length - 1);
             _toIndex = 0;
-            
-            from = to = _frames.at(length - 1); 
+
+            from = to = _frames.at(length - 1);
             if (from->isEnterWhenPassed())
                 needEnterFrame = true;
 
@@ -168,38 +168,39 @@ void Timeline::binarySearchKeyFrame(unsigned int frameIndex)
         }
 
         long target = -1;
-        long low=0,high=length-1,mid=0;
-        while(low<=high){ 
-            mid=(low+high)/2;
-            if(frameIndex >= _frames.at(mid)->getFrameIndex() && frameIndex < _frames.at(mid+1)->getFrameIndex()) 
+        long low = 0, high = length - 1, mid = 0;
+        while (low <= high)
+        {
+            mid = (low + high) / 2;
+            if (frameIndex >= _frames.at(mid)->getFrameIndex() && frameIndex < _frames.at(mid + 1)->getFrameIndex())
             {
                 target = mid;
                 break;
             }
-            if(_frames.at(mid)->getFrameIndex()>frameIndex)
-                high=mid-1; 
+            if (_frames.at(mid)->getFrameIndex() > frameIndex)
+                high = mid - 1;
             else
-                low=mid+1;
+                low = mid + 1;
         }
-        
+
         _fromIndex = (int)target;
 
-        if(length > 1)
+        if (length > 1)
             _toIndex = (int)(target + 1);
         else
             _toIndex = (int)target;
 
         from = _frames.at(_fromIndex);
-        to   = _frames.at(_toIndex);
+        to = _frames.at(_toIndex);
 
-        if(target == 0 && _currentKeyFrameIndex<from->getFrameIndex())
+        if (target == 0 && _currentKeyFrameIndex < from->getFrameIndex())
             needEnterFrame = true;
 
         _currentKeyFrameIndex = from->getFrameIndex();
         _betweenDuration = to->getFrameIndex() - from->getFrameIndex();
     } while (0);
 
-    if(needEnterFrame || _currentKeyFrame != from)
+    if (needEnterFrame || _currentKeyFrame != from)
     {
         _currentKeyFrame = from;
         _currentKeyFrame->onEnter(to, frameIndex);
@@ -211,10 +212,10 @@ void Timeline::updateCurrentKeyFrame(unsigned int frameIndex)
     //! If play to current frame's front or back, then find current frame again
     if (frameIndex < _currentKeyFrameIndex || frameIndex >= _currentKeyFrameIndex + _betweenDuration)
     {
-        Frame *from = nullptr;
-        Frame *to = nullptr;
+        Frame* from = nullptr;
+        Frame* to = nullptr;
 
-        do 
+        do
         {
             long length = _frames.size();
 
@@ -225,10 +226,10 @@ void Timeline::updateCurrentKeyFrame(unsigned int frameIndex)
                 _betweenDuration = _frames.at(0)->getFrameIndex();
                 break;
             }
-            else if(frameIndex >= _frames.at(length - 1)->getFrameIndex())
+            else if (frameIndex >= _frames.at(length - 1)->getFrameIndex())
             {
-				unsigned int lastFrameIndex = _frames.at(length - 1)->getFrameIndex();
-                if(_currentKeyFrameIndex >= lastFrameIndex)
+                unsigned int lastFrameIndex = _frames.at(length - 1)->getFrameIndex();
+                if (_currentKeyFrameIndex >= lastFrameIndex)
                     return;
                 frameIndex = lastFrameIndex;
             }
@@ -237,7 +238,7 @@ void Timeline::updateCurrentKeyFrame(unsigned int frameIndex)
             {
                 _fromIndex = _toIndex;
                 from = _frames.at(_fromIndex);
-                _currentKeyFrameIndex  = from->getFrameIndex();
+                _currentKeyFrameIndex = from->getFrameIndex();
 
                 _toIndex = _fromIndex + 1;
                 if ((ssize_t)_toIndex >= length)
@@ -247,25 +248,24 @@ void Timeline::updateCurrentKeyFrame(unsigned int frameIndex)
 
                 to = _frames.at(_toIndex);
 
-                if(frameIndex == from->getFrameIndex())
+                if (frameIndex == from->getFrameIndex())
                     break;
-                if(frameIndex > from->getFrameIndex() && frameIndex < to->getFrameIndex())
+                if (frameIndex > from->getFrameIndex() && frameIndex < to->getFrameIndex())
                     break;
-                if(from->isEnterWhenPassed())
+                if (from->isEnterWhenPassed())
                     from->onEnter(to, from->getFrameIndex());
-            }
-            while (true);
+            } while (true);
 
-            if(_fromIndex == length-1)
+            if (_fromIndex == length - 1)
                 to = from;
-            
+
             _betweenDuration = to->getFrameIndex() - from->getFrameIndex();
-            
+
         } while (0);
 
         _currentKeyFrame = from;
         _currentKeyFrame->onEnter(to, frameIndex);
-        
+
     }
 }
 

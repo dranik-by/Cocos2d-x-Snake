@@ -31,63 +31,80 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCDatas.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-
 #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-#include "editor-support/cocostudio/CCColliderDetector.h"
+
+    #include "editor-support/cocostudio/CCColliderDetector.h"
+
 #endif
 
-namespace cocos2d {
-    class Node;
+namespace cocos2d
+{
+class Node;
 }
 
-namespace cocostudio {
+namespace cocostudio
+{
 /**
  *  @js NA
  *  @lua NA
  */
-class CC_STUDIO_DLL DecorativeDisplay: public cocos2d::Ref
+class CC_STUDIO_DLL DecorativeDisplay : public cocos2d::Ref
 {
 public:
-    static DecorativeDisplay *create();
+    static DecorativeDisplay* create();
 public:
     DecorativeDisplay();
     ~DecorativeDisplay();
 
     virtual bool init();
 
-    virtual void setDisplay(cocos2d::Node *display);
-    virtual cocos2d::Node *getDisplay() const { return _display; }
+    virtual void setDisplay(cocos2d::Node* display);
 
-    virtual void setDisplayData(DisplayData *data)
+    virtual cocos2d::Node* getDisplay() const
+    {
+        return _display;
+    }
+
+    virtual void setDisplayData(DisplayData* data)
     {
         if (_displayData != data)
         {
             CC_SAFE_RETAIN(data);
             CC_SAFE_RELEASE(_displayData);
-            _displayData = data; 
+            _displayData = data;
         }
     }
-    virtual DisplayData *getDisplayData() const { return _displayData; }
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    virtual void setColliderDetector(ColliderDetector *detector)
+    virtual DisplayData* getDisplayData() const
+    {
+        return _displayData;
+    }
+
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+
+    virtual void setColliderDetector(ColliderDetector* detector)
     {
         if (_colliderDetector != detector)
         {
             CC_SAFE_RETAIN(detector);
             CC_SAFE_RELEASE(_colliderDetector);
-            _colliderDetector = detector; 
+            _colliderDetector = detector;
         }
     }
-    virtual ColliderDetector *getColliderDetector() const { return _colliderDetector; }
-#endif
-protected:
-    cocos2d::Node *_display;
-    DisplayData *_displayData;
 
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
-    ColliderDetector *_colliderDetector;
-#endif
+    virtual ColliderDetector* getColliderDetector() const
+    {
+        return _colliderDetector;
+    }
+
+    #endif
+protected:
+    cocos2d::Node* _display;
+    DisplayData* _displayData;
+
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    ColliderDetector* _colliderDetector;
+    #endif
 };
 
 }

@@ -57,27 +57,28 @@ public:
     //
     // Overrides
     //
-    virtual void startWithTarget(Node *target) override;
+    virtual void startWithTarget(Node* target) override;
     virtual void stop() override;
     virtual void update(float time) override;
 
 CC_CONSTRUCTOR_ACCESS:
+
     ActionEase()
     : _inner(nullptr)
-    {}
-    
+    {
+    }
+
     virtual ~ActionEase();
     /**
      @brief Initializes the action.
      @return Return true when the initialization success, otherwise return false.
     */
-    bool initWithAction(ActionInterval *action);
+    bool initWithAction(ActionInterval* action);
 
 protected:
     /** The inner action */
-    ActionInterval *_inner;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ActionEase);
+    ActionInterval* _inner;
+private: CC_DISALLOW_COPY_AND_ASSIGN(ActionEase);
 };
 
 /**
@@ -90,33 +91,47 @@ class CC_DLL EaseRateAction : public ActionEase
 {
 public:
     static EaseRateAction* create(ActionInterval* action, float rate);
+
     /**
     @brief Set the rate value for the ease rate action.
     @param rate The value will be set.
     */
-    void setRate(float rate) { _rate = rate; }
+    void setRate(float rate)
+    {
+        _rate = rate;
+    }
+
     /**
     @brief Get the rate value of the ease rate action.
     @return Return the rate value of the ease rate action.
     */
-    float getRate() const { return _rate; }
+    float getRate() const
+    {
+        return _rate;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
-    EaseRateAction() {}
-    virtual ~EaseRateAction() {}
+
+    EaseRateAction()
+    {
+    }
+
+    virtual ~EaseRateAction()
+    {
+    }
+
     /**
      @brief Initializes the action with the inner action and the rate parameter.
      @param pAction The pointer of the inner action.
      @param fRate The value of the rate parameter.
      @return Return true when the initialization success, otherwise return false.
     */
-    bool initWithAction(ActionInterval *pAction, float fRate);
+    bool initWithAction(ActionInterval* pAction, float fRate);
 
 protected:
     float _rate;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(EaseRateAction);
+private: CC_DISALLOW_COPY_AND_ASSIGN(EaseRateAction);
 };
 
 //
@@ -200,7 +215,9 @@ EASE_TEMPLATE_DECL_CLASS(EaseSineInOut);
  @since v0.8.2
  @ingroup Actions
  */
-class CC_DLL EaseBounce : public ActionEase {};
+class CC_DLL EaseBounce : public ActionEase
+{
+};
 
 /**
  @class EaseBounceIn
@@ -430,29 +447,42 @@ public:
      @brief Get period of the wave in radians. Default value is 0.3.
      @return Return the period of the wave in radians.
     */
-    float getPeriod() const { return _period; }
+    float getPeriod() const
+    {
+        return _period;
+    }
+
     /**
      @brief Set period of the wave in radians.
      @param fPeriod The value will be set.
     */
-    void setPeriod(float fPeriod) { _period = fPeriod; }
+    void setPeriod(float fPeriod)
+    {
+        _period = fPeriod;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
-    EaseElastic() {}
-    virtual ~EaseElastic() {}
+
+    EaseElastic()
+    {
+    }
+
+    virtual ~EaseElastic()
+    {
+    }
+
     /**
      @brief Initializes the action with the inner action and the period in radians.
      @param action The pointer of the inner action.
      @param period Period of the wave in radians. Default is 0.3.
      @return Return true when the initialization success, otherwise return false.
     */
-    bool initWithAction(ActionInterval *action, float period = 0.3f);
+    bool initWithAction(ActionInterval* action, float period = 0.3f);
 
 protected:
     float _period;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(EaseElastic);
+private: CC_DISALLOW_COPY_AND_ASSIGN(EaseElastic);
 };
 
 //
@@ -511,7 +541,6 @@ EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticOut);
  */
 EASEELASTIC_TEMPLATE_DECL_CLASS(EaseElasticInOut);
 
-
 /**
  @class EaseBezierAction
  @brief Ease Bezier
@@ -534,11 +563,17 @@ public:
     /**
      @brief Set the bezier parameters.
     */
-    virtual void setBezierParamer( float p0, float p1, float p2, float p3);
+    virtual void setBezierParamer(float p0, float p1, float p2, float p3);
 
 CC_CONSTRUCTOR_ACCESS:
-    EaseBezierAction() {}
-    virtual ~EaseBezierAction() {}
+
+    EaseBezierAction()
+    {
+    }
+
+    virtual ~EaseBezierAction()
+    {
+    }
 
 protected:
     float _p0;
@@ -546,8 +581,7 @@ protected:
     float _p2;
     float _p3;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(EaseBezierAction);
+private: CC_DISALLOW_COPY_AND_ASSIGN(EaseBezierAction);
 };
 
 // end of actions group

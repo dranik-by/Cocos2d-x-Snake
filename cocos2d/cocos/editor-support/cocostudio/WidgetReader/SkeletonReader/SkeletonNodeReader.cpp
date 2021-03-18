@@ -54,7 +54,7 @@ SkeletonNodeReader* SkeletonNodeReader::getInstance()
 {
     if (_instanceSkeletonNodeReader == nullptr)
     {
-        _instanceSkeletonNodeReader = new (std::nothrow) SkeletonNodeReader();
+        _instanceSkeletonNodeReader = new(std::nothrow) SkeletonNodeReader();
     }
     return _instanceSkeletonNodeReader;
 }
@@ -64,7 +64,7 @@ void SkeletonNodeReader::destroyInstance()
     CC_SAFE_DELETE(_instanceSkeletonNodeReader);
 }
 
-cocos2d::Node*  SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table *nodeOptions)
+cocos2d::Node* SkeletonNodeReader::createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions)
 {
     auto bone = SkeletonNode::create();
 

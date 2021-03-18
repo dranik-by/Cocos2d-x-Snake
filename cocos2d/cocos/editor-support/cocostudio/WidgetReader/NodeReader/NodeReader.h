@@ -26,32 +26,31 @@
 #ifndef __cocos2d_libs__NodeReader__
 #define __cocos2d_libs__NodeReader__
 
-
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReaderProtocol.h"
 #include "editor-support/cocostudio/WidgetReader/NodeReaderDefine.h"
 
 namespace cocostudio
 {
-    class CC_STUDIO_DLL NodeReader : public cocos2d::Ref, public NodeReaderProtocol
-    {
-        DECLARE_CLASS_NODE_READER_INFO
-        
-    public:
-        NodeReader();
-        ~NodeReader();
-        
-        static NodeReader* getInstance();
-        /** @deprecated Use method destroyInstance() instead */
-        CC_DEPRECATED_ATTRIBUTE static void purge();
-        static void destroyInstance();
-        
-        flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
-                                                                             flatbuffers::FlatBufferBuilder* builder);
-        void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
-        void setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
-        cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
-    };
+class CC_STUDIO_DLL NodeReader : public cocos2d::Ref, public NodeReaderProtocol
+{
+DECLARE_CLASS_NODE_READER_INFO
+
+public:
+    NodeReader();
+    ~NodeReader();
+
+    static NodeReader* getInstance();
+    /** @deprecated Use method destroyInstance() instead */
+    CC_DEPRECATED_ATTRIBUTE static void purge();
+    static void destroyInstance();
+
+    flatbuffers::Offset<flatbuffers::Table> createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                                         flatbuffers::FlatBufferBuilder* builder);
+    void setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
+    void setLayoutComponentPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* nodeOptions);
+    cocos2d::Node* createNodeWithFlatBuffers(const flatbuffers::Table* nodeOptions);
+};
 }
 
 #endif /* defined(__cocos2d_libs__NodeReader__) */

@@ -29,16 +29,16 @@
 #include "audio/android/CCThreadPool.h"
 #include <sys/time.h>
 
-
 #ifdef __ANDROID__
-#include <android/log.h>
-#define LOG_TAG "ThreadPool"
-#define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG,__VA_ARGS__)
+    #include <android/log.h>
+    #define LOG_TAG "ThreadPool"
+    #define LOGD(...)  __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG,__VA_ARGS__)
 #else
-#define LOGD(...) printf(__VA_ARGS__)
+    #define LOGD(...) printf(__VA_ARGS__)
 #endif
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 #define DEFAULT_THREAD_POOL_MIN_NUM (4)
 #define DEFAULT_THREAD_POOL_MAX_NUM (20)
@@ -47,16 +47,14 @@ namespace cocos2d {
 #define DEFAULT_SHRINK_STEP (2)
 #define DEFAULT_STRETCH_STEP (2)
 
-static ThreadPool *__defaultThreadPool = nullptr;
+static ThreadPool* __defaultThreadPool = nullptr;
 
-ThreadPool *ThreadPool::getDefaultThreadPool()
+ThreadPool* ThreadPool::getDefaultThreadPool()
 {
     if (__defaultThreadPool == nullptr)
     {
-        __defaultThreadPool = newCachedThreadPool(DEFAULT_THREAD_POOL_MIN_NUM,
-                                                  DEFAULT_THREAD_POOL_MAX_NUM,
-                                                  DEFAULT_SHRINK_INTERVAL, DEFAULT_SHRINK_STEP,
-                                                  DEFAULT_STRETCH_STEP);
+        __defaultThreadPool = newCachedThreadPool(DEFAULT_THREAD_POOL_MIN_NUM, DEFAULT_THREAD_POOL_MAX_NUM,
+                                                  DEFAULT_SHRINK_INTERVAL, DEFAULT_SHRINK_STEP, DEFAULT_STRETCH_STEP);
     }
 
     return __defaultThreadPool;
@@ -68,10 +66,10 @@ void ThreadPool::destroyDefaultThreadPool()
     __defaultThreadPool = nullptr;
 }
 
-ThreadPool *ThreadPool::newCachedThreadPool(int minThreadNum, int maxThreadNum, int shrinkInterval,
-                                            int shrinkStep, int stretchStep)
+ThreadPool* ThreadPool::newCachedThreadPool(int minThreadNum, int maxThreadNum, int shrinkInterval, int shrinkStep,
+                                            int stretchStep)
 {
-    ThreadPool *pool = new(std::nothrow) ThreadPool(minThreadNum, maxThreadNum);
+    ThreadPool* pool = new(std::nothrow) ThreadPool(minThreadNum, maxThreadNum);
     if (pool != nullptr)
     {
         pool->setFixedSize(false);
@@ -82,9 +80,9 @@ ThreadPool *ThreadPool::newCachedThreadPool(int minThreadNum, int maxThreadNum, 
     return pool;
 }
 
-ThreadPool *ThreadPool::newFixedThreadPool(int threadNum)
+ThreadPool* ThreadPool::newFixedThreadPool(int threadNum)
 {
-    ThreadPool *pool = new(std::nothrow) ThreadPool(threadNum, threadNum);
+    ThreadPool* pool = new(std::nothrow) ThreadPool(threadNum, threadNum);
     if (pool != nullptr)
     {
         pool->setFixedSize(true);
@@ -92,9 +90,9 @@ ThreadPool *ThreadPool::newFixedThreadPool(int threadNum)
     return pool;
 }
 
-ThreadPool *ThreadPool::newSingleThreadPool()
+ThreadPool* ThreadPool::newSingleThreadPool()
 {
-    ThreadPool *pool = new(std::nothrow) ThreadPool(1, 1);
+    ThreadPool* pool = new(std::nothrow) ThreadPool(1, 1);
     if (pool != nullptr)
     {
         pool->setFixedSize(true);
@@ -103,10 +101,16 @@ ThreadPool *ThreadPool::newSingleThreadPool()
 }
 
 ThreadPool::ThreadPool(int minNum, int maxNum)
-        : _isDone(false), _isStop(false), _idleThreadNum(0), _minThreadNum(minNum),
-          _maxThreadNum(maxNum), _initedThreadNum(0), _shrinkInterval(DEFAULT_SHRINK_INTERVAL),
-          _shrinkStep(DEFAULT_SHRINK_STEP), _stretchStep(DEFAULT_STRETCH_STEP),
-          _isFixedSize(false)
+: _isDone(false)
+, _isStop(false)
+, _idleThreadNum(0)
+, _minThreadNum(minNum)
+, _maxThreadNum(maxNum)
+, _initedThreadNum(0)
+, _shrinkInterval(DEFAULT_SHRINK_INTERVAL)
+, _shrinkStep(DEFAULT_SHRINK_STEP)
+, _stretchStep(DEFAULT_STRETCH_STEP)
+, _isFixedSize(false)
 {
     init();
 }
@@ -184,7 +188,7 @@ bool ThreadPool::tryShrinkPool()
         _cv.notify_all();
     }
 
-    for (const auto& threadID : threadIDsToJoin)
+    for (const auto &threadID : threadIDsToJoin)
     {  // wait for the computing threads to finish
         if (_threads[threadID]->joinable())
         {
@@ -201,7 +205,7 @@ bool ThreadPool::tryShrinkPool()
 
     float seconds = (after.tv_sec - before.tv_sec) + (after.tv_usec - before.tv_usec) / 1000000.0f;
 
-    LOGD("shrink %d threads, waste: %f seconds\n", (int) threadIDsToJoin.size(), seconds);
+    LOGD("shrink %d threads, waste: %f seconds\n", (int)threadIDsToJoin.size(), seconds);
 
     if (_initedThreadNum <= _minThreadNum)
         return true;
@@ -238,16 +242,13 @@ void ThreadPool::stretchPool(int count)
         struct timeval after;
         gettimeofday(&after, nullptr);
 
-        float seconds =
-                (after.tv_sec - before.tv_sec) + (after.tv_usec - before.tv_usec) / 1000000.0f;
+        float seconds = (after.tv_sec - before.tv_sec) + (after.tv_usec - before.tv_usec) / 1000000.0f;
 
-        LOGD("stretch pool from %d to %d, waste %f seconds\n", oldThreadCount, _initedThreadNum,
-             seconds);
+        LOGD("stretch pool from %d to %d, waste %f seconds\n", oldThreadCount, _initedThreadNum, seconds);
     }
 }
 
-void ThreadPool::pushTask(const std::function<void(int)>& runnable,
-                          TaskType type/* = DEFAULT*/)
+void ThreadPool::pushTask(const std::function<void(int)> &runnable, TaskType type/* = DEFAULT*/)
 {
     if (!_isFixedSize)
     {
@@ -262,8 +263,7 @@ void ThreadPool::pushTask(const std::function<void(int)>& runnable,
                 struct timeval now;
                 gettimeofday(&now, nullptr);
 
-                float seconds = (now.tv_sec - _lastShrinkTime.tv_sec) +
-                                (now.tv_usec - _lastShrinkTime.tv_usec) / 1000000.0f;
+                float seconds = (now.tv_sec - _lastShrinkTime.tv_sec) + (now.tv_usec - _lastShrinkTime.tv_usec) / 1000000.0f;
                 if (seconds > _shrinkInterval)
                 {
                     tryShrinkPool();
@@ -277,9 +277,10 @@ void ThreadPool::pushTask(const std::function<void(int)>& runnable,
         }
     }
 
-    auto callback = new(std::nothrow) std::function<void(int)>([runnable](int tid) {
-        runnable(tid);
-    });
+    auto callback = new(std::nothrow) std::function<void(int)>([runnable](int tid)
+                                                               {
+                                                                   runnable(tid);
+                                                               });
 
     Task task;
     task.type = type;
@@ -322,7 +323,7 @@ void ThreadPool::stopTasksByType(TaskType type)
 
     if (!notStopTasks.empty())
     {
-        for (const auto& t : notStopTasks)
+        for (const auto &t : notStopTasks)
         {
             _taskQueue.push(t);
         }
@@ -348,7 +349,7 @@ void ThreadPool::joinThread(int tid)
 
 int ThreadPool::getTaskNum() const
 {
-    return (int) _taskQueue.size();
+    return (int)_taskQueue.size();
 }
 
 void ThreadPool::setFixedSize(bool isFixedSize)
@@ -398,10 +399,10 @@ void ThreadPool::stop()
 
 void ThreadPool::setThread(int tid)
 {
-    std::shared_ptr<std::atomic<bool>> abort_ptr(
-            _abortFlags[tid]); // a copy of the shared ptr to the flag
-    auto f = [this, tid, abort_ptr/* a copy of the shared ptr to the abort */]() {
-        std::atomic<bool>& abort = *abort_ptr;
+    std::shared_ptr<std::atomic<bool>> abort_ptr(_abortFlags[tid]); // a copy of the shared ptr to the flag
+    auto f = [this, tid, abort_ptr/* a copy of the shared ptr to the abort */]()
+    {
+        std::atomic<bool> &abort = *abort_ptr;
         Task task;
         bool isPop = _taskQueue.pop(task);
         while (true)
@@ -409,7 +410,7 @@ void ThreadPool::setThread(int tid)
             while (isPop)
             {  // if there is anything in the queue
                 std::unique_ptr<std::function<void(int)>> func(
-                        task.callback); // at return, delete the function even if an exception occurred
+                task.callback); // at return, delete the function even if an exception occurred
                 (*task.callback)(tid);
                 if (abort)
                     return;  // the thread is wanted to stop, return even if the queue is not empty yet
@@ -423,7 +424,8 @@ void ThreadPool::setThread(int tid)
             _idleThreadNumMutex.unlock();
 
             *_idleFlags[tid] = true;
-            _cv.wait(lock, [this, &task, &isPop, &abort]() {
+            _cv.wait(lock, [this, &task, &isPop, &abort]()
+            {
                 isPop = _taskQueue.pop(task);
                 return isPop || _isDone || abort;
             });
@@ -431,13 +433,12 @@ void ThreadPool::setThread(int tid)
             _idleThreadNumMutex.lock();
             --_idleThreadNum;
             _idleThreadNumMutex.unlock();
-            
+
             if (!isPop)
                 return;  // if the queue is empty and isDone == true or *flag then return
         }
     };
-    _threads[tid].reset(
-            new(std::nothrow) std::thread(f)); // compiler may not support std::make_unique()
+    _threads[tid].reset(new(std::nothrow) std::thread(f)); // compiler may not support std::make_unique()
 }
 
 } // namespace cocos2d {

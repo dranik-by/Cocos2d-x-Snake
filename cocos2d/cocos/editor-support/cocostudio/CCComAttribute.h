@@ -31,11 +31,12 @@ THE SOFTWARE.
 #include "base/CCValue.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CC_STUDIO_DLL ComAttribute : public cocos2d::Component
 {
-    DECLARE_CLASS_COMPONENT_INFO
+DECLARE_CLASS_COMPONENT_INFO
 public:
     /**
      * @js ctor
@@ -46,26 +47,26 @@ public:
      * @lua NA
      */
     virtual ~ComAttribute();
-    
+
 public:
     const static std::string COMPONENT_NAME;
 
     static ComAttribute* create();
     virtual bool init() override;
     virtual bool serialize(void* r) override;
-    
-    void setInt(const std::string& key, int value);
-    void setFloat(const std::string& key, float value);
-    void setBool(const std::string& key, bool value);
-    void setString(const std::string& key, const std::string& value);
-    int getInt(const std::string& key, int def = 0) const;
-    float getFloat(const std::string& key, float def = 0.0f) const;
-    bool getBool(const std::string& key, bool def = false) const;
-    std::string getString(const std::string& key, const std::string& def = "") const;
+
+    void setInt(const std::string &key, int value);
+    void setFloat(const std::string &key, float value);
+    void setBool(const std::string &key, bool value);
+    void setString(const std::string &key, const std::string &value);
+    int getInt(const std::string &key, int def = 0) const;
+    float getFloat(const std::string &key, float def = 0.0f) const;
+    bool getBool(const std::string &key, bool def = false) const;
+    std::string getString(const std::string &key, const std::string &def = "") const;
     bool parse(const std::string &jsonFile);
 private:
-   cocos2d::ValueMap _dict;
-   rapidjson::Document _doc;
+    cocos2d::ValueMap _dict;
+    rapidjson::Document _doc;
 };
 
 }

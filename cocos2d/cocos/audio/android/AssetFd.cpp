@@ -28,10 +28,11 @@ THE SOFTWARE.
 #include "audio/android/cutils/log.h"
 #include "audio/android/AssetFd.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 AssetFd::AssetFd(int assetFd)
-        : _assetFd(assetFd)
+: _assetFd(assetFd)
 {
 }
 

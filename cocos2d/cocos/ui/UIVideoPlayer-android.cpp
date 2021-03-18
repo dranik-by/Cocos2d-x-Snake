@@ -26,15 +26,15 @@
 #include "ui/UIVideoPlayer.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <unordered_map>
-#include <stdlib.h>
-#include <jni.h>
-#include <string>
-#include "platform/android/jni/JniHelper.h"
-#include "base/CCDirector.h"
-#include "base/CCEventListenerKeyboard.h"
-#include "platform/CCFileUtils.h"
-#include "ui/UIHelper.h"
+    #include <unordered_map>
+    #include <stdlib.h>
+    #include <jni.h>
+    #include <string>
+    #include "platform/android/jni/JniHelper.h"
+    #include "base/CCDirector.h"
+    #include "base/CCEventListenerKeyboard.h"
+    #include "platform/CCFileUtils.h"
+    #include "ui/UIHelper.h"
 
 //-----------------------------------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ USING_NS_CC;
 
 static void executeVideoCallback(int index,int event);
 
-#define QUIT_FULLSCREEN 1000
+    #define QUIT_FULLSCREEN 1000
 
 extern "C" {
     void Java_org_cocos2dx_lib_Cocos2dxVideoHelper_nativeExecuteVideoCallback(JNIEnv * env, jobject obj, jint index,jint event) {
@@ -105,10 +105,10 @@ VideoPlayer::VideoPlayer()
     _videoPlayerIndex = createVideoWidgetJNI();
     s_allVideoPlayers[_videoPlayerIndex] = this;
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+    #if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode = DrawNode::create();
     addChild(_debugDrawNode);
-#endif
+    #endif
 }
 
 VideoPlayer::~VideoPlayer()
@@ -121,7 +121,7 @@ void VideoPlayer::setFileName(const std::string& fileName)
 {
     _videoURL = FileUtils::getInstance()->fullPathForFilename(fileName);
     _videoSource = VideoPlayer::Source::FILENAME;
-    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex, 
+    JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoUrl", _videoPlayerIndex,
                                     (int)Source::FILENAME,_videoURL);
 }
 
@@ -157,12 +157,12 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags
     if (flags & FLAGS_TRANSFORM_DIRTY)
     {
         auto uiRect = cocos2d::ui::Helper::convertBoundingBoxToScreen(this);
-        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex, 
+        JniHelper::callStaticVoidMethod(videoHelperClassName, "setVideoRect", _videoPlayerIndex,
                                         (int)uiRect.origin.x, (int)uiRect.origin.y,
                                         (int)uiRect.size.width, (int)uiRect.size.height);
     }
 
-#if CC_VIDEOPLAYER_DEBUG_DRAW
+    #if CC_VIDEOPLAYER_DEBUG_DRAW
     _debugDrawNode->clear();
     auto size = getContentSize();
     Point vertices[4]=
@@ -173,7 +173,7 @@ void VideoPlayer::draw(Renderer* renderer, const Mat4 &transform, uint32_t flags
         Point(0, size.height)
     };
     _debugdrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
-#endif
+    #endif
 }
 
 void VideoPlayer::setFullScreenEnabled(bool enabled)

@@ -29,11 +29,15 @@
 #include <mutex>
 #include <string>
 #include <thread>
+
 #ifdef OPENAL_PLAIN_INCLUDES
-#include <al.h>
+    #include <al.h>
 #else
-#include <AL/al.h>
+
+    #include <AL/al.h>
+
 #endif
+
 #include "platform/CCPlatformMacros.h"
 
 NS_CC_BEGIN
@@ -51,7 +55,12 @@ public:
 
     //queue buffer related stuff
     bool setTime(float time);
-    float getTime() { return _currTime;}
+
+    float getTime()
+    {
+        return _currTime;
+    }
+
     bool setLoop(bool loop);
 
 protected:
@@ -63,7 +72,7 @@ protected:
 
     float _volume;
     bool _loop;
-    std::function<void (int, const std::string &)> _finishCallbak;
+    std::function<void(int, const std::string &)> _finishCallbak;
 
     bool _isDestroyed;
     bool _removeByAudioEngine;

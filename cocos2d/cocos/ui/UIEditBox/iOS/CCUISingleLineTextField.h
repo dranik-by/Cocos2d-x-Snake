@@ -32,7 +32,7 @@
 
 @interface CCUISingleLineTextField : UITextField
 
-@property (nonatomic, retain) UIColor *placeholderTextColor;
-@property (nonatomic, retain) UIFont *placeholderFont;
+@property(nonatomic, retain) UIColor* placeholderTextColor;
+@property(nonatomic, retain) UIFont* placeholderFont;
 
 @end

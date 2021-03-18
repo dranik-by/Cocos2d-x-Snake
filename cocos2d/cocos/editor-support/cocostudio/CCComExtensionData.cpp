@@ -28,70 +28,69 @@
 
 namespace cocostudio
 {
-    IMPLEMENT_CLASS_COMPONENT_INFO(ComExtensionData)
+IMPLEMENT_CLASS_COMPONENT_INFO(ComExtensionData)
 
-    const std::string ComExtensionData::COMPONENT_NAME = "ComExtensionData";
+const std::string ComExtensionData::COMPONENT_NAME = "ComExtensionData";
 
-    ComExtensionData::ComExtensionData()
-    : _customProperty("")
-    , _timelineData(nullptr)
-    {
-        _name = COMPONENT_NAME;
-    }
+ComExtensionData::ComExtensionData()
+: _customProperty("")
+, _timelineData(nullptr)
+{
+    _name = COMPONENT_NAME;
+}
 
-    ComExtensionData::~ComExtensionData()
-    {
-        CC_SAFE_RELEASE(_timelineData);
-    }
+ComExtensionData::~ComExtensionData()
+{
+    CC_SAFE_RELEASE(_timelineData);
+}
 
-    ComExtensionData* ComExtensionData::create()
+ComExtensionData* ComExtensionData::create()
+{
+    ComExtensionData* ret = new(std::nothrow) ComExtensionData();
+    if (ret && ret->init())
     {
-        ComExtensionData * ret = new (std::nothrow) ComExtensionData();
-        if (ret && ret->init())
-        {
-            ret->autorelease();
-        }
-        else
-        {
-            CC_SAFE_DELETE(ret);
-        }
-        return ret;
+        ret->autorelease();
     }
-    
-    
-    bool ComExtensionData::init()
+    else
     {
-        _timelineData = cocostudio::timeline::ActionTimelineData::create(0);
-        CC_SAFE_RETAIN(_timelineData);
-        
-        return true;
+        CC_SAFE_DELETE(ret);
     }
-    
-    void ComExtensionData::onEnter()
-    {
-    }
+    return ret;
+}
 
-    void ComExtensionData::onExit()
-    {
-        onRemove();
-    }
+bool ComExtensionData::init()
+{
+    _timelineData = cocostudio::timeline::ActionTimelineData::create(0);
+    CC_SAFE_RETAIN(_timelineData);
 
-    void ComExtensionData::onAdd()
-    {
-    }
+    return true;
+}
 
-    void ComExtensionData::onRemove()
-    {
-    }
+void ComExtensionData::onEnter()
+{
+}
 
-    void ComExtensionData::setActionTag(int actionTag)
-    {
-        _timelineData->setActionTag(actionTag);
-    }
-    
-    int ComExtensionData::getActionTag() const
-    {
-        return _timelineData->getActionTag();
-    }
-    
+void ComExtensionData::onExit()
+{
+    onRemove();
+}
+
+void ComExtensionData::onAdd()
+{
+}
+
+void ComExtensionData::onRemove()
+{
+}
+
+void ComExtensionData::setActionTag(int actionTag)
+{
+    _timelineData->setActionTag(actionTag);
+}
+
+int ComExtensionData::getActionTag() const
+{
+    return _timelineData->getActionTag();
+}
+
 }

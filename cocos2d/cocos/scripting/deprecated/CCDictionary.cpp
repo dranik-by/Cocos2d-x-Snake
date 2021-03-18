@@ -47,16 +47,16 @@ DictElement::DictElement(const char* pszKey, Ref* pObject)
     CCASSERT(pszKey && strlen(pszKey) > 0, "Invalid key value.");
     _intKey = 0;
     const char* pStart = pszKey;
-    
+
     size_t len = strlen(pszKey);
-    if (len > MAX_KEY_LEN )
+    if (len > MAX_KEY_LEN)
     {
-        char* pEnd = (char*)&pszKey[len-1];
-        pStart = pEnd - (MAX_KEY_LEN-1);
+        char* pEnd = (char*)&pszKey[len - 1];
+        pStart = pEnd - (MAX_KEY_LEN - 1);
     }
-    
+
     strcpy(_strKey, pStart);
-    
+
     _object = pObject;
     memset(&hh, 0, sizeof(hh));
 }
@@ -98,48 +98,50 @@ unsigned int __Dictionary::count()
 __Array* __Dictionary::allKeys()
 {
     int iKeyCount = this->count();
-    if (iKeyCount <= 0) return nullptr;
+    if (iKeyCount <= 0)
+        return nullptr;
 
     __Array* array = __Array::createWithCapacity(iKeyCount);
 
-    DictElement *pElement, *tmp;
+    DictElement* pElement, * tmp;
     if (_dictType == kDictStr)
     {
-        HASH_ITER(hh, _elements, pElement, tmp) 
+        HASH_ITER(hh, _elements, pElement, tmp)
         {
-            __String* pOneKey = new (std::nothrow) __String(pElement->_strKey);
+            __String* pOneKey = new(std::nothrow) __String(pElement->_strKey);
             array->addObject(pOneKey);
             CC_SAFE_RELEASE(pOneKey);
         }
     }
     else if (_dictType == kDictInt)
     {
-        HASH_ITER(hh, _elements, pElement, tmp) 
+        HASH_ITER(hh, _elements, pElement, tmp)
         {
-            __Integer* pOneKey = new (std::nothrow) __Integer(static_cast<int>(pElement->_intKey));
+            __Integer* pOneKey = new(std::nothrow) __Integer(static_cast<int>(pElement->_intKey));
             array->addObject(pOneKey);
             CC_SAFE_RELEASE(pOneKey);
         }
     }
-    
+
     return array;
 }
 
 __Array* __Dictionary::allKeysForObject(Ref* object)
 {
     int iKeyCount = this->count();
-    if (iKeyCount <= 0) return nullptr;
+    if (iKeyCount <= 0)
+        return nullptr;
     __Array* array = __Array::create();
 
-    DictElement *pElement, *tmp;
+    DictElement* pElement, * tmp;
 
     if (_dictType == kDictStr)
     {
-        HASH_ITER(hh, _elements, pElement, tmp) 
+        HASH_ITER(hh, _elements, pElement, tmp)
         {
             if (object == pElement->_object)
             {
-                __String* pOneKey = new (std::nothrow) __String(pElement->_strKey);
+                __String* pOneKey = new(std::nothrow) __String(pElement->_strKey);
                 array->addObject(pOneKey);
                 CC_SAFE_RELEASE(pOneKey);
             }
@@ -147,11 +149,11 @@ __Array* __Dictionary::allKeysForObject(Ref* object)
     }
     else if (_dictType == kDictInt)
     {
-        HASH_ITER(hh, _elements, pElement, tmp) 
+        HASH_ITER(hh, _elements, pElement, tmp)
         {
             if (object == pElement->_object)
             {
-                __Integer* pOneKey = new (std::nothrow) __Integer(static_cast<int>(pElement->_intKey));
+                __Integer* pOneKey = new(std::nothrow) __Integer(static_cast<int>(pElement->_intKey));
                 array->addObject(pOneKey);
                 CC_SAFE_RELEASE(pOneKey);
             }
@@ -160,16 +162,17 @@ __Array* __Dictionary::allKeysForObject(Ref* object)
     return array;
 }
 
-Ref* __Dictionary::objectForKey(const std::string& key)
+Ref* __Dictionary::objectForKey(const std::string &key)
 {
     // if dictionary wasn't initialized, return nullptr directly.
-    if (_dictType == kDictUnknown) return nullptr;
+    if (_dictType == kDictUnknown)
+        return nullptr;
     // __Dictionary only supports one kind of key, string or integer.
     // This method uses string as key, therefore we should make sure that the key type of this __Dictionary is string.
     CCASSERT(_dictType == kDictStr, "this dictionary does not use string as key.");
 
     Ref* pRetObject = nullptr;
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_STR(_elements, key.c_str(), pElement);
     if (pElement != nullptr)
     {
@@ -181,13 +184,14 @@ Ref* __Dictionary::objectForKey(const std::string& key)
 Ref* __Dictionary::objectForKey(intptr_t key)
 {
     // if dictionary wasn't initialized, return nullptr directly.
-    if (_dictType == kDictUnknown) return nullptr;
+    if (_dictType == kDictUnknown)
+        return nullptr;
     // __Dictionary only supports one kind of key, string or integer.
     // This method uses integer as key, therefore we should make sure that the key type of this __Dictionary is integer.
     CCASSERT(_dictType == kDictInt, "this dictionary does not use integer as key.");
 
     Ref* pRetObject = nullptr;
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_PTR(_elements, &key, pElement);
     if (pElement != nullptr)
     {
@@ -196,7 +200,7 @@ Ref* __Dictionary::objectForKey(intptr_t key)
     return pRetObject;
 }
 
-const __String* __Dictionary::valueForKey(const std::string& key)
+const __String* __Dictionary::valueForKey(const std::string &key)
 {
     __String* pStr = dynamic_cast<__String*>(objectForKey(key));
     if (pStr == nullptr)
@@ -216,7 +220,7 @@ const __String* __Dictionary::valueForKey(intptr_t key)
     return pStr;
 }
 
-void __Dictionary::setObject(Ref* pObject, const std::string& key)
+void __Dictionary::setObject(Ref* pObject, const std::string &key)
 {
     CCASSERT(!key.empty() && pObject != nullptr, "Invalid Argument!");
     if (_dictType == kDictUnknown)
@@ -226,7 +230,7 @@ void __Dictionary::setObject(Ref* pObject, const std::string& key)
 
     CCASSERT(_dictType == kDictStr, "this dictionary doesn't use string as key.");
 
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_STR(_elements, key.c_str(), pElement);
     if (pElement == nullptr)
     {
@@ -252,7 +256,7 @@ void __Dictionary::setObject(Ref* pObject, intptr_t key)
 
     CCASSERT(_dictType == kDictInt, "this dictionary doesn't use integer as key.");
 
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_PTR(_elements, &key, pElement);
     if (pElement == nullptr)
     {
@@ -269,16 +273,16 @@ void __Dictionary::setObject(Ref* pObject, intptr_t key)
 
 }
 
-void __Dictionary::removeObjectForKey(const std::string& key)
+void __Dictionary::removeObjectForKey(const std::string &key)
 {
     if (_dictType == kDictUnknown)
     {
         return;
     }
-    
+
     CCASSERT(_dictType == kDictStr, "this dictionary doesn't use string as its key");
     CCASSERT(!key.empty(), "Invalid Argument!");
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_STR(_elements, key.c_str(), pElement);
     removeObjectForElememt(pElement);
 }
@@ -289,24 +293,24 @@ void __Dictionary::removeObjectForKey(intptr_t key)
     {
         return;
     }
-    
+
     CCASSERT(_dictType == kDictInt, "this dictionary doesn't use integer as its key");
-    DictElement *pElement = nullptr;
+    DictElement* pElement = nullptr;
     HASH_FIND_PTR(_elements, &key, pElement);
     removeObjectForElememt(pElement);
 }
 
-void __Dictionary::setObjectUnSafe(Ref* pObject, const std::string& key)
+void __Dictionary::setObjectUnSafe(Ref* pObject, const std::string &key)
 {
     pObject->retain();
-    DictElement* pElement = new (std::nothrow) DictElement(key.c_str(), pObject);
+    DictElement* pElement = new(std::nothrow) DictElement(key.c_str(), pObject);
     HASH_ADD_STR(_elements, _strKey, pElement);
 }
 
 void __Dictionary::setObjectUnSafe(Ref* pObject, const intptr_t key)
 {
     pObject->retain();
-    DictElement* pElement = new (std::nothrow) DictElement(key, pObject);
+    DictElement* pElement = new(std::nothrow) DictElement(key, pObject);
     HASH_ADD_PTR(_elements, _intKey, pElement);
 }
 
@@ -314,10 +318,10 @@ void __Dictionary::removeObjectsForKeys(__Array* pKey__Array)
 {
     Ref* pObj = nullptr;
     CCARRAY_FOREACH(pKey__Array, pObj)
-    {
-        __String* pStr = static_cast<__String*>(pObj);
-        removeObjectForKey(pStr->getCString());
-    }
+        {
+            __String* pStr = static_cast<__String*>(pObj);
+            removeObjectForKey(pStr->getCString());
+        }
 }
 
 void __Dictionary::removeObjectForElememt(DictElement* pElement)
@@ -332,8 +336,8 @@ void __Dictionary::removeObjectForElememt(DictElement* pElement)
 
 void __Dictionary::removeAllObjects()
 {
-    DictElement *pElement, *tmp;
-    HASH_ITER(hh, _elements, pElement, tmp) 
+    DictElement* pElement, * tmp;
+    HASH_ITER(hh, _elements, pElement, tmp)
     {
         HASH_DEL(_elements, pElement);
         pElement->_object->release();
@@ -348,16 +352,16 @@ Ref* __Dictionary::randomObject()
     {
         return nullptr;
     }
-    
+
     Ref* key = allKeys()->getRandomObject();
-    
+
     if (_dictType == kDictInt)
     {
-        return objectForKey( static_cast<__Integer*>(key)->getValue());
+        return objectForKey(static_cast<__Integer*>(key)->getValue());
     }
     else if (_dictType == kDictStr)
     {
-        return objectForKey( static_cast<__String*>(key)->getCString());
+        return objectForKey(static_cast<__String*>(key)->getCString());
     }
     else
     {
@@ -367,8 +371,8 @@ Ref* __Dictionary::randomObject()
 
 __Dictionary* __Dictionary::create()
 {
-    __Dictionary* ret = new (std::nothrow) __Dictionary();
-    if (ret && ret->init() )
+    __Dictionary* ret = new(std::nothrow) __Dictionary();
+    if (ret && ret->init())
     {
         ret->autorelease();
     }
@@ -385,32 +389,32 @@ __Dictionary* __Dictionary::createWithDictionary(__Dictionary* srcDict)
     return srcDict->clone();
 }
 
-static __Array* visitArray(const ValueVector& array);
+static __Array* visitArray(const ValueVector &array);
 
-static __Dictionary* visitDict(const ValueMap& dict)
+static __Dictionary* visitDict(const ValueMap &dict)
 {
-    __Dictionary* ret = new (std::nothrow) __Dictionary();
+    __Dictionary* ret = new(std::nothrow) __Dictionary();
     ret->init();
-    
+
     for (auto iter = dict.begin(); iter != dict.end(); ++iter)
     {
         if (iter->second.getType() == Value::Type::MAP)
         {
-            const ValueMap& subDict = iter->second.asValueMap();
+            const ValueMap &subDict = iter->second.asValueMap();
             auto sub = visitDict(subDict);
             ret->setObject(sub, iter->first);
             sub->release();
         }
         else if (iter->second.getType() == Value::Type::VECTOR)
         {
-            const ValueVector& arr = iter->second.asValueVector();
+            const ValueVector &arr = iter->second.asValueVector();
             auto sub = visitArray(arr);
             ret->setObject(sub, iter->first);
             sub->release();
         }
         else
         {
-            auto str = new (std::nothrow) __String(iter->second.asString());
+            auto str = new(std::nothrow) __String(iter->second.asString());
             ret->setObject(str, iter->first);
             str->release();
         }
@@ -418,38 +422,39 @@ static __Dictionary* visitDict(const ValueMap& dict)
     return ret;
 }
 
-static __Array* visitArray(const ValueVector& array)
+static __Array* visitArray(const ValueVector &array)
 {
-    __Array* ret = new (std::nothrow) __Array();
+    __Array* ret = new(std::nothrow) __Array();
     ret->init();
 
-    for(const auto &value : array) {
+    for (const auto &value : array)
+    {
         if (value.getType() == Value::Type::MAP)
         {
-            const ValueMap& subDict = value.asValueMap();
+            const ValueMap &subDict = value.asValueMap();
             auto sub = visitDict(subDict);
             ret->addObject(sub);
             sub->release();
         }
         else if (value.getType() == Value::Type::VECTOR)
         {
-            const ValueVector& arr = value.asValueVector();
+            const ValueVector &arr = value.asValueVector();
             auto sub = visitArray(arr);
             ret->addObject(sub);
             sub->release();
         }
         else
         {
-            auto str = new (std::nothrow) __String(value.asString());
+            auto str = new(std::nothrow) __String(value.asString());
             ret->addObject(str);
             str->release();
         }
     }
-    
+
     return ret;
 }
 
-__Dictionary* __Dictionary::createWithContentsOfFileThreadSafe(const char *pFileName)
+__Dictionary* __Dictionary::createWithContentsOfFileThreadSafe(const char* pFileName)
 {
     return visitDict(FileUtils::getInstance()->getValueMapFromFile(pFileName));
 }
@@ -459,7 +464,7 @@ void __Dictionary::acceptVisitor(DataVisitor &visitor)
     return visitor.visit(this);
 }
 
-__Dictionary* __Dictionary::createWithContentsOfFile(const char *pFileName)
+__Dictionary* __Dictionary::createWithContentsOfFile(const char* pFileName)
 {
     auto ret = createWithContentsOfFileThreadSafe(pFileName);
     if (ret != nullptr)
@@ -474,40 +479,55 @@ static ValueMap ccdictionary_to_valuemap(__Dictionary* dict);
 static ValueVector ccarray_to_valuevector(__Array* arr)
 {
     ValueVector ret;
-    
+
     Ref* obj;
     CCARRAY_FOREACH(arr, obj)
-    {
-        Value arrElement;
+        {
+            Value arrElement;
 
-        __String* strVal = nullptr;
-        __Dictionary* dictVal = nullptr;
-        __Array* arrVal = nullptr;
-        __Double* doubleVal = nullptr;
-        __Bool* boolVal = nullptr;
-        __Float* floatVal = nullptr;
-        __Integer* intVal = nullptr;
-        
-        if ((strVal = dynamic_cast<__String *>(obj))) {
-            arrElement = Value(strVal->getCString());
-        } else if ((dictVal = dynamic_cast<__Dictionary*>(obj))) {
-            arrElement = ccdictionary_to_valuemap(dictVal);
-        } else if ((arrVal = dynamic_cast<__Array*>(obj))) {
-            arrElement = ccarray_to_valuevector(arrVal);
-        } else if ((doubleVal = dynamic_cast<__Double*>(obj))) {
-            arrElement = Value(doubleVal->getValue());
-        } else if ((floatVal = dynamic_cast<__Float*>(obj))) {
-            arrElement = Value(floatVal->getValue());
-        } else if ((intVal = dynamic_cast<__Integer*>(obj))) {
-            arrElement = Value(intVal->getValue());
-        }  else if ((boolVal = dynamic_cast<__Bool*>(obj))) {
-            arrElement = boolVal->getValue() ? Value(true) : Value(false);
-        } else {
-            CCASSERT(false, "the type isn't supported.");
+            __String* strVal = nullptr;
+            __Dictionary* dictVal = nullptr;
+            __Array* arrVal = nullptr;
+            __Double* doubleVal = nullptr;
+            __Bool* boolVal = nullptr;
+            __Float* floatVal = nullptr;
+            __Integer* intVal = nullptr;
+
+            if ((strVal = dynamic_cast<__String*>(obj)))
+            {
+                arrElement = Value(strVal->getCString());
+            }
+            else if ((dictVal = dynamic_cast<__Dictionary*>(obj)))
+            {
+                arrElement = ccdictionary_to_valuemap(dictVal);
+            }
+            else if ((arrVal = dynamic_cast<__Array*>(obj)))
+            {
+                arrElement = ccarray_to_valuevector(arrVal);
+            }
+            else if ((doubleVal = dynamic_cast<__Double*>(obj)))
+            {
+                arrElement = Value(doubleVal->getValue());
+            }
+            else if ((floatVal = dynamic_cast<__Float*>(obj)))
+            {
+                arrElement = Value(floatVal->getValue());
+            }
+            else if ((intVal = dynamic_cast<__Integer*>(obj)))
+            {
+                arrElement = Value(intVal->getValue());
+            }
+            else if ((boolVal = dynamic_cast<__Bool*>(obj)))
+            {
+                arrElement = boolVal->getValue() ? Value(true) : Value(false);
+            }
+            else
+            {
+                CCASSERT(false, "the type isn't supported.");
+            }
+
+            ret.push_back(arrElement);
         }
-
-        ret.push_back(arrElement);
-    }
     return ret;
 }
 
@@ -516,48 +536,62 @@ static ValueMap ccdictionary_to_valuemap(__Dictionary* dict)
     ValueMap ret;
     DictElement* pElement = nullptr;
     CCDICT_FOREACH(dict, pElement)
-    {
-        Ref* obj = pElement->getObject();
-        
-        __String* strVal = nullptr;
-        __Dictionary* dictVal = nullptr;
-        __Array* arrVal = nullptr;
-        __Double* doubleVal = nullptr;
-        __Bool* boolVal = nullptr;
-        __Float* floatVal = nullptr;
-        __Integer* intVal = nullptr;
-        
-        Value dictElement;
-        
-        if ((strVal = dynamic_cast<__String *>(obj))) {
-            dictElement = Value(strVal->getCString());
-        } else if ((dictVal = dynamic_cast<__Dictionary*>(obj))) {
-            dictElement = ccdictionary_to_valuemap(dictVal);
-        } else if ((arrVal = dynamic_cast<__Array*>(obj))) {
-            dictElement = ccarray_to_valuevector(arrVal);
-        } else if ((doubleVal = dynamic_cast<__Double*>(obj))) {
-            dictElement = Value(doubleVal->getValue());
-        } else if ((floatVal = dynamic_cast<__Float*>(obj))) {
-            dictElement = Value(floatVal->getValue());
-        } else if ((intVal = dynamic_cast<__Integer*>(obj))) {
-            dictElement = Value(intVal->getValue());
-        } else if ((boolVal = dynamic_cast<__Bool*>(obj))) {
-            dictElement = boolVal->getValue() ? Value(true) : Value(false);
-        } else {
-            CCASSERT(false, "the type isn't supported.");
-        }
-
-        const char* key = pElement->getStrKey();
-        if (key && strlen(key) > 0)
         {
-            ret[key] = dictElement;
+            Ref* obj = pElement->getObject();
+
+            __String* strVal = nullptr;
+            __Dictionary* dictVal = nullptr;
+            __Array* arrVal = nullptr;
+            __Double* doubleVal = nullptr;
+            __Bool* boolVal = nullptr;
+            __Float* floatVal = nullptr;
+            __Integer* intVal = nullptr;
+
+            Value dictElement;
+
+            if ((strVal = dynamic_cast<__String*>(obj)))
+            {
+                dictElement = Value(strVal->getCString());
+            }
+            else if ((dictVal = dynamic_cast<__Dictionary*>(obj)))
+            {
+                dictElement = ccdictionary_to_valuemap(dictVal);
+            }
+            else if ((arrVal = dynamic_cast<__Array*>(obj)))
+            {
+                dictElement = ccarray_to_valuevector(arrVal);
+            }
+            else if ((doubleVal = dynamic_cast<__Double*>(obj)))
+            {
+                dictElement = Value(doubleVal->getValue());
+            }
+            else if ((floatVal = dynamic_cast<__Float*>(obj)))
+            {
+                dictElement = Value(floatVal->getValue());
+            }
+            else if ((intVal = dynamic_cast<__Integer*>(obj)))
+            {
+                dictElement = Value(intVal->getValue());
+            }
+            else if ((boolVal = dynamic_cast<__Bool*>(obj)))
+            {
+                dictElement = boolVal->getValue() ? Value(true) : Value(false);
+            }
+            else
+            {
+                CCASSERT(false, "the type isn't supported.");
+            }
+
+            const char* key = pElement->getStrKey();
+            if (key && strlen(key) > 0)
+            {
+                ret[key] = dictElement;
+            }
         }
-    }
     return ret;
 }
 
-
-bool __Dictionary::writeToFile(const char *fullPath)
+bool __Dictionary::writeToFile(const char* fullPath)
 {
     ValueMap dict = ccdictionary_to_valuemap(this);
     return FileUtils::getInstance()->writeToFile(dict, fullPath);
@@ -566,7 +600,7 @@ bool __Dictionary::writeToFile(const char *fullPath)
 __Dictionary* __Dictionary::clone() const
 {
     __Dictionary* newDict = __Dictionary::create();
-    
+
     DictElement* element = nullptr;
     Ref* tmpObj = nullptr;
     Clonable* obj = nullptr;
@@ -586,7 +620,8 @@ __Dictionary* __Dictionary::clone() const
             }
             else
             {
-                CCLOGWARN("%s isn't clonable.", typeid(std::remove_pointer<decltype(element->getObject())>::type).name());
+                CCLOGWARN("%s isn't clonable.",
+                          typeid(std::remove_pointer<decltype(element->getObject())>::type).name());
             }
         }
     }
@@ -606,11 +641,12 @@ __Dictionary* __Dictionary::clone() const
             }
             else
             {
-                CCLOGWARN("%s isn't clonable.", typeid(std::remove_pointer<decltype(element->getObject())>::type).name());
+                CCLOGWARN("%s isn't clonable.",
+                          typeid(std::remove_pointer<decltype(element->getObject())>::type).name());
             }
         }
     }
-    
+
     return newDict;
 }
 

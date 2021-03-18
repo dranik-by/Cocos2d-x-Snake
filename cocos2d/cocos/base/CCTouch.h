@@ -48,7 +48,8 @@ public:
      * Dispatch mode, how the touches are dispatched.
      * @js NA
      */
-    enum class DispatchMode {
+    enum class DispatchMode
+    {
         ALL_AT_ONCE, /** All at once. */
         ONE_BY_ONE,  /** One by one. */
     };
@@ -56,12 +57,13 @@ public:
     /** Constructor.
      * @js ctor
      */
-    Touch() 
-        : _id(0),
-        _startPointCaptured(false),
-        _curForce(0.f),
-        _maxForce(0.f)
-    {}
+    Touch()
+    : _id(0)
+    , _startPointCaptured(false)
+    , _curForce(0.f)
+    , _maxForce(0.f)
+    {
+    }
 
     /** Returns the current touch location in OpenGL coordinates.
      *
@@ -98,7 +100,7 @@ public:
      * @return The start touch location in screen coordinates.
      */
     Vec2 getStartLocationInView() const;
-    
+
     /** Set the touch information. It always used to monitor touch event.
      *
      * @param id A given id
@@ -109,8 +111,8 @@ public:
     {
         _id = id;
         _prevPoint = _point;
-        _point.x   = x;
-        _point.y   = y;
+        _point.x = x;
+        _point.y = y;
         _curForce = 0.0f;
         _maxForce = 0.0f;
         if (!_startPointCaptured)
@@ -133,8 +135,8 @@ public:
     {
         _id = id;
         _prevPoint = _point;
-        _point.x   = x;
-        _point.y   = y;
+        _point.x = x;
+        _point.y = y;
         _curForce = force;
         _maxForce = maxForce;
         if (!_startPointCaptured)
@@ -144,6 +146,7 @@ public:
             _prevPoint = _point;
         }
     }
+
     /** Get touch id.
      * @js getId
      * @lua getId
@@ -154,6 +157,7 @@ public:
     {
         return _id;
     }
+
     /** Returns the current touch force for 3d touch.
      *
      * @return The current touch force for 3d touch.

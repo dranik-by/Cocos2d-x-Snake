@@ -30,27 +30,28 @@
 
 @class UIWebViewWrapper;
 
-namespace cocos2d {
-    
+namespace cocos2d
+{
+
 class Data;
 class Renderer;
 class Mat4;
 
-namespace ui{
-    
+namespace ui
+{
+
 class WebView;
 
-class WebViewImpl {
+class WebViewImpl
+{
 public:
-    WebViewImpl(WebView *webView);
+    WebViewImpl(WebView* webView);
 
     virtual ~WebViewImpl();
 
     void setJavascriptInterfaceScheme(const std::string &scheme);
 
-    void loadData(const cocos2d::Data &data,
-                  const std::string &MIMEType,
-                  const std::string &encoding,
+    void loadData(const cocos2d::Data &data, const std::string &MIMEType, const std::string &encoding,
                   const std::string &baseURL);
 
     void loadHTMLString(const std::string &string, const std::string &baseURL);
@@ -76,24 +77,24 @@ public:
 
     void setScalesPageToFit(const bool scalesPageToFit);
 
-    virtual void draw(cocos2d::Renderer *renderer, cocos2d::Mat4 const &transform, uint32_t flags);
+    virtual void draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const &transform, uint32_t flags);
 
     virtual void setVisible(bool visible);
 
     void setBounces(bool bounces);
-    
+
     virtual void setOpacityWebView(float opacity);
-    
+
     virtual float getOpacityWebView() const;
-    
+
     virtual void setBackgroundTransparent();
 
 private:
-    UIWebViewWrapper *_uiWebViewWrapper;
-    WebView *_webView;
+    UIWebViewWrapper* _uiWebViewWrapper;
+    WebView* _webView;
 };
 
-    } // namespace ui
+} // namespace ui
 }//namespace cocos2d
 
 /// @endcond

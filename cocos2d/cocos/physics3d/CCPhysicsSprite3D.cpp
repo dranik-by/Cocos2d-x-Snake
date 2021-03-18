@@ -27,13 +27,15 @@
 
 #if CC_USE_3D_PHYSICS
 
-#if (CC_ENABLE_BULLET_INTEGRATION)
+    #if (CC_ENABLE_BULLET_INTEGRATION)
 
 NS_CC_BEGIN
 
-PhysicsSprite3D* PhysicsSprite3D::create(const std::string &modelPath, Physics3DRigidBodyDes* rigidDes, const cocos2d::Vec3& translateInPhysics, const cocos2d::Quaternion& rotInPhsyics)
+PhysicsSprite3D* PhysicsSprite3D::create(const std::string &modelPath, Physics3DRigidBodyDes* rigidDes,
+                                         const cocos2d::Vec3 &translateInPhysics,
+                                         const cocos2d::Quaternion &rotInPhsyics)
 {
-    auto ret = new (std::nothrow) PhysicsSprite3D();
+    auto ret = new(std::nothrow) PhysicsSprite3D();
     if (ret && ret->initWithFile(modelPath))
     {
         auto obj = Physics3DRigidBody::create(rigidDes);
@@ -47,9 +49,11 @@ PhysicsSprite3D* PhysicsSprite3D::create(const std::string &modelPath, Physics3D
     return ret;
 }
 
-PhysicsSprite3D* PhysicsSprite3D::createWithCollider(const std::string &modelPath, Physics3DColliderDes* colliderDes, const cocos2d::Vec3& translateInPhysics, const cocos2d::Quaternion& rotInPhsyics)
+PhysicsSprite3D* PhysicsSprite3D::createWithCollider(const std::string &modelPath, Physics3DColliderDes* colliderDes,
+                                                     const cocos2d::Vec3 &translateInPhysics,
+                                                     const cocos2d::Quaternion &rotInPhsyics)
 {
-    auto ret = new (std::nothrow) PhysicsSprite3D();
+    auto ret = new(std::nothrow) PhysicsSprite3D();
     if (ret && ret->initWithFile(modelPath))
     {
         auto obj = Physics3DCollider::create(colliderDes);
@@ -89,15 +93,16 @@ void PhysicsSprite3D::syncPhysicsToNode()
 PhysicsSprite3D::PhysicsSprite3D()
 : _physicsComponent(nullptr)
 {
-    
+
 }
+
 PhysicsSprite3D::~PhysicsSprite3D()
 {
-    
+
 }
 
 NS_CC_END
 
-#endif // CC_ENABLE_BULLET_INTEGRATION
+    #endif // CC_ENABLE_BULLET_INTEGRATION
 
 #endif // CC_USE_3D_PHYSICS

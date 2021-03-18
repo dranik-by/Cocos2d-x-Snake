@@ -45,6 +45,7 @@ void BaseLight::onEnter()
     }
     Node::onEnter();
 }
+
 void BaseLight::onExit()
 {
     auto scene = getScene();
@@ -58,7 +59,7 @@ void BaseLight::onExit()
     Node::onExit();
 }
 
-void BaseLight::setRotationFromDirection( const Vec3 &direction )
+void BaseLight::setRotationFromDirection(const Vec3 &direction)
 {
     float projLen = sqrt(direction.x * direction.x + direction.z * direction.z);
     float rotY = CC_RADIANS_TO_DEGREES(atan2f(-direction.x, -direction.z));
@@ -71,18 +72,18 @@ BaseLight::BaseLight()
 , _lightFlag(LightFlag::LIGHT0)
 , _enabled(true)
 {
-    
-}
-BaseLight::~BaseLight()
-{
-    
+
 }
 
+BaseLight::~BaseLight()
+{
+
+}
 
 ////////////////////////////////////////////////////////////////////
 DirectionLight* DirectionLight::create(const Vec3 &direction, const Color3B &color)
 {
-    auto light = new (std::nothrow) DirectionLight();
+    auto light = new(std::nothrow) DirectionLight();
     light->setRotationFromDirection(direction);
     light->setColor(color);
     light->autorelease();
@@ -93,29 +94,33 @@ void DirectionLight::setDirection(const Vec3 &dir)
 {
     setRotationFromDirection(dir);
 }
+
 Vec3 DirectionLight::getDirection() const
 {
     Mat4 mat = getNodeToParentTransform();
     return Vec3(-mat.m[8], -mat.m[9], -mat.m[10]);
 }
+
 Vec3 DirectionLight::getDirectionInWorld() const
 {
     Mat4 mat = getNodeToWorldTransform();
     return Vec3(-mat.m[8], -mat.m[9], -mat.m[10]);
 }
+
 DirectionLight::DirectionLight()
 {
-    
+
 }
+
 DirectionLight::~DirectionLight()
 {
-    
+
 }
 
 //////////////////////////////////////////////////////////////////
 PointLight* PointLight::create(const Vec3 &position, const Color3B &color, float range)
 {
-    auto light = new (std::nothrow) PointLight();
+    auto light = new(std::nothrow) PointLight();
     light->setPosition3D(position);
     light->setColor(color);
     light->_range = range;
@@ -125,17 +130,19 @@ PointLight* PointLight::create(const Vec3 &position, const Color3B &color, float
 
 PointLight::PointLight()
 {
-    
+
 }
+
 PointLight::~PointLight()
 {
-    
+
 }
 
 //////////////////////////////////////////////////////////////
-SpotLight* SpotLight::create(const Vec3 &direction, const Vec3 &position, const Color3B &color, float innerAngle, float outerAngle, float range)
+SpotLight* SpotLight::create(const Vec3 &direction, const Vec3 &position, const Color3B &color, float innerAngle,
+                             float outerAngle, float range)
 {
-    auto light = new (std::nothrow) SpotLight();
+    auto light = new(std::nothrow) SpotLight();
     light->setRotationFromDirection(direction);
     light->setPosition3D(position);
     light->setColor(color);
@@ -187,9 +194,9 @@ SpotLight::~SpotLight()
 
 /////////////////////////////////////////////////////////////
 
-AmbientLight* AmbientLight::create( const Color3B &color )
+AmbientLight* AmbientLight::create(const Color3B &color)
 {
-    auto light = new (std::nothrow) AmbientLight();
+    auto light = new(std::nothrow) AmbientLight();
     light->setColor(color);
     light->autorelease();
     return light;

@@ -30,19 +30,20 @@ THE SOFTWARE.
 #include <stddef.h>
 #include <stdio.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class PcmBufferProvider : public AudioBufferProvider
 {
 public:
     PcmBufferProvider();
-    bool init(const void *addr, size_t frames, size_t frameSize);
-    virtual status_t getNextBuffer(Buffer *buffer, int64_t pts = kInvalidPTS) override ;
-    virtual void releaseBuffer(Buffer *buffer) override ;
+    bool init(const void* addr, size_t frames, size_t frameSize);
+    virtual status_t getNextBuffer(Buffer* buffer, int64_t pts = kInvalidPTS) override;
+    virtual void releaseBuffer(Buffer* buffer) override;
     void reset();
 
 protected:
-    const void *_addr;      // base address
+    const void* _addr;      // base address
     size_t _numFrames; // total frames
     size_t _frameSize; // size of each frame in bytes
     size_t _nextFrame; // index of next frame to provide

@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include "2d/CCNode.h"
 #include "editor-support/cocostudio/ActionTimeline/CCTimelineMacro.h"
 
-
 NS_TIMELINE_BEGIN
 
 typedef cocos2d::Node SkinNode;

@@ -35,51 +35,52 @@ NS_CC_BEGIN
  * @{
  */
 
-namespace ui {
-    
+namespace ui
+{
+
 /**
  *@brief RelativeBox is just a convenient wrapper class for relative layout type.
  * RelativeBox lays out its children relative to a widget or a position.
  */
-class CC_GUI_DLL RelativeBox : public Layout{
-    
-    
+class CC_GUI_DLL RelativeBox : public Layout
+{
+
 public:
-    
+
     /**
      * Default constructor.
      * @js ctor
      * @lua new
      */
     RelativeBox();
-    
+
     /**
      * Default destructor.
      * @js NA
      * @lua NA
      */
     virtual ~RelativeBox();
-    
+
     /**
      * Create an empty RelativeBox instance.
      * @return A RelativeBox instance.
      */
     static RelativeBox* create();
-    
+
     /**
      * @brief Create a RelativeBox with a fixed size.
      *
      * @param size Size in `Size`.
      * @return A RelativeBox instance.
      */
-    static RelativeBox* create(const Size& size);
-    
+    static RelativeBox* create(const Size &size);
+
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
-    virtual bool initWithSize(const Size& size);
+    virtual bool initWithSize(const Size &size);
 };
-    
+
 }
 
 // end of ui group

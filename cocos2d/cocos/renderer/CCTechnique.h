@@ -40,13 +40,13 @@ NS_CC_BEGIN
 class Pass;
 class Material;
 
-namespace  backend
+namespace backend
 {
-    class ProgramState;
+class ProgramState;
 }
 
 /// Technique
-class CC_DLL Technique :public Ref
+class CC_DLL Technique : public Ref
 {
     friend class Material;
     friend class Renderer;
@@ -77,26 +77,32 @@ public:
     ssize_t getPassCount() const;
 
     /** Returns the list of passes */
-    const Vector<Pass*>& getPasses() const;
+    const Vector<Pass*> &getPasses() const;
 
     /** Returns a new clone of the Technique */
     Technique* clone() const;
 
-    void setMaterial(Material * material) { _material = material; }
+    void setMaterial(Material* material)
+    {
+        _material = material;
+    }
 
-    RenderState::StateBlock &getStateBlock() { return _renderState.getStateBlock(); }
+    RenderState::StateBlock &getStateBlock()
+    {
+        return _renderState.getStateBlock();
+    }
 
 protected:
     Technique();
     ~Technique();
     bool init(Material* parent);
 
-    void setName(const std::string& name);
+    void setName(const std::string &name);
     RenderState _renderState;
     std::string _name;
     Vector<Pass*> _passes;
 
-    Material *_material = nullptr;
+    Material* _material = nullptr;
 };
 
 NS_CC_END

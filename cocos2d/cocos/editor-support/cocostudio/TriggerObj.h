@@ -30,8 +30,8 @@ THE SOFTWARE.
 #include "base/CCVector.h"
 #include "base/CCEventListenerCustom.h"
 
-
-namespace cocostudio {
+namespace cocostudio
+{
 
 class CC_STUDIO_DLL BaseTriggerCondition : public cocos2d::Ref
 {
@@ -42,7 +42,7 @@ public:
     virtual bool init();
     virtual bool detect();
     virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     virtual void removeAll();
 };
 
@@ -55,10 +55,9 @@ public:
     virtual bool init();
     virtual void done();
     virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     virtual void removeAll();
 };
-
 
 class CC_STUDIO_DLL TriggerObj : public cocos2d::Ref
 {
@@ -67,15 +66,15 @@ public:
     virtual ~TriggerObj();
     virtual bool init();
     static TriggerObj* create();
-    
+
     virtual bool detect();
     virtual void done();
     virtual void removeAll();
     virtual void serialize(const rapidjson::Value &val);
-    virtual void serialize(cocostudio::CocoLoader *cocoLoader, cocostudio::stExpCocoNode *cocoNode);
+    virtual void serialize(cocostudio::CocoLoader* cocoLoader, cocostudio::stExpCocoNode* cocoNode);
     unsigned int getId();
     void setEnabled(bool enabled);
-  
+
 private:
     cocos2d::Vector<BaseTriggerCondition*> _cons;
     cocos2d::Vector<BaseTriggerAction*> _acts;

@@ -27,25 +27,24 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
+namespace cocostudio
+{
 
-namespace cocostudio {
-
-bool isSpriteContainPoint(Sprite *sprite, Vec2 point, Vec2 &outPoint)
+bool isSpriteContainPoint(Sprite* sprite, Vec2 point, Vec2 &outPoint)
 {
     outPoint = sprite->convertToNodeSpace(point);
 
-    Size s  = sprite->getContentSize();
+    Size s = sprite->getContentSize();
     Rect r(0, 0, s.width, s.height);
 
     return r.containsPoint(outPoint);
 }
 
-bool isSpriteContainPoint(Sprite *sprite, Vec2 point)
+bool isSpriteContainPoint(Sprite* sprite, Vec2 point)
 {
     Vec2 p;
     return isSpriteContainPoint(sprite, point, p);
 }
-
 
 Vec2 bezierTo(float t, Vec2 &point1, Vec2 &point2, Vec2 &point3)
 {
@@ -62,8 +61,12 @@ Vec2 bezierTo(float t, Vec2 &point1, Vec2 &point2, Vec2 &point3, Vec2 &point4)
 {
     Vec2 p;
 
-    p.x = point1.x * pow((1 - t), 3) + 3 * t * point2.x * pow((1 - t), 2) + 3 * point3.x * pow(t, 2) * (1 - t) + point4.x * pow(t, 3);
-    p.y = point1.y * pow((1 - t), 3) + 3 * t * point2.y * pow((1 - t), 2) + 3 * point3.y * pow(t, 2) * (1 - t) + point4.y * pow(t, 3);
+    p.x = point1.x * pow((1 - t), 3) + 3 * t * point2.x * pow((1 - t), 2) + 3 * point3.x * pow(t,
+                                                                                               2) * (1 - t) + point4.x * pow(
+    t, 3);
+    p.y = point1.y * pow((1 - t), 3) + 3 * t * point2.y * pow((1 - t), 2) + 3 * point3.y * pow(t,
+                                                                                               2) * (1 - t) + point4.y * pow(
+    t, 3);
 
     return p;
 }

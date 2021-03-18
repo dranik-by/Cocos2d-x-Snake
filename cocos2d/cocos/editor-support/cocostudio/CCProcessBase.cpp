@@ -28,37 +28,35 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 ProcessBase::ProcessBase()
-    : _processScale(1)
-    , _isPause(true)
-    , _isComplete(true)
-    , _isPlaying(false)
-    , _currentPercent(0.0f)
-    , _rawDuration(0)
-    , _loopType(ANIMATION_LOOP_BACK)
-    , _tweenEasing(cocos2d::tweenfunc::Linear)
-    , _animationInternal(1/60.0f)
-    , _durationTween(0)
-    , _currentFrame(0)
-    , _curFrameIndex(0)
-    , _isLoopBack(false)
+: _processScale(1)
+, _isPause(true)
+, _isComplete(true)
+, _isPlaying(false)
+, _currentPercent(0.0f)
+, _rawDuration(0)
+, _loopType(ANIMATION_LOOP_BACK)
+, _tweenEasing(cocos2d::tweenfunc::Linear)
+, _animationInternal(1 / 60.0f)
+, _durationTween(0)
+, _currentFrame(0)
+, _curFrameIndex(0)
+, _isLoopBack(false)
 {
 }
-
 
 ProcessBase::~ProcessBase()
 {
 }
-
 
 void ProcessBase::pause()
 {
     _isPause = true;
     _isPlaying = false;
 }
-
 
 void ProcessBase::resume()
 {
@@ -72,7 +70,7 @@ void ProcessBase::stop()
     _isPlaying = false;
 }
 
-void ProcessBase::play(int durationTo, int /*durationTween*/,  int /*loop*/, int tweenEasing)
+void ProcessBase::play(int durationTo, int /*durationTween*/, int /*loop*/, int tweenEasing)
 {
     _isComplete = false;
     _isPause = false;
@@ -100,7 +98,7 @@ void ProcessBase::update(float dt)
      *  Filter the m_iDuration <=0 and dt >1
      *  If dt>1, generally speaking  the reason is the device is stuck.
      */
-    if(_rawDuration <= 0 || dt > 1)
+    if (_rawDuration <= 0 || dt > 1)
     {
         return;
     }
@@ -119,7 +117,6 @@ void ProcessBase::update(float dt)
         */
         _currentFrame += _processScale * (dt / _animationInternal);
 
-
         _currentPercent = _currentFrame / _nextFrameIndex;
 
         /*
@@ -131,8 +128,6 @@ void ProcessBase::update(float dt)
 
     updateHandler();
 }
-
-
 
 void ProcessBase::gotoFrame(int frameIndex)
 {
@@ -146,13 +141,13 @@ void ProcessBase::gotoFrame(int frameIndex)
     }
 
     _curFrameIndex = frameIndex;
-    
+
     _nextFrameIndex = _durationTween;
 }
 
 int ProcessBase::getCurrentFrameIndex()
 {
-    _curFrameIndex = (_rawDuration-1) * _currentPercent;
+    _curFrameIndex = (_rawDuration - 1) * _currentPercent;
     return _curFrameIndex;
 }
 

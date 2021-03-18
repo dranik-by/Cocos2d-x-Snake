@@ -40,32 +40,34 @@
 extern "C" {
 #endif
 
-typedef struct spRegionAttachment {
-	spAttachment super;
-	const char* path;
-	float x, y, scaleX, scaleY, rotation, width, height;
-	spColor color;
+typedef struct spRegionAttachment
+{
+    spAttachment super;
+    const char* path;
+    float x, y, scaleX, scaleY, rotation, width, height;
+    spColor color;
 
-	void* rendererObject;
-	int regionOffsetX, regionOffsetY; /* Pixels stripped from the bottom left, unrotated. */
-	int regionWidth, regionHeight; /* Unrotated, stripped pixel size. */
-	int regionOriginalWidth, regionOriginalHeight; /* Unrotated, unstripped pixel size. */
+    void* rendererObject;
+    int regionOffsetX, regionOffsetY; /* Pixels stripped from the bottom left, unrotated. */
+    int regionWidth, regionHeight; /* Unrotated, stripped pixel size. */
+    int regionOriginalWidth, regionOriginalHeight; /* Unrotated, unstripped pixel size. */
 
-	float offset[8];
-	float uvs[8];
+    float offset[8];
+    float uvs[8];
 } spRegionAttachment;
 
-SP_API spRegionAttachment* spRegionAttachment_create (const char* name);
-SP_API void spRegionAttachment_setUVs (spRegionAttachment* self, float u, float v, float u2, float v2, int/*bool*/rotate);
-SP_API void spRegionAttachment_updateOffset (spRegionAttachment* self);
-SP_API void spRegionAttachment_computeWorldVertices (spRegionAttachment* self, spBone* bone, float* vertices, int offset, int stride);
+SP_API spRegionAttachment* spRegionAttachment_create(const char* name); SP_API void spRegionAttachment_setUVs(
+spRegionAttachment* self, float u, float v, float u2, float v2,
+int/*bool*/rotate); SP_API void spRegionAttachment_updateOffset(
+spRegionAttachment* self); SP_API void spRegionAttachment_computeWorldVertices(spRegionAttachment* self, spBone* bone,
+                                                                               float* vertices, int offset, int stride);
 
 #ifdef SPINE_SHORT_NAMES
 typedef spRegionAttachment RegionAttachment;
-#define RegionAttachment_create(...) spRegionAttachment_create(__VA_ARGS__)
-#define RegionAttachment_setUVs(...) spRegionAttachment_setUVs(__VA_ARGS__)
-#define RegionAttachment_updateOffset(...) spRegionAttachment_updateOffset(__VA_ARGS__)
-#define RegionAttachment_computeWorldVertices(...) spRegionAttachment_computeWorldVertices(__VA_ARGS__)
+    #define RegionAttachment_create(...) spRegionAttachment_create(__VA_ARGS__)
+    #define RegionAttachment_setUVs(...) spRegionAttachment_setUVs(__VA_ARGS__)
+    #define RegionAttachment_updateOffset(...) spRegionAttachment_updateOffset(__VA_ARGS__)
+    #define RegionAttachment_computeWorldVertices(...) spRegionAttachment_computeWorldVertices(__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

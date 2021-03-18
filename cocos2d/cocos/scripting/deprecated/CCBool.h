@@ -42,12 +42,18 @@ class CC_DLL __Bool : public Ref, public Clonable
 {
 public:
     __Bool(bool v)
-        : _value(v) {}
-    bool getValue() const {return _value;}
+    : _value(v)
+    {
+    }
+
+    bool getValue() const
+    {
+        return _value;
+    }
 
     static __Bool* create(bool v)
     {
-        __Bool* pRet = new (std::nothrow) __Bool(v);
+        __Bool* pRet = new(std::nothrow) __Bool(v);
         if (pRet)
         {
             pRet->autorelease();
@@ -56,12 +62,16 @@ public:
     }
 
     /* override functions */
-    virtual void acceptVisitor(DataVisitor &visitor) { visitor.visit(this); }
+    virtual void acceptVisitor(DataVisitor &visitor)
+    {
+        visitor.visit(this);
+    }
 
     virtual __Bool* clone() const override
     {
         return __Bool::create(_value);
     }
+
 private:
     bool _value;
 };

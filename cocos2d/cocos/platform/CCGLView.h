@@ -33,7 +33,7 @@ THE SOFTWARE.
 #include <vector>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#include <windows.h>
+    #include <windows.h>
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
@@ -41,7 +41,7 @@ typedef void* id;
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-#define CC_ICON_SET_SUPPORT true
+    #define CC_ICON_SET_SUPPORT true
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX) */
 
 /** There are some Resolution Policy for Adapt to the screen. */
@@ -132,29 +132,32 @@ public:
      * @param open Open or close IME keyboard.
      */
     virtual void setIMEKeyboardState(bool open) = 0;
-    
+
     /** When the window is closed, it will return false if the platforms is Ios or Android.
      * If the platforms is windows or Mac,it will return true.
      *
      * @return In ios and android it will return false,if in windows or Mac it will return true.
      */
-    virtual bool windowShouldClose() { return false; };
+    virtual bool windowShouldClose()
+    {
+        return false;
+    };
 
     /** Static method and member so that we can modify it on all platforms before create OpenGL context. 
      *
      * @param glContextAttrs The OpenGL context attrs.
      */
-    static void setGLContextAttrs(GLContextAttrs& glContextAttrs);
-    
+    static void setGLContextAttrs(GLContextAttrs &glContextAttrs);
+
     /** Return the OpenGL context attrs. 
      *
      * @return Return the OpenGL context attrs.
      */
     static GLContextAttrs getGLContextAttrs();
-    
+
     /** The OpenGL context attrs. */
     static GLContextAttrs _glContextAttrs;
-    
+
     /** Polls the events. */
     virtual void pollEvents();
 
@@ -179,43 +182,62 @@ public:
      * 
      * @param zoomFactor The zoom factor for frame.
      */
-    virtual void setFrameZoomFactor(float /*zoomFactor*/) {}
-    
+    virtual void setFrameZoomFactor(float /*zoomFactor*/)
+    {
+    }
+
     /** Get zoom factor for frame. This methods are for
      * debugging big resolution (e.g.new ipad) app on desktop.
      *
      * @return The zoom factor for frame.
      */
-    virtual float getFrameZoomFactor() const { return 1.0; }
-    
+    virtual float getFrameZoomFactor() const
+    {
+        return 1.0;
+    }
+
     /**
      * Hide or Show the mouse cursor if there is one.
      *
      * @param isVisible Hide or Show the mouse cursor if there is one.
      */
-    virtual void setCursorVisible(bool /*isVisible*/) {}
+    virtual void setCursorVisible(bool /*isVisible*/)
+    {
+    }
 
     /** Get retina factor.
      *
      * @return The retina factor.
      */
-    virtual int getRetinaFactor() const { return 1; }
+    virtual int getRetinaFactor() const
+    {
+        return 1;
+    }
 
     /** Only works on ios platform. Set Content Scale of the Factor. */
-    virtual bool setContentScaleFactor(float /*scaleFactor*/) { return false; }
-    
+    virtual bool setContentScaleFactor(float /*scaleFactor*/)
+    {
+        return false;
+    }
+
     /** Only works on ios platform. Get Content Scale of the Factor. */
-    virtual float getContentScaleFactor() const { return 1.0; }
-    
+    virtual float getContentScaleFactor() const
+    {
+        return 1.0;
+    }
+
     /** Returns whether or not the view is in Retina Display mode.
      *
      * @return Returns whether or not the view is in Retina Display mode.
      */
-    virtual bool isRetinaDisplay() const { return false; }
- 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    virtual bool isRetinaDisplay() const
+    {
+        return false;
+    }
+
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     virtual void* getEAGLView() const { return nullptr; }
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
+    #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_IOS) */
 
     /**
      * Get the visible area size of opengl viewport.
@@ -259,7 +281,7 @@ public:
      *
      * @return The design resolution size.
      */
-    virtual const Size&  getDesignResolutionSize() const;
+    virtual const Size &getDesignResolutionSize() const;
 
     /**
      * Set opengl view port rectangle with points.
@@ -269,7 +291,7 @@ public:
      * @param w Set the width of  the view port
      * @param h Set the Height of the view port.
      */
-    virtual void setViewPortInPoints(float x , float y , float w , float h);
+    virtual void setViewPortInPoints(float x, float y, float w, float h);
 
     /**
      * Set Scissor rectangle with points.
@@ -279,7 +301,7 @@ public:
      * @param w Set the width of  the view port
      * @param h Set the Height of the view port.
      */
-    virtual void setScissorInPoints(float x , float y , float w , float h);
+    virtual void setScissorInPoints(float x, float y, float w, float h);
 
     /**
      * Get whether GL_SCISSOR_TEST is enable.
@@ -299,13 +321,13 @@ public:
      *
      * @param viewname A string will be set to the view as name.
      */
-    virtual void setViewName(const std::string& viewname);
-    
+    virtual void setViewName(const std::string &viewname);
+
     /** Get the view name.
      *
      * @return The view name.
      */
-    const std::string& getViewName() const;
+    const std::string &getViewName() const;
 
     /** Touch events are handled by default; if you want to customize your handlers, please override this function.
      *
@@ -315,7 +337,7 @@ public:
      * @param ys The points of y.
      */
     virtual void handleTouchesBegin(int num, intptr_t ids[], float xs[], float ys[]);
-    
+
     /** Touch events are handled by default; if you want to customize your handlers, please override this function.
      *
      * @param num The number of touch.
@@ -335,7 +357,7 @@ public:
      # @param ms The maximum force of 3d touches
      */
     virtual void handleTouchesMove(int num, intptr_t ids[], float xs[], float ys[], float fs[], float ms[]);
-    
+
     /** Touch events are handled by default; if you want to customize your handlers, please override this function.
      *
      * @param num The number of touch.
@@ -344,7 +366,7 @@ public:
      * @param ys The points of y.
      */
     virtual void handleTouchesEnd(int num, intptr_t ids[], float xs[], float ys[]);
-    
+
     /** Touch events are handled by default; if you want to customize your handlers, please override this function.
      *
      * @param num The number of touch.
@@ -358,28 +380,34 @@ public:
      *
      * @param filename A path to image file, e.g., "icons/cusom.png". 
      */
-    virtual void setIcon(const std::string& filename) const {};
+    virtual void setIcon(const std::string &filename) const
+    {
+    };
 
     /** Set window icon (implemented for windows and linux).
      * Best icon (based on size) will be auto selected.
      * 
      * @param filelist The array contains icons.
      */
-    virtual void setIcon(const std::vector<std::string>& filelist) const {};
+    virtual void setIcon(const std::vector<std::string> &filelist) const
+    {
+    };
 
     /** Set default window icon (implemented for windows and linux).
      * On windows it will use icon from .exe file (if included).
      * On linux it will use default window icon.
      */
-    virtual void setDefaultIcon() const {};
+    virtual void setDefaultIcon() const
+    {
+    };
 
     /**
      * Get the opengl view port rectangle.
      *
      * @return Return the opengl view port rectangle.
      */
-    const Rect& getViewPortRect() const;
-    
+    const Rect &getViewPortRect() const;
+
     /**
      * Get list of all active touches.
      *
@@ -405,26 +433,29 @@ public:
      *
      * @return The current Resolution policy.
      */
-    ResolutionPolicy getResolutionPolicy() const { return _resolutionPolicy; }
+    ResolutionPolicy getResolutionPolicy() const
+    {
+        return _resolutionPolicy;
+    }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     virtual HWND getWin32Window() = 0;
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
+    #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) */
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
     virtual id getCocoaWindow() = 0;
     virtual id getNSGLContext() = 0; // stevetranby: added
-#endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
+    #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
 
     /**
      * Renders a Scene with a Renderer
      * This method is called directly by the Director
      */
     void renderScene(Scene* scene, Renderer* renderer);
-    
+
 protected:
     void updateDesignResolutionSize();
-    
+
     void handleTouchesOfEndOrCancel(EventTouch::EventCode eventCode, int num, intptr_t ids[], float xs[], float ys[]);
 
     // real screen size

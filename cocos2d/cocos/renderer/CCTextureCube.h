@@ -56,16 +56,19 @@ public:
        @param negative_z texture for the rear side of the texture cube face.
        @return  A new texture cube inited with given parameters.
     */
-    static TextureCube* create(const std::string& positive_x, const std::string& negative_x,
-                               const std::string& positive_y, const std::string& negative_y,
-                               const std::string& positive_z, const std::string& negative_z);
+    static TextureCube* create(const std::string &positive_x, const std::string &negative_x,
+                               const std::string &positive_y, const std::string &negative_y,
+                               const std::string &positive_z, const std::string &negative_z);
 
     /** Sets the min filter, mag filter, wrap s and wrap t texture parameters.
     If the texture size is NPOT (non power of 2), then in can only use GL_CLAMP_TO_EDGE in GL_TEXTURE_WRAP_{S,T}.
     */
-    void setTexParameters(const Texture2D::TexParams&);
+    void setTexParameters(const Texture2D::TexParams &);
 
-    backend::TextureBackend* getBackendTexture() { return _texture; }
+    backend::TextureBackend* getBackendTexture()
+    {
+        return _texture;
+    }
 
     /** reload texture cube after GLESContext reconstructed.*/
     bool reloadTexture();
@@ -81,12 +84,11 @@ CC_CONSTRUCTOR_ACCESS:
     virtual ~TextureCube();
 protected:
 
-    bool init(const std::string& positive_x, const std::string& negative_x,
-              const std::string& positive_y, const std::string& negative_y,
-              const std::string& positive_z, const std::string& negative_z);
+    bool init(const std::string &positive_x, const std::string &negative_x, const std::string &positive_y,
+              const std::string &negative_y, const std::string &positive_z, const std::string &negative_z);
 private:
     std::vector<std::string> _imgPath;
-    backend::TextureCubemapBackend *_texture = nullptr;
+    backend::TextureCubemapBackend* _texture = nullptr;
 };
 
 // end of 3d group

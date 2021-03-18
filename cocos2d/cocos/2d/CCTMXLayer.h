@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "2d/CCSpriteBatchNode.h"
 #include "2d/CCTMXXMLParser.h"
 #include "base/ccCArray.h"
+
 NS_CC_BEGIN
 
 class TMXMapInfo;
@@ -73,7 +74,7 @@ public:
      * @param mapInfo A map info.
      * @return An autorelease object.
      */
-    static TMXLayer * create(TMXTilesetInfo *tilesetInfo, TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+    static TMXLayer* create(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
     /**
      * @js ctor
      */
@@ -91,7 +92,7 @@ public:
      * @param mapInfo A map info.
      * @return If initializes successfully, it will return true.
      */
-    bool initWithTilesetInfo(TMXTilesetInfo *tilesetInfo, TMXLayerInfo *layerInfo, TMXMapInfo *mapInfo);
+    bool initWithTilesetInfo(TMXTilesetInfo* tilesetInfo, TMXLayerInfo* layerInfo, TMXMapInfo* mapInfo);
 
     /** Dealloc the map that contains the tile position from memory.
      * Unless you want to know at runtime the tiles positions, you can safely call this method.
@@ -109,8 +110,8 @@ public:
      * @param tileCoordinate A tile coordinate.
      * @return Returns the tile (Sprite) at a given a tile coordinate.
      */
-    Sprite* getTileAt(const Vec2& tileCoordinate);
-    
+    Sprite* getTileAt(const Vec2 &tileCoordinate);
+
     /** Returns the tile gid at a given tile coordinate. It also returns the tile flags.
      * This method requires the tile map has not been previously released (eg. don't call [layer releaseMap]).
      * 
@@ -118,7 +119,7 @@ public:
      * @param flags Tile flags.
      * @return Returns the tile gid at a given tile coordinate. It also returns the tile flags.
      */
-	uint32_t getTileGIDAt(const Vec2& tileCoordinate, TMXTileFlags* flags = nullptr);
+    uint32_t getTileGIDAt(const Vec2 &tileCoordinate, TMXTileFlags* flags = nullptr);
 
     /** Sets the tile gid (gid = tile global id) at a given tile coordinate.
      * The Tile GID can be obtained by using the method "tileGIDAt" or by using the TMX editor -> Tileset Mgr +1.
@@ -127,7 +128,7 @@ public:
      * @param gid The tile gid.
      * @param tileCoordinate The tile coordinate.
      */
-    void setTileGID(uint32_t gid, const Vec2& tileCoordinate);
+    void setTileGID(uint32_t gid, const Vec2 &tileCoordinate);
 
     /** Sets the tile gid (gid = tile global id) at a given tile coordinate.
      * The Tile GID can be obtained by using the method "tileGIDAt" or by using the TMX editor -> Tileset Mgr +1.
@@ -139,126 +140,167 @@ public:
      * @param flags The tile flags.
      */
 
-    void setTileGID(uint32_t gid, const Vec2& tileCoordinate, TMXTileFlags flags);
+    void setTileGID(uint32_t gid, const Vec2 &tileCoordinate, TMXTileFlags flags);
 
     /** Removes a tile at given tile coordinate. 
      *
      * @param tileCoordinate The tile coordinate.
      */
-    void removeTileAt(const Vec2& tileCoordinate);
+    void removeTileAt(const Vec2 &tileCoordinate);
 
     /** Returns the position in points of a given tile coordinate.
      *
      * @param tileCoordinate The tile coordinate.
      * @return The position in points of a given tile coordinate.
      */
-	Vec2 getPositionAt(const Vec2& tileCoordinate);
+    Vec2 getPositionAt(const Vec2 &tileCoordinate);
 
     /** Return the value for the specific property name.
      *
      * @param propertyName The specific property name.
      * @return Return the value for the specific property name.
      */
-	Value getProperty(const std::string& propertyName) const;
+    Value getProperty(const std::string &propertyName) const;
 
     /** Creates the tiles. */
     void setupTiles();
-    
+
     /** Get the layer name. 
      *
      * @return The layer name.
      */
-    const std::string& getLayerName() { return _layerName; }
-    
+    const std::string &getLayerName()
+    {
+        return _layerName;
+    }
+
     /** Set the layer name.
      *
      * @param layerName The layer name.
      */
-    void setLayerName(const std::string& layerName) { _layerName = layerName; }
+    void setLayerName(const std::string &layerName)
+    {
+        _layerName = layerName;
+    }
 
     /** Size of the layer in tiles.
      *
      * @return Size of the layer in tiles.
      */
-    const Size& getLayerSize() const { return _layerSize; }
-    
+    const Size &getLayerSize() const
+    {
+        return _layerSize;
+    }
+
     /** Set size of the layer in tiles.
      *
      * @param size Size of the layer in tiles.
      */
-    void setLayerSize(const Size& size) { _layerSize = size; }
-    
+    void setLayerSize(const Size &size)
+    {
+        _layerSize = size;
+    }
+
     /** Size of the map's tile (could be different from the tile's size).
      *
      * @return The size of the map's tile.
      */
-    const Size& getMapTileSize() const { return _mapTileSize; }
-    
+    const Size &getMapTileSize() const
+    {
+        return _mapTileSize;
+    }
+
     /** Set the size of the map's tile.
      *
      * @param size The size of the map's tile.
      */
-    void setMapTileSize(const Size& size) { _mapTileSize = size; }
-    
+    void setMapTileSize(const Size &size)
+    {
+        _mapTileSize = size;
+    }
+
     /** Pointer to the map of tiles.
      * @js NA
      * @lua NA
      * @return Pointer to the map of tiles.
      */
-    uint32_t* getTiles() const { return _tiles; };
-    
+    uint32_t* getTiles() const
+    {
+        return _tiles;
+    };
+
     /** Set a pointer to the map of tiles.
      *
      * @param tiles A pointer to the map of tiles.
      */
-    void setTiles(uint32_t* tiles) { _tiles = tiles; };
-    
+    void setTiles(uint32_t* tiles)
+    {
+        _tiles = tiles;
+    };
+
     /** Tileset information for the layer. 
      *
      * @return Tileset information for the layer.
      */
-    TMXTilesetInfo* getTileSet() const { return _tileSet; }
-    
+    TMXTilesetInfo* getTileSet() const
+    {
+        return _tileSet;
+    }
+
     /** Set tileset information for the layer.
      *
      * @param info The tileset information for the layer.
      * @js NA
      */
-    void setTileSet(TMXTilesetInfo* info) {
+    void setTileSet(TMXTilesetInfo* info)
+    {
         CC_SAFE_RETAIN(info);
         CC_SAFE_RELEASE(_tileSet);
         _tileSet = info;
     }
-    
+
     /** Layer orientation, which is the same as the map orientation.
      *
      * @return Layer orientation, which is the same as the map orientation.
      */
-    int getLayerOrientation() const { return _layerOrientation; }
-    
+    int getLayerOrientation() const
+    {
+        return _layerOrientation;
+    }
+
     /** Set layer orientation, which is the same as the map orientation.
      *
      * @param orientation Layer orientation,which is the same as the map orientation.
      */
-    void setLayerOrientation(int orientation) { _layerOrientation = orientation; }
-    
+    void setLayerOrientation(int orientation)
+    {
+        _layerOrientation = orientation;
+    }
+
     /** Properties from the layer. They can be added using Tiled.
      *
      * @return Properties from the layer. They can be added using Tiled.
      */
-    const ValueMap& getProperties() const { return _properties; }
-    
+    const ValueMap &getProperties() const
+    {
+        return _properties;
+    }
+
     /** Properties from the layer. They can be added using Tiled.
      *
      * @return Properties from the layer. They can be added using Tiled.
      */
-    ValueMap& getProperties() { return _properties; }
-    
+    ValueMap &getProperties()
+    {
+        return _properties;
+    }
+
     /** Set an Properties from to layer.
      *
      * @param properties It is used to set the layer Properties.
      */
-    void setProperties(const ValueMap& properties) {
+    void setProperties(const ValueMap &properties)
+    {
         _properties = properties;
     }
     //
@@ -268,7 +310,7 @@ public:
      @warning addChild(z, tag); is not supported on TMXLayer. Instead of setTileGID.
      */
     using SpriteBatchNode::addChild;
-    virtual void addChild(Node * child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
     // super method
     void removeChild(Node* child, bool cleanup) override;
     /**
@@ -277,46 +319,45 @@ public:
     virtual std::string getDescription() const override;
 
 protected:
-    Vec2 getPositionForIsoAt(const Vec2& pos);
-    Vec2 getPositionForOrthoAt(const Vec2& pos);
-    Vec2 getPositionForHexAt(const Vec2& pos);
-    Vec2 getPositionForStaggeredAt(const Vec2& pos);
-    Vec2 calculateLayerOffset(const Vec2& offset);
+    Vec2 getPositionForIsoAt(const Vec2 &pos);
+    Vec2 getPositionForOrthoAt(const Vec2 &pos);
+    Vec2 getPositionForHexAt(const Vec2 &pos);
+    Vec2 getPositionForStaggeredAt(const Vec2 &pos);
+    Vec2 calculateLayerOffset(const Vec2 &offset);
 
     /* optimization methods */
-    Sprite* appendTileForGID(uint32_t gid, const Vec2& pos);
-    Sprite* insertTileForGID(uint32_t gid, const Vec2& pos);
-    Sprite* updateTileForGID(uint32_t gid, const Vec2& pos);
+    Sprite* appendTileForGID(uint32_t gid, const Vec2 &pos);
+    Sprite* insertTileForGID(uint32_t gid, const Vec2 &pos);
+    Sprite* updateTileForGID(uint32_t gid, const Vec2 &pos);
 
-    intptr_t getZForPos(const Vec2& pos) const;
+    intptr_t getZForPos(const Vec2 &pos) const;
 
     /* The layer recognizes some special properties, like cc_vertexz */
     void parseInternalProperties();
-    void setupTileSprite(Sprite* sprite, const Vec2& pos, uint32_t gid);
-    Sprite* reusedTileWithRect(const Rect& rect);
-    int getVertexZForPos(const Vec2& pos);
+    void setupTileSprite(Sprite* sprite, const Vec2 &pos, uint32_t gid);
+    Sprite* reusedTileWithRect(const Rect &rect);
+    int getVertexZForPos(const Vec2 &pos);
 
     // index
     ssize_t atlasIndexForExistantZ(int z);
     ssize_t atlasIndexForNewZ(int z);
 
-
     //! name of the layer
     std::string _layerName;
     //! TMX Layer supports opacity
     unsigned char _opacity;
-    
+
     //! Only used when vertexZ is used
     int _vertexZvalue;
     bool _useAutomaticVertexZ;
 
     //! used for optimization
-    Sprite *_reusedTile;
-    ccCArray *_atlasIndexArray;
-    
+    Sprite* _reusedTile;
+    ccCArray* _atlasIndexArray;
+
     // used for retina display
     float _contentScaleFactor;
-    
+
     /** size of the layer in tiles */
     Size _layerSize;
     /** size of the map's tile (could be different from the tile's size) */

@@ -64,7 +64,7 @@ public:
      * @param   filename A path to image file, e.g., "scene1/monster.png"
      * @return  An autoreleased BillBoard object.
      */
-    static BillBoard* create(const std::string& filename, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    static BillBoard* create(const std::string &filename, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
     /**
      * Creates a BillBoard with an image filename and a rect.
@@ -73,17 +73,17 @@ public:
      * @param   rect     A subrect of the image file
      * @return  An autoreleased BillBoard object
      */
-    static BillBoard* create(const std::string& filename, const Rect& rect, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    static BillBoard* create(const std::string &filename, const Rect &rect, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
-     /**
-     * Creates a BillBoard with a Texture2D object.
-     *
-     * After creation, the rect will be the size of the texture, and the offset will be (0,0).
-     *
-     * @param   texture    A pointer to a Texture2D object.
-     * @return  An autoreleased BillBoard object
-     */
-    static BillBoard* createWithTexture(Texture2D *texture, Mode mode = Mode::VIEW_POINT_ORIENTED);
+    /**
+    * Creates a BillBoard with a Texture2D object.
+    *
+    * After creation, the rect will be the size of the texture, and the offset will be (0,0).
+    *
+    * @param   texture    A pointer to a Texture2D object.
+    * @return  An autoreleased BillBoard object
+    */
+    static BillBoard* createWithTexture(Texture2D* texture, Mode mode = Mode::VIEW_POINT_ORIENTED);
 
     /** Set the billboard rotation mode. */
     void setMode(Mode mode);
@@ -92,17 +92,16 @@ public:
     Mode getMode() const;
 
     //override
-    
+
     /** update billboard's transform and turn it towards camera */
-    virtual void visit(Renderer *renderer, const Mat4& parentTransform, uint32_t parentFlags) override;
-    
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+
     /** 
      * draw BillBoard object.
      *
      * @lua NA
      */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
-
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
 
 CC_CONSTRUCTOR_ACCESS:
     BillBoard();
@@ -114,15 +113,14 @@ protected:
      * calculate a model matrix which keep original translate & scaling but always face to the camera
      */
     bool calculateBillboardTransform();
-    
+
     Mat4 _camWorldMat;
     Mat4 _mvTransform;
 
     Mode _mode;
     bool _modeDirty;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(BillBoard);
+private: CC_DISALLOW_COPY_AND_ASSIGN(BillBoard);
 
 };
 

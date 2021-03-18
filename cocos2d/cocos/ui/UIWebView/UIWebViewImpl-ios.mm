@@ -35,10 +35,27 @@
 #include "platform/CCFileUtils.h"
 
 @interface UIWebViewWrapper : NSObject
-@property (nonatomic) std::function<bool(std::string url)> shouldStartLoading;
-@property (nonatomic) std::function<void(std::string url)> didFinishLoading;
-@property (nonatomic) std::function<void(std::string url)> didFailLoading;
-@property (nonatomic) std::function<void(std::string url)> onJsCallback;
+
+@property(nonatomic)
+std::function<
+bool(std::string
+url)>
+shouldStartLoading;
+@property(nonatomic)
+std::function<
+void(std::string
+url)>
+didFinishLoading;
+@property(nonatomic)
+std::function<
+void(std::string
+url)>
+didFailLoading;
+@property(nonatomic)
+std::function<
+void(std::string
+url)>
+onJsCallback;
 
 @property(nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property(nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
@@ -63,7 +80,7 @@
 
 - (void)loadHTMLString:(const std::string &)string baseURL:(const std::string &)baseURL;
 
-- (void)loadUrl:(const std::string &)urlString cleanCachedData:(BOOL) needCleanCachedData;
+- (void)loadUrl:(const std::string &)urlString cleanCachedData:(BOOL)needCleanCachedData;
 
 - (void)loadFile:(const std::string &)filePath;
 
@@ -80,24 +97,26 @@
 - (void)setScalesPageToFit:(const bool)scalesPageToFit;
 @end
 
-
 @interface UIWebViewWrapper () <WKUIDelegate, WKNavigationDelegate>
-@property(nonatomic) WKWebView *wkWebView;
 
-@property(nonatomic, copy) NSString *jsScheme;
+@property(nonatomic) WKWebView* wkWebView;
+
+@property(nonatomic, copy) NSString* jsScheme;
 @end
 
-@implementation UIWebViewWrapper {
-    
+@implementation UIWebViewWrapper
+{
+
 }
 
-+ (instancetype) newWebViewWrapper {
++ (instancetype)newWebViewWrapper {
     return [[self alloc] init];
 }
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.wkWebView = nil;
         self.shouldStartLoading = nullptr;
         self.didFinishLoading = nullptr;
@@ -117,47 +136,62 @@
 }
 
 - (void)setupWebView {
-    if (!self.wkWebView) {
+    if (!self.wkWebView)
+    {
         self.wkWebView = [[WKWebView alloc] init];
         self.wkWebView.UIDelegate = self;
         self.wkWebView.navigationDelegate = self;
     }
-    if (!self.wkWebView.superview) {
+    if (!self.wkWebView.superview)
+    {
         auto view = cocos2d::Director::getInstance()->getOpenGLView();
-        auto eaglview = (CCEAGLView *) view->getEAGLView();
+        auto eaglview = (CCEAGLView*)view->getEAGLView();
         [eaglview addSubview:self.wkWebView];
     }
 }
 
 - (void)setVisible:(bool)visible {
-    if (!self.wkWebView) {[self setupWebView];}
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     self.wkWebView.hidden = !visible;
 }
 
 - (void)setBounces:(bool)bounces {
-  self.wkWebView.scrollView.bounces = bounces;
+    self.wkWebView.scrollView.bounces = bounces;
 }
 
 - (void)setOpacityWebView:(float)opacity {
-    if (!self.wkWebView) { [self setupWebView]; }
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     self.wkWebView.alpha = opacity;
     [self.wkWebView setOpaque:YES];
 }
 
--(float) getOpacityWebView{
+- (float)getOpacityWebView {
     return self.wkWebView.alpha;
 }
 
--(void) setBackgroundTransparent{
-    if (!self.wkWebView) {[self setupWebView];}
+- (void)setBackgroundTransparent {
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     [self.wkWebView setOpaque:NO];
     [self.wkWebView setBackgroundColor:[UIColor clearColor]];
 }
 
 - (void)setFrameWithX:(float)x y:(float)y width:(float)width height:(float)height {
-    if (!self.wkWebView) {[self setupWebView];}
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     CGRect newFrame = CGRectMake(x, y, width, height);
-    if (!CGRectEqualToRect(self.wkWebView.frame, newFrame)) {
+    if (!CGRectEqualToRect(self.wkWebView.frame, newFrame))
+    {
         self.wkWebView.frame = CGRectMake(x, y, width, height);
     }
 }
@@ -171,25 +205,28 @@
     path = [path stringByAppendingPathComponent:@(baseURL.c_str() )];
     auto url = [NSURL fileURLWithPath:path];
 
-    [self.wkWebView loadData:[NSData dataWithBytes:data.c_str() length:data.length()]
-                    MIMEType:@(MIMEType.c_str())
-       characterEncodingName:@(encodingName.c_str())
-                     baseURL:url];
+    [self.wkWebView loadData:[NSData dataWithBytes:data.c_str() length:data.length()] MIMEType:@(MIMEType.c_str()) characterEncodingName:@(encodingName.c_str()) baseURL:url];
 }
 
 - (void)loadHTMLString:(const std::string &)string baseURL:(const std::string &)baseURL {
-    if (!self.wkWebView) {[self setupWebView];}
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     auto path = [[NSBundle mainBundle] resourcePath];
     path = [path stringByAppendingPathComponent:@(baseURL.c_str() )];
     auto url = [NSURL fileURLWithPath:path];
     [self.wkWebView loadHTMLString:@(string.c_str()) baseURL:url];
 }
 
-- (void)loadUrl:(const std::string &)urlString cleanCachedData:(BOOL) needCleanCachedData {
-    if (!self.wkWebView) {[self setupWebView];}
-    NSURL *url = [NSURL URLWithString:@(urlString.c_str())];
+- (void)loadUrl:(const std::string &)urlString cleanCachedData:(BOOL)needCleanCachedData {
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
+    NSURL* url = [NSURL URLWithString:@(urlString.c_str())];
 
-    NSURLRequest *request = nil;
+    NSURLRequest* request = nil;
     if (needCleanCachedData)
         request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:60];
     else
@@ -199,9 +236,12 @@
 }
 
 - (void)loadFile:(const std::string &)filePath {
-    if (!self.wkWebView) {[self setupWebView];}
-    NSURL *url = [NSURL fileURLWithPath:@(filePath.c_str())];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
+    NSURL* url = [NSURL fileURLWithPath:@(filePath.c_str())];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
     [self.wkWebView loadRequest:request];
 }
 
@@ -230,28 +270,33 @@
 }
 
 - (void)evaluateJS:(const std::string &)js {
-    if (!self.wkWebView) {[self setupWebView];}
+    if (!self.wkWebView)
+    {
+        [self setupWebView];
+    }
     [self.wkWebView evaluateJavaScript:@(js.c_str()) completionHandler:nil];
 }
 
 - (void)setScalesPageToFit:(const bool)scalesPageToFit {
-// TODO: there is not corresponding API in WK.
-// https://stackoverflow.com/questions/26295277/wkwebview-equivalent-for-uiwebviews-scalespagetofit/43048514 seems has a solution,
-// but it doesn't support setting it dynamically. If we want to set this feature dynamically, then it will be too complex.
+    // TODO: there is not corresponding API in WK.
+    // https://stackoverflow.com/questions/26295277/wkwebview-equivalent-for-uiwebviews-scalespagetofit/43048514 seems has a solution,
+    // but it doesn't support setting it dynamically. If we want to set this feature dynamically, then it will be too complex.
 }
 
-
-
 #pragma mark - WKNavigationDelegate
-- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    NSString *url = [[[navigationAction request] URL] absoluteString];
-    if ([[webView.URL scheme] isEqualToString:self.jsScheme]) {
+
+- (void)webView:(WKWebView*)webView decidePolicyForNavigationAction:(WKNavigationAction*)navigationAction decisionHandler:(void (^)(
+WKNavigationActionPolicy))decisionHandler {
+    NSString* url = [[[navigationAction request] URL] absoluteString];
+    if ([[webView.URL scheme] isEqualToString:self.jsScheme])
+    {
         self.onJsCallback([url UTF8String]);
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
-    if (self.shouldStartLoading && url) {
-        if (self.shouldStartLoading([url UTF8String]) )
+    if (self.shouldStartLoading && url)
+    {
+        if (self.shouldStartLoading([url UTF8String]))
             decisionHandler(WKNavigationActionPolicyAllow);
         else
             decisionHandler(WKNavigationActionPolicyCancel);
@@ -262,17 +307,20 @@
     decisionHandler(WKNavigationActionPolicyAllow);
 }
 
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    if (self.didFinishLoading) {
-        NSString *url = [webView.URL absoluteString];
+- (void)webView:(WKWebView*)webView didFinishNavigation:(WKNavigation*)navigation {
+    if (self.didFinishLoading)
+    {
+        NSString* url = [webView.URL absoluteString];
         self.didFinishLoading([url UTF8String]);
     }
 }
 
-- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    if (self.didFailLoading) {
-        NSString *errorInfo = error.userInfo[NSURLErrorFailingURLStringErrorKey];
-        if (errorInfo) {
+- (void)webView:(WKWebView*)webView didFailProvisionalNavigation:(WKNavigation*)navigation withError:(NSError*)error {
+    if (self.didFailLoading)
+    {
+        NSString* errorInfo = error.userInfo[NSURLErrorFailingURLStringErrorKey];
+        if (errorInfo)
+        {
             self.didFailLoading([errorInfo UTF8String]);
         }
     }
@@ -281,168 +329,193 @@
 #pragma WKUIDelegate
 
 // Implement js alert function.
-- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)())completionHandler
-{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:message
-                                                                             message:nil
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addAction:[UIAlertAction actionWithTitle:@"Ok"
-                                                        style:UIAlertActionStyleCancel
-                                                      handler:^(UIAlertAction *action) {
-                                                          completionHandler();
-                                                      }]];
+- (void)webView:(WKWebView*)webView runJavaScriptAlertPanelWithMessage:(NSString*)message initiatedByFrame:(WKFrameInfo*)frame completionHandler:(void (^)())completionHandler {
+    UIAlertController* alertController = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleCancel handler:^(
+    UIAlertAction* action)
+    {
+        completionHandler();
+    }]];
 
     auto rootViewController = [UIApplication sharedApplication].windows[0].rootViewController;
-    [rootViewController presentViewController:alertController animated:YES completion:^{}];
+    [rootViewController presentViewController:alertController animated:YES completion:^
+    {
+    }];
 }
 
 @end
 
+namespace cocos2d
+{
+namespace ui
+{
 
+WebViewImpl::WebViewImpl(WebView* webView)
+: _uiWebViewWrapper([UIWebViewWrapper newWebViewWrapper])
+, _webView(webView)
+{
 
-namespace cocos2d {
-namespace ui{
-
-WebViewImpl::WebViewImpl(WebView *webView)
-        : _uiWebViewWrapper([UIWebViewWrapper newWebViewWrapper]),
-        _webView(webView) {
-            
-    _uiWebViewWrapper.shouldStartLoading = [this](std::string url) {
-        if (this->_webView->_onShouldStartLoading) {
+    _uiWebViewWrapper.shouldStartLoading = [this](std::string url)
+    {
+        if (this->_webView->_onShouldStartLoading)
+        {
             return this->_webView->_onShouldStartLoading(this->_webView, url);
         }
         return true;
     };
-    _uiWebViewWrapper.didFinishLoading = [this](std::string url) {
-        if (this->_webView->_onDidFinishLoading) {
+    _uiWebViewWrapper.didFinishLoading = [this](std::string url)
+    {
+        if (this->_webView->_onDidFinishLoading)
+        {
             this->_webView->_onDidFinishLoading(this->_webView, url);
         }
     };
-    _uiWebViewWrapper.didFailLoading = [this](std::string url) {
-        if (this->_webView->_onDidFailLoading) {
+    _uiWebViewWrapper.didFailLoading = [this](std::string url)
+    {
+        if (this->_webView->_onDidFailLoading)
+        {
             this->_webView->_onDidFailLoading(this->_webView, url);
         }
     };
-    _uiWebViewWrapper.onJsCallback = [this](std::string url) {
-        if (this->_webView->_onJSCallback) {
+    _uiWebViewWrapper.onJsCallback = [this](std::string url)
+    {
+        if (this->_webView->_onJSCallback)
+        {
             this->_webView->_onJSCallback(this->_webView, url);
         }
     };
 }
 
-WebViewImpl::~WebViewImpl(){
+WebViewImpl::~WebViewImpl()
+{
     [_uiWebViewWrapper release];
     _uiWebViewWrapper = nullptr;
 }
 
-void WebViewImpl::setJavascriptInterfaceScheme(const std::string &scheme) {
+void WebViewImpl::setJavascriptInterfaceScheme(const std::string &scheme)
+{
     [_uiWebViewWrapper setJavascriptInterfaceScheme:scheme];
 }
 
-void WebViewImpl::loadData(const Data &data,
-                           const std::string &MIMEType,
-                           const std::string &encoding,
-                           const std::string &baseURL) {
-    
-    std::string dataString(reinterpret_cast<char *>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
+void WebViewImpl::loadData(const Data &data, const std::string &MIMEType, const std::string &encoding,
+                           const std::string &baseURL)
+{
+
+    std::string dataString(reinterpret_cast<char*>(data.getBytes()), static_cast<unsigned int>(data.getSize()));
     [_uiWebViewWrapper loadData:dataString MIMEType:MIMEType textEncodingName:encoding baseURL:baseURL];
 }
 
-void WebViewImpl::loadHTMLString(const std::string &string, const std::string &baseURL) {
+void WebViewImpl::loadHTMLString(const std::string &string, const std::string &baseURL)
+{
     [_uiWebViewWrapper loadHTMLString:string baseURL:baseURL];
 }
 
-void WebViewImpl::loadURL(const std::string &url) {
+void WebViewImpl::loadURL(const std::string &url)
+{
     this->loadURL(url, false);
 }
 
-void WebViewImpl::loadURL(const std::string &url, bool cleanCachedData) {
+void WebViewImpl::loadURL(const std::string &url, bool cleanCachedData)
+{
     [_uiWebViewWrapper loadUrl:url cleanCachedData:cleanCachedData];
 }
 
-void WebViewImpl::loadFile(const std::string &fileName) {
+void WebViewImpl::loadFile(const std::string &fileName)
+{
     auto fullPath = cocos2d::FileUtils::getInstance()->fullPathForFilename(fileName);
     [_uiWebViewWrapper loadFile:fullPath];
 }
 
-void WebViewImpl::stopLoading() {
+void WebViewImpl::stopLoading()
+{
     [_uiWebViewWrapper stopLoading];
 }
 
-void WebViewImpl::reload() {
+void WebViewImpl::reload()
+{
     [_uiWebViewWrapper reload];
 }
 
-bool WebViewImpl::canGoBack() {
+bool WebViewImpl::canGoBack()
+{
     return _uiWebViewWrapper.canGoBack;
 }
 
-bool WebViewImpl::canGoForward() {
+bool WebViewImpl::canGoForward()
+{
     return _uiWebViewWrapper.canGoForward;
 }
 
-void WebViewImpl::goBack() {
+void WebViewImpl::goBack()
+{
     [_uiWebViewWrapper goBack];
 }
 
-void WebViewImpl::goForward() {
+void WebViewImpl::goForward()
+{
     [_uiWebViewWrapper goForward];
 }
 
-void WebViewImpl::evaluateJS(const std::string &js) {
+void WebViewImpl::evaluateJS(const std::string &js)
+{
     [_uiWebViewWrapper evaluateJS:js];
 }
 
-void WebViewImpl::setBounces(bool bounces) {
+void WebViewImpl::setBounces(bool bounces)
+{
     [_uiWebViewWrapper setBounces:bounces];
 }
 
-void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit) {
+void WebViewImpl::setScalesPageToFit(const bool scalesPageToFit)
+{
     [_uiWebViewWrapper setScalesPageToFit:scalesPageToFit];
 }
 
-void WebViewImpl::draw(cocos2d::Renderer *renderer, cocos2d::Mat4 const &transform, uint32_t flags) {
-    if (flags & cocos2d::Node::FLAGS_TRANSFORM_DIRTY) {
-        
+void WebViewImpl::draw(cocos2d::Renderer* renderer, cocos2d::Mat4 const &transform, uint32_t flags)
+{
+    if (flags & cocos2d::Node::FLAGS_TRANSFORM_DIRTY)
+    {
+
         auto director = cocos2d::Director::getInstance();
         auto glView = director->getOpenGLView();
         auto frameSize = glView->getFrameSize();
-        
-        auto scaleFactor = [static_cast<CCEAGLView *>(glView->getEAGLView()) contentScaleFactor];
+
+        auto scaleFactor = [static_cast<CCEAGLView*>(glView->getEAGLView()) contentScaleFactor];
 
         auto winSize = director->getWinSize();
 
         auto leftBottom = this->_webView->convertToWorldSpace(cocos2d::Vec2::ZERO);
-        auto rightTop = this->_webView->convertToWorldSpace(cocos2d::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
+        auto rightTop = this->_webView->convertToWorldSpace(
+        cocos2d::Vec2(this->_webView->getContentSize().width, this->_webView->getContentSize().height));
 
         auto x = (frameSize.width / 2 + (leftBottom.x - winSize.width / 2) * glView->getScaleX()) / scaleFactor;
         auto y = (frameSize.height / 2 - (rightTop.y - winSize.height / 2) * glView->getScaleY()) / scaleFactor;
         auto width = (rightTop.x - leftBottom.x) * glView->getScaleX() / scaleFactor;
         auto height = (rightTop.y - leftBottom.y) * glView->getScaleY() / scaleFactor;
 
-        [_uiWebViewWrapper setFrameWithX:x
-                                      y:y
-                                  width:width
-                                 height:height];
+        [_uiWebViewWrapper setFrameWithX:x y:y width:width height:height];
     }
 }
 
-void WebViewImpl::setVisible(bool visible){
+void WebViewImpl::setVisible(bool visible)
+{
     [_uiWebViewWrapper setVisible:visible];
 }
-        
-void WebViewImpl::setOpacityWebView(float opacity){
-    [_uiWebViewWrapper setOpacityWebView: opacity];
+
+void WebViewImpl::setOpacityWebView(float opacity)
+{
+    [_uiWebViewWrapper setOpacityWebView:opacity];
 }
-        
-float WebViewImpl::getOpacityWebView() const{
+
+float WebViewImpl::getOpacityWebView() const
+{
     return [_uiWebViewWrapper getOpacityWebView];
 }
 
-void WebViewImpl::setBackgroundTransparent(){
+void WebViewImpl::setBackgroundTransparent()
+{
     [_uiWebViewWrapper setBackgroundTransparent];
 }
 
-        
 } // namespace ui
 } //namespace cocos2d

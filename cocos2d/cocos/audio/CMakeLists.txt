@@ -3,7 +3,7 @@ set(COCOS_AUDIO_SRC
     audio/AudioEngine.cpp
     )
 
-if(WINDOWS)
+if (WINDOWS)
 
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/win32/AudioDecoderManager.h
@@ -29,7 +29,7 @@ if(WINDOWS)
         audio/win32/AudioDecoderOgg.cpp
         )
 
-elseif(ANDROID)
+elseif (ANDROID)
 
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/android/PcmAudioService.h
@@ -105,7 +105,7 @@ elseif(ANDROID)
         audio/android/tinysndfile.cpp
         )
 
-elseif(LINUX)
+elseif (LINUX)
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/linux/AudioEngine-linux.h
         )
@@ -115,7 +115,7 @@ elseif(LINUX)
         audio/linux/AudioEngine-linux.cpp
         )
 
-elseif(APPLE)
+elseif (APPLE)
     # common
     set(COCOS_AUDIO_PLATFORM_HEADER
         audio/apple/AudioDecoder.h
@@ -130,7 +130,7 @@ elseif(APPLE)
         audio/apple/AudioEngine-inl.mm
         audio/apple/AudioPlayer.mm
         )
-endif()
+endif ()
 
 set(COCOS_AUDIO_HEADER
     audio/include/AudioEngine.h

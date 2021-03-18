@@ -26,7 +26,8 @@ THE SOFTWARE.
 
 #include <unistd.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AssetFd
 {
@@ -34,7 +35,10 @@ public:
     AssetFd(int assetFd);
     ~AssetFd();
 
-    inline int getFd() const { return _assetFd; };
+    inline int getFd() const
+    {
+        return _assetFd;
+    };
 private:
     int _assetFd;
 };

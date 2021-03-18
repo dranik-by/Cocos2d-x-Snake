@@ -33,15 +33,15 @@
 
 //FIXME:Move the definition of the following macros to a separated file.
 
-void audioLog(const char * format, ...);
+void audioLog(const char* format, ...);
 
 #define QUOTEME_(x) #x
 #define QUOTEME(x) QUOTEME_(x)
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define ALOGV(fmt, ...) audioLog("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
+    #define ALOGV(fmt, ...) audioLog("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #else
-#define ALOGV(fmt, ...) do {} while(false)
+    #define ALOGV(fmt, ...) do {} while(false)
 #endif
 #define ALOGD(fmt, ...) audioLog("D/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 #define ALOGI(fmt, ...) audioLog("I/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
@@ -49,7 +49,7 @@ void audioLog(const char * format, ...);
 #define ALOGE(fmt, ...) audioLog("E/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "", ##__VA_ARGS__)
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define CHECK_AL_ERROR_DEBUG() \
+    #define CHECK_AL_ERROR_DEBUG() \
 do { \
     GLenum __error = alGetError(); \
     if (__error) { \
@@ -57,7 +57,7 @@ do { \
     } \
 } while (false)
 #else
-#define CHECK_AL_ERROR_DEBUG()
+    #define CHECK_AL_ERROR_DEBUG()
 #endif
 
 #define BREAK_IF(condition) \

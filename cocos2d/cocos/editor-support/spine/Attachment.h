@@ -39,41 +39,46 @@ extern "C" {
 
 struct spAttachmentLoader;
 
-typedef enum {
-	SP_ATTACHMENT_REGION,
-	SP_ATTACHMENT_BOUNDING_BOX,
-	SP_ATTACHMENT_MESH,
-	SP_ATTACHMENT_LINKED_MESH,
-	SP_ATTACHMENT_PATH,
-	SP_ATTACHMENT_POINT,
-	SP_ATTACHMENT_CLIPPING
+typedef enum
+{
+    SP_ATTACHMENT_REGION,
+    SP_ATTACHMENT_BOUNDING_BOX,
+    SP_ATTACHMENT_MESH,
+    SP_ATTACHMENT_LINKED_MESH,
+    SP_ATTACHMENT_PATH,
+    SP_ATTACHMENT_POINT,
+    SP_ATTACHMENT_CLIPPING
 } spAttachmentType;
 
-typedef struct spAttachment {
-	const char* const name;
-	const spAttachmentType type;
-	const void* const vtable;
-	struct spAttachmentLoader* attachmentLoader;
+typedef struct spAttachment
+{
+    const char* const name;
+    const spAttachmentType type;
+    const void* const vtable;
+    struct spAttachmentLoader* attachmentLoader;
 
-#ifdef __cplusplus
-	spAttachment() :
-		name(0),
-		type(SP_ATTACHMENT_REGION),
-		vtable(0) {
-	}
-#endif
+        #ifdef __cplusplus
+
+    spAttachment()
+    : name(0)
+    , type(SP_ATTACHMENT_REGION)
+    , vtable(0)
+    {
+    }
+
+        #endif
 } spAttachment;
 
-void spAttachment_dispose (spAttachment* self);
+void spAttachment_dispose(spAttachment* self);
 
 #ifdef SPINE_SHORT_NAMES
 typedef spAttachmentType AttachmentType;
-#define ATTACHMENT_REGION SP_ATTACHMENT_REGION
-#define ATTACHMENT_BOUNDING_BOX SP_ATTACHMENT_BOUNDING_BOX
-#define ATTACHMENT_MESH SP_ATTACHMENT_MESH
-#define ATTACHMENT_LINKED_MESH SP_ATTACHMENT_LINKED_MESH
+    #define ATTACHMENT_REGION SP_ATTACHMENT_REGION
+    #define ATTACHMENT_BOUNDING_BOX SP_ATTACHMENT_BOUNDING_BOX
+    #define ATTACHMENT_MESH SP_ATTACHMENT_MESH
+    #define ATTACHMENT_LINKED_MESH SP_ATTACHMENT_LINKED_MESH
 typedef spAttachment Attachment;
-#define Attachment_dispose(...) spAttachment_dispose(__VA_ARGS__)
+    #define Attachment_dispose(...) spAttachment_dispose(__VA_ARGS__)
 #endif
 
 #ifdef __cplusplus

@@ -29,27 +29,27 @@
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
 
-#include "audio/win32/AudioCache.h"
-#include <thread>
-#include "base/CCDirector.h"
-#include "base/CCScheduler.h"
+    #include "audio/win32/AudioCache.h"
+    #include <thread>
+    #include "base/CCDirector.h"
+    #include "base/CCScheduler.h"
 
-#include "audio/win32/AudioDecoderManager.h"
-#include "audio/win32/AudioDecoder.h"
+    #include "audio/win32/AudioDecoderManager.h"
+    #include "audio/win32/AudioDecoder.h"
 
-#define VERY_VERY_VERBOSE_LOGGING
-#ifdef VERY_VERY_VERBOSE_LOGGING
-#define ALOGVV ALOGV
-#else
-#define ALOGVV(...) do{} while(false)
-#endif
+    #define VERY_VERY_VERBOSE_LOGGING
+    #ifdef VERY_VERY_VERBOSE_LOGGING
+        #define ALOGVV ALOGV
+    #else
+        #define ALOGVV(...) do{} while(false)
+    #endif
 
 namespace {
 unsigned int __idIndex = 0;
 }
 
-#define INVALID_AL_BUFFER_ID 0xFFFFFFFF
-#define PCMDATA_CACHEMAXSIZE 1048576
+    #define INVALID_AL_BUFFER_ID 0xFFFFFFFF
+    #define PCMDATA_CACHEMAXSIZE 1048576
 
 using namespace cocos2d;
 

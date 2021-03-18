@@ -40,13 +40,13 @@ static Texture2D* getDefaultTexture()
 {
     Texture2D* texture = nullptr;
     Image* image = nullptr;
-    do 
+    do
     {
         const std::string key = "/__firePngData";
         texture = Director::getInstance()->getTextureCache()->getTextureForKey(key);
         CC_BREAK_IF(texture != nullptr);
 
-        image = new (std::nothrow) Image();
+        image = new(std::nothrow) Image();
         CC_BREAK_IF(nullptr == image);
         bool ret = image->initWithImageData(__firePngData, sizeof(__firePngData));
         CC_BREAK_IF(!ret);
@@ -61,7 +61,7 @@ static Texture2D* getDefaultTexture()
 
 ParticleFire* ParticleFire::create()
 {
-    ParticleFire* ret = new (std::nothrow) ParticleFire();
+    ParticleFire* ret = new(std::nothrow) ParticleFire();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -75,7 +75,7 @@ ParticleFire* ParticleFire::create()
 
 ParticleFire* ParticleFire::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFire* ret = new (std::nothrow) ParticleFire();
+    ParticleFire* ret = new(std::nothrow) ParticleFire();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -89,7 +89,7 @@ ParticleFire* ParticleFire::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -106,7 +106,7 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 
         // Gravity Mode: speed of particles
         this->modeA.speed = 60;
-        this->modeA.speedVar = 20;        
+        this->modeA.speedVar = 20;
 
         // starting angle
         _angle = 90;
@@ -114,7 +114,7 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2.0f, 60.0f);
+        this->setPosition(winSize.width / 2.0f, 60.0f);
         this->_posVar.set(40.0f, 20.0f);
 
         // life of particles
@@ -128,7 +128,7 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per frame
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.76f;
@@ -153,7 +153,7 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
         {
             setTexture(texture);
         }
-        
+
         // additive
         this->setBlendAdditive(true);
         return true;
@@ -166,7 +166,7 @@ bool ParticleFire::initWithTotalParticles(int numberOfParticles)
 
 ParticleFireworks* ParticleFireworks::create()
 {
-    ParticleFireworks* ret = new (std::nothrow) ParticleFireworks();
+    ParticleFireworks* ret = new(std::nothrow) ParticleFireworks();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -180,7 +180,7 @@ ParticleFireworks* ParticleFireworks::create()
 
 ParticleFireworks* ParticleFireworks::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFireworks* ret = new (std::nothrow) ParticleFireworks();
+    ParticleFireworks* ret = new(std::nothrow) ParticleFireworks();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -194,10 +194,10 @@ ParticleFireworks* ParticleFireworks::createWithTotalParticles(int numberOfParti
 
 bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
-        _duration= DURATION_INFINITY;
+        _duration = DURATION_INFINITY;
 
         // Gravity Mode
         this->_emitterMode = Mode::GRAVITY;
@@ -215,10 +215,10 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
 
         // angle
-        this->_angle= 90.0f;
+        this->_angle = 90.0f;
         this->_angleVar = 20.0f;
 
         // life of particles
@@ -226,7 +226,7 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
         this->_lifeVar = 1.0f;
 
         // emits per frame
-        this->_emissionRate = _totalParticles/_life;
+        this->_emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.5f;
@@ -262,12 +262,13 @@ bool ParticleFireworks::initWithTotalParticles(int numberOfParticles)
     }
     return false;
 }
+
 //
 // ParticleSun
 //
 ParticleSun* ParticleSun::create()
 {
-    ParticleSun* ret = new (std::nothrow) ParticleSun();
+    ParticleSun* ret = new(std::nothrow) ParticleSun();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -281,7 +282,7 @@ ParticleSun* ParticleSun::create()
 
 ParticleSun* ParticleSun::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSun* ret = new (std::nothrow) ParticleSun();
+    ParticleSun* ret = new(std::nothrow) ParticleSun();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -295,7 +296,7 @@ ParticleSun* ParticleSun::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSun::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // additive
         this->setBlendAdditive(true);
@@ -307,7 +308,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity mode: radial acceleration
         setRadialAccel(0);
@@ -324,7 +325,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -337,7 +338,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per seconds
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.76f;
@@ -374,7 +375,7 @@ bool ParticleSun::initWithTotalParticles(int numberOfParticles)
 
 ParticleGalaxy* ParticleGalaxy::create()
 {
-    ParticleGalaxy* ret = new (std::nothrow) ParticleGalaxy();
+    ParticleGalaxy* ret = new(std::nothrow) ParticleGalaxy();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -388,7 +389,7 @@ ParticleGalaxy* ParticleGalaxy::create()
 
 ParticleGalaxy* ParticleGalaxy::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleGalaxy* ret = new (std::nothrow) ParticleGalaxy();
+    ParticleGalaxy* ret = new(std::nothrow) ParticleGalaxy();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -402,7 +403,7 @@ ParticleGalaxy* ParticleGalaxy::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -411,7 +412,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(60);
@@ -431,7 +432,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -444,7 +445,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.12f;
@@ -483,7 +484,7 @@ bool ParticleGalaxy::initWithTotalParticles(int numberOfParticles)
 
 ParticleFlower* ParticleFlower::create()
 {
-    ParticleFlower* ret = new (std::nothrow) ParticleFlower();
+    ParticleFlower* ret = new(std::nothrow) ParticleFlower();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -497,7 +498,7 @@ ParticleFlower* ParticleFlower::create()
 
 ParticleFlower* ParticleFlower::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleFlower* ret = new (std::nothrow) ParticleFlower();
+    ParticleFlower* ret = new(std::nothrow) ParticleFlower();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -511,7 +512,7 @@ ParticleFlower* ParticleFlower::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -520,7 +521,7 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(80);
@@ -540,7 +541,7 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -553,7 +554,7 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.50f;
@@ -589,9 +590,9 @@ bool ParticleFlower::initWithTotalParticles(int numberOfParticles)
 // ParticleMeteor
 //
 
-ParticleMeteor * ParticleMeteor::create()
+ParticleMeteor* ParticleMeteor::create()
 {
-    ParticleMeteor *ret = new (std::nothrow) ParticleMeteor();
+    ParticleMeteor* ret = new(std::nothrow) ParticleMeteor();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -605,7 +606,7 @@ ParticleMeteor * ParticleMeteor::create()
 
 ParticleMeteor* ParticleMeteor::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleMeteor* ret = new (std::nothrow) ParticleMeteor();
+    ParticleMeteor* ret = new(std::nothrow) ParticleMeteor();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -619,7 +620,7 @@ ParticleMeteor* ParticleMeteor::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -628,7 +629,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(-200,200));
+        setGravity(Vec2(-200, 200));
 
         // Gravity Mode: speed of particles
         setSpeed(15);
@@ -648,7 +649,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -661,7 +662,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.2f;
@@ -700,7 +701,7 @@ bool ParticleMeteor::initWithTotalParticles(int numberOfParticles)
 
 ParticleSpiral* ParticleSpiral::create()
 {
-    ParticleSpiral* ret = new (std::nothrow) ParticleSpiral();
+    ParticleSpiral* ret = new(std::nothrow) ParticleSpiral();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -714,7 +715,7 @@ ParticleSpiral* ParticleSpiral::create()
 
 ParticleSpiral* ParticleSpiral::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSpiral* ret = new (std::nothrow) ParticleSpiral();
+    ParticleSpiral* ret = new(std::nothrow) ParticleSpiral();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -728,7 +729,7 @@ ParticleSpiral* ParticleSpiral::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -737,7 +738,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(150);
@@ -757,7 +758,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -770,7 +771,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.5f;
@@ -809,7 +810,7 @@ bool ParticleSpiral::initWithTotalParticles(int numberOfParticles)
 
 ParticleExplosion* ParticleExplosion::create()
 {
-    ParticleExplosion* ret = new (std::nothrow) ParticleExplosion();
+    ParticleExplosion* ret = new(std::nothrow) ParticleExplosion();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -823,7 +824,7 @@ ParticleExplosion* ParticleExplosion::create()
 
 ParticleExplosion* ParticleExplosion::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleExplosion* ret = new (std::nothrow) ParticleExplosion();
+    ParticleExplosion* ret = new(std::nothrow) ParticleExplosion();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -837,7 +838,7 @@ ParticleExplosion* ParticleExplosion::createWithTotalParticles(int numberOfParti
 
 bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = 0.1f;
@@ -845,7 +846,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: speed of particles
         setSpeed(70);
@@ -865,7 +866,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height/2);
+        this->setPosition(winSize.width / 2, winSize.height / 2);
         setPosVar(Vec2::ZERO);
 
         // life of particles
@@ -878,7 +879,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per second
-        _emissionRate = _totalParticles/_duration;
+        _emissionRate = _totalParticles / _duration;
 
         // color of particles
         _startColor.r = 0.7f;
@@ -917,7 +918,7 @@ bool ParticleExplosion::initWithTotalParticles(int numberOfParticles)
 
 ParticleSmoke* ParticleSmoke::create()
 {
-    ParticleSmoke* ret = new (std::nothrow) ParticleSmoke();
+    ParticleSmoke* ret = new(std::nothrow) ParticleSmoke();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -931,7 +932,7 @@ ParticleSmoke* ParticleSmoke::create()
 
 ParticleSmoke* ParticleSmoke::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSmoke* ret = new (std::nothrow) ParticleSmoke();
+    ParticleSmoke* ret = new(std::nothrow) ParticleSmoke();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -945,7 +946,7 @@ ParticleSmoke* ParticleSmoke::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -954,7 +955,7 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,0));
+        setGravity(Vec2(0, 0));
 
         // Gravity Mode: radial acceleration
         setRadialAccel(0);
@@ -970,7 +971,7 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, 0);
+        this->setPosition(winSize.width / 2, 0);
         setPosVar(Vec2(20, 0));
 
         // life of particles
@@ -983,7 +984,7 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
         _endSize = START_SIZE_EQUAL_TO_END_SIZE;
 
         // emits per frame
-        _emissionRate = _totalParticles/_life;
+        _emissionRate = _totalParticles / _life;
 
         // color of particles
         _startColor.r = 0.8f;
@@ -1022,7 +1023,7 @@ bool ParticleSmoke::initWithTotalParticles(int numberOfParticles)
 
 ParticleSnow* ParticleSnow::create()
 {
-    ParticleSnow* ret = new (std::nothrow) ParticleSnow();
+    ParticleSnow* ret = new(std::nothrow) ParticleSnow();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -1036,7 +1037,7 @@ ParticleSnow* ParticleSnow::create()
 
 ParticleSnow* ParticleSnow::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleSnow* ret = new (std::nothrow) ParticleSnow();
+    ParticleSnow* ret = new(std::nothrow) ParticleSnow();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -1050,7 +1051,7 @@ ParticleSnow* ParticleSnow::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) ) 
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -1059,7 +1060,7 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(0,-1));
+        setGravity(Vec2(0, -1));
 
         // Gravity Mode: speed of particles
         setSpeed(5);
@@ -1075,8 +1076,8 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height + 10);
-        setPosVar(Vec2(winSize.width/2, 0.0f));
+        this->setPosition(winSize.width / 2, winSize.height + 10);
+        setPosVar(Vec2(winSize.width / 2, 0.0f));
 
         // angle
         _angle = -90;
@@ -1130,7 +1131,7 @@ bool ParticleSnow::initWithTotalParticles(int numberOfParticles)
 
 ParticleRain* ParticleRain::create()
 {
-    ParticleRain* ret = new (std::nothrow) ParticleRain();
+    ParticleRain* ret = new(std::nothrow) ParticleRain();
     if (ret && ret->init())
     {
         ret->autorelease();
@@ -1144,7 +1145,7 @@ ParticleRain* ParticleRain::create()
 
 ParticleRain* ParticleRain::createWithTotalParticles(int numberOfParticles)
 {
-    ParticleRain* ret = new (std::nothrow) ParticleRain();
+    ParticleRain* ret = new(std::nothrow) ParticleRain();
     if (ret && ret->initWithTotalParticles(numberOfParticles))
     {
         ret->autorelease();
@@ -1158,7 +1159,7 @@ ParticleRain* ParticleRain::createWithTotalParticles(int numberOfParticles)
 
 bool ParticleRain::initWithTotalParticles(int numberOfParticles)
 {
-    if( ParticleSystemQuad::initWithTotalParticles(numberOfParticles) )
+    if (ParticleSystemQuad::initWithTotalParticles(numberOfParticles))
     {
         // duration
         _duration = DURATION_INFINITY;
@@ -1166,7 +1167,7 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
         setEmitterMode(Mode::GRAVITY);
 
         // Gravity Mode: gravity
-        setGravity(Vec2(10,-10));
+        setGravity(Vec2(10, -10));
 
         // Gravity Mode: radial
         setRadialAccel(0);
@@ -1187,8 +1188,8 @@ bool ParticleRain::initWithTotalParticles(int numberOfParticles)
 
         // emitter position
         Size winSize = Director::getInstance()->getWinSize();
-        this->setPosition(winSize.width/2, winSize.height);
-        setPosVar(Vec2(winSize.width/2, 0.0f));
+        this->setPosition(winSize.width / 2, winSize.height);
+        setPosVar(Vec2(winSize.width / 2, 0.0f));
 
         // life of particles
         _life = 4.5f;

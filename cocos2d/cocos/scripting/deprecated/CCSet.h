@@ -39,7 +39,7 @@ NS_CC_BEGIN
  * @{
  */
 
-typedef std::set<Ref *>::iterator __SetIterator;
+typedef std::set<Ref*>::iterator __SetIterator;
 
 class CC_DLL __Set : public Ref
 {
@@ -58,7 +58,7 @@ public:
     /**
     * @brief Create and return a new empty set.
     */
-    static __Set * create();
+    static __Set* create();
 
     /**
     *@brief Return a copy of the Set, it will copy all the elements.
@@ -75,11 +75,11 @@ public:
     /**
     *@brief Add a element into Set, it will retain the element.
     */
-    void addObject(Ref *pObject);
+    void addObject(Ref* pObject);
     /**
     *@brief Remove the given element, nothing todo if no element equals pObject.
     */
-    void removeObject(Ref *pObject);
+    void removeObject(Ref* pObject);
     /**
      *@brief Remove all elements of the set
      */
@@ -87,7 +87,7 @@ public:
     /**
     *@brief Check if Set contains a element equals pObject.
     */
-    bool containsObject(Ref *pObject);
+    bool containsObject(Ref* pObject);
     /**
     *@brief Return the iterator that points to the first element.
     * @js NA
@@ -111,7 +111,7 @@ public:
     virtual void acceptVisitor(DataVisitor &visitor);
 
 private:
-    std::set<Ref *> *_set;
+    std::set<Ref*>* _set;
 };
 
 // end of data_structure group

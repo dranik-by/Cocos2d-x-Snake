@@ -34,125 +34,122 @@ THE SOFTWARE.
 
 using namespace cocos2d;
 
-namespace cocostudio {
-
-void DisplayFactory::addDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData)
+namespace cocostudio
 {
-    switch(displayData->displayType)
+
+void DisplayFactory::addDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData)
+{
+    switch (displayData->displayType)
     {
-    case CS_DISPLAY_SPRITE:
-        addSpriteDisplay(bone, decoDisplay, displayData);
-        break;
-    case  CS_DISPLAY_PARTICLE:
-        addParticleDisplay(bone, decoDisplay, displayData);
-        break;
-    case  CS_DISPLAY_ARMATURE:
-        addArmatureDisplay(bone, decoDisplay, displayData);
-        break;
-    default:
-        break;
+        case CS_DISPLAY_SPRITE:
+            addSpriteDisplay(bone, decoDisplay, displayData);
+            break;
+        case CS_DISPLAY_PARTICLE:
+            addParticleDisplay(bone, decoDisplay, displayData);
+            break;
+        case CS_DISPLAY_ARMATURE:
+            addArmatureDisplay(bone, decoDisplay, displayData);
+            break;
+        default:
+            break;
     }
 }
 
-void DisplayFactory::createDisplay(Bone *bone, DecorativeDisplay *decoDisplay)
+void DisplayFactory::createDisplay(Bone* bone, DecorativeDisplay* decoDisplay)
 {
-    switch(decoDisplay->getDisplayData()->displayType)
+    switch (decoDisplay->getDisplayData()->displayType)
     {
-    case CS_DISPLAY_SPRITE:
-        createSpriteDisplay(bone, decoDisplay);
-        break;
-    case CS_DISPLAY_PARTICLE:
-        createParticleDisplay(bone, decoDisplay);
-        break;
-    case CS_DISPLAY_ARMATURE:
-        createArmatureDisplay(bone, decoDisplay);
-        break;
-    default:
-        break;
+        case CS_DISPLAY_SPRITE:
+            createSpriteDisplay(bone, decoDisplay);
+            break;
+        case CS_DISPLAY_PARTICLE:
+            createParticleDisplay(bone, decoDisplay);
+            break;
+        case CS_DISPLAY_ARMATURE:
+            createArmatureDisplay(bone, decoDisplay);
+            break;
+        default:
+            break;
     }
 }
 
-void DisplayFactory::updateDisplay(Bone *bone, float dt, bool dirty)
+void DisplayFactory::updateDisplay(Bone* bone, float dt, bool dirty)
 {
-    Node *display = bone->getDisplayRenderNode();
+    Node* display = bone->getDisplayRenderNode();
     CS_RETURN_IF(!display);
 
-    switch(bone->getDisplayRenderNodeType())
+    switch (bone->getDisplayRenderNodeType())
     {
-    case CS_DISPLAY_SPRITE:
-        if (dirty)
+        case CS_DISPLAY_SPRITE:
+            if (dirty)
+            {
+                static_cast<Skin*>(display)->updateArmatureTransform();
+            }
+            break;
+        case CS_DISPLAY_PARTICLE:
+            updateParticleDisplay(bone, display, dt);
+            break;
+        case CS_DISPLAY_ARMATURE:
+            updateArmatureDisplay(bone, display, dt);
+            break;
+        default:
         {
-            static_cast<Skin*>(display)->updateArmatureTransform();
+            Mat4 transform = bone->getNodeToArmatureTransform();
+            display->setAdditionalTransform(&transform);
         }
-        break;
-    case CS_DISPLAY_PARTICLE:
-        updateParticleDisplay(bone, display, dt);
-        break;
-    case CS_DISPLAY_ARMATURE:
-        updateArmatureDisplay(bone, display, dt);
-        break;
-    default:
-    {
-        Mat4 transform = bone->getNodeToArmatureTransform();
-        display->setAdditionalTransform(&transform);
-    }
-    break;
+            break;
     }
 
-
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (dirty)
     {
-        DecorativeDisplay *decoDisplay = bone->getDisplayManager()->getCurrentDecorativeDisplay();
-        ColliderDetector *detector = decoDisplay->getColliderDetector();
+        DecorativeDisplay* decoDisplay = bone->getDisplayManager()->getCurrentDecorativeDisplay();
+        ColliderDetector* detector = decoDisplay->getColliderDetector();
         if (detector)
         {
             do
             {
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
+                #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT
                 CC_BREAK_IF(!detector->getBody());
-#endif
+                #endif
 
                 Mat4 displayTransform = display->getNodeToParentTransform();
-                Vec2 anchorPoint =  display->getAnchorPointInPoints();
+                Vec2 anchorPoint = display->getAnchorPointInPoints();
                 anchorPoint = PointApplyTransform(anchorPoint, displayTransform);
                 displayTransform.m[12] = anchorPoint.x;
                 displayTransform.m[13] = anchorPoint.y;
-                Mat4 t = TransformConcat( bone->getArmature()->getNodeToParentTransform(),displayTransform);
+                Mat4 t = TransformConcat(bone->getArmature()->getNodeToParentTransform(), displayTransform);
                 detector->updateTransform(t);
-            }
-            while (0);
+            } while (0);
         }
     }
-#endif
+    #endif
 }
 
-
-
-void DisplayFactory::addSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData)
+void DisplayFactory::addSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData)
 {
-    SpriteDisplayData *sdp = SpriteDisplayData::create();
-    sdp->copy((SpriteDisplayData *)displayData);
+    SpriteDisplayData* sdp = SpriteDisplayData::create();
+    sdp->copy((SpriteDisplayData*)displayData);
     decoDisplay->setDisplayData(sdp);
     createSpriteDisplay(bone, decoDisplay);
 }
 
-void DisplayFactory::createSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay)
+void DisplayFactory::createSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay)
 {
-    Skin *skin = nullptr;
+    Skin* skin = nullptr;
 
-    SpriteDisplayData *displayData = (SpriteDisplayData *)decoDisplay->getDisplayData();
+    SpriteDisplayData* displayData = (SpriteDisplayData*)decoDisplay->getDisplayData();
 
     std::string textureName = displayData->displayName;
     size_t startPos = textureName.find_last_of('.');
 
-    if(startPos != std::string::npos)
+    if (startPos != std::string::npos)
     {
         textureName = textureName.erase(startPos);
     }
 
     //! create display
-    if(textureName.empty())
+    if (textureName.empty())
     {
         skin = Skin::create();
     }
@@ -172,7 +169,7 @@ void DisplayFactory::createSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisp
 
     initSpriteDisplay(bone, decoDisplay, displayData->displayName.c_str(), skin);
 
-    Armature *armature = bone->getArmature();
+    Armature* armature = bone->getArmature();
     if (armature)
     {
         if (armature->getArmatureData()->dataVersion >= VERSION_COMBINED)
@@ -187,85 +184,83 @@ void DisplayFactory::createSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisp
 
 }
 
-void DisplayFactory::initSpriteDisplay(Bone *bone, DecorativeDisplay *decoDisplay, const char *displayName, Skin *skin)
+void DisplayFactory::initSpriteDisplay(Bone* bone, DecorativeDisplay* decoDisplay, const char* displayName, Skin* skin)
 {
     //! remove .xxx
     std::string textureName = displayName;
     size_t startPos = textureName.find_last_of('.');
 
-    if(startPos != std::string::npos)
+    if (startPos != std::string::npos)
     {
         textureName = textureName.erase(startPos);
     }
 
-    TextureData *textureData = ArmatureDataManager::getInstance()->getTextureData(textureName);
-    if(textureData)
+    TextureData* textureData = ArmatureDataManager::getInstance()->getTextureData(textureName);
+    if (textureData)
     {
         //! Init display anchorPoint, every Texture have a anchor point
-        skin->setAnchorPoint(Vec2( textureData->pivotX, textureData->pivotY));
+        skin->setAnchorPoint(Vec2(textureData->pivotX, textureData->pivotY));
     }
 
-
-#if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
+    #if ENABLE_PHYSICS_BOX2D_DETECT || ENABLE_PHYSICS_CHIPMUNK_DETECT || ENABLE_PHYSICS_SAVE_CALCULATED_VERTEX
     if (textureData && textureData->contourDataList.size() > 0)
     {
 
         //! create ContourSprite
-        ColliderDetector *colliderDetector = ColliderDetector::create(bone);
+        ColliderDetector* colliderDetector = ColliderDetector::create(bone);
         colliderDetector->addContourDataList(textureData->contourDataList);
 
         decoDisplay->setColliderDetector(colliderDetector);
     }
-#endif
+    #endif
 }
 
-
-
-void DisplayFactory::addArmatureDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData)
+void DisplayFactory::addArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData)
 {
-    ArmatureDisplayData *adp = ArmatureDisplayData::create();
-    adp->copy((ArmatureDisplayData *)displayData);
+    ArmatureDisplayData* adp = ArmatureDisplayData::create();
+    adp->copy((ArmatureDisplayData*)displayData);
     decoDisplay->setDisplayData(adp);
 
     createArmatureDisplay(bone, decoDisplay);
 }
-void DisplayFactory::createArmatureDisplay(Bone *bone, DecorativeDisplay *decoDisplay)
-{
-    ArmatureDisplayData *displayData = (ArmatureDisplayData *)decoDisplay->getDisplayData();
 
-    Armature *armature = Armature::create(displayData->displayName, bone);
+void DisplayFactory::createArmatureDisplay(Bone* bone, DecorativeDisplay* decoDisplay)
+{
+    ArmatureDisplayData* displayData = (ArmatureDisplayData*)decoDisplay->getDisplayData();
+
+    Armature* armature = Armature::create(displayData->displayName, bone);
 
     decoDisplay->setDisplay(armature);
 }
-void DisplayFactory::updateArmatureDisplay(Bone* /*bone*/, Node *display, float dt)
+
+void DisplayFactory::updateArmatureDisplay(Bone* /*bone*/, Node* display, float dt)
 {
-    Armature *armature = (Armature *)display;
-    if(armature)
+    Armature* armature = (Armature*)display;
+    if (armature)
     {
         armature->sortAllChildren();
         armature->update(dt);
     }
 }
 
-
-
-void DisplayFactory::addParticleDisplay(Bone *bone, DecorativeDisplay *decoDisplay, DisplayData *displayData)
+void DisplayFactory::addParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay, DisplayData* displayData)
 {
-    ParticleDisplayData *adp = ParticleDisplayData::create();
-    adp->copy((ParticleDisplayData *)displayData);
+    ParticleDisplayData* adp = ParticleDisplayData::create();
+    adp->copy((ParticleDisplayData*)displayData);
     decoDisplay->setDisplayData(adp);
 
     createParticleDisplay(bone, decoDisplay);
 }
-void DisplayFactory::createParticleDisplay(Bone *bone, DecorativeDisplay *decoDisplay)
+
+void DisplayFactory::createParticleDisplay(Bone* bone, DecorativeDisplay* decoDisplay)
 {
-    ParticleDisplayData *displayData = (ParticleDisplayData *)decoDisplay->getDisplayData();
-    ParticleSystem *system = ParticleSystemQuad::create(displayData->displayName);
+    ParticleDisplayData* displayData = (ParticleDisplayData*)decoDisplay->getDisplayData();
+    ParticleSystem* system = ParticleSystemQuad::create(displayData->displayName);
 
     system->removeFromParent();
     system->cleanup();
-    
-    Armature *armature = bone->getArmature();
+
+    Armature* armature = bone->getArmature();
     if (armature)
     {
         system->setParent(armature);
@@ -273,9 +268,10 @@ void DisplayFactory::createParticleDisplay(Bone *bone, DecorativeDisplay *decoDi
 
     decoDisplay->setDisplay(system);
 }
-void DisplayFactory::updateParticleDisplay(Bone *bone, Node *display, float dt)
+
+void DisplayFactory::updateParticleDisplay(Bone* bone, Node* display, float dt)
 {
-    ParticleSystem *system = (ParticleSystem *)display;
+    ParticleSystem* system = (ParticleSystem*)display;
     BaseData node;
     TransformHelp::matrixToNode(bone->getNodeToArmatureTransform(), node);
     system->setPosition(node.x, node.y);
@@ -283,6 +279,5 @@ void DisplayFactory::updateParticleDisplay(Bone *bone, Node *display, float dt)
     system->setScaleY(node.scaleY);
     system->update(dt);
 }
-
 
 }

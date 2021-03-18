@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <array>
@@ -43,9 +43,13 @@ class TextureBackend;
  */
 struct RenderPassDescriptor
 {
-    RenderPassDescriptor& operator=(const RenderPassDescriptor& descriptor);
-    bool operator==(const RenderPassDescriptor& descriptor) const;
-    bool needDepthStencilAttachment() const { return depthTestEnabled || stencilTestEnabled; }
+    RenderPassDescriptor &operator=(const RenderPassDescriptor &descriptor);
+    bool operator==(const RenderPassDescriptor &descriptor) const;
+
+    bool needDepthStencilAttachment() const
+    {
+        return depthTestEnabled || stencilTestEnabled;
+    }
 
     float clearDepthValue = 0.f;
     float clearStencilValue = 0.f;
@@ -58,7 +62,7 @@ struct RenderPassDescriptor
     bool needClearStencil = false;
     TextureBackend* depthAttachmentTexture = nullptr;
     TextureBackend* stencilAttachmentTexture = nullptr;
-    TextureBackend* colorAttachmentsTexture[MAX_COLOR_ATTCHMENT] = { nullptr };
+    TextureBackend* colorAttachmentsTexture[MAX_COLOR_ATTCHMENT] = {nullptr};
 };
 
 //end of _backend group

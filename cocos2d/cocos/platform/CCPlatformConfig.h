@@ -93,14 +93,14 @@ THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////
 
 // check user set platform
-#if ! CC_TARGET_PLATFORM
+#if !CC_TARGET_PLATFORM
     #error  "Cannot recognize the target platform; are you targeting an unsupported platform?"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-#ifndef __MINGW32__
-#pragma warning (disable:4127)
-#endif
+    #ifndef __MINGW32__
+        #pragma warning (disable:4127)
+    #endif
 #endif  // CC_PLATFORM_WIN32
 
 #if ((CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS))

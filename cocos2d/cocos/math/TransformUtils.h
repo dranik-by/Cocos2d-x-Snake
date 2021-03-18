@@ -35,7 +35,8 @@ THE SOFTWARE.
  * @{
  */
 
-namespace   cocos2d {
+namespace cocos2d
+{
 
 struct AffineTransform;
 /**@{
@@ -43,8 +44,8 @@ struct AffineTransform;
  @param m The Mat4*4 pointer.
  @param t Affine transform.
  */
-CC_DLL void CGAffineToGL(const AffineTransform &t, float *m);
-CC_DLL void GLToCGAffine(const float *m, AffineTransform *t);
+CC_DLL void CGAffineToGL(const AffineTransform &t, float* m);
+CC_DLL void GLToCGAffine(const float* m, AffineTransform* t);
 /**@}*/
 }//namespace   cocos2d 
 /**

@@ -32,12 +32,11 @@ THE SOFTWARE.
 #include "base/ObjectFactory.h"
 #include "editor-support/cocostudio/CocoLoader.h"
 
-
 #define DECLARE_CLASS_COMPONENT_INFO \
     public: \
         static cocos2d::ObjectFactory::TInfo Type; \
         static cocos2d::Ref* createInstance(); \
-        
+
 #define IMPLEMENT_CLASS_COMPONENT_INFO(className) \
         cocos2d::Ref* className::createInstance() \
         { \
@@ -50,16 +49,17 @@ THE SOFTWARE.
 
 struct CC_STUDIO_DLL SerData
 {
-    const rapidjson::Value *_rData;
-    cocostudio::stExpCocoNode *_cocoNode;
-    cocostudio::CocoLoader *_cocoLoader;
+    const rapidjson::Value* _rData;
+    cocostudio::stExpCocoNode* _cocoNode;
+    cocostudio::CocoLoader* _cocoLoader;
+
     SerData()
     {
         _rData = NULL;
         _cocoNode = NULL;
         _cocoLoader = NULL;
     }
-    
+
 };
 
 #endif

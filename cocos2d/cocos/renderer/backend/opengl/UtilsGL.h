@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "base/ccMacros.h"
@@ -95,7 +95,8 @@ public:
      * @param out type Specifies the data type of the texel data. 
      * @param out isCompressed Specifies if the texel data is compressed.
      */
-    static void toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint &format, GLenum &type, bool &isCompressed);
+    static void toGLTypes(PixelFormat textureFormat, GLint &internalFormat, GLuint &format, GLenum &type,
+                          bool &isCompressed);
 
     /**
      * Convert compare function to GLenum. i.e. convert CompareFunction::NEVER to GL_NEVER.

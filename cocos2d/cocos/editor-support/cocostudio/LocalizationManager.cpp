@@ -36,7 +36,7 @@ ILocalizationManager* JsonLocalizationManager::getInstance()
 {
     if (!_sharedJsonLocalizationManager)
     {
-        _sharedJsonLocalizationManager = new (std::nothrow) JsonLocalizationManager();
+        _sharedJsonLocalizationManager = new(std::nothrow) JsonLocalizationManager();
     }
 
     return _sharedJsonLocalizationManager;
@@ -52,7 +52,7 @@ void JsonLocalizationManager::destroyInstance()
 }
 
 JsonLocalizationManager::JsonLocalizationManager()
-    :languageData(nullptr)
+: languageData(nullptr)
 {
 }
 
@@ -84,14 +84,11 @@ std::string JsonLocalizationManager::getLocalizationString(std::string key)
 {
     std::string result = key;
 
-    if (languageData && languageData->HasMember(key.c_str()) &&
-        (*languageData)[key.c_str()].IsString())
+    if (languageData && languageData->HasMember(key.c_str()) && (*languageData)[key.c_str()].IsString())
         result = (*languageData)[key.c_str()].GetString();
 
     return result;
 }
-
-
 
 static BinLocalizationManager* _sharedBinLocalizationManager = nullptr;
 
@@ -99,7 +96,7 @@ ILocalizationManager* BinLocalizationManager::getInstance()
 {
     if (!_sharedBinLocalizationManager)
     {
-        _sharedBinLocalizationManager = new (std::nothrow) BinLocalizationManager();
+        _sharedBinLocalizationManager = new(std::nothrow) BinLocalizationManager();
     }
 
     return _sharedBinLocalizationManager;
@@ -164,8 +161,6 @@ std::string BinLocalizationManager::getLocalizationString(std::string key)
     return result;
 }
 
-
-
 static bool isCurrentBinManager = true;
 static ILocalizationManager* _sharedLocalizationManager = nullptr;
 
@@ -176,7 +171,7 @@ ILocalizationManager* LocalizationHelper::getCurrentManager()
         _sharedLocalizationManager = BinLocalizationManager::getInstance();
         isCurrentBinManager = true;
     }
-    
+
     return _sharedLocalizationManager;
 }
 

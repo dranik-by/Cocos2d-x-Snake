@@ -38,7 +38,8 @@
 #include <vector>
 #include <atomic>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 /**
  * @addtogroup base
@@ -61,7 +62,7 @@ public:
     /*
      * Gets the default thread pool which is a cached thread pool with default parameters.
      */
-    static ThreadPool *getDefaultThreadPool();
+    static ThreadPool* getDefaultThreadPool();
 
     /*
      * Destroys the default thread pool
@@ -72,20 +73,20 @@ public:
      * Creates a cached thread pool
      * @note The return value has to be delete while it doesn't needed
      */
-    static ThreadPool *newCachedThreadPool(int minThreadNum, int maxThreadNum, int shrinkInterval,
-                                           int shrinkStep, int stretchStep);
+    static ThreadPool* newCachedThreadPool(int minThreadNum, int maxThreadNum, int shrinkInterval, int shrinkStep,
+                                           int stretchStep);
 
     /*
      * Creates a thread pool with fixed thread count
      * @note The return value has to be delete while it doesn't needed
      */
-    static ThreadPool *newFixedThreadPool(int threadNum);
+    static ThreadPool* newFixedThreadPool(int threadNum);
 
     /*
      * Creates a thread pool with only one thread in the pool, it could be used to execute multiply tasks serially in just one thread.
      * @note The return value has to be delete while it doesn't needed
      */
-    static ThreadPool *newSingleThreadPool();
+    static ThreadPool* newSingleThreadPool();
 
     // the destructor waits for all the functions in the queue to be finished
     ~ThreadPool();
@@ -95,7 +96,7 @@ public:
      *  @param type The task type, it's TASK_TYPE_DEFAULT if this argument isn't assigned
      *  @note This function has to be invoked in cocos thread
      */
-    void pushTask(const std::function<void(int /*threadId*/)>& runnable, TaskType type = TaskType::DEFAULT);
+    void pushTask(const std::function<void(int /*threadId*/)> &runnable, TaskType type = TaskType::DEFAULT);
 
     // Stops all tasks, it will remove all tasks in queue
     void stopAllTasks();
@@ -105,18 +106,24 @@ public:
 
     // Gets the minimum thread numbers
     inline int getMinThreadNum() const
-    { return _minThreadNum; };
+    {
+        return _minThreadNum;
+    };
 
     // Gets the maximum thread numbers
     inline int getMaxThreadNum() const
-    { return _maxThreadNum; };
+    {
+        return _maxThreadNum;
+    };
 
     // Gets the number of idle threads
     int getIdleThreadNum() const;
 
     // Gets the number of initialized threads
     inline int getInitedThreadNum() const
-    { return _initedThreadNum; };
+    {
+        return _initedThreadNum;
+    };
 
     // Gets the task number
     int getTaskNum() const;
@@ -130,13 +137,13 @@ public:
 private:
     ThreadPool(int minNum, int maxNum);
 
-    ThreadPool(const ThreadPool&);
+    ThreadPool(const ThreadPool &);
 
-    ThreadPool(ThreadPool&&);
+    ThreadPool(ThreadPool &&);
 
-    ThreadPool& operator=(const ThreadPool&);
+    ThreadPool &operator=(const ThreadPool &);
 
-    ThreadPool& operator=(ThreadPool&&);
+    ThreadPool &operator=(ThreadPool &&);
 
     void init();
 
@@ -161,11 +168,11 @@ private:
     std::vector<std::shared_ptr<std::atomic<bool>>> _idleFlags;
     std::vector<std::shared_ptr<std::atomic<bool>>> _initedFlags;
 
-    template<typename T>
+    template <typename T>
     class ThreadSafeQueue
     {
     public:
-        bool push(T const& value)
+        bool push(T const &value)
         {
             std::unique_lock<std::mutex> lock(this->mutex);
             this->q.push(value);
@@ -173,7 +180,7 @@ private:
         }
 
         // deletes the retrieved element, do not use for non integral types
-        bool pop(T& v)
+        bool pop(T &v)
         {
             std::unique_lock<std::mutex> lock(this->mutex);
             if (this->q.empty())
@@ -205,7 +212,7 @@ private:
     struct Task
     {
         TaskType type;
-        std::function<void(int)> *callback;
+        std::function<void(int)>* callback;
     };
 
     ThreadSafeQueue<Task> _taskQueue;

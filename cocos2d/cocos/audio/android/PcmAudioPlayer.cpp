@@ -30,14 +30,15 @@ THE SOFTWARE.
 #include "audio/android/AudioMixerController.h"
 #include "audio/android/ICallerThreadUtils.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
-PcmAudioPlayer::PcmAudioPlayer(AudioMixerController * controller, ICallerThreadUtils* callerThreadUtils)
-        : _id(-1)
-        , _track(nullptr)
-        , _playEventCallback(nullptr)
-        , _controller(controller)
-        , _callerThreadUtils(callerThreadUtils)
+PcmAudioPlayer::PcmAudioPlayer(AudioMixerController* controller, ICallerThreadUtils* callerThreadUtils)
+: _id(-1)
+, _track(nullptr)
+, _playEventCallback(nullptr)
+, _controller(controller)
+, _callerThreadUtils(callerThreadUtils)
 {
     ALOGV("PcmAudioPlayer constructor: %p", this);
 }
@@ -53,7 +54,7 @@ bool PcmAudioPlayer::prepare(const std::string &url, const PcmData &decResult)
     _url = url;
     _decResult = decResult;
 
-    _track = new (std::nothrow) Track(_decResult);
+    _track = new(std::nothrow) Track(_decResult);
 
     std::thread::id callerThreadId = _callerThreadUtils->getCallerThreadId();
 
@@ -67,10 +68,12 @@ bool PcmAudioPlayer::prepare(const std::string &url, const PcmData &decResult)
     // HOW TO FIX: If the previous state is |STOPPED| and the current state
     // is |OVER|, just skip to invoke |OVER| callback.
 
-    _track->onStateChanged = [this, callerThreadId](Track::State state) {
+    _track->onStateChanged = [this, callerThreadId](Track::State state)
+    {
         // It maybe in sub thread
         Track::State prevState = _track->getPrevState();
-        auto func = [this, state, prevState](){
+        auto func = [this, state, prevState]()
+        {
             // It's in caller's thread
             if (state == Track::State::OVER && prevState != Track::State::STOPPED)
             {

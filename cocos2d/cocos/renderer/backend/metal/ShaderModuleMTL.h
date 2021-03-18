@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include "../ShaderModule.h"
@@ -52,39 +52,54 @@ public:
      * @param stage Specify what kinds of shader to be created.
      * @param source Specify the shader source.
      */
-    ShaderModuleMTL(id<MTLDevice> mtlDevice, ShaderStage stage, const std::string& source);
+    ShaderModuleMTL(id <MTLDevice> mtlDevice, ShaderStage stage, const std::string &source);
     ~ShaderModuleMTL();
-    
+
     /**
      * Get MTLFunction object.
      * @return A MTLFunction object.
      */
-    inline id<MTLFunction> getMTLFunction() const { return _mtlFunction; }
-    
+    inline id <MTLFunction> getMTLFunction() const
+    {
+        return _mtlFunction;
+    }
+
     /**
      * Get current shader uniform informatino.
      * @return Uniform information. Key is each uniform name, Value is corresponding uniform info.
      */
-    inline const UniformInfo& getActiveUniform(int location) { return _activeUniformInfos[location]; }
+    inline const UniformInfo &getActiveUniform(int location)
+    {
+        return _activeUniformInfos[location];
+    }
 
     /**
      * Get all uniformInfos.
      * @return The uniformInfos.
      */
-    inline const std::unordered_map<std::string, UniformInfo>& getAllActiveUniformInfo() const { return _uniformInfos; }
-    
+    inline const std::unordered_map <std::string, UniformInfo> &getAllActiveUniformInfo() const
+    {
+        return _uniformInfos;
+    }
+
     /**
      * Get maximum uniform location.
      * @return Maximum uniform location.
      */
-    inline const int getMaxLocation() const { return _maxLocation; }
-    
+    inline const int getMaxLocation() const
+    {
+        return _maxLocation;
+    }
+
     /**
      * Get active attribute informations.
      * @return Active attribute informations. key is attribute name and Value is corresponding attribute info.
      */
-    inline const std::unordered_map<std::string, AttributeBindInfo> getAttributeInfo() const { return _attributeInfo; }
-    
+    inline const std::unordered_map <std::string, AttributeBindInfo> getAttributeInfo() const
+    {
+        return _attributeInfo;
+    }
+
     /**
      * Get uniform location by engine built-in uniform enum name.
      * @param name Specifies the engine built-in uniform enum name.
@@ -97,8 +112,8 @@ public:
      * @param uniform Specifies the uniform name.
      * @return The uniform location.
      */
-    int getUniformLocation(const std::string& name) const;
-    
+    int getUniformLocation(const std::string &name) const;
+
     /**
      * Get attribute location by engine built-in attribute enum name.
      * @param name Specifies the engine built-in attribute enum name.
@@ -117,21 +132,24 @@ public:
      * Get uniform buffer size in bytes that holds all the uniforms.
      * @return The uniform buffer size.
      */
-    inline std::size_t getUniformBufferSize() const { return _uniformBufferSize; }
-    
+    inline std::size_t getUniformBufferSize() const
+    {
+        return _uniformBufferSize;
+    }
+
 private:
-    void parseAttibute(id<MTLDevice> mtlDevice, glslopt_shader* shader);
-    void parseUniform(id<MTLDevice> mtlDevice, glslopt_shader* shader);
-    void parseTexture(id<MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseAttibute(id <MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseUniform(id <MTLDevice> mtlDevice, glslopt_shader* shader);
+    void parseTexture(id <MTLDevice> mtlDevice, glslopt_shader* shader);
     void setBuiltinUniformLocation();
     void setBuiltinAttributeLocation();
-    
-    id<MTLFunction> _mtlFunction = nil;
-    
-    std::unordered_map<std::string, UniformInfo> _uniformInfos;
+
+    id <MTLFunction> _mtlFunction = nil;
+
+    std::unordered_map <std::string, UniformInfo> _uniformInfos;
     std::unordered_map<int, UniformInfo> _activeUniformInfos;
-    std::unordered_map<std::string, AttributeBindInfo> _attributeInfo;
-    
+    std::unordered_map <std::string, AttributeBindInfo> _attributeInfo;
+
     int _maxLocation = -1;
     int _uniformLocation[UNIFORM_MAX];
     int _attributeLocation[ATTRIBUTE_MAX];

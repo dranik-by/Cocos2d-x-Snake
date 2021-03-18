@@ -47,10 +47,10 @@ public:
     void readFile();
 
     void writeFile();
-    void setCookieFileName(const std::string& fileName);
+    void setCookieFileName(const std::string &fileName);
 
-    const std::vector<CookiesInfo>* getCookies()const;
-    const CookiesInfo* getMatchCookie(const std::string& url) const;
+    const std::vector<CookiesInfo>* getCookies() const;
+    const CookiesInfo* getMatchCookie(const std::string &url) const;
     void updateOrAddCookie(CookiesInfo* cookie);
 
 private:

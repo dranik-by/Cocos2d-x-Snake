@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "audio/android/PcmData.h"
 #include "base/CCData.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class AudioDecoder
 {
@@ -42,7 +43,9 @@ public:
     bool start();
 
     inline PcmData getResult()
-    { return _result; };
+    {
+        return _result;
+    };
 
 protected:
     virtual bool decodeToPcm() = 0;

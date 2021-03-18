@@ -43,7 +43,7 @@ public:
      * @lua NA
      */
     virtual ~Application();
-    
+
     /**
     @brief  Callback by Director for limit FPS.
     @param interval The time, which expressed in second in second, between current frame and next.
@@ -56,30 +56,30 @@ public:
     * @lua NA
     */
     int run();
-    
+
     /**
     @brief  Get current application instance.
     @return Current application instance pointer.
     */
     static Application* getInstance();
-    
+
     /**
     @brief Get current language config
     @return Current language config
     */
     virtual LanguageType getCurrentLanguage() override;
-    
+
     /**
     @brief Get current language iso 639-1 code
     @return Current language iso 639-1 code
     */
-    virtual const char * getCurrentLanguageCode() override;
-    
+    virtual const char* getCurrentLanguageCode() override;
+
     /**
      @brief Get target platform
      */
     virtual Platform getTargetPlatform() override;
-    
+
     /**
      @brief Get application version.
      */
@@ -91,14 +91,14 @@ public:
      @return true if the resource located by the URL was successfully opened; otherwise false.
      */
     virtual bool openURL(const std::string &url) override;
-    
-    void setStartupScriptFilename(const std::string& startupScriptFile);
-    
-    const std::string& getStartupScriptFilename();
-    
+
+    void setStartupScriptFilename(const std::string &startupScriptFile);
+
+    const std::string &getStartupScriptFilename();
+
 protected:
-    static Application * sm_pSharedApplication;
-    
+    static Application* sm_pSharedApplication;
+
     long _animationInterval;  //micro second
     std::string _resourceRootPath;
     std::string _startupScriptFilename;

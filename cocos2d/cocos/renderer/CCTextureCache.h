@@ -64,7 +64,7 @@ class CC_DLL TextureCache : public Ref
 {
 public:
     // ETC1 ALPHA supports.
-    static void setETC1AlphaFileSuffix(const std::string& suffix);
+    static void setETC1AlphaFileSuffix(const std::string &suffix);
     static std::string getETC1AlphaFileSuffix();
 
 public:
@@ -103,9 +103,10 @@ public:
      @param callback A callback function would be invoked after the image is loaded.
      @since v0.8
     */
-    virtual void addImageAsync(const std::string &filepath, const std::function<void(Texture2D*)>& callback);
-    
-    void addImageAsync(const std::string &path, const std::function<void(Texture2D*)>& callback, const std::string& callbackKey );
+    virtual void addImageAsync(const std::string &filepath, const std::function<void(Texture2D * )> &callback);
+
+    void addImageAsync(const std::string &path, const std::function<void(Texture2D * )> &callback,
+                       const std::string &callbackKey);
 
     /** Unbind a specified bound image asynchronous callback.
      * In the case an object who was bound to an image asynchronous callback was destroyed before the callback is invoked,
@@ -114,7 +115,7 @@ public:
      * @since v3.1
      */
     virtual void unbindImageAsync(const std::string &filename);
-    
+
     /** Unbind all bound image asynchronous load callbacks.
      * @since v3.1
      */
@@ -126,13 +127,13 @@ public:
     * @param key The "key" parameter will be used as the "key" for the cache.
     * If "key" is nil, then a new texture will be created each time.
     */
-    Texture2D* addImage(Image *image, const std::string &key);
+    Texture2D* addImage(Image* image, const std::string &key);
 
     /** Returns an already created texture. Returns nil if the texture doesn't exist.
     @param key It's the related/absolute path of the file image.
     @since v0.99.5
     */
-    Texture2D* getTextureForKey(const std::string& key) const;
+    Texture2D* getTextureForKey(const std::string &key) const;
 
     /** Reload texture from the image file.
     * If the file image hasn't loaded before, load it.
@@ -140,7 +141,7 @@ public:
     * @param fileName It's the related/absolute path of the file image.
     * @return True if the reloading is succeed, otherwise return false.
     */
-    bool reloadTexture(const std::string& fileName);
+    bool reloadTexture(const std::string &fileName);
 
     /** Purges the dictionary of loaded textures.
     * Call this method if you receive the "Memory Warning".
@@ -195,17 +196,16 @@ public:
     *
     * @since v3.10
     */
-    void renameTextureWithKey(const std::string& srcName, const std::string& dstName);
-
+    void renameTextureWithKey(const std::string &srcName, const std::string &dstName);
 
 private:
     void addImageAsyncCallBack(float dt);
     void loadImage();
-    void parseNinePatchImage(Image* image, Texture2D* texture, const std::string& path);
+    void parseNinePatchImage(Image* image, Texture2D* texture, const std::string &path);
 public:
 protected:
     struct AsyncStruct;
-    
+
     std::thread* _loadingThread;
 
     std::deque<AsyncStruct*> _asyncStructQueue;
@@ -214,7 +214,7 @@ protected:
 
     std::mutex _requestMutex;
     std::mutex _responseMutex;
-    
+
     std::condition_variable _sleepCondition;
 
     bool _needQuit;

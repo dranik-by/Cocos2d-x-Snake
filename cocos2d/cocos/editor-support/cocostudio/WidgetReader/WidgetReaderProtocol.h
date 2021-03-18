@@ -26,35 +26,36 @@
 #ifndef __TestCpp__WidgetReaderProtocol__
 #define __TestCpp__WidgetReaderProtocol__
 
-
 #include "editor-support/cocostudio/DictionaryHelper.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
 namespace protocolbuffers
 {
-    class NodeTree;
+class NodeTree;
 }
 
 namespace cocos2d
 {
-    namespace ui
-    {
-        class Widget;
-    }
+namespace ui
+{
+class Widget;
+}
 }
 
 namespace cocostudio
 {
-    class CocoLoader;
-    struct stExpCocoNode;
-    
-    class CC_STUDIO_DLL WidgetReaderProtocol
+class CocoLoader;
+struct stExpCocoNode;
+
+class CC_STUDIO_DLL WidgetReaderProtocol
+{
+public:
+    virtual ~WidgetReaderProtocol()
     {
-    public:
-        virtual ~WidgetReaderProtocol() {};
-        virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value& options) = 0;
-        virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader,  stExpCocoNode*	pCocoNode) = 0;        
     };
+    virtual void setPropsFromJsonDictionary(cocos2d::ui::Widget* widget, const rapidjson::Value &options) = 0;
+    virtual void setPropsFromBinary(cocos2d::ui::Widget* widget, CocoLoader* cocoLoader, stExpCocoNode* pCocoNode) = 0;
+};
 }
 
 #endif /* defined(__TestCpp__WidgetReaderProtocol__) */

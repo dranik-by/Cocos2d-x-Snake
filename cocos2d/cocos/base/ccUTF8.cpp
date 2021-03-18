@@ -32,7 +32,8 @@
 
 NS_CC_BEGIN
 
-namespace StringUtils {
+namespace StringUtils
+{
 
 /*--- This a C++ universal sprintf in the future.
 **  @pitfall: The behavior of vsnprintf between VS2013 and VS2015/2017 is different
@@ -42,7 +43,7 @@ namespace StringUtils {
 */
 std::string format(const char* format, ...)
 {
-#define CC_VSNPRINTF_BUFFER_LENGTH 512
+    #define CC_VSNPRINTF_BUFFER_LENGTH 512
     va_list args;
     std::string buffer(CC_VSNPRINTF_BUFFER_LENGTH, '\0');
 
@@ -50,11 +51,14 @@ std::string format(const char* format, ...)
     int nret = vsnprintf(&buffer.front(), buffer.length() + 1, format, args);
     va_end(args);
 
-    if (nret >= 0) {
-        if ((unsigned int)nret < buffer.length()) {
+    if (nret >= 0)
+    {
+        if ((unsigned int)nret < buffer.length())
+        {
             buffer.resize(nret);
         }
-        else if ((unsigned int)nret > buffer.length()) { // VS2015/2017 or later Visual Studio Version
+        else if ((unsigned int)nret > buffer.length())
+        { // VS2015/2017 or later Visual Studio Version
             buffer.resize(nret);
 
             va_start(args, format);
@@ -65,8 +69,10 @@ std::string format(const char* format, ...)
         }
         // else equals, do nothing.
     }
-    else { // less or equal VS2013 and Unix System glibc implement.
-        do {
+    else
+    { // less or equal VS2013 and Unix System glibc implement.
+        do
+        {
             buffer.resize(buffer.length() * 3 / 2);
 
             va_start(args, format);
@@ -87,13 +93,14 @@ std::string format(const char* format, ...)
  *
  * Return value: the index of the last character that is not c.
  * */
-unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c)
+unsigned int getIndexOfLastNotChar16(const std::vector<char16_t> &str, char16_t c)
 {
     int len = static_cast<int>(str.size());
 
     int i = len - 1;
     for (; i >= 0; --i)
-        if (str[i] != c) return i;
+        if (str[i] != c)
+            return i;
 
     return i;
 }
@@ -106,7 +113,7 @@ unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t 
  *
  * Return value: the trimmed string.
  * */
-static void trimUTF16VectorFromIndex(std::vector<char16_t>& str, int index)
+static void trimUTF16VectorFromIndex(std::vector<char16_t> &str, int index)
 {
     int size = static_cast<int>(str.size());
     if (index >= size || index < 0)
@@ -114,7 +121,7 @@ static void trimUTF16VectorFromIndex(std::vector<char16_t>& str, int index)
 
     str.erase(str.begin() + index, str.begin() + size);
 }
-    
+
 /*
  * @str:    the string to trim
  * @index:    the index to start trimming from.
@@ -123,12 +130,12 @@ static void trimUTF16VectorFromIndex(std::vector<char16_t>& str, int index)
  *
  * Return value: the trimmed string.
  * */
-static void trimUTF32VectorFromIndex(std::vector<char32_t>& str, int index)
+static void trimUTF32VectorFromIndex(std::vector<char32_t> &str, int index)
 {
     int size = static_cast<int>(str.size());
     if (index >= size || index < 0)
         return;
-    
+
     str.erase(str.begin() + index, str.begin() + size);
 }
 
@@ -141,24 +148,22 @@ static void trimUTF32VectorFromIndex(std::vector<char32_t>& str, int index)
  * */
 bool isUnicodeSpace(char32_t ch)
 {
-    return  (ch >= 0x0009 && ch <= 0x000D) || ch == 0x0020 || ch == 0x0085 || ch == 0x00A0 || ch == 0x1680
-    || (ch >= 0x2000 && ch <= 0x200A) || ch == 0x2028 || ch == 0x2029 || ch == 0x202F
-    ||  ch == 0x205F || ch == 0x3000;
+    return (ch >= 0x0009 && ch <= 0x000D) || ch == 0x0020 || ch == 0x0085 || ch == 0x00A0 || ch == 0x1680 || (ch >= 0x2000 && ch <= 0x200A) || ch == 0x2028 || ch == 0x2029 || ch == 0x202F || ch == 0x205F || ch == 0x3000;
 }
 
 bool isCJKUnicode(char32_t ch)
 {
     return (ch >= 0x4E00 && ch <= 0x9FBF)   // CJK Unified Ideographs
-        || (ch >= 0x2E80 && ch <= 0x2FDF)   // CJK Radicals Supplement & Kangxi Radicals
-        || (ch >= 0x2FF0 && ch <= 0x30FF)   // Ideographic Description Characters, CJK Symbols and Punctuation & Japanese
-        || (ch >= 0x3100 && ch <= 0x31BF)   // Korean
-        || (ch >= 0xAC00 && ch <= 0xD7AF)   // Hangul Syllables
-        || (ch >= 0xF900 && ch <= 0xFAFF)   // CJK Compatibility Ideographs
-        || (ch >= 0xFE30 && ch <= 0xFE4F)   // CJK Compatibility Forms
-        || (ch >= 0x31C0 && ch <= 0x4DFF)   // Other extensions
-        || (ch >= 0x1f004 && ch <= 0x1f682);// Emoji
+    || (ch >= 0x2E80 && ch <= 0x2FDF)   // CJK Radicals Supplement & Kangxi Radicals
+    || (ch >= 0x2FF0 && ch <= 0x30FF)   // Ideographic Description Characters, CJK Symbols and Punctuation & Japanese
+    || (ch >= 0x3100 && ch <= 0x31BF)   // Korean
+    || (ch >= 0xAC00 && ch <= 0xD7AF)   // Hangul Syllables
+    || (ch >= 0xF900 && ch <= 0xFAFF)   // CJK Compatibility Ideographs
+    || (ch >= 0xFE30 && ch <= 0xFE4F)   // CJK Compatibility Forms
+    || (ch >= 0x31C0 && ch <= 0x4DFF)   // Other extensions
+    || (ch >= 0x1f004 && ch <= 0x1f682);// Emoji
 }
-    
+
 bool isUnicodeNonBreaking(char32_t ch)
 {
     return ch == 0x00A0   // Non-Breaking Space
@@ -166,12 +171,12 @@ bool isUnicodeNonBreaking(char32_t ch)
     || ch == 0x2007       // Figure Space
     || ch == 0x2060;      // Word Joiner
 }
-    
-void trimUTF16Vector(std::vector<char16_t>& str)
+
+void trimUTF16Vector(std::vector<char16_t> &str)
 {
     int len = static_cast<int>(str.size());
 
-    if ( len <= 0 )
+    if (len <= 0)
         return;
 
     int last_index = len - 1;
@@ -190,16 +195,16 @@ void trimUTF16Vector(std::vector<char16_t>& str)
         trimUTF16VectorFromIndex(str, last_index);
     }
 }
-    
-void trimUTF32Vector(std::vector<char32_t>& str)
+
+void trimUTF32Vector(std::vector<char32_t> &str)
 {
     int len = static_cast<int>(str.size());
-    
-    if ( len <= 0 )
+
+    if (len <= 0)
         return;
-    
+
     int last_index = len - 1;
-    
+
     // Only start trimming if the last character is whitespace..
     if (isUnicodeSpace(str[last_index]))
     {
@@ -210,36 +215,36 @@ void trimUTF32Vector(std::vector<char32_t>& str)
             else
                 break;
         }
-        
+
         trimUTF32VectorFromIndex(str, last_index);
     }
 }
 
-
 template <typename T>
-struct ConvertTrait {
+struct ConvertTrait
+{
     typedef T ArgType;
 };
 template <>
-struct ConvertTrait<char> {
+struct ConvertTrait<char>
+{
     typedef UTF8 ArgType;
 };
 template <>
-struct ConvertTrait<char16_t> {
+struct ConvertTrait<char16_t>
+{
     typedef UTF16 ArgType;
 };
 template <>
-struct ConvertTrait<char32_t> {
+struct ConvertTrait<char32_t>
+{
     typedef UTF32 ArgType;
 };
 
 template <typename From, typename To, typename FromTrait = ConvertTrait<From>, typename ToTrait = ConvertTrait<To>>
-bool utfConvert(
-    const std::basic_string<From>& from, std::basic_string<To>& to,
-    ConversionResult(*cvtfunc)(const typename FromTrait::ArgType**, const typename FromTrait::ArgType*,
-        typename ToTrait::ArgType**, typename ToTrait::ArgType*,
-        ConversionFlags)
-    )
+bool utfConvert(const std::basic_string<From> &from, std::basic_string<To> &to,
+                ConversionResult(* cvtfunc)(const typename FromTrait::ArgType**, const typename FromTrait::ArgType*,
+                                            typename ToTrait::ArgType**, typename ToTrait::ArgType*, ConversionFlags))
 {
     static_assert(sizeof(From) == sizeof(typename FromTrait::ArgType), "Error size mismatched");
     static_assert(sizeof(To) == sizeof(typename ToTrait::ArgType), "Error size mismatched");
@@ -261,7 +266,6 @@ bool utfConvert(
     auto inbeg = reinterpret_cast<const typename FromTrait::ArgType*>(&from[0]);
     auto inend = inbeg + from.length();
 
-
     auto outbeg = reinterpret_cast<typename ToTrait::ArgType*>(&working[0]);
     auto outend = outbeg + working.length();
     auto r = cvtfunc(&inbeg, inend, &outbeg, outend, strictConversion);
@@ -274,38 +278,37 @@ bool utfConvert(
     return true;
 };
 
-
-bool UTF8ToUTF16(const std::string& utf8, std::u16string& outUtf16)
+bool UTF8ToUTF16(const std::string &utf8, std::u16string &outUtf16)
 {
     return utfConvert(utf8, outUtf16, ConvertUTF8toUTF16);
 }
 
-bool UTF8ToUTF32(const std::string& utf8, std::u32string& outUtf32)
+bool UTF8ToUTF32(const std::string &utf8, std::u32string &outUtf32)
 {
     return utfConvert(utf8, outUtf32, ConvertUTF8toUTF32);
 }
 
-bool UTF16ToUTF8(const std::u16string& utf16, std::string& outUtf8)
+bool UTF16ToUTF8(const std::u16string &utf16, std::string &outUtf8)
 {
     return utfConvert(utf16, outUtf8, ConvertUTF16toUTF8);
 }
-    
-bool UTF16ToUTF32(const std::u16string& utf16, std::u32string& outUtf32)
+
+bool UTF16ToUTF32(const std::u16string &utf16, std::u32string &outUtf32)
 {
     return utfConvert(utf16, outUtf32, ConvertUTF16toUTF32);
 }
 
-bool UTF32ToUTF8(const std::u32string& utf32, std::string& outUtf8)
+bool UTF32ToUTF8(const std::u32string &utf32, std::string &outUtf8)
 {
     return utfConvert(utf32, outUtf8, ConvertUTF32toUTF8);
 }
 
-bool UTF32ToUTF16(const std::u32string& utf32, std::u16string& outUtf16)
+bool UTF32ToUTF16(const std::u32string &utf32, std::u16string &outUtf16)
 {
     return utfConvert(utf32, outUtf16, ConvertUTF32toUTF16);
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 std::string getStringUTFCharsJNI(JNIEnv* env, jstring srcjStr, bool* ret)
 {
     std::string utf8Str;
@@ -355,23 +358,22 @@ jstring newStringUTFJNI(JNIEnv* env, const std::string& utf8Str, bool* ret)
 }
 #endif
 
-std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16)
+std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string &utf16)
 {
     return std::vector<char16_t>(utf16.begin(), utf16.end());
 }
 
-long getCharacterCountInUTF8String(const std::string& utf8)
+long getCharacterCountInUTF8String(const std::string &utf8)
 {
     return getUTF8StringLength((const UTF8*)utf8.c_str());
 }
-
 
 StringUTF8::StringUTF8()
 {
 
 }
 
-StringUTF8::StringUTF8(const std::string& newStr)
+StringUTF8::StringUTF8(const std::string &newStr)
 {
     replace(newStr);
 }
@@ -386,7 +388,7 @@ std::size_t StringUTF8::length() const
     return _str.size();
 }
 
-void StringUTF8::replace(const std::string& newStr)
+void StringUTF8::replace(const std::string &newStr)
 {
     _str.clear();
     if (!newStr.empty())
@@ -455,14 +457,14 @@ bool StringUTF8::deleteChar(std::size_t pos)
     }
 }
 
-bool StringUTF8::insert(std::size_t pos, const std::string& insertStr)
+bool StringUTF8::insert(std::size_t pos, const std::string &insertStr)
 {
     StringUTF8 utf8(insertStr);
 
     return insert(pos, utf8);
 }
 
-bool StringUTF8::insert(std::size_t pos, const StringUTF8& insertStr)
+bool StringUTF8::insert(std::size_t pos, const StringUTF8 &insertStr)
 {
     if (pos <= _str.size())
     {

@@ -22,21 +22,21 @@
 
 #if defined(__MINGW32__)
 
-#include <errno.h>
-#include <assert.h>
-#include <WS2tcpip.h>
-#include <Winsock2.h>
+    #include <errno.h>
+    #include <assert.h>
+    #include <WS2tcpip.h>
+    #include <Winsock2.h>
 
-#define ERRNO         ((int)GetLastError())
-#define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
+    #define ERRNO         ((int)GetLastError())
+    #define SET_ERRNO(x)  (SetLastError((DWORD)(x)))
 
-#include "platform/win32/inet_pton_mingw.h"
+    #include "platform/win32/inet_pton_mingw.h"
 
-#define ENABLE_IPV6
+    #define ENABLE_IPV6
 
-#define IN6ADDRSZ       16
-#define INADDRSZ         4
-#define INT16SZ          2
+    #define IN6ADDRSZ       16
+    #define INADDRSZ         4
+    #define INT16SZ          2
 
 /*
  * WARNING: Don't even consider trying to compile this on a system where
@@ -70,10 +70,10 @@ int inet_pton(int af, const char *src, void *dst)
   switch (af) {
   case AF_INET:
     return (inet_pton4(src, (unsigned char *)dst));
-#ifdef ENABLE_IPV6
+    #ifdef ENABLE_IPV6
   case AF_INET6:
     return (inet_pton6(src, (unsigned char *)dst));
-#endif
+    #endif
   default:
     SET_ERRNO(EAFNOSUPPORT);
     return (-1);

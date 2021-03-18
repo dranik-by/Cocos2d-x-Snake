@@ -28,12 +28,13 @@ THE SOFTWARE.
 
 #include <string>
 
-typedef void (*EditTextCallback)(const char* text, void* ctx);
+typedef void (* EditTextCallback)(const char* text, void* ctx);
 
-extern const char * getApkPath();
+extern const char* getApkPath();
 extern std::string getPackageNameJNI();
 extern int getObbAssetFileDescriptorJNI(const char* path, long* startOffset, long* size);
-extern void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharset, char* dst, const char* newCharset);
+extern void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharset, char* dst,
+                                  const char* newCharset);
 
 extern int getDeviceSampleRate();
 extern int getDeviceAudioBufferSizeInFrames();

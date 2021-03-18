@@ -32,21 +32,25 @@
 
 USING_NS_CC;
 
-namespace spine {
+namespace spine
+{
 
-AttachmentVertices::AttachmentVertices (Texture2D* texture, int verticesCount, unsigned short* triangles, int trianglesCount) {
-	_texture = texture;
+AttachmentVertices::AttachmentVertices(Texture2D* texture, int verticesCount, unsigned short* triangles,
+                                       int trianglesCount)
+{
+    _texture = texture;
 
-	_triangles = new TrianglesCommand::Triangles();
-	_triangles->verts = new V3F_C4B_T2F[verticesCount];
-	_triangles->vertCount = verticesCount;
-	_triangles->indices = triangles;
-	_triangles->indexCount = trianglesCount;
+    _triangles = new TrianglesCommand::Triangles();
+    _triangles->verts = new V3F_C4B_T2F[verticesCount];
+    _triangles->vertCount = verticesCount;
+    _triangles->indices = triangles;
+    _triangles->indexCount = trianglesCount;
 }
 
-AttachmentVertices::~AttachmentVertices () {
-	delete [] _triangles->verts;
-	delete _triangles;
+AttachmentVertices::~AttachmentVertices()
+{
+    delete[] _triangles->verts;
+    delete _triangles;
 }
 
 }

@@ -61,9 +61,9 @@ class CC_DLL CaptureScreenCallbackCommand : public RenderCommand
 {
 public:
     CaptureScreenCallbackCommand();
-    
+
     void init(float globalZOrder);
-    
+
     /**
      * A callback function to do with the image after capture from the color buffer.
      */

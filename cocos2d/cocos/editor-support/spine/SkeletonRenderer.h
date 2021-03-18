@@ -34,116 +34,119 @@
 #include <spine/spine.h>
 #include "cocos2d.h"
 
-namespace spine {
+namespace spine
+{
 
 class AttachmentVertices;
 
 /* Draws a skeleton. */
-class SkeletonRenderer: public cocos2d::Node, public cocos2d::BlendProtocol {
+class SkeletonRenderer : public cocos2d::Node, public cocos2d::BlendProtocol
+{
 public:
-	CREATE_FUNC(SkeletonRenderer);
-	static SkeletonRenderer* createWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	static SkeletonRenderer* createWithFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+    CREATE_FUNC(SkeletonRenderer);
+    static SkeletonRenderer* createWithData(spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+    static SkeletonRenderer* createWithFile(const std::string &skeletonDataFile, spAtlas* atlas, float scale = 1);
+    static SkeletonRenderer* createWithFile(const std::string &skeletonDataFile, const std::string &atlasFile,
+                                            float scale = 1);
 
-	virtual void update (float deltaTime) override;
-	virtual void draw (cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags) override;
-    virtual void drawDebug (cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t transformFlags);
-	virtual cocos2d::Rect getBoundingBox () const override;
-	virtual void onEnter () override;
-	virtual void onExit () override;
+    virtual void update(float deltaTime) override;
+    virtual void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags) override;
+    virtual void drawDebug(cocos2d::Renderer* renderer, const cocos2d::Mat4 &transform, uint32_t transformFlags);
+    virtual cocos2d::Rect getBoundingBox() const override;
+    virtual void onEnter() override;
+    virtual void onExit() override;
 
-	spSkeleton* getSkeleton();
+    spSkeleton* getSkeleton();
 
-	void setTimeScale(float scale);
-	float getTimeScale() const;
+    void setTimeScale(float scale);
+    float getTimeScale() const;
 
-	/*  */
-	void setDebugSlotsEnabled(bool enabled);
-	bool getDebugSlotsEnabled() const;
+    /*  */
+    void setDebugSlotsEnabled(bool enabled);
+    bool getDebugSlotsEnabled() const;
 
-	void setDebugBonesEnabled(bool enabled);
-	bool getDebugBonesEnabled() const;
-	
-	void setDebugMeshesEnabled(bool enabled);
-	bool getDebugMeshesEnabled() const;
+    void setDebugBonesEnabled(bool enabled);
+    bool getDebugBonesEnabled() const;
 
-	// --- Convenience methods for common Skeleton_* functions.
-	void updateWorldTransform ();
+    void setDebugMeshesEnabled(bool enabled);
+    bool getDebugMeshesEnabled() const;
 
-	void setToSetupPose ();
-	void setBonesToSetupPose ();
-	void setSlotsToSetupPose ();
+    // --- Convenience methods for common Skeleton_* functions.
+    void updateWorldTransform();
 
-	/* Returns 0 if the bone was not found. */
-	spBone* findBone (const std::string& boneName) const;
-	/* Returns 0 if the slot was not found. */
-	spSlot* findSlot (const std::string& slotName) const;
-	
-	/* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
-	 * attached if the corresponding attachment from the old skin was attached. Returns false if the skin was not found.
-	 * @param skin May be empty string ("") for no skin.*/
-	bool setSkin (const std::string& skinName);
-	/** @param skin May be 0 for no skin.*/
-	bool setSkin (const char* skinName);
-	
-	/* Returns 0 if the slot or attachment was not found. */
-	spAttachment* getAttachment (const std::string& slotName, const std::string& attachmentName) const;
-	/* Returns false if the slot or attachment was not found.
-	 * @param attachmentName May be empty string ("") for no attachment. */
-	bool setAttachment (const std::string& slotName, const std::string& attachmentName);
-	/* @param attachmentName May be 0 for no attachment. */
-	bool setAttachment (const std::string& slotName, const char* attachmentName);
-	
-	/* Enables/disables two color tinting for this instance. May break batching */
-	void setTwoColorTint(bool enabled);
-	/* Whether two color tinting is enabled */
-	bool isTwoColorTint();
-	
-	/* Sets the vertex effect to be used, set to 0 to disable vertex effects */
-	void setVertexEffect(spVertexEffect* effect);
+    void setToSetupPose();
+    void setBonesToSetupPose();
+    void setSlotsToSetupPose();
+
+    /* Returns 0 if the bone was not found. */
+    spBone* findBone(const std::string &boneName) const;
+    /* Returns 0 if the slot was not found. */
+    spSlot* findSlot(const std::string &slotName) const;
+
+    /* Sets the skin used to look up attachments not found in the SkeletonData defaultSkin. Attachments from the new skin are
+     * attached if the corresponding attachment from the old skin was attached. Returns false if the skin was not found.
+     * @param skin May be empty string ("") for no skin.*/
+    bool setSkin(const std::string &skinName);
+    /** @param skin May be 0 for no skin.*/
+    bool setSkin(const char* skinName);
+
+    /* Returns 0 if the slot or attachment was not found. */
+    spAttachment* getAttachment(const std::string &slotName, const std::string &attachmentName) const;
+    /* Returns false if the slot or attachment was not found.
+     * @param attachmentName May be empty string ("") for no attachment. */
+    bool setAttachment(const std::string &slotName, const std::string &attachmentName);
+    /* @param attachmentName May be 0 for no attachment. */
+    bool setAttachment(const std::string &slotName, const char* attachmentName);
+
+    /* Enables/disables two color tinting for this instance. May break batching */
+    void setTwoColorTint(bool enabled);
+    /* Whether two color tinting is enabled */
+    bool isTwoColorTint();
+
+    /* Sets the vertex effect to be used, set to 0 to disable vertex effects */
+    void setVertexEffect(spVertexEffect* effect);
 
     // --- BlendProtocol
-    virtual void setBlendFunc (const cocos2d::BlendFunc& blendFunc)override;
-    virtual const cocos2d::BlendFunc& getBlendFunc () const override;
-    virtual void setOpacityModifyRGB (bool value) override;
-    virtual bool isOpacityModifyRGB () const override;
+    virtual void setBlendFunc(const cocos2d::BlendFunc &blendFunc) override;
+    virtual const cocos2d::BlendFunc &getBlendFunc() const override;
+    virtual void setOpacityModifyRGB(bool value) override;
+    virtual bool isOpacityModifyRGB() const override;
 
 CC_CONSTRUCTOR_ACCESS:
-	SkeletonRenderer ();
-	SkeletonRenderer (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	SkeletonRenderer (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	SkeletonRenderer (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+    SkeletonRenderer();
+    SkeletonRenderer(spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+    SkeletonRenderer(const std::string &skeletonDataFile, spAtlas* atlas, float scale = 1);
+    SkeletonRenderer(const std::string &skeletonDataFile, const std::string &atlasFile, float scale = 1);
 
-	virtual ~SkeletonRenderer ();
+    virtual ~SkeletonRenderer();
 
-	void initWithData (spSkeletonData* skeletonData, bool ownsSkeletonData = false);
-	void initWithJsonFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-	void initWithJsonFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
-    void initWithBinaryFile (const std::string& skeletonDataFile, spAtlas* atlas, float scale = 1);
-    void initWithBinaryFile (const std::string& skeletonDataFile, const std::string& atlasFile, float scale = 1);
+    void initWithData(spSkeletonData* skeletonData, bool ownsSkeletonData = false);
+    void initWithJsonFile(const std::string &skeletonDataFile, spAtlas* atlas, float scale = 1);
+    void initWithJsonFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale = 1);
+    void initWithBinaryFile(const std::string &skeletonDataFile, spAtlas* atlas, float scale = 1);
+    void initWithBinaryFile(const std::string &skeletonDataFile, const std::string &atlasFile, float scale = 1);
 
-	virtual void initialize ();
+    virtual void initialize();
 
 protected:
-	void setSkeletonData (spSkeletonData* skeletonData, bool ownsSkeletonData);
-	virtual AttachmentVertices* getAttachmentVertices (spRegionAttachment* attachment) const;
-	virtual AttachmentVertices* getAttachmentVertices (spMeshAttachment* attachment) const;	
+    void setSkeletonData(spSkeletonData* skeletonData, bool ownsSkeletonData);
+    virtual AttachmentVertices* getAttachmentVertices(spRegionAttachment* attachment) const;
+    virtual AttachmentVertices* getAttachmentVertices(spMeshAttachment* attachment) const;
 
-	bool _ownsSkeletonData;
-	spAtlas* _atlas;
-	spAttachmentLoader* _attachmentLoader;
-	cocos2d::CustomCommand _debugCommand;
-	cocos2d::BlendFunc _blendFunc;
-	float* _worldVertices;
-	bool _premultipliedAlpha;
-	spSkeleton* _skeleton;
-	float _timeScale;
-	bool _debugSlots;
-	bool _debugBones;
-	bool _debugMeshes;
-	spSkeletonClipping* _clipper;
-	spVertexEffect* _effect;
+    bool _ownsSkeletonData;
+    spAtlas* _atlas;
+    spAttachmentLoader* _attachmentLoader;
+    cocos2d::CustomCommand _debugCommand;
+    cocos2d::BlendFunc _blendFunc;
+    float* _worldVertices;
+    bool _premultipliedAlpha;
+    spSkeleton* _skeleton;
+    float _timeScale;
+    bool _debugSlots;
+    bool _debugBones;
+    bool _debugMeshes;
+    spSkeletonClipping* _clipper;
+    spVertexEffect* _effect;
 };
 
 }

@@ -33,7 +33,8 @@ THE SOFTWARE.
 #include "base/CCConsole.h"
 #include "mpg123.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 static bool __mp3Inited = false;
 
@@ -52,11 +53,11 @@ AudioDecoder* AudioDecoderManager::createDecoder(const char* path)
     std::string suffix = FileUtils::getInstance()->getFileExtension(path);
     if (suffix == ".ogg")
     {
-        return new (std::nothrow) AudioDecoderOgg();
+        return new(std::nothrow) AudioDecoderOgg();
     }
     else if (suffix == ".mp3")
     {
-        return new (std::nothrow) AudioDecoderMp3();
+        return new(std::nothrow) AudioDecoderMp3();
     }
 
     return nullptr;

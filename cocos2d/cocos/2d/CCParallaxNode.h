@@ -53,7 +53,7 @@ public:
      *
      * @return An autoreleased ParallaxNode object.
      */
-    static ParallaxNode * create();
+    static ParallaxNode* create();
 
     // prevents compiler warning: "Included function hides overloaded virtual functions"
     using Node::addChild;
@@ -65,28 +65,39 @@ public:
      * @param parallaxRatio A given parallax ratio.
      * @param positionOffset A given position offset.
      */
-    void addChild(Node * child, int z, const Vec2& parallaxRatio, const Vec2& positionOffset);
+    void addChild(Node* child, int z, const Vec2 &parallaxRatio, const Vec2 &positionOffset);
 
     /** Sets an array of layers for the Parallax node.
      *
      * @param parallaxArray An array of layers for the Parallax node.
      */
-    void setParallaxArray( struct _ccArray *parallaxArray) { _parallaxArray = parallaxArray; }
+    void setParallaxArray(struct _ccArray* parallaxArray)
+    {
+        _parallaxArray = parallaxArray;
+    }
+
     /** Returns the array of layers of the Parallax node.
      *
      * @return An array of layers for the Parallax node.
      */
-    struct _ccArray* getParallaxArray() { return _parallaxArray; }
-    const struct _ccArray* getParallaxArray() const { return _parallaxArray; }
+    struct _ccArray* getParallaxArray()
+    {
+        return _parallaxArray;
+    }
+
+    const struct _ccArray* getParallaxArray() const
+    {
+        return _parallaxArray;
+    }
 
     //
     // Overrides
     //
-    virtual void addChild(Node * child, int zOrder, int tag) override;
-    virtual void addChild(Node * child, int zOrder, const std::string &name) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string &name) override;
     virtual void removeChild(Node* child, bool cleanup) override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
-    virtual void visit(Renderer *renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
+    virtual void visit(Renderer* renderer, const Mat4 &parentTransform, uint32_t parentFlags) override;
 
 CC_CONSTRUCTOR_ACCESS:
     /** Adds a child to the container with a z-order, a parallax ratio and a position offset
@@ -104,11 +115,10 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     Vec2 absolutePosition();
 
-    Vec2    _lastPosition;
+    Vec2 _lastPosition;
     struct _ccArray* _parallaxArray;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);
+private: CC_DISALLOW_COPY_AND_ASSIGN(ParallaxNode);
 };
 
 // end of _2d group

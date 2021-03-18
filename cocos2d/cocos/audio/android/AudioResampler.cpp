@@ -39,17 +39,22 @@
 
 
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 // ----------------------------------------------------------------------------
 
-class AudioResamplerOrder1 : public AudioResampler {
+class AudioResamplerOrder1 : public AudioResampler
+{
 public:
-    AudioResamplerOrder1(int inChannelCount, int32_t sampleRate) :
-        AudioResampler(inChannelCount, sampleRate, LOW_QUALITY), mX0L(0), mX0R(0) {
+    AudioResamplerOrder1(int inChannelCount, int32_t sampleRate)
+    : AudioResampler(inChannelCount, sampleRate, LOW_QUALITY)
+    , mX0L(0)
+    , mX0R(0)
+    {
     }
-    virtual size_t resample(int32_t* out, size_t outFrameCount,
-            AudioBufferProvider* provider);
+
+    virtual size_t resample(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider);
 private:
     // number of bits used in interpolation multiply - 15 bits avoids overflow
     static const int kNumInterpBits = 15;
@@ -57,28 +62,33 @@ private:
     // bits to shift the phase fraction down to avoid overflow
     static const int kPreInterpShift = kNumPhaseBits - kNumInterpBits;
 
-    void init() {}
-    size_t resampleMono16(int32_t* out, size_t outFrameCount,
-            AudioBufferProvider* provider);
-    size_t resampleStereo16(int32_t* out, size_t outFrameCount,
-            AudioBufferProvider* provider);
-#ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
+    void init()
+    {
+    }
+
+    size_t resampleMono16(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider);
+    size_t resampleStereo16(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider);
+    #ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
     void AsmMono16Loop(int16_t *in, int32_t* maxOutPt, int32_t maxInIdx,
             size_t &outputIndex, int32_t* out, size_t &inputIndex, int32_t vl, int32_t vr,
             uint32_t &phaseFraction, uint32_t phaseIncrement);
     void AsmStereo16Loop(int16_t *in, int32_t* maxOutPt, int32_t maxInIdx,
             size_t &outputIndex, int32_t* out, size_t &inputIndex, int32_t vl, int32_t vr,
             uint32_t &phaseFraction, uint32_t phaseIncrement);
-#endif  // ASM_ARM_RESAMP1
+    #endif  // ASM_ARM_RESAMP1
 
-    static inline int32_t Interp(int32_t x0, int32_t x1, uint32_t f) {
+    static inline int32_t Interp(int32_t x0, int32_t x1, uint32_t f)
+    {
         return x0 + (((x1 - x0) * (int32_t)(f >> kPreInterpShift)) >> kNumInterpBits);
     }
-    static inline void Advance(size_t* index, uint32_t* frac, uint32_t inc) {
+
+    static inline void Advance(size_t* index, uint32_t* frac, uint32_t inc)
+    {
         *frac += inc;
         *index += (size_t)(*frac >> kNumPhaseBits);
         *frac &= kPhaseMask;
     }
+
     int mX0L;
     int mX0R;
 };
@@ -88,15 +98,16 @@ const double AudioResampler::kPhaseMultiplier = 1L << AudioResampler::kNumPhaseB
 
 bool AudioResampler::qualityIsSupported(src_quality quality)
 {
-    switch (quality) {
-    case DEFAULT_QUALITY:
-    case LOW_QUALITY:
-    case MED_QUALITY:
-    case HIGH_QUALITY:
-    case VERY_HIGH_QUALITY:
-        return true;
-    default:
-        return false;
+    switch (quality)
+    {
+        case DEFAULT_QUALITY:
+        case LOW_QUALITY:
+        case MED_QUALITY:
+        case HIGH_QUALITY:
+        case VERY_HIGH_QUALITY:
+            return true;
+        default:
+            return false;
     }
 }
 
@@ -119,23 +130,24 @@ void AudioResampler::init_routine()
 
 uint32_t AudioResampler::qualityMHz(src_quality quality)
 {
-    switch (quality) {
-    default:
-    case DEFAULT_QUALITY:
-    case LOW_QUALITY:
-        return 3;
-    case MED_QUALITY:
-        return 6;
-    case HIGH_QUALITY:
-        return 20;
-    case VERY_HIGH_QUALITY:
-        return 34;
-//    case DYN_LOW_QUALITY:
-//        return 4;
-//    case DYN_MED_QUALITY:
-//        return 6;
-//    case DYN_HIGH_QUALITY:
-//        return 12;
+    switch (quality)
+    {
+        default:
+        case DEFAULT_QUALITY:
+        case LOW_QUALITY:
+            return 3;
+        case MED_QUALITY:
+            return 6;
+        case HIGH_QUALITY:
+            return 20;
+        case VERY_HIGH_QUALITY:
+            return 34;
+            //    case DYN_LOW_QUALITY:
+            //        return 4;
+            //    case DYN_MED_QUALITY:
+            //        return 6;
+            //    case DYN_HIGH_QUALITY:
+            //        return 12;
     }
 }
 
@@ -143,19 +155,24 @@ static const uint32_t maxMHz = 130; // an arbitrary number that permits 3 VHQ, s
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static uint32_t currentMHz = 0;
 
-AudioResampler* AudioResampler::create(audio_format_t format, int inChannelCount,
-        int32_t sampleRate, src_quality quality) {
+AudioResampler* AudioResampler::create(audio_format_t format, int inChannelCount, int32_t sampleRate,
+                                       src_quality quality)
+{
 
     bool atFinalQuality;
-    if (quality == DEFAULT_QUALITY) {
+    if (quality == DEFAULT_QUALITY)
+    {
         // read the resampler default quality property the first time it is needed
         int ok = pthread_once(&once_control, init_routine);
-        if (ok != 0) {
+        if (ok != 0)
+        {
             ALOGE("%s pthread_once failed: %d", __func__, ok);
         }
         quality = defaultQuality;
         atFinalQuality = false;
-    } else {
+    }
+    else
+    {
         atFinalQuality = true;
     }
 
@@ -165,77 +182,82 @@ AudioResampler* AudioResampler::create(audio_format_t format, int inChannelCount
      * due to estimated CPU load of having too many active resamplers
      * (the code below the if).
      */
-    if (quality == DEFAULT_QUALITY) {
-//cjh        quality = DYN_MED_QUALITY;
+    if (quality == DEFAULT_QUALITY)
+    {
+        //cjh        quality = DYN_MED_QUALITY;
     }
 
     // naive implementation of CPU load throttling doesn't account for whether resampler is active
     pthread_mutex_lock(&mutex);
-    for (;;) {
+    for (;;)
+    {
         uint32_t deltaMHz = qualityMHz(quality);
         uint32_t newMHz = currentMHz + deltaMHz;
-        if ((qualityIsSupported(quality) && newMHz <= maxMHz) || atFinalQuality) {
-            ALOGV("resampler load %u -> %u MHz due to delta +%u MHz from quality %d",
-                    currentMHz, newMHz, deltaMHz, quality);
+        if ((qualityIsSupported(quality) && newMHz <= maxMHz) || atFinalQuality)
+        {
+            ALOGV("resampler load %u -> %u MHz due to delta +%u MHz from quality %d", currentMHz, newMHz, deltaMHz,
+                  quality);
             currentMHz = newMHz;
             break;
         }
         // not enough CPU available for proposed quality level, so try next lowest level
-        switch (quality) {
-        default:
-        case LOW_QUALITY:
-            atFinalQuality = true;
-            break;
-        case MED_QUALITY:
-            quality = LOW_QUALITY;
-            break;
-        case HIGH_QUALITY:
-            quality = MED_QUALITY;
-            break;
-        case VERY_HIGH_QUALITY:
-            quality = HIGH_QUALITY;
-            break;
-//        case DYN_LOW_QUALITY:
-//            atFinalQuality = true;
-//            break;
-//        case DYN_MED_QUALITY:
-//            quality = DYN_LOW_QUALITY;
-//            break;
-//        case DYN_HIGH_QUALITY:
-//            quality = DYN_MED_QUALITY;
-//            break;
+        switch (quality)
+        {
+            default:
+            case LOW_QUALITY:
+                atFinalQuality = true;
+                break;
+            case MED_QUALITY:
+                quality = LOW_QUALITY;
+                break;
+            case HIGH_QUALITY:
+                quality = MED_QUALITY;
+                break;
+            case VERY_HIGH_QUALITY:
+                quality = HIGH_QUALITY;
+                break;
+                //        case DYN_LOW_QUALITY:
+                //            atFinalQuality = true;
+                //            break;
+                //        case DYN_MED_QUALITY:
+                //            quality = DYN_LOW_QUALITY;
+                //            break;
+                //        case DYN_HIGH_QUALITY:
+                //            quality = DYN_MED_QUALITY;
+                //            break;
         }
     }
     pthread_mutex_unlock(&mutex);
 
     AudioResampler* resampler;
 
-    switch (quality) {
-    default:
-    case LOW_QUALITY:
-        ALOGV("Create linear Resampler");
-        LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
-        resampler = new (std::nothrow) AudioResamplerOrder1(inChannelCount, sampleRate);
-        break;
-    case MED_QUALITY:
-        ALOGV("Create cubic Resampler");
-        LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
-        resampler = new (std::nothrow) AudioResamplerCubic(inChannelCount, sampleRate);
-        break;
-    case HIGH_QUALITY:
-        ALOGV("Create HIGH_QUALITY sinc Resampler");
-        LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
-        ALOG_ASSERT(false, "HIGH_QUALITY isn't supported");
-        // Cocos2d-x only uses MED_QUALITY, so we could remove Sinc relative files
-//        resampler = new (std::nothrow) AudioResamplerSinc(inChannelCount, sampleRate);
-        break;
-    case VERY_HIGH_QUALITY:
-        ALOGV("Create VERY_HIGH_QUALITY sinc Resampler = %d", quality);
-        LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
-        // Cocos2d-x only uses MED_QUALITY, so we could remove Sinc relative files
-//        resampler = new (std::nothrow) AudioResamplerSinc(inChannelCount, sampleRate, quality);
-        ALOG_ASSERT(false, "VERY_HIGH_QUALITY isn't supported");
-        break;
+    switch (quality)
+    {
+        default:
+        case LOW_QUALITY:
+            ALOGV("Create linear Resampler");
+            LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
+            resampler = new(std::nothrow) AudioResamplerOrder1(inChannelCount, sampleRate);
+            break;
+        case MED_QUALITY:
+            ALOGV("Create cubic Resampler");
+            LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
+            resampler = new(std::nothrow) AudioResamplerCubic(inChannelCount, sampleRate);
+            break;
+        case HIGH_QUALITY:
+            ALOGV("Create HIGH_QUALITY sinc Resampler");
+            LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
+            ALOG_ASSERT(false, "HIGH_QUALITY isn't supported");
+            // Cocos2d-x only uses MED_QUALITY, so we could remove Sinc relative files
+            //        resampler = new (std::nothrow) AudioResamplerSinc(inChannelCount, sampleRate);
+            break;
+        case VERY_HIGH_QUALITY:
+            ALOGV("Create VERY_HIGH_QUALITY sinc Resampler = %d", quality);
+            LOG_ALWAYS_FATAL_IF(format != AUDIO_FORMAT_PCM_16_BIT, "invalid pcm format");
+            // Cocos2d-x only uses MED_QUALITY, so we could remove Sinc relative files
+            //        resampler = new (std::nothrow) AudioResamplerSinc(inChannelCount, sampleRate, quality);
+            ALOG_ASSERT(false, "VERY_HIGH_QUALITY isn't supported");
+            break;
     }
 
     // initialize resampler
@@ -243,20 +265,24 @@ AudioResampler* AudioResampler::create(audio_format_t format, int inChannelCount
     return resampler;
 }
 
-AudioResampler::AudioResampler(int inChannelCount,
-        int32_t sampleRate, src_quality quality) :
-        mChannelCount(inChannelCount),
-        mSampleRate(sampleRate), mInSampleRate(sampleRate), mInputIndex(0),
-        mPhaseFraction(0), mLocalTimeFreq(0),
-        mPTS(AudioBufferProvider::kInvalidPTS), mQuality(quality) {
+AudioResampler::AudioResampler(int inChannelCount, int32_t sampleRate, src_quality quality)
+: mChannelCount(inChannelCount)
+, mSampleRate(sampleRate)
+, mInSampleRate(sampleRate)
+, mInputIndex(0)
+, mPhaseFraction(0)
+, mLocalTimeFreq(0)
+, mPTS(AudioBufferProvider::kInvalidPTS)
+, mQuality(quality)
+{
 
     const int maxChannels = 2;//cjh quality < DYN_LOW_QUALITY ? 2 : 8;
-    if (inChannelCount < 1
-            || inChannelCount > maxChannels) {
-        LOG_ALWAYS_FATAL("Unsupported sample format %d quality %d channels",
-                quality, inChannelCount);
+    if (inChannelCount < 1 || inChannelCount > maxChannels)
+    {
+        LOG_ALWAYS_FATAL("Unsupported sample format %d quality %d channels", quality, inChannelCount);
     }
-    if (sampleRate <= 0) {
+    if (sampleRate <= 0)
+    {
         LOG_ALWAYS_FATAL("Unsupported sample rate %d Hz", sampleRate);
     }
 
@@ -265,24 +291,26 @@ AudioResampler::AudioResampler(int inChannelCount,
     mBuffer.frameCount = 0;
 }
 
-AudioResampler::~AudioResampler() {
+AudioResampler::~AudioResampler()
+{
     pthread_mutex_lock(&mutex);
     src_quality quality = getQuality();
     uint32_t deltaMHz = qualityMHz(quality);
     int32_t newMHz = currentMHz - deltaMHz;
-    ALOGV("resampler load %u -> %d MHz due to delta -%u MHz from quality %d",
-            currentMHz, newMHz, deltaMHz, quality);
+    ALOGV("resampler load %u -> %d MHz due to delta -%u MHz from quality %d", currentMHz, newMHz, deltaMHz, quality);
     LOG_ALWAYS_FATAL_IF(newMHz < 0, "negative resampler load %d MHz", newMHz);
     currentMHz = newMHz;
     pthread_mutex_unlock(&mutex);
 }
 
-void AudioResampler::setSampleRate(int32_t inSampleRate) {
+void AudioResampler::setSampleRate(int32_t inSampleRate)
+{
     mInSampleRate = inSampleRate;
     mPhaseIncrement = (uint32_t)((kPhaseMultiplier * inSampleRate) / mSampleRate);
 }
 
-void AudioResampler::setVolume(float left, float right) {
+void AudioResampler::setVolume(float left, float right)
+{
     // TODO: Implement anti-zipper filter
     // convert to U4.12 for internal integer use (round down)
     // integer volume values are clamped to 0 to UNITY_GAIN.
@@ -290,24 +318,31 @@ void AudioResampler::setVolume(float left, float right) {
     mVolume[1] = u4_12_from_float(clampFloatVol(right));
 }
 
-void AudioResampler::setLocalTimeFreq(uint64_t freq) {
+void AudioResampler::setLocalTimeFreq(uint64_t freq)
+{
     mLocalTimeFreq = freq;
 }
 
-void AudioResampler::setPTS(int64_t pts) {
+void AudioResampler::setPTS(int64_t pts)
+{
     mPTS = pts;
 }
 
-int64_t AudioResampler::calculateOutputPTS(int outputFrameIndex) {
+int64_t AudioResampler::calculateOutputPTS(int outputFrameIndex)
+{
 
-    if (mPTS == AudioBufferProvider::kInvalidPTS) {
+    if (mPTS == AudioBufferProvider::kInvalidPTS)
+    {
         return AudioBufferProvider::kInvalidPTS;
-    } else {
+    }
+    else
+    {
         return mPTS + ((outputFrameIndex * mLocalTimeFreq) / mSampleRate);
     }
 }
 
-void AudioResampler::reset() {
+void AudioResampler::reset()
+{
     mInputIndex = 0;
     mPhaseFraction = 0;
     mBuffer.frameCount = 0;
@@ -315,26 +350,27 @@ void AudioResampler::reset() {
 
 // ----------------------------------------------------------------------------
 
-size_t AudioResamplerOrder1::resample(int32_t* out, size_t outFrameCount,
-        AudioBufferProvider* provider) {
+size_t AudioResamplerOrder1::resample(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider)
+{
 
     // should never happen, but we overflow if it does
     // ALOG_ASSERT(outFrameCount < 32767);
 
     // select the appropriate resampler
-    switch (mChannelCount) {
-    case 1:
-        return resampleMono16(out, outFrameCount, provider);
-    case 2:
-        return resampleStereo16(out, outFrameCount, provider);
-    default:
-        LOG_ALWAYS_FATAL("invalid channel count: %d", mChannelCount);
-        return 0;
+    switch (mChannelCount)
+    {
+        case 1:
+            return resampleMono16(out, outFrameCount, provider);
+        case 2:
+            return resampleStereo16(out, outFrameCount, provider);
+        default:
+            LOG_ALWAYS_FATAL("invalid channel count: %d", mChannelCount);
+            return 0;
     }
 }
 
-size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount,
-        AudioBufferProvider* provider) {
+size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider)
+{
 
     int32_t vl = mVolume[0];
     int32_t vr = mVolume[1];
@@ -349,36 +385,41 @@ size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount
     // ALOGE("starting resample %d frames, inputIndex=%d, phaseFraction=%d, phaseIncrement=%d",
     //      outFrameCount, inputIndex, phaseFraction, phaseIncrement);
 
-    while (outputIndex < outputSampleCount) {
+    while (outputIndex < outputSampleCount)
+    {
 
         // buffer is empty, fetch a new one
-        while (mBuffer.frameCount == 0) {
+        while (mBuffer.frameCount == 0)
+        {
             mBuffer.frameCount = inFrameCount;
-            provider->getNextBuffer(&mBuffer,
-                                    calculateOutputPTS(outputIndex / 2));
-            if (mBuffer.raw == NULL) {
+            provider->getNextBuffer(&mBuffer, calculateOutputPTS(outputIndex / 2));
+            if (mBuffer.raw == NULL)
+            {
                 goto resampleStereo16_exit;
             }
 
             // ALOGE("New buffer fetched: %d frames", mBuffer.frameCount);
-            if (mBuffer.frameCount > inputIndex) break;
+            if (mBuffer.frameCount > inputIndex)
+                break;
 
             inputIndex -= mBuffer.frameCount;
-            mX0L = mBuffer.i16[mBuffer.frameCount*2-2];
-            mX0R = mBuffer.i16[mBuffer.frameCount*2-1];
+            mX0L = mBuffer.i16[mBuffer.frameCount * 2 - 2];
+            mX0R = mBuffer.i16[mBuffer.frameCount * 2 - 1];
             provider->releaseBuffer(&mBuffer);
             // mBuffer.frameCount == 0 now so we reload a new buffer
         }
 
-        int16_t *in = mBuffer.i16;
+        int16_t* in = mBuffer.i16;
 
         // handle boundary case
-        while (inputIndex == 0) {
+        while (inputIndex == 0)
+        {
             // ALOGE("boundary case");
             out[outputIndex++] += vl * Interp(mX0L, in[0], phaseFraction);
             out[outputIndex++] += vr * Interp(mX0R, in[1], phaseFraction);
             Advance(&inputIndex, &phaseFraction, phaseIncrement);
-            if (outputIndex == outputSampleCount) {
+            if (outputIndex == outputSampleCount)
+            {
                 break;
             }
         }
@@ -386,7 +427,7 @@ size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount
         // process input samples
         // ALOGE("general case");
 
-#ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
+        #ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
         if (inputIndex + 2 < mBuffer.frameCount) {
             int32_t* maxOutPt;
             int32_t maxInIdx;
@@ -396,26 +437,26 @@ size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount
             AsmStereo16Loop(in, maxOutPt, maxInIdx, outputIndex, out, inputIndex, vl, vr,
                     phaseFraction, phaseIncrement);
         }
-#endif  // ASM_ARM_RESAMP1
+        #endif  // ASM_ARM_RESAMP1
 
-        while (outputIndex < outputSampleCount && inputIndex < mBuffer.frameCount) {
-            out[outputIndex++] += vl * Interp(in[inputIndex*2-2],
-                    in[inputIndex*2], phaseFraction);
-            out[outputIndex++] += vr * Interp(in[inputIndex*2-1],
-                    in[inputIndex*2+1], phaseFraction);
+        while (outputIndex < outputSampleCount && inputIndex < mBuffer.frameCount)
+        {
+            out[outputIndex++] += vl * Interp(in[inputIndex * 2 - 2], in[inputIndex * 2], phaseFraction);
+            out[outputIndex++] += vr * Interp(in[inputIndex * 2 - 1], in[inputIndex * 2 + 1], phaseFraction);
             Advance(&inputIndex, &phaseFraction, phaseIncrement);
         }
 
         // ALOGE("loop done - outputIndex=%d, inputIndex=%d", outputIndex, inputIndex);
 
         // if done with buffer, save samples
-        if (inputIndex >= mBuffer.frameCount) {
+        if (inputIndex >= mBuffer.frameCount)
+        {
             inputIndex -= mBuffer.frameCount;
 
             // ALOGE("buffer done, new input index %d", inputIndex);
 
-            mX0L = mBuffer.i16[mBuffer.frameCount*2-2];
-            mX0R = mBuffer.i16[mBuffer.frameCount*2-1];
+            mX0L = mBuffer.i16[mBuffer.frameCount * 2 - 2];
+            mX0R = mBuffer.i16[mBuffer.frameCount * 2 - 1];
             provider->releaseBuffer(&mBuffer);
 
             // verify that the releaseBuffer resets the buffer frameCount
@@ -425,15 +466,15 @@ size_t AudioResamplerOrder1::resampleStereo16(int32_t* out, size_t outFrameCount
 
     // ALOGE("output buffer full - outputIndex=%d, inputIndex=%d", outputIndex, inputIndex);
 
-resampleStereo16_exit:
+    resampleStereo16_exit:
     // save state
     mInputIndex = inputIndex;
     mPhaseFraction = phaseFraction;
     return outputIndex / 2 /* channels for stereo */;
 }
 
-size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
-        AudioBufferProvider* provider) {
+size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount, AudioBufferProvider* provider)
+{
 
     int32_t vl = mVolume[0];
     int32_t vr = mVolume[1];
@@ -447,35 +488,40 @@ size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
 
     // ALOGE("starting resample %d frames, inputIndex=%d, phaseFraction=%d, phaseIncrement=%d",
     //      outFrameCount, inputIndex, phaseFraction, phaseIncrement);
-    while (outputIndex < outputSampleCount) {
+    while (outputIndex < outputSampleCount)
+    {
         // buffer is empty, fetch a new one
-        while (mBuffer.frameCount == 0) {
+        while (mBuffer.frameCount == 0)
+        {
             mBuffer.frameCount = inFrameCount;
-            provider->getNextBuffer(&mBuffer,
-                                    calculateOutputPTS(outputIndex / 2));
-            if (mBuffer.raw == NULL) {
+            provider->getNextBuffer(&mBuffer, calculateOutputPTS(outputIndex / 2));
+            if (mBuffer.raw == NULL)
+            {
                 mInputIndex = inputIndex;
                 mPhaseFraction = phaseFraction;
                 goto resampleMono16_exit;
             }
             // ALOGE("New buffer fetched: %d frames", mBuffer.frameCount);
-            if (mBuffer.frameCount >  inputIndex) break;
+            if (mBuffer.frameCount > inputIndex)
+                break;
 
             inputIndex -= mBuffer.frameCount;
-            mX0L = mBuffer.i16[mBuffer.frameCount-1];
+            mX0L = mBuffer.i16[mBuffer.frameCount - 1];
             provider->releaseBuffer(&mBuffer);
             // mBuffer.frameCount == 0 now so we reload a new buffer
         }
-        int16_t *in = mBuffer.i16;
+        int16_t* in = mBuffer.i16;
 
         // handle boundary case
-        while (inputIndex == 0) {
+        while (inputIndex == 0)
+        {
             // ALOGE("boundary case");
             int32_t sample = Interp(mX0L, in[0], phaseFraction);
             out[outputIndex++] += vl * sample;
             out[outputIndex++] += vr * sample;
             Advance(&inputIndex, &phaseFraction, phaseIncrement);
-            if (outputIndex == outputSampleCount) {
+            if (outputIndex == outputSampleCount)
+            {
                 break;
             }
         }
@@ -483,7 +529,7 @@ size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
         // process input samples
         // ALOGE("general case");
 
-#ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
+        #ifdef ASM_ARM_RESAMP1  // asm optimisation for ResamplerOrder1
         if (inputIndex + 2 < mBuffer.frameCount) {
             int32_t* maxOutPt;
             int32_t maxInIdx;
@@ -493,11 +539,11 @@ size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
                 AsmMono16Loop(in, maxOutPt, maxInIdx, outputIndex, out, inputIndex, vl, vr,
                         phaseFraction, phaseIncrement);
         }
-#endif  // ASM_ARM_RESAMP1
+        #endif  // ASM_ARM_RESAMP1
 
-        while (outputIndex < outputSampleCount && inputIndex < mBuffer.frameCount) {
-            int32_t sample = Interp(in[inputIndex-1], in[inputIndex],
-                    phaseFraction);
+        while (outputIndex < outputSampleCount && inputIndex < mBuffer.frameCount)
+        {
+            int32_t sample = Interp(in[inputIndex - 1], in[inputIndex], phaseFraction);
             out[outputIndex++] += vl * sample;
             out[outputIndex++] += vr * sample;
             Advance(&inputIndex, &phaseFraction, phaseIncrement);
@@ -507,12 +553,13 @@ size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
         // ALOGE("loop done - outputIndex=%d, inputIndex=%d", outputIndex, inputIndex);
 
         // if done with buffer, save samples
-        if (inputIndex >= mBuffer.frameCount) {
+        if (inputIndex >= mBuffer.frameCount)
+        {
             inputIndex -= mBuffer.frameCount;
 
             // ALOGE("buffer done, new input index %d", inputIndex);
 
-            mX0L = mBuffer.i16[mBuffer.frameCount-1];
+            mX0L = mBuffer.i16[mBuffer.frameCount - 1];
             provider->releaseBuffer(&mBuffer);
 
             // verify that the releaseBuffer resets the buffer frameCount
@@ -522,7 +569,7 @@ size_t AudioResamplerOrder1::resampleMono16(int32_t* out, size_t outFrameCount,
 
     // ALOGE("output buffer full - outputIndex=%d, inputIndex=%d", outputIndex, inputIndex);
 
-resampleMono16_exit:
+    resampleMono16_exit:
     // save state
     mInputIndex = inputIndex;
     mPhaseFraction = phaseFraction;
@@ -567,7 +614,7 @@ void AudioResamplerOrder1::AsmMono16Loop(int16_t *in, int32_t* maxOutPt, int32_t
     (void)phaseFraction;
     (void)phaseIncrement;
     (void)in;
-#define MO_PARAM5   "36"        // offset of parameter 5 (outputIndex)
+    #define MO_PARAM5   "36"        // offset of parameter 5 (outputIndex)
 
     asm(
         "stmfd  sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}\n"
@@ -611,7 +658,7 @@ void AudioResamplerOrder1::AsmMono16Loop(int16_t *in, int32_t* maxOutPt, int32_t
         "   cmp r8, r2\n"                   // curOut - maxCurOut
         "   bcs 2f\n"
 
-#define MO_ONE_FRAME \
+        #define MO_ONE_FRAME \
     "   add r0, r1, r7, asl #1\n"       /* in + inputIndex */\
     "   ldrsh r4, [r0]\n"               /* in[inputIndex] */\
     "   ldr r5, [r8]\n"                 /* out[outputIndex] */\
@@ -688,7 +735,7 @@ void AudioResamplerOrder1::AsmStereo16Loop(int16_t *in, int32_t* maxOutPt, int32
     (void)phaseFraction;
     (void)phaseIncrement;
     (void)in;
-#define ST_PARAM5    "40"     // offset of parameter 5 (outputIndex)
+    #define ST_PARAM5    "40"     // offset of parameter 5 (outputIndex)
     asm(
         "stmfd  sp!, {r4, r5, r6, r7, r8, r9, r10, r11, r12, lr}\n"
         // get parameters
@@ -729,7 +776,7 @@ void AudioResamplerOrder1::AsmStereo16Loop(int16_t *in, int32_t* maxOutPt, int32
         "   cmp r8, r2\n"                   // curOut - maxCurOut
         "   bcs 4f\n"
 
-#define ST_ONE_FRAME \
+        #define ST_ONE_FRAME \
     "   bic r6, r6, #0xC0000000\n"      /* phaseFraction & ... */\
 \
     "   add r0, r1, r7, asl #2\n"       /* in + 2*inputIndex */\

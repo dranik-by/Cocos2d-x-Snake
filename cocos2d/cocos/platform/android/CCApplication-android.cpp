@@ -47,11 +47,11 @@ static const std::string helperClassName = "org.cocos2dx.lib.Cocos2dxHelper";
 NS_CC_BEGIN
 
 // sharedApplication pointer
-Application * Application::sm_pSharedApplication = nullptr;
+Application* Application::sm_pSharedApplication = nullptr;
 
 Application::Application()
 {
-    CCAssert(! sm_pSharedApplication, "");
+    CCAssert(!sm_pSharedApplication, "");
     sm_pSharedApplication = this;
 }
 
@@ -64,7 +64,7 @@ Application::~Application()
 int Application::run()
 {
     // Initialize instance and cocos2d.
-    if (! applicationDidFinishLaunching())
+    if (!applicationDidFinishLaunching())
     {
         return 0;
     }
@@ -92,12 +92,12 @@ Application* Application::sharedApplication()
     return Application::getInstance();
 }
 
-const char * Application::getCurrentLanguageCode()
+const char* Application::getCurrentLanguageCode()
 {
-    static char code[3]={0};
+    static char code[3] = {0};
     std::string language = JniHelper::callStaticStringMethod(helperClassName, "getCurrentLanguage");
     strncpy(code, language.c_str(), 2);
-    code[2]='\0';
+    code[2] = '\0';
     return code;
 }
 
@@ -123,7 +123,8 @@ bool Application::openURL(const std::string &url)
     return JniHelper::callStaticBooleanMethod(helperClassName, "openURL", url);
 }
 
-void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
+void Application::applicationScreenSizeChanged(int newWidth, int newHeight)
+{
 
 }
 

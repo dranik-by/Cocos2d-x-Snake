@@ -36,7 +36,8 @@ THE SOFTWARE.
  */
 NS_CC_BEGIN
 
-namespace ui{
+namespace ui
+{
 
 /**
  *@brief ListView is a view group that displays a list of scrollable items.
@@ -46,8 +47,8 @@ namespace ui{
  */
 class CC_GUI_DLL ListView : public ScrollView
 {
- 
-    DECLARE_CLASS_GUI_INFO
+
+DECLARE_CLASS_GUI_INFO
 public:
     /**
      * Gravity for docking elements in ListView.
@@ -61,7 +62,7 @@ public:
         BOTTOM,
         CENTER_VERTICAL
     };
-    
+
     /**
      * ListView element item click event.
      */
@@ -70,7 +71,7 @@ public:
         ON_SELECTED_ITEM_START,
         ON_SELECTED_ITEM_END
     };
-    
+
     /**
      * ListView supports magnetic scroll.
      * With CENTER type, ListView tries to align its items in center of current view.
@@ -86,32 +87,32 @@ public:
         TOP,
         BOTTOM,
     };
-    
+
     /**
      * ListView item click callback.
      */
-    typedef std::function<void(Ref*, EventType)> ccListViewCallback;
-    
+    typedef std::function<void(Ref * , EventType)> ccListViewCallback;
+
     /**
      * Default constructor
      * @js ctor
      * @lua new
      */
     ListView();
-    
+
     /**
      * Default destructor
      * @js NA
      * @lua NA
      */
     virtual ~ListView();
-    
+
     /**
      * Create an empty ListView.
      *@return A ListView instance.
      */
     static ListView* create();
-    
+
     /**
      * Set an item model for listview.
      *
@@ -119,25 +120,24 @@ public:
      * @param model  Model in `Widget*`.
      */
     void setItemModel(Widget* model);
-    
+
     /**
      * Insert a default item(create by a cloned model) at the end of the listview.
      */
     void pushBackDefaultItem();
-    
+
     /**
      * Insert a default item(create by cloning model) into listview at a give index.
      *@param index  An index in ssize_t.
      */
     void insertDefaultItem(ssize_t index);
-    
+
     /**
      * Insert a  custom item into the end of ListView.
      *@param item An item in `Widget*`.
      */
     void pushBackCustomItem(Widget* item);
-    
-    
+
     /**
      * @brief Insert a custom widget into ListView at a given index.
      *
@@ -145,12 +145,12 @@ public:
      * @param index A given index in ssize_t.
      */
     void insertCustomItem(Widget* item, ssize_t index);
-    
+
     /**
      *  Removes the last item of ListView.
      */
     void removeLastItem();
-    
+
     /**
      * Remove an item at given index.
      *
@@ -164,21 +164,21 @@ public:
      
      */
     void removeAllItems();
-    
+
     /**
      * Return an item at a given index.
      *
      * @param index A given index in ssize_t.
      * @return A widget instance.
      */
-    Widget* getItem(ssize_t index)const;
-    
+    Widget* getItem(ssize_t index) const;
+
     /**
      * Return all items in a ListView.
      *@returns A vector of widget pointers.
      */
-    Vector<Widget*>& getItems();
-    
+    Vector<Widget*> &getItems();
+
     /**
      * Return the index of specified widget.
      *
@@ -186,48 +186,48 @@ public:
      * @return The index of a given widget in ListView.
      */
     ssize_t getIndex(Widget* item) const;
-    
+
     /**
      * Set the gravity of ListView.
      * @see `ListViewGravity`
      */
     void setGravity(Gravity gravity);
-    
+
     /**
      * Set magnetic type of ListView.
      * @see `MagneticType`
      */
     void setMagneticType(MagneticType magneticType);
-    
+
     /**
      * Get magnetic type of ListView.
      */
     MagneticType getMagneticType() const;
-    
+
     /**
      * Set magnetic allowed out of boundary.
      */
     void setMagneticAllowedOutOfBoundary(bool magneticAllowedOutOfBoundary);
-    
+
     /**
      * Query whether the magnetic out of boundary is allowed.
      */
     bool getMagneticAllowedOutOfBoundary() const;
-    
+
     /**
      * Set the margin between each item in ListView.
      *
      * @param margin A margin in float.
      */
     void setItemsMargin(float margin);
-    
+
     /**
      * @brief Query margin between each item in ListView.
      *
      
      * @return A margin in float.
      */
-    float getItemsMargin()const;
+    float getItemsMargin() const;
 
     /**
      * Change padding with left, top, right, and bottom padding.
@@ -292,20 +292,20 @@ public:
      * @param time The seconds needed to scroll between two items. 'time' must be >= 0
      * @see scrollToItem(ssize_t, const Vec2&, const Vec2&)
      */
-    void  setScrollDuration(float time);
-    
-     /**
-     * Get the time in seconds to scroll between items.
-     * @return The time in seconds to scroll between items
-     * @see setScrollDuration(float)
-     */
+    void setScrollDuration(float time);
+
+    /**
+    * Get the time in seconds to scroll between items.
+    * @return The time in seconds to scroll between items
+    * @see setScrollDuration(float)
+    */
     float getScrollDuration() const;
-    
+
     //override methods
     virtual void doLayout() override;
     virtual void requestDoLayout() override;
-    virtual void addChild(Node* child)override;
-    virtual void addChild(Node * child, int localZOrder)override;
+    virtual void addChild(Node* child) override;
+    virtual void addChild(Node* child, int localZOrder) override;
     virtual void addChild(Node* child, int zOrder, int tag) override;
     virtual void addChild(Node* child, int zOrder, const std::string &name) override;
     virtual void removeAllChildren() override;
@@ -319,8 +319,8 @@ public:
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
      * @return An item instance if list view is not empty. Otherwise, returns null.
      */
-    Widget* getClosestItemToPosition(const Vec2& targetPosition, const Vec2& itemAnchorPoint) const;
-    
+    Widget* getClosestItemToPosition(const Vec2 &targetPosition, const Vec2 &itemAnchorPoint) const;
+
     /**
      * @brief Query the closest item to a specific position in current view.
      * For instance, to find the item in the center of view, call 'getClosestItemToPositionInCurrentView(Vec2::ANCHOR_MIDDLE, Vec2::ANCHOR_MIDDLE)'.
@@ -329,32 +329,32 @@ public:
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
      * @return An item instance if list view is not empty. Otherwise, returns null.
      */
-    Widget* getClosestItemToPositionInCurrentView(const Vec2& positionRatioInView, const Vec2& itemAnchorPoint) const;
-    
+    Widget* getClosestItemToPositionInCurrentView(const Vec2 &positionRatioInView, const Vec2 &itemAnchorPoint) const;
+
     /**
      * @brief Query the center item
      * @return An item instance.
      */
     Widget* getCenterItemInCurrentView() const;
-    
+
     /**
      * @brief Query the leftmost item in horizontal list
      * @return An item instance.
      */
     Widget* getLeftmostItemInCurrentView() const;
-    
+
     /**
      * @brief Query the rightmost item in horizontal list
      * @return An item instance.
      */
     Widget* getRightmostItemInCurrentView() const;
-    
+
     /**
      * @brief Query the topmost item in horizontal list
      * @return An item instance.
      */
     Widget* getTopmostItemInCurrentView() const;
-    
+
     /**
      * @brief Query the bottommost item in horizontal list
      * @return An item instance.
@@ -374,7 +374,7 @@ public:
     virtual void jumpToBottomRight() override;
     virtual void jumpToPercentVertical(float percent) override;
     virtual void jumpToPercentHorizontal(float percent) override;
-    virtual void jumpToPercentBothDirection(const Vec2& percent) override;
+    virtual void jumpToPercentBothDirection(const Vec2 &percent) override;
 
     /**
      * @brief Jump to specific item
@@ -382,17 +382,17 @@ public:
      * @param positionRatioInView Specifies the position with ratio in list view's content size.
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
      */
-    void jumpToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint);
-    
+    void jumpToItem(ssize_t itemIndex, const Vec2 &positionRatioInView, const Vec2 &itemAnchorPoint);
+
     /**
      * @brief Scroll to specific item
      * @param positionRatioInView Specifies the position with ratio in list view's content size.
      * @param itemAnchorPoint Specifies an anchor point of each item for position to calculate distance.
      * @param timeInSec Scroll time
      */
-    void scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint);
-    void scrollToItem(ssize_t itemIndex, const Vec2& positionRatioInView, const Vec2& itemAnchorPoint, float timeInSec);
-    
+    void scrollToItem(ssize_t itemIndex, const Vec2 &positionRatioInView, const Vec2 &itemAnchorPoint);
+    void scrollToItem(ssize_t itemIndex, const Vec2 &positionRatioInView, const Vec2 &itemAnchorPoint, float timeInSec);
+
     /**
      * @brief Query current selected widget's index.
      *
@@ -400,18 +400,18 @@ public:
      * @return An index of a selected item.
      */
     ssize_t getCurSelectedIndex() const;
-    
+
     /**
      * @brief Set current selected widget's index and call TouchEventType::ENDED event.
      * @param itemIndex A index of a selected item.
      */
-     void setCurSelectedIndex(int itemIndex);
-    
+    void setCurSelectedIndex(int itemIndex);
+
     /**
      * Add an event click callback to ListView, then one item of Listview is clicked, the callback will be called.
      *@param callback A callback function with type of `ccListViewCallback`.
      */
-    void addEventListener(const ccListViewCallback& callback);
+    void addEventListener(const ccListViewCallback &callback);
     using ScrollView::addEventListener;
 
     /**
@@ -421,46 +421,46 @@ public:
      * @param dir Set the list view's scroll direction.
      */
     virtual void setDirection(Direction dir) override;
-    
+
     virtual std::string getDescription() const override;
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
-    
+
 protected:
-    virtual void handleReleaseLogic(Touch *touch) override;
+    virtual void handleReleaseLogic(Touch* touch) override;
 
     virtual void onItemListChanged();
 
     virtual void remedyLayoutParameter(Widget* item);
     void updateInnerContainerSize();
     void remedyVerticalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex);
-    void remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutParameter,ssize_t itemIndex);
-    
+    void remedyHorizontalLayoutParameter(LinearLayoutParameter* layoutParameter, ssize_t itemIndex);
+
     virtual void onSizeChanged() override;
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void copyClonedWidgetChildren(Widget* model) override;
     void selectedItemEvent(TouchEventType event);
-    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,Touch* touch) override;
-    
-    virtual Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO) override;
-    
-    virtual void startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity) override;
-    
+    virtual void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
+
+    virtual Vec2 getHowMuchOutOfBoundary(const Vec2 &addition = Vec2::ZERO) override;
+
+    virtual void startAttenuatingAutoScroll(const Vec2 &deltaMove, const Vec2 &initialVelocity) override;
+
     void startMagneticScroll();
-    Vec2 calculateItemDestination(const Vec2& positionRatioInView, Widget* item, const Vec2& itemAnchorPoint);
-    
+    Vec2 calculateItemDestination(const Vec2 &positionRatioInView, Widget* item, const Vec2 &itemAnchorPoint);
+
 protected:
     Widget* _model;
-    
+
     Vector<Widget*> _items;
-    
+
     Gravity _gravity;
-    
+
     MagneticType _magneticType;
     bool _magneticAllowedOutOfBoundary;
-    
+
     float _itemsMargin;
 
     float _leftPadding;
@@ -469,7 +469,7 @@ protected:
     float _bottomPadding;
 
     float _scrollTime;
-    
+
     ssize_t _curSelectedIndex;
 
     bool _innerContainerDoLayoutDirty;

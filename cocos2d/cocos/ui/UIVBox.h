@@ -35,48 +35,50 @@ NS_CC_BEGIN
  * @{
  */
 
-namespace ui {
-    
+namespace ui
+{
+
 /**
  * VBox is just a convenient wrapper class for vertical layout type.
  * VBox lays out its children in a single vertical column.
  */
-class CC_GUI_DLL VBox : public Layout{
+class CC_GUI_DLL VBox : public Layout
+{
 public:
-    
+
     /**
      * Default constructor
      * @js ctor
      * @lua new
      */
     VBox();
-    
+
     /**
      * Default destructor
      * @js NA
      * @lua NA
      */
     virtual ~VBox();
-    
+
     /**
      * Create a empty VBox instance.
      * @return A VBox instance pointer.
      */
     static VBox* create();
-    
+
     /**
      * Create a VBox with a certain size.
      *@param size The content size of the layout.
      *@return A VBox instance pointer.
      */
-    static VBox* create(const Size& size);
-    
+    static VBox* create(const Size &size);
+
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
-    virtual bool initWithSize(const Size& size);
+    virtual bool initWithSize(const Size &size);
 };
-    
+
 }
 
 // end of ui group

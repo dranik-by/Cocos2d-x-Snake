@@ -38,7 +38,7 @@
 
 using namespace std;
 
-NS_CC_BEGIN;
+NS_CC_BEGIN ;
 
 /*
  *  Implementation of PointArray
@@ -46,7 +46,7 @@ NS_CC_BEGIN;
 
 PointArray* PointArray::create(ssize_t capacity)
 {
-    PointArray* pointArray = new (std::nothrow) PointArray();
+    PointArray* pointArray = new(std::nothrow) PointArray();
     if (pointArray && pointArray->initWithCapacity(capacity))
     {
         pointArray->autorelease();
@@ -60,15 +60,15 @@ PointArray* PointArray::create(ssize_t capacity)
 bool PointArray::initWithCapacity(ssize_t capacity)
 {
     _controlPoints.reserve(capacity);
-    
+
     return true;
 }
 
 PointArray* PointArray::clone() const
 {
     vector<Vec2> newArray = _controlPoints;
-    
-    PointArray *points = new (std::nothrow) PointArray();
+
+    PointArray* points = new(std::nothrow) PointArray();
     points->initWithCapacity(10);
     points->setControlPoints(std::move(newArray));
 
@@ -81,9 +81,11 @@ PointArray::~PointArray()
     CCLOGINFO("deallocing PointArray: %p", this);
 }
 
-PointArray::PointArray() {}
+PointArray::PointArray()
+{
+}
 
-const std::vector<Vec2>& PointArray::getControlPoints() const
+const std::vector<Vec2> &PointArray::getControlPoints() const
 {
     return _controlPoints;
 }
@@ -93,23 +95,23 @@ void PointArray::setControlPoints(vector<Vec2> controlPoints)
     _controlPoints = std::move(controlPoints);
 }
 
-void PointArray::addControlPoint(const Vec2& controlPoint)
-{    
+void PointArray::addControlPoint(const Vec2 &controlPoint)
+{
     _controlPoints.push_back(controlPoint);
 }
 
-void PointArray::insertControlPoint(const Vec2& controlPoint, ssize_t index)
+void PointArray::insertControlPoint(const Vec2 &controlPoint, ssize_t index)
 {
     _controlPoints.insert(std::next(_controlPoints.begin(), index), controlPoint);
 }
 
-const Vec2& PointArray::getControlPointAtIndex(ssize_t index) const
+const Vec2 &PointArray::getControlPointAtIndex(ssize_t index) const
 {
-    index = MIN(static_cast<ssize_t>(_controlPoints.size())-1, MAX(index, 0));
+    index = MIN(static_cast<ssize_t>(_controlPoints.size()) - 1, MAX(index, 0));
     return _controlPoints.at(index);
 }
 
-void PointArray::replaceControlPoint(const Vec2& controlPoint, ssize_t index)
+void PointArray::replaceControlPoint(const Vec2 &controlPoint, ssize_t index)
 {
     _controlPoints.at(index) = controlPoint;
 }
@@ -133,29 +135,29 @@ PointArray* PointArray::reverse() const
     {
         newArray.push_back(*iter);
     }
-    PointArray *config = PointArray::create(0);
+    PointArray* config = PointArray::create(0);
     config->setControlPoints(std::move(newArray));
-    
+
     return config;
 }
 
 void PointArray::reverseInline()
 {
     const size_t l = _controlPoints.size();
-    Vec2 *p1 = nullptr;
-    Vec2 *p2 = nullptr;
+    Vec2* p1 = nullptr;
+    Vec2* p2 = nullptr;
     float x, y;
-    for (size_t i = 0; i < l/2; ++i)
+    for (size_t i = 0; i < l / 2; ++i)
     {
         p1 = &_controlPoints.at(i);
-        p2 = &_controlPoints.at(l-i-1);
-        
+        p2 = &_controlPoints.at(l - i - 1);
+
         x = p1->x;
         y = p1->y;
-        
+
         p1->x = p2->x;
         p1->y = p2->y;
-        
+
         p2->x = x;
         p2->y = y;
     }
@@ -166,7 +168,7 @@ Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Ve
 {
     float t2 = t * t;
     float t3 = t2 * t;
-    
+
     /*
      * Formula: s(-ttt + 2tt - t)P1 + s(-ttt + tt)P2 + (2ttt - 3tt + 1)P2 + s(ttt - 2tt + t)P3 + (-2ttt + 3tt)P3 + s(ttt - tt)P4
      */
@@ -176,26 +178,26 @@ Vec2 ccCardinalSplineAt(const Vec2 &p0, const Vec2 &p1, const Vec2 &p2, const Ve
     float b2 = s * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);          // s(-t3 + t2)P2 + (2 t3 - 3 t2 + 1)P2
     float b3 = s * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);      // s(t3 - 2 t2 + t)P3 + (-2 t3 + 3 t2)P3
     float b4 = s * (t3 - t2);                                   // s(t3 - t2)P4
-    
-    float x = (p0.x*b1 + p1.x*b2 + p2.x*b3 + p3.x*b4);
-    float y = (p0.y*b1 + p1.y*b2 + p2.y*b3 + p3.y*b4);
 
-    return Vec2(x,y);
+    float x = (p0.x * b1 + p1.x * b2 + p2.x * b3 + p3.x * b4);
+    float y = (p0.y * b1 + p1.y * b2 + p2.y * b3 + p3.y * b4);
+
+    return Vec2(x, y);
 }
 
 /* Implementation of CardinalSplineTo
  */
 
-CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, float tension)
+CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray* points, float tension)
 {
-    CardinalSplineTo *ret = new (std::nothrow) CardinalSplineTo();
+    CardinalSplineTo* ret = new(std::nothrow) CardinalSplineTo();
     if (ret)
     {
         if (ret->initWithDuration(duration, points, tension))
         {
             ret->autorelease();
         }
-        else 
+        else
         {
             CC_SAFE_RELEASE_NULL(ret);
         }
@@ -204,7 +206,7 @@ CardinalSplineTo* CardinalSplineTo::create(float duration, PointArray *points, f
     return ret;
 }
 
-bool CardinalSplineTo::initWithDuration(float duration, PointArray *points, float tension)
+bool CardinalSplineTo::initWithDuration(float duration, PointArray* points, float tension)
 {
     CCASSERT(points->count() > 0, "Invalid configuration. It must at least have one control point");
 
@@ -212,10 +214,10 @@ bool CardinalSplineTo::initWithDuration(float duration, PointArray *points, floa
     {
         this->setPoints(points);
         this->_tension = tension;
-        
+
         return true;
     }
-    
+
     return false;
 }
 
@@ -231,14 +233,14 @@ CardinalSplineTo::CardinalSplineTo()
 {
 }
 
-void CardinalSplineTo::startWithTarget(Node *target)
+void CardinalSplineTo::startWithTarget(Node* target)
 {
     ActionInterval::startWithTarget(target);
 
-//    _deltaT = (float) 1 / _points->count();
-    
+    //    _deltaT = (float) 1 / _points->count();
+
     // Issue #1441
-    _deltaT = (float) 1 / (_points->count() - 1);
+    _deltaT = (float)1 / (_points->count() - 1);
 
     _previousPosition = target->getPosition();
     _accumulatedDiff.setZero();
@@ -247,7 +249,7 @@ void CardinalSplineTo::startWithTarget(Node *target)
 CardinalSplineTo* CardinalSplineTo::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CardinalSplineTo();
+    auto a = new(std::nothrow) CardinalSplineTo();
     a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
     a->autorelease();
     return a;
@@ -267,31 +269,31 @@ void CardinalSplineTo::update(float time)
         p = _points->count() - 1;
         lt = 1;
     }
-    else 
+    else
     {
         p = (ssize_t)(time / _deltaT);
         lt = (time - _deltaT * p) / _deltaT;
     }
-    
+
     // Interpolate
-    Vec2 pp0 = _points->getControlPointAtIndex(p-1);
-    Vec2 pp1 = _points->getControlPointAtIndex(p+0);
-    Vec2 pp2 = _points->getControlPointAtIndex(p+1);
-    Vec2 pp3 = _points->getControlPointAtIndex(p+2);
+    Vec2 pp0 = _points->getControlPointAtIndex(p - 1);
+    Vec2 pp1 = _points->getControlPointAtIndex(p + 0);
+    Vec2 pp2 = _points->getControlPointAtIndex(p + 1);
+    Vec2 pp3 = _points->getControlPointAtIndex(p + 2);
 
     Vec2 newPos = ccCardinalSplineAt(pp0, pp1, pp2, pp3, _tension, lt);
 
-#if CC_ENABLE_STACKABLE_ACTIONS
+    #if CC_ENABLE_STACKABLE_ACTIONS
     // Support for stacked actions
-    Node *node = _target;
+    Node* node = _target;
     Vec2 diff = node->getPosition() - _previousPosition;
-    if( diff.x !=0 || diff.y != 0 )
+    if (diff.x != 0 || diff.y != 0)
     {
         _accumulatedDiff = _accumulatedDiff + diff;
         newPos = newPos + _accumulatedDiff;
     }
-#endif
-    
+    #endif
+
     this->updatePosition(newPos);
 }
 
@@ -303,24 +305,24 @@ void CardinalSplineTo::updatePosition(const Vec2 &newPos)
 
 CardinalSplineTo* CardinalSplineTo::reverse() const
 {
-    PointArray *pReverse = _points->reverse();
-    
+    PointArray* pReverse = _points->reverse();
+
     return CardinalSplineTo::create(_duration, pReverse, _tension);
 }
 
 /* CardinalSplineBy
  */
 
-CardinalSplineBy* CardinalSplineBy::create(float duration, PointArray *points, float tension)
+CardinalSplineBy* CardinalSplineBy::create(float duration, PointArray* points, float tension)
 {
-    CardinalSplineBy *ret = new (std::nothrow) CardinalSplineBy();
+    CardinalSplineBy* ret = new(std::nothrow) CardinalSplineBy();
     if (ret)
     {
         if (ret->initWithDuration(duration, points, tension))
         {
             ret->autorelease();
         }
-        else 
+        else
         {
             CC_SAFE_RELEASE_NULL(ret);
         }
@@ -329,7 +331,8 @@ CardinalSplineBy* CardinalSplineBy::create(float duration, PointArray *points, f
     return ret;
 }
 
-CardinalSplineBy::CardinalSplineBy() : _startPosition(0,0)
+CardinalSplineBy::CardinalSplineBy()
+: _startPosition(0, 0)
 {
 }
 
@@ -342,7 +345,7 @@ void CardinalSplineBy::updatePosition(const Vec2 &newPos)
 
 CardinalSplineBy* CardinalSplineBy::reverse() const
 {
-    PointArray *copyConfig = _points->clone();
+    PointArray* copyConfig = _points->clone();
 
     //
     // convert "absolutes" to "diffs"
@@ -353,37 +356,37 @@ CardinalSplineBy* CardinalSplineBy::reverse() const
         Vec2 current = copyConfig->getControlPointAtIndex(i);
         Vec2 diff = current - p;
         copyConfig->replaceControlPoint(diff, i);
-        
+
         p = current;
     }
 
     // convert to "diffs" to "reverse absolute"
 
-    PointArray *pReverse = copyConfig->reverse();
+    PointArray* pReverse = copyConfig->reverse();
 
     // 1st element (which should be 0,0) should be here too
-    
-    p = pReverse->getControlPointAtIndex(pReverse->count()-1);
-    pReverse->removeControlPointAtIndex(pReverse->count()-1);
-    
+
+    p = pReverse->getControlPointAtIndex(pReverse->count() - 1);
+    pReverse->removeControlPointAtIndex(pReverse->count() - 1);
+
     p = -p;
     pReverse->insertControlPoint(p, 0);
-    
+
     for (ssize_t i = 1; i < pReverse->count(); ++i)
     {
         Vec2 current = pReverse->getControlPointAtIndex(i);
         current = -current;
         Vec2 abs = current + p;
         pReverse->replaceControlPoint(abs, i);
-        
+
         p = abs;
     }
 
     return CardinalSplineBy::create(_duration, pReverse, _tension);
 }
 
-void CardinalSplineBy::startWithTarget(Node *target)
-{    
+void CardinalSplineBy::startWithTarget(Node* target)
+{
     CardinalSplineTo::startWithTarget(target);
     _startPosition = target->getPosition();
 }
@@ -391,7 +394,7 @@ void CardinalSplineBy::startWithTarget(Node *target)
 CardinalSplineBy* CardinalSplineBy::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CardinalSplineBy();
+    auto a = new(std::nothrow) CardinalSplineBy();
     a->initWithDuration(this->_duration, this->_points->clone(), this->_tension);
     a->autorelease();
     return a;
@@ -400,16 +403,16 @@ CardinalSplineBy* CardinalSplineBy::clone() const
 /* CatmullRomTo
  */
 
-CatmullRomTo* CatmullRomTo::create(float dt, PointArray *points)
+CatmullRomTo* CatmullRomTo::create(float dt, PointArray* points)
 {
-    CatmullRomTo *ret = new (std::nothrow) CatmullRomTo();
+    CatmullRomTo* ret = new(std::nothrow) CatmullRomTo();
     if (ret)
     {
         if (ret->initWithDuration(dt, points))
         {
             ret->autorelease();
         }
-        else 
+        else
         {
             CC_SAFE_RELEASE_NULL(ret);
         }
@@ -418,20 +421,20 @@ CatmullRomTo* CatmullRomTo::create(float dt, PointArray *points)
     return ret;
 }
 
-bool CatmullRomTo::initWithDuration(float dt, PointArray *points)
+bool CatmullRomTo::initWithDuration(float dt, PointArray* points)
 {
     if (CardinalSplineTo::initWithDuration(dt, points, 0.5f))
     {
         return true;
     }
-    
+
     return false;
 }
 
 CatmullRomTo* CatmullRomTo::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CatmullRomTo();
+    auto a = new(std::nothrow) CatmullRomTo();
     a->initWithDuration(this->_duration, this->_points->clone());
     a->autorelease();
     return a;
@@ -439,24 +442,23 @@ CatmullRomTo* CatmullRomTo::clone() const
 
 CatmullRomTo* CatmullRomTo::reverse() const
 {
-    PointArray *reverse = _points->reverse();
+    PointArray* reverse = _points->reverse();
     return CatmullRomTo::create(_duration, reverse);
 }
-
 
 /* CatmullRomBy
  */
 
-CatmullRomBy* CatmullRomBy::create(float dt, PointArray *points)
+CatmullRomBy* CatmullRomBy::create(float dt, PointArray* points)
 {
-    CatmullRomBy *ret = new (std::nothrow) CatmullRomBy();
+    CatmullRomBy* ret = new(std::nothrow) CatmullRomBy();
     if (ret)
     {
         if (ret->initWithDuration(dt, points))
         {
             ret->autorelease();
         }
-        else 
+        else
         {
             CC_SAFE_RELEASE_NULL(ret);
         }
@@ -465,20 +467,20 @@ CatmullRomBy* CatmullRomBy::create(float dt, PointArray *points)
     return ret;
 }
 
-bool CatmullRomBy::initWithDuration(float dt, PointArray *points)
+bool CatmullRomBy::initWithDuration(float dt, PointArray* points)
 {
     if (CardinalSplineTo::initWithDuration(dt, points, 0.5f))
     {
         return true;
     }
-    
+
     return false;
 }
 
 CatmullRomBy* CatmullRomBy::clone() const
 {
     // no copy constructor
-    auto a = new (std::nothrow) CatmullRomBy();
+    auto a = new(std::nothrow) CatmullRomBy();
     a->initWithDuration(this->_duration, this->_points->clone());
     a->autorelease();
     return a;
@@ -486,7 +488,7 @@ CatmullRomBy* CatmullRomBy::clone() const
 
 CatmullRomBy* CatmullRomBy::reverse() const
 {
-    PointArray *copyConfig = _points->clone();
+    PointArray* copyConfig = _points->clone();
 
     //
     // convert "absolutes" to "diffs"
@@ -503,12 +505,12 @@ CatmullRomBy* CatmullRomBy::reverse() const
 
     // convert to "diffs" to "reverse absolute"
 
-    PointArray *reverse = copyConfig->reverse();
+    PointArray* reverse = copyConfig->reverse();
 
     // 1st element (which should be 0,0) should be here too
 
-    p = reverse->getControlPointAtIndex(reverse->count()-1);
-    reverse->removeControlPointAtIndex(reverse->count()-1);
+    p = reverse->getControlPointAtIndex(reverse->count() - 1);
+    reverse->removeControlPointAtIndex(reverse->count() - 1);
 
     p = -p;
     reverse->insertControlPoint(p, 0);

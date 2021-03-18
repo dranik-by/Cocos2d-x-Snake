@@ -68,14 +68,14 @@ public:
 
     void init(float globalZOrder, const Mat4 &transform);
 
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     void listenRendererRecreated(EventCustom* event);
-#endif
+    #endif
 
 protected:
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _rendererRecreatedListener;
-#endif
+    #endif
 };
 
 NS_CC_END

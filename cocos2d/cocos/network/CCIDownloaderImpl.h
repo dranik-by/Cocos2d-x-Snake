@@ -33,40 +33,42 @@ THE SOFTWARE.
 
 //#define CC_DOWNLOADER_DEBUG
 #ifdef  CC_DOWNLOADER_DEBUG
-#define DLLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
+    #define DLLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
 #else
-#define DLLOG(...)       do {} while (0)
+    #define DLLOG(...)       do {} while (0)
 #endif
 
-namespace cocos2d { namespace network
+namespace cocos2d
 {
-    class DownloadTask;
+namespace network
+{
+class DownloadTask;
 
-    class CC_DLL IDownloadTask
+class CC_DLL IDownloadTask
+{
+public:
+    virtual ~IDownloadTask()
     {
-    public:
-        virtual ~IDownloadTask(){}
-    };
+    }
+};
 
-    class IDownloaderImpl
+class IDownloaderImpl
+{
+public:
+    virtual ~IDownloaderImpl()
     {
-    public:
-        virtual ~IDownloaderImpl(){}
+    }
 
-        std::function<void(const DownloadTask& task,
-                           int64_t bytesReceived,
-                           int64_t totalBytesReceived,
-                           int64_t totalBytesExpected,
-                           std::function<int64_t(void *buffer, int64_t len)>& transferDataToBuffer)> onTaskProgress;
+    std::function<void(const DownloadTask &task, int64_t bytesReceived, int64_t totalBytesReceived,
+                       int64_t totalBytesExpected,
+                       std::function<int64_t(void* buffer, int64_t len)> &transferDataToBuffer)> onTaskProgress;
 
-        std::function<void(const DownloadTask& task,
-                           int errorCode,
-                           int errorCodeInternal,
-                           const std::string& errorStr,
-                           std::vector<unsigned char>& data)> onTaskFinish;
+    std::function<void(const DownloadTask &task, int errorCode, int errorCodeInternal, const std::string &errorStr,
+                       std::vector<unsigned char> &data)> onTaskFinish;
 
-        virtual IDownloadTask *createCoTask(std::shared_ptr<const DownloadTask>& task) = 0;
-    };
+    virtual IDownloadTask* createCoTask(std::shared_ptr<const DownloadTask> &task) = 0;
+};
 
-}}  // namespace cocos2d::network
+}
+}  // namespace cocos2d::network
 

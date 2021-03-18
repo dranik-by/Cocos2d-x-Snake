@@ -93,10 +93,10 @@ CC_DEPRECATED_ATTRIBUTE static __TYPE__* node() \
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-    /** Application will crash in glDrawElements function on some win32 computers and some android devices.
-     *  Indices should be bound again while drawing to avoid this bug.
-     */
-    #define CC_REBIND_INDICES_BUFFER  1
+/** Application will crash in glDrawElements function on some win32 computers and some android devices.
+ *  Indices should be bound again while drawing to avoid this bug.
+ */
+ #define CC_REBIND_INDICES_BUFFER  1
 #else
     #define CC_REBIND_INDICES_BUFFER  0
 #endif
@@ -111,11 +111,11 @@ CC_DEPRECATED_ATTRIBUTE static __TYPE__* node() \
     #define USING_NS_CC                     using namespace cocos2d
     #define NS_CC                           ::cocos2d
 #else
-    #define NS_CC_BEGIN 
+    #define NS_CC_BEGIN
     #define NS_CC_END 
     #define USING_NS_CC 
     #define NS_CC
-#endif 
+#endif
 //  end of namespace group
 /// @}
 
@@ -196,7 +196,7 @@ private: varType varName; public: virtual inline varType get##funName() const { 
         CC_SAFE_RELEASE(varName); \
         varName = var; \
     } \
-} 
+}
 
 #define CC_SAFE_DELETE(p)           do { delete (p); (p) = nullptr; } while(0)
 #define CC_SAFE_DELETE_ARRAY(p)     do { if(p) { delete[] (p); (p) = nullptr; } } while(0)
@@ -212,29 +212,29 @@ private: varType varName; public: virtual inline varType get##funName() const { 
 /// @name Cocos2d debug
 /// @{
 #if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
-#define CCLOG(...)       do {} while (0)
-#define CCLOGINFO(...)   do {} while (0)
-#define CCLOGERROR(...)  do {} while (0)
-#define CCLOGWARN(...)   do {} while (0)
+    #define CCLOG(...)       do {} while (0)
+    #define CCLOGINFO(...)   do {} while (0)
+    #define CCLOGERROR(...)  do {} while (0)
+    #define CCLOGWARN(...)   do {} while (0)
 
 #elif COCOS2D_DEBUG == 1
-#define CCLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
-#define CCLOGERROR(format,...)  cocos2d::log(format, ##__VA_ARGS__)
-#define CCLOGINFO(format,...)   do {} while (0)
-#define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
+    #define CCLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
+    #define CCLOGERROR(format, ...)  cocos2d::log(format, ##__VA_ARGS__)
+    #define CCLOGINFO(format, ...)   do {} while (0)
+    #define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
 
 #elif COCOS2D_DEBUG > 1
-#define CCLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
-#define CCLOGERROR(format,...)  cocos2d::log(format, ##__VA_ARGS__)
-#define CCLOGINFO(format,...)   cocos2d::log(format, ##__VA_ARGS__)
-#define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
+    #define CCLOG(format, ...)      cocos2d::log(format, ##__VA_ARGS__)
+    #define CCLOGERROR(format,...)  cocos2d::log(format, ##__VA_ARGS__)
+    #define CCLOGINFO(format,...)   cocos2d::log(format, ##__VA_ARGS__)
+    #define CCLOGWARN(...) __CCLOGWITHFUNCTION(__VA_ARGS__)
 #endif // COCOS2D_DEBUG
 
 /** Lua engine debug */
 #if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0 || CC_LUA_ENGINE_DEBUG == 0
-#define LUALOG(...)
+    #define LUALOG(...)
 #else
-#define LUALOG(format, ...)     cocos2d::log(format, ##__VA_ARGS__)
+    #define LUALOG(format, ...)     cocos2d::log(format, ##__VA_ARGS__)
 #endif // Lua engine debug
 
 //  end of debug group
@@ -245,12 +245,12 @@ private: varType varName; public: virtual inline varType get##funName() const { 
  * This should be used in the private: declarations for a class
  */
 #if defined(__GNUC__) && ((__GNUC__ >= 5) || ((__GNUG__ == 4) && (__GNUC_MINOR__ >= 4))) \
-    || (defined(__clang__) && (__clang_major__ >= 3)) || (_MSC_VER >= 1800)
-#define CC_DISALLOW_COPY_AND_ASSIGN(TypeName) \
+ || (defined(__clang__) && (__clang_major__ >= 3)) || (_MSC_VER >= 1800)
+    #define CC_DISALLOW_COPY_AND_ASSIGN(TypeName) \
     TypeName(const TypeName &) = delete; \
     TypeName &operator =(const TypeName &) = delete;
 #else
-#define CC_DISALLOW_COPY_AND_ASSIGN(TypeName) \
+    #define CC_DISALLOW_COPY_AND_ASSIGN(TypeName) \
     TypeName(const TypeName &); \
     TypeName &operator =(const TypeName &);
 #endif
@@ -273,10 +273,10 @@ private: varType varName; public: virtual inline varType get##funName() const { 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
     #define CC_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
 #elif _MSC_VER >= 1400 //vs 2005 or higher
-    #define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated) 
+    #define CC_DEPRECATED_ATTRIBUTE __declspec(deprecated)
 #else
     #define CC_DEPRECATED_ATTRIBUTE
-#endif 
+#endif
 
 /** @def CC_DEPRECATED(...)
  * Macro to mark things deprecated as of a particular version
@@ -292,25 +292,25 @@ private: varType varName; public: virtual inline varType get##funName() const { 
  * @param argPos    1-based position of first format-dependent argument.
  */
 #if defined(__GNUC__) && (__GNUC__ >= 4)
-#define CC_FORMAT_PRINTF(formatPos, argPos) __attribute__((__format__(printf, formatPos, argPos)))
+    #define CC_FORMAT_PRINTF(formatPos, argPos) __attribute__((__format__(printf, formatPos, argPos)))
 #elif defined(__has_attribute)
-  #if __has_attribute(format)
-  #define CC_FORMAT_PRINTF(formatPos, argPos) __attribute__((__format__(printf, formatPos, argPos)))
-  #endif // __has_attribute(format)
+    #if __has_attribute(format)
+        #define CC_FORMAT_PRINTF(formatPos, argPos) __attribute__((__format__(printf, formatPos, argPos)))
+    #endif // __has_attribute(format)
 #else
-#define CC_FORMAT_PRINTF(formatPos, argPos)
+    #define CC_FORMAT_PRINTF(formatPos, argPos)
 #endif
 
 #if defined(_MSC_VER)
-#define CC_FORMAT_PRINTF_SIZE_T "%08lX"
+    #define CC_FORMAT_PRINTF_SIZE_T "%08lX"
 #else
-#define CC_FORMAT_PRINTF_SIZE_T "%08zX"
+    #define CC_FORMAT_PRINTF_SIZE_T "%08zX"
 #endif
 
 #ifdef __GNUC__
-#define CC_UNUSED __attribute__ ((unused))
+    #define CC_UNUSED __attribute__ ((unused))
 #else
-#define CC_UNUSED
+    #define CC_UNUSED
 #endif
 
 /** @def CC_REQUIRES_NULL_TERMINATION

@@ -42,15 +42,14 @@ NS_CC_BEGIN
  */
 extern const std::string CC_DLL STD_STRING_EMPTY;
 
-
 /**
  * Keyboard notification event type.
  */
 typedef struct
 {
-    Rect  begin;              // the soft keyboard rectangle when animation begins
-    Rect  end;                // the soft keyboard rectangle when animation ends
-    float     duration;           // the soft keyboard animation duration
+    Rect begin;              // the soft keyboard rectangle when animation begins
+    Rect end;                // the soft keyboard rectangle when animation ends
+    float duration;           // the soft keyboard animation duration
 } IMEKeyboardNotificationInfo;
 
 /**
@@ -65,14 +64,14 @@ public:
      * @lua NA
      */
     virtual ~IMEDelegate();
-    
+
     /**
      * Default destructor.
      * @js NA
      * @lua NA
      */
     virtual bool attachWithIME();
-    
+
     /**
      * Determine whether the IME is detached or not.
      * @js NA
@@ -90,55 +89,75 @@ protected:
     * @js NA
     * @lua NA
     */
-    virtual bool canAttachWithIME() { return false; }
+    virtual bool canAttachWithIME()
+    {
+        return false;
+    }
+
     /**
     @brief    When the delegate detaches from the IME, this method is called by IMEDispatcher.
     * @js NA
     * @lua NA
     */
-    virtual void didAttachWithIME() {}
+    virtual void didAttachWithIME()
+    {
+    }
 
     /**
     @brief    Decide if the delegate instance can stop receiving IME messages.
     * @js NA
     * @lua NA
     */
-    virtual bool canDetachWithIME() { return false; }
+    virtual bool canDetachWithIME()
+    {
+        return false;
+    }
 
     /**
     @brief    When the delegate detaches from the IME, this method is called by IMEDispatcher.
     * @js NA
     * @lua NA
     */
-    virtual void didDetachWithIME() {}
+    virtual void didDetachWithIME()
+    {
+    }
 
     /**
     @brief    Called by IMEDispatcher when text input received from the IME.
     * @js NA
     * @lua NA
     */
-    virtual void insertText(const char* /*text*/, size_t /*len*/) {}
+    virtual void insertText(const char* /*text*/, size_t /*len*/)
+    {
+    }
 
     /**
     @brief    Called by IMEDispatcher after the user clicks the backward key.
     * @js NA
     * @lua NA
     */
-    virtual void deleteBackward() {}
+    virtual void deleteBackward()
+    {
+    }
 
     /**
     @brief    Called by IMEDispatcher after the user press control key.
     * @js NA
     * @lua NA
     */
-    virtual void controlKey(EventKeyboard::KeyCode /*keyCode*/) {}
+    virtual void controlKey(EventKeyboard::KeyCode /*keyCode*/)
+    {
+    }
 
     /**
     @brief    Called by IMEDispatcher for text stored in delegate.
     * @js NA
     * @lua NA
     */
-    virtual const std::string& getContentText() { return STD_STRING_EMPTY; }
+    virtual const std::string &getContentText()
+    {
+        return STD_STRING_EMPTY;
+    }
 
     //////////////////////////////////////////////////////////////////////////
     // keyboard show/hide notification
@@ -147,22 +166,33 @@ protected:
      * @js NA
      * @lua NA
      */
-    virtual void keyboardWillShow(IMEKeyboardNotificationInfo& /*info*/)   {}
+    virtual void keyboardWillShow(IMEKeyboardNotificationInfo & /*info*/)
+    {
+    }
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardDidShow(IMEKeyboardNotificationInfo& /*info*/)    {}
+    virtual void keyboardDidShow(IMEKeyboardNotificationInfo & /*info*/)
+    {
+    }
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardWillHide(IMEKeyboardNotificationInfo& /*info*/)   {}
+    virtual void keyboardWillHide(IMEKeyboardNotificationInfo & /*info*/)
+    {
+    }
+
     /**
      * @js NA
      * @lua NA
      */
-    virtual void keyboardDidHide(IMEKeyboardNotificationInfo& /*info*/)    {}
+    virtual void keyboardDidHide(IMEKeyboardNotificationInfo & /*info*/)
+    {
+    }
 
 protected:
     /**
@@ -171,7 +201,6 @@ protected:
      */
     IMEDelegate();
 };
-
 
 NS_CC_END
 // end of base group

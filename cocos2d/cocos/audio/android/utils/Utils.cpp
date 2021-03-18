@@ -25,7 +25,8 @@ THE SOFTWARE.
 #include "audio/android/utils/Utils.h"
 #include "platform/android/jni/JniHelper.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 int getSDKVersion()
 {

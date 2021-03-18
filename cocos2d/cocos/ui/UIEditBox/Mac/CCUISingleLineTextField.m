@@ -35,11 +35,10 @@
 
 @implementation RSVerticallyCenteredTextFieldCell
 
-- (NSRect)drawingRectForBounds:(NSRect)theRect
-{
+- (NSRect)drawingRectForBounds:(NSRect)theRect {
     // Get the parent's idea of where we should draw
     NSRect newRect = [super drawingRectForBounds:theRect];
-    
+
     // When the text field is being
     // edited or selected, we have to turn off the magic because it screws up
     // the configuration of the field editor.  We sneak around this by
@@ -49,7 +48,7 @@
     {
         // Get our ideal size for current text
         NSSize textSize = [self cellSizeForBounds:theRect];
-        
+
         // Center that in the proposed rect
         float heightDelta = newRect.size.height - textSize.height;
         if (heightDelta > 0)
@@ -58,153 +57,111 @@
             newRect.origin.y += (heightDelta / 2);
         }
     }
-    
+
     return newRect;
 }
 
-- (void)selectWithFrame:(NSRect)aRect
-                 inView:(NSView *)controlView
-                 editor:(NSText *)textObj
-               delegate:(id)anObject
-                  start:(long)selStart
-                 length:(long)selLength
-{
+- (void)selectWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject start:(long)selStart length:(long)selLength {
     aRect = [self drawingRectForBounds:aRect];
     mIsEditingOrSelecting = YES;
-    [super selectWithFrame:aRect
-                    inView:controlView
-                    editor:textObj
-                  delegate:anObject
-                     start:selStart
-                    length:selLength];
+    [super selectWithFrame:aRect inView:controlView editor:textObj delegate:anObject start:selStart length:selLength];
     mIsEditingOrSelecting = NO;
 }
 
-- (void)editWithFrame:(NSRect)aRect
-               inView:(NSView *)controlView
-               editor:(NSText *)textObj
-             delegate:(id)anObject
-                event:(NSEvent *)theEvent
-{
+- (void)editWithFrame:(NSRect)aRect inView:(NSView*)controlView editor:(NSText*)textObj delegate:(id)anObject event:(NSEvent*)theEvent {
     aRect = [self drawingRectForBounds:aRect];
     mIsEditingOrSelecting = YES;
-    [super editWithFrame:aRect
-                  inView:controlView
-                  editor:textObj
-                delegate:anObject
-                   event:theEvent];
+    [super editWithFrame:aRect inView:controlView editor:textObj delegate:anObject event:theEvent];
     mIsEditingOrSelecting = NO;
 }
 
 @end
 
-
 @implementation CCUISingleLineTextField
 {
 }
 
--(id) initWithFrame:(NSRect)frameRect
-{
-    if ([super initWithFrame:frameRect]) {
+- (id)initWithFrame:(NSRect)frameRect {
+    if ([super initWithFrame:frameRect])
+    {
         [self setLineBreakMode:NSLineBreakByTruncatingTail];
     }
-    
+
     return self;
 }
 
-+(void)load
-{
++ (void)load {
     [self setCellClass:[RSVerticallyCenteredTextFieldCell class]];
 }
 
--(void)ccui_setPlaceholderFont:(NSFont *)font
-{
+- (void)ccui_setPlaceholderFont:(NSFont*)font {
     //TODO:
 }
 
-
-
--(void)ccui_setPlaceholder:(NSString *)text
-{
+- (void)ccui_setPlaceholder:(NSString*)text {
     //TODO:
 }
 
--(NSString*)ccui_placeholder
-{
+- (NSString*)ccui_placeholder {
     return self.placeholderString;
 }
 
--(NSFont*)ccui_placeholderFont
-{
+- (NSFont*)ccui_placeholderFont {
     //FIXME:
     return [NSFont systemFontOfSize:self.bounds.size.height * 3.0 / 2.0];
 }
 
--(NSColor*)ccui_placeholderColor
-{
+- (NSColor*)ccui_placeholderColor {
     return [NSColor whiteColor];
 }
 
--(void)ccui_setPlaceholderColor:(NSColor *)color
-{
+- (void)ccui_setPlaceholderColor:(NSColor*)color {
     //TODO:
 }
 
-- (NSString *)ccui_text
-{
+- (NSString*)ccui_text {
     return self.stringValue;
 }
 
-- (void)ccui_setText:(NSString *)ccui_text
-{
+- (void)ccui_setText:(NSString*)ccui_text {
     self.stringValue = ccui_text;
 }
 
-- (NSColor *)ccui_textColor
-{
+- (NSColor*)ccui_textColor {
     return self.textColor;
 }
 
-- (void)ccui_setTextColor:(NSColor *)ccui_textColor
-{
+- (void)ccui_setTextColor:(NSColor*)ccui_textColor {
     self.textColor = ccui_textColor;
 }
 
-- (NSFont *)ccui_font
-{
+- (NSFont*)ccui_font {
     return self.font;
 }
 
-- (void)ccui_setFont:(NSFont *)ccui_font
-{
+- (void)ccui_setFont:(NSFont*)ccui_font {
     self.font = ccui_font;
 }
 
-- (NSTextAlignment)ccui_alignment
-{
-  return self.alignment;
+- (NSTextAlignment)ccui_alignment {
+    return self.alignment;
 }
 
-- (void)ccui_setTextHorizontalAlignment:(NSTextAlignment)ccui_alignment
-{
+- (void)ccui_setTextHorizontalAlignment:(NSTextAlignment)ccui_alignment {
     self.alignment = ccui_alignment;
 }
 
-
-- (void)ccui_setDelegate:(id<NSTextFieldDelegate,NSTextViewDelegate>)delegate
-{
+- (void)ccui_setDelegate:(id <NSTextFieldDelegate, NSTextViewDelegate>)delegate {
     self.delegate = delegate;
 }
 
-- (void)ccui_setMaxLength:(int)length
-{
-    id formater =  [[[CCUITextFieldFormatter alloc]init] autorelease];
+- (void)ccui_setMaxLength:(int)length {
+    id formater = [[[CCUITextFieldFormatter alloc] init] autorelease];
     [formater setMaximumLength:length];
     [self setFormatter:formater];
 }
 
-- (int)ccui_maxLength
-{
+- (int)ccui_maxLength {
     return [self.formatter maximumLength];
 }
 

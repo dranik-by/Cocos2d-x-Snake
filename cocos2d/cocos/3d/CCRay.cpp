@@ -30,12 +30,12 @@ Ray::Ray()
 {
 }
 
-Ray::Ray(const Ray& ray)
+Ray::Ray(const Ray &ray)
 {
     set(ray._origin, ray._direction);
 }
 
-Ray::Ray(const Vec3& origin, const Vec3& direction)
+Ray::Ray(const Vec3 &origin, const Vec3 &direction)
 {
     set(origin, direction);
 }
@@ -44,21 +44,21 @@ Ray::~Ray()
 {
 }
 
-bool Ray::intersects(const AABB& box, float* distance) const
+bool Ray::intersects(const AABB &box, float* distance) const
 {
     float lowt = 0.0f;
     float t;
     bool hit = false;
     Vec3 hitpoint;
-    const Vec3& min = box._min;
-    const Vec3& max = box._max;
-    const Vec3& rayorig = _origin;
-    const Vec3& raydir = _direction;
-    
+    const Vec3 &min = box._min;
+    const Vec3 &max = box._max;
+    const Vec3 &rayorig = _origin;
+    const Vec3 &raydir = _direction;
+
     // Check origin inside first
     if (rayorig > min && rayorig < max)
         return true;
-    
+
     // Check each face in turn, only check closest 3
     // Min x
     if (rayorig.x <= min.x && raydir.x > 0)
@@ -68,9 +68,7 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
-                hitpoint.z >= min.z && hitpoint.z <= max.z &&
-                (!hit || t < lowt))
+            if (hitpoint.y >= min.y && hitpoint.y <= max.y && hitpoint.z >= min.z && hitpoint.z <= max.z && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
@@ -85,9 +83,7 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
-                hitpoint.z >= min.z && hitpoint.z <= max.z &&
-                (!hit || t < lowt))
+            if (hitpoint.y >= min.y && hitpoint.y <= max.y && hitpoint.z >= min.z && hitpoint.z <= max.z && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
@@ -102,9 +98,7 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-                hitpoint.z >= min.z && hitpoint.z <= max.z &&
-                (!hit || t < lowt))
+            if (hitpoint.x >= min.x && hitpoint.x <= max.x && hitpoint.z >= min.z && hitpoint.z <= max.z && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
@@ -116,15 +110,12 @@ bool Ray::intersects(const AABB& box, float* distance) const
     {
         t = (max.y - rayorig.y) / raydir.y;
         if
-            
-            
-            (t >= 0)
+
+        (t >= 0)
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-                hitpoint.z >= min.z && hitpoint.z <= max.z &&
-                (!hit || t < lowt))
+            if (hitpoint.x >= min.x && hitpoint.x <= max.x && hitpoint.z >= min.z && hitpoint.z <= max.z && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
@@ -139,9 +130,7 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-                hitpoint.y >= min.y && hitpoint.y <= max.y &&
-                (!hit || t < lowt))
+            if (hitpoint.x >= min.x && hitpoint.x <= max.x && hitpoint.y >= min.y && hitpoint.y <= max.y && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
@@ -156,80 +145,78 @@ bool Ray::intersects(const AABB& box, float* distance) const
         {
             // Substitute t back into ray and check bounds and dist
             hitpoint = rayorig + raydir * t;
-            if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
-                hitpoint.y >= min.y && hitpoint.y <= max.y &&
-                (!hit || t < lowt))
+            if (hitpoint.x >= min.x && hitpoint.x <= max.x && hitpoint.y >= min.y && hitpoint.y <= max.y && (!hit || t < lowt))
             {
                 hit = true;
                 lowt = t;
             }
         }
     }
-    
+
     if (distance)
         *distance = lowt;
-    
+
     return hit;
 }
 
-bool Ray::intersects(const OBB& obb, float* distance) const
+bool Ray::intersects(const OBB &obb, float* distance) const
 {
     AABB aabb;
-    aabb._min = - obb._extents;
+    aabb._min = -obb._extents;
     aabb._max = obb._extents;
-    
+
     Ray ray;
     ray._direction = _direction;
     ray._origin = _origin;
-    
+
     Mat4 mat = Mat4::IDENTITY;
     mat.m[0] = obb._xAxis.x;
     mat.m[1] = obb._xAxis.y;
     mat.m[2] = obb._xAxis.z;
-    
+
     mat.m[4] = obb._yAxis.x;
     mat.m[5] = obb._yAxis.y;
     mat.m[6] = obb._yAxis.z;
-    
+
     mat.m[8] = obb._zAxis.x;
     mat.m[9] = obb._zAxis.y;
     mat.m[10] = obb._zAxis.z;
-    
+
     mat.m[12] = obb._center.x;
     mat.m[13] = obb._center.y;
     mat.m[14] = obb._center.z;
-    
+
     mat = mat.getInversed();
-    
+
     ray.transform(mat);
-    
+
     return ray.intersects(aabb, distance);
-    
+
 }
 
-float Ray::dist(const Plane& plane) const
+float Ray::dist(const Plane &plane) const
 {
     float ndd = Vec3::dot(plane.getNormal(), _direction);
-    if(ndd == 0)
+    if (ndd == 0)
         return 0.0f;
     float ndo = Vec3::dot(plane.getNormal(), _origin);
     return (plane.getDist() - ndo) / ndd;
 }
 
-Vec3 Ray::intersects(const Plane& plane) const
+Vec3 Ray::intersects(const Plane &plane) const
 {
     float dis = this->dist(plane);
     return _origin + dis * _direction;
 }
 
-void Ray::set(const Vec3& origin, const Vec3& direction)
+void Ray::set(const Vec3 &origin, const Vec3 &direction)
 {
     _origin = origin;
     _direction = direction;
     _direction.normalize();
 }
 
-void Ray::transform(const Mat4& matrix)
+void Ray::transform(const Mat4 &matrix)
 {
     matrix.transformPoint(&_origin);
     matrix.transformVector(&_direction);

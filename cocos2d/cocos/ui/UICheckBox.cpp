@@ -27,8 +27,9 @@ THE SOFTWARE.
 
 NS_CC_BEGIN
 
-namespace ui {
-    
+namespace ui
+{
+
 IMPLEMENT_CLASS_GUI_INFO(CheckBox)
 
 CheckBox::CheckBox()
@@ -42,7 +43,7 @@ CheckBox::~CheckBox()
 
 CheckBox* CheckBox::create()
 {
-    CheckBox* widget = new (std::nothrow) CheckBox();
+    CheckBox* widget = new(std::nothrow) CheckBox();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -51,20 +52,13 @@ CheckBox* CheckBox::create()
     CC_SAFE_DELETE(widget);
     return nullptr;
 }
-    
-CheckBox* CheckBox::create(const std::string& backGround,
-                           const std::string& backGroundSelected,
-                           const std::string& cross,
-                           const std::string& backGroundDisabled,
-                           const std::string& frontCrossDisabled,
-                           TextureResType texType)
+
+CheckBox* CheckBox::create(const std::string &backGround, const std::string &backGroundSelected,
+                           const std::string &cross, const std::string &backGroundDisabled,
+                           const std::string &frontCrossDisabled, TextureResType texType)
 {
-    CheckBox *pWidget = new (std::nothrow) CheckBox;
-    if (pWidget && pWidget->init(backGround,
-                                 backGroundSelected,
-                                 cross,
-                                 backGroundDisabled,
-                                 frontCrossDisabled,
+    CheckBox* pWidget = new(std::nothrow) CheckBox;
+    if (pWidget && pWidget->init(backGround, backGroundSelected, cross, backGroundDisabled, frontCrossDisabled,
                                  texType))
     {
         pWidget->autorelease();
@@ -73,18 +67,11 @@ CheckBox* CheckBox::create(const std::string& backGround,
     CC_SAFE_DELETE(pWidget);
     return nullptr;
 }
-    
-CheckBox* CheckBox::create(const std::string& backGround,
-                           const std::string& cross,
-                           TextureResType texType)
+
+CheckBox* CheckBox::create(const std::string &backGround, const std::string &cross, TextureResType texType)
 {
-    CheckBox *pWidget = new (std::nothrow) CheckBox;
-    if (pWidget && pWidget->init(backGround,
-                                 "",
-                                 cross,
-                                 "",
-                                 "",
-                                 texType))
+    CheckBox* pWidget = new(std::nothrow) CheckBox;
+    if (pWidget && pWidget->init(backGround, "", cross, "", "", texType))
     {
         pWidget->autorelease();
         return pWidget;
@@ -92,8 +79,8 @@ CheckBox* CheckBox::create(const std::string& backGround,
     CC_SAFE_DELETE(pWidget);
     return nullptr;
 }
-    
-void CheckBox::onTouchEnded(Touch *touch, Event *unusedEvent)
+
+void CheckBox::onTouchEnded(Touch* touch, Event* unusedEvent)
 {
     bool highlight = _highlight;
 
@@ -113,12 +100,11 @@ void CheckBox::onTouchEnded(Touch *touch, Event *unusedEvent)
         }
     }
 }
-    
 
 void CheckBox::dispatchSelectChangedEvent(bool selected)
 {
     EventType eventType = (selected ? EventType::SELECTED : EventType::UNSELECTED);
-    
+
     this->retain();
     if (_checkBoxEventCallback)
     {
@@ -128,16 +114,16 @@ void CheckBox::dispatchSelectChangedEvent(bool selected)
     {
         _ccEventCallback(this, static_cast<int>(eventType));
     }
-    
+
     this->release();
-    
+
 }
 
-void CheckBox::addEventListener(const ccCheckBoxCallback& callback)
+void CheckBox::addEventListener(const ccCheckBoxCallback &callback)
 {
     _checkBoxEventCallback = callback;
 }
-    
+
 std::string CheckBox::getDescription() const
 {
     return "CheckBox";
@@ -148,7 +134,7 @@ Widget* CheckBox::createCloneInstance()
     return CheckBox::create();
 }
 
-void CheckBox::copySpecialProperties(Widget *widget)
+void CheckBox::copySpecialProperties(Widget* widget)
 {
     CheckBox* checkBox = dynamic_cast<CheckBox*>(widget);
     if (checkBox)

@@ -1,4 +1,4 @@
-if(ANDROID)
+if (ANDROID)
     set(COCOS_NETWORK_HEADER
         network/CCDownloader-android.h
         )
@@ -10,7 +10,7 @@ if(ANDROID)
         network/CCDownloader-android.cpp
         network/Uri.cpp
         )
-elseif(APPLE)
+elseif (APPLE)
     set(COCOS_NETWORK_HEADER
         network/CCDownloader-apple.h
         network/HttpAsynConnection-apple.h
@@ -24,7 +24,7 @@ elseif(APPLE)
         network/CCDownloader-curl.cpp
         network/Uri.cpp
         )
-else()
+else ()
     set(COCOS_NETWORK_SRC
         network/HttpClient.cpp
         network/SocketIO.cpp
@@ -33,7 +33,7 @@ else()
         network/CCDownloader-curl.cpp
         network/Uri.cpp
         )
-endif()
+endif ()
 
 set(COCOS_NETWORK_HEADER
     ${COCOS_NETWORK_HEADER}

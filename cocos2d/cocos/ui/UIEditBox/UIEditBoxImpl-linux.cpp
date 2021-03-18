@@ -28,10 +28,10 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
 
-#include "ui/UIEditBox/UIEditBox.h"
-#include "2d/CCLabel.h"
-#include "base/ccUTF8.h"
-#include <gtk/gtk.h>
+    #include "ui/UIEditBox/UIEditBox.h"
+    #include "2d/CCLabel.h"
+    #include "base/ccUTF8.h"
+    #include <gtk/gtk.h>
 
 // destroy dialog when lost focus
 static void dialogFocusOutCallback(GtkWidget* widget, gpointer user_data)
@@ -42,9 +42,9 @@ static void dialogFocusOutCallback(GtkWidget* widget, gpointer user_data)
 bool LinuxInputBox(std::string &entryLine)
 {
     bool didChange = false;
-    GtkWidget *dialog;
-    GtkWidget *entry;
-    GtkWidget *contentArea;
+    GtkWidget* dialog;
+    GtkWidget* entry;
+    GtkWidget* contentArea;
 
     gtk_init(0, NULL);
     dialog = gtk_dialog_new();
@@ -62,15 +62,15 @@ bool LinuxInputBox(std::string &entryLine)
     gtk_widget_show_all(dialog);
 
     gint result = gtk_dialog_run(GTK_DIALOG(dialog));
-    switch(result)
+    switch (result)
     {
-    case 0:
-        entryLine = gtk_entry_get_text(GTK_ENTRY(entry));
-        didChange = true;
-        break;
-    default:
-        // CCLOG("Undefined. Perhaps dialog was closed");
-        break;
+        case 0:
+            entryLine = gtk_entry_get_text(GTK_ENTRY(entry));
+            didChange = true;
+            break;
+        default:
+            // CCLOG("Undefined. Perhaps dialog was closed");
+            break;
     }
 
     gtk_widget_destroy(dialog);
@@ -80,7 +80,8 @@ bool LinuxInputBox(std::string &entryLine)
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 {
@@ -90,12 +91,12 @@ EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 EditBoxImplLinux::EditBoxImplLinux(EditBox* pEditText)
 : EditBoxImplCommon(pEditText)
 {
-    
+
 }
 
 EditBoxImplLinux::~EditBoxImplLinux()
 {
-	
+
 }
 
 bool EditBoxImplLinux::isEditing()

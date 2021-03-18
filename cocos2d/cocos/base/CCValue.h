@@ -60,10 +60,10 @@ public:
 
     /** Default constructor. */
     Value();
-    
+
     /** Create a Value by an unsigned char value. */
     explicit Value(unsigned char v);
-    
+
     /** Create a Value by an integer value. */
     explicit Value(int v);
 
@@ -72,87 +72,87 @@ public:
 
     /** Create a Value by a float value. */
     explicit Value(float v);
-    
+
     /** Create a Value by a double value. */
     explicit Value(double v);
-    
+
     /** Create a Value by a bool value. */
     explicit Value(bool v);
-    
+
     /** Create a Value by a char pointer. It will copy the chars internally. */
     explicit Value(const char* v);
-    
+
     /** Create a Value by a string. */
-    explicit Value(const std::string& v);
-    
+    explicit Value(const std::string &v);
+
     /** Create a Value by a ValueVector object. */
-    explicit Value(const ValueVector& v);
+    explicit Value(const ValueVector &v);
     /** Create a Value by a ValueVector object. It will use std::move internally. */
-    explicit Value(ValueVector&& v);
-    
+    explicit Value(ValueVector &&v);
+
     /** Create a Value by a ValueMap object. */
-    explicit Value(const ValueMap& v);
+    explicit Value(const ValueMap &v);
     /** Create a Value by a ValueMap object. It will use std::move internally. */
-    explicit Value(ValueMap&& v);
-    
+    explicit Value(ValueMap &&v);
+
     /** Create a Value by a ValueMapIntKey object. */
-    explicit Value(const ValueMapIntKey& v);
+    explicit Value(const ValueMapIntKey &v);
     /** Create a Value by a ValueMapIntKey object. It will use std::move internally. */
-    explicit Value(ValueMapIntKey&& v);
+    explicit Value(ValueMapIntKey &&v);
 
     /** Create a Value by another Value object. */
-    Value(const Value& other);
+    Value(const Value &other);
     /** Create a Value by a Value object. It will use std::move internally. */
-    Value(Value&& other);
-    
+    Value(Value &&other);
+
     /** Destructor. */
     ~Value();
 
     /** Assignment operator, assign from Value to Value. */
-    Value& operator= (const Value& other);
+    Value &operator=(const Value &other);
     /** Assignment operator, assign from Value to Value. It will use std::move internally. */
-    Value& operator= (Value&& other);
+    Value &operator=(Value &&other);
 
     /** Assignment operator, assign from unsigned char to Value. */
-    Value& operator= (unsigned char v);
+    Value &operator=(unsigned char v);
     /** Assignment operator, assign from integer to Value. */
-    Value& operator= (int v);
+    Value &operator=(int v);
     /** Assignment operator, assign from integer to Value. */
-    Value& operator= (unsigned int v);
+    Value &operator=(unsigned int v);
     /** Assignment operator, assign from float to Value. */
-    Value& operator= (float v);
+    Value &operator=(float v);
     /** Assignment operator, assign from double to Value. */
-    Value& operator= (double v);
+    Value &operator=(double v);
     /** Assignment operator, assign from bool to Value. */
-    Value& operator= (bool v);
+    Value &operator=(bool v);
     /** Assignment operator, assign from char* to Value. */
-    Value& operator= (const char* v);
+    Value &operator=(const char* v);
     /** Assignment operator, assign from string to Value. */
-    Value& operator= (const std::string& v);
+    Value &operator=(const std::string &v);
 
     /** Assignment operator, assign from ValueVector to Value. */
-    Value& operator= (const ValueVector& v);
+    Value &operator=(const ValueVector &v);
     /** Assignment operator, assign from ValueVector to Value. */
-    Value& operator= (ValueVector&& v);
+    Value &operator=(ValueVector &&v);
 
     /** Assignment operator, assign from ValueMap to Value. */
-    Value& operator= (const ValueMap& v);
+    Value &operator=(const ValueMap &v);
     /** Assignment operator, assign from ValueMap to Value. It will use std::move internally. */
-    Value& operator= (ValueMap&& v);
+    Value &operator=(ValueMap &&v);
 
     /** Assignment operator, assign from ValueMapIntKey to Value. */
-    Value& operator= (const ValueMapIntKey& v);
+    Value &operator=(const ValueMapIntKey &v);
     /** Assignment operator, assign from ValueMapIntKey to Value. It will use std::move internally. */
-    Value& operator= (ValueMapIntKey&& v);
+    Value &operator=(ValueMapIntKey &&v);
 
     /** != operator overloading */
-    bool operator!= (const Value& v);
+    bool operator!=(const Value &v);
     /** != operator overloading */
-    bool operator!= (const Value& v) const;
+    bool operator!=(const Value &v) const;
     /** == operator overloading */
-    bool operator== (const Value& v);
+    bool operator==(const Value &v);
     /** == operator overloading */
-    bool operator== (const Value& v) const;
+    bool operator==(const Value &v) const;
 
     /** Gets as a byte value. Will convert to unsigned char if possible, or will trigger assert error. */
     unsigned char asByte() const;
@@ -170,25 +170,28 @@ public:
     std::string asString() const;
 
     /** Gets as a ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
-    ValueVector& asValueVector();
+    ValueVector &asValueVector();
     /** Gets as a const ValueVector reference. Will convert to ValueVector if possible, or will trigger assert error. */
-    const ValueVector& asValueVector() const;
+    const ValueVector &asValueVector() const;
 
     /** Gets as a ValueMap reference. Will convert to ValueMap if possible, or will trigger assert error. */
-    ValueMap& asValueMap();
+    ValueMap &asValueMap();
     /** Gets as a const ValueMap reference. Will convert to ValueMap if possible, or will trigger assert error. */
-    const ValueMap& asValueMap() const;
+    const ValueMap &asValueMap() const;
 
     /** Gets as a ValueMapIntKey reference. Will convert to ValueMapIntKey if possible, or will trigger assert error. */
-    ValueMapIntKey& asIntKeyMap();
+    ValueMapIntKey &asIntKeyMap();
     /** Gets as a const ValueMapIntKey reference. Will convert to ValueMapIntKey if possible, or will trigger assert error. */
-    const ValueMapIntKey& asIntKeyMap() const;
+    const ValueMapIntKey &asIntKeyMap() const;
 
     /**
      * Checks if the Value is null.
      * @return True if the Value is null, false if not.
      */
-    bool isNull() const { return _type == Type::NONE; }
+    bool isNull() const
+    {
+        return _type == Type::NONE;
+    }
 
     /** Value type wrapped by Value. */
     enum class Type
@@ -218,7 +221,10 @@ public:
     };
 
     /** Gets the value type. */
-    Type getType() const { return _type; }
+    Type getType() const
+    {
+        return _type;
+    }
 
     /** Gets the description of the class. */
     std::string getDescription() const;
@@ -240,7 +246,7 @@ private:
         ValueVector* vectorVal;
         ValueMap* mapVal;
         ValueMapIntKey* intKeyMapVal;
-    }_field;
+    } _field;
 
     Type _type;
 };
@@ -248,6 +254,5 @@ private:
 /** @} */
 
 NS_CC_END
-
 
 #endif /* defined(__cocos2d_libs__CCValue__) */

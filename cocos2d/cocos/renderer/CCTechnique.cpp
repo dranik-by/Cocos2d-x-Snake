@@ -36,7 +36,7 @@ NS_CC_BEGIN
 
 Technique* Technique::createWithProgramState(Material* parent, backend::ProgramState* state)
 {
-    auto technique = new (std::nothrow) Technique();
+    auto technique = new(std::nothrow) Technique();
     if (technique && technique->init(parent))
     {
         auto pass = Pass::createWithProgramState(technique, state);
@@ -45,12 +45,12 @@ Technique* Technique::createWithProgramState(Material* parent, backend::ProgramS
         technique->autorelease();
         return technique;
     }
-    return  nullptr;
+    return nullptr;
 }
 
 Technique* Technique::create(Material* material)
 {
-    auto technique = new (std::nothrow) Technique();
+    auto technique = new(std::nothrow) Technique();
     if (technique && technique->init(material))
     {
         technique->autorelease();
@@ -76,7 +76,7 @@ bool Technique::init(Material* parent)
 
 Technique* Technique::clone() const
 {
-    auto technique = new (std::nothrow) Technique();
+    auto technique = new(std::nothrow) Technique();
 
     if (technique)
     {
@@ -94,7 +94,7 @@ Technique* Technique::clone() const
     return technique;
 }
 
-void Technique::addPass(Pass *pass)
+void Technique::addPass(Pass* pass)
 {
     _passes.pushBack(pass);
 }
@@ -111,7 +111,7 @@ void Technique::setName(const std::string &name)
 
 Pass* Technique::getPassByIndex(ssize_t index) const
 {
-    CC_ASSERT(index>=0 && index<_passes.size() && "Invalid index");
+    CC_ASSERT(index >= 0 && index < _passes.size() && "Invalid index");
     return _passes.at(index);
 }
 
@@ -120,7 +120,7 @@ ssize_t Technique::getPassCount() const
     return _passes.size();
 }
 
-const Vector<Pass*>& Technique::getPasses() const
+const Vector<Pass*> &Technique::getPasses() const
 {
     return _passes;
 }

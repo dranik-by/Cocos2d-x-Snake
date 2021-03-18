@@ -32,30 +32,33 @@
 #include <string>
 #include <sstream>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) 
-#include "platform/android/jni/JniHelper.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    #include "platform/android/jni/JniHelper.h"
 #endif
 
 NS_CC_BEGIN
 
-namespace StringUtils {
+namespace StringUtils
+{
 
-namespace UnicodeCharacters {
-    const char32_t NewLine                = 0x000A; // 10
-    const char32_t CarriageReturn         = 0x000D; // 13
-    const char32_t NextCharNoChangeX      = 0x0008; // 8
-    const char32_t Space                  = 0x0020; // 32
-    const char32_t NoBreakSpace           = 0x00A0; // 160
+namespace UnicodeCharacters
+{
+const char32_t NewLine = 0x000A; // 10
+const char32_t CarriageReturn = 0x000D; // 13
+const char32_t NextCharNoChangeX = 0x0008; // 8
+const char32_t Space = 0x0020; // 32
+const char32_t NoBreakSpace = 0x00A0; // 160
 }
 
-namespace AsciiCharacters {
-    const char NewLine                    = '\n';
-    const char CarriageReturn             = '\r';
-    const char NextCharNoChangeX          = '\b';
-    const char Space                      = ' ';
+namespace AsciiCharacters
+{
+const char NewLine = '\n';
+const char CarriageReturn = '\r';
+const char NextCharNoChangeX = '\b';
+const char Space = ' ';
 }
 
-template<typename T>
+template <typename T>
 std::string toString(T arg)
 {
     std::stringstream ss;
@@ -85,44 +88,42 @@ std::string CC_DLL format(const char* format, ...) CC_FORMAT_PRINTF(1, 2);
  *    }
  *  @endcode
  */
-CC_DLL bool UTF8ToUTF16(const std::string& inUtf8, std::u16string& outUtf16);
+CC_DLL bool UTF8ToUTF16(const std::string &inUtf8, std::u16string &outUtf16);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF8 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF8ToUTF32(const std::string& inUtf8, std::u32string& outUtf32);
+CC_DLL bool UTF8ToUTF32(const std::string &inUtf8, std::u32string &outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF16ToUTF8(const std::u16string& inUtf16, std::string& outUtf8);
-    
+CC_DLL bool UTF16ToUTF8(const std::u16string &inUtf16, std::string &outUtf8);
+
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF16 to UTF32.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF16ToUTF32(const std::u16string& inUtf16, std::u32string& outUtf32);
+CC_DLL bool UTF16ToUTF32(const std::u16string &inUtf16, std::u32string &outUtf32);
 
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF8.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF32ToUTF8(const std::u32string& inUtf32, std::string& outUtf8);
-    
+CC_DLL bool UTF32ToUTF8(const std::u32string &inUtf32, std::string &outUtf8);
+
 /**
  *  @brief Same as \a UTF8ToUTF16 but converts form UTF32 to UTF16.
  *
  *  @see UTF8ToUTF16
  */
-CC_DLL bool UTF32ToUTF16(const std::u32string& inUtf32, std::u16string& outUtf16);
-
-
+CC_DLL bool UTF32ToUTF16(const std::u32string &inUtf32, std::u16string &outUtf16);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
@@ -151,12 +152,12 @@ CC_DLL jstring newStringUTFJNI(JNIEnv* env, const std::string& utf8Str, bool* re
 /**
  *  @brief Trims the unicode spaces at the end of char16_t vector.
  */
-CC_DLL void trimUTF16Vector(std::vector<char16_t>& str);
-    
+CC_DLL void trimUTF16Vector(std::vector<char16_t> &str);
+
 /**
  *  @brief Trims the unicode spaces at the end of char32_t vector.
  */
-CC_DLL void trimUTF32Vector(std::vector<char32_t>& str);
+CC_DLL void trimUTF32Vector(std::vector<char32_t> &str);
 
 /**
  *  @brief Whether the character is a whitespace character.
@@ -178,7 +179,7 @@ CC_DLL bool isUnicodeSpace(char32_t ch);
  *
  */
 CC_DLL bool isCJKUnicode(char32_t ch);
-    
+
 /**
  *  @brief Whether the character is a non-breaking character.
  *  @param ch    The unicode character.
@@ -191,13 +192,13 @@ CC_DLL bool isCJKUnicode(char32_t ch);
  *
  */
 CC_DLL bool isUnicodeNonBreaking(char32_t ch);
-    
+
 /**
  *  @brief Returns the length of the string in characters.
  *  @param utf8 An UTF-8 encoded string.
  *  @returns The length of the string in characters.
  */
-CC_DLL long getCharacterCountInUTF8String(const std::string& utf8);
+CC_DLL long getCharacterCountInUTF8String(const std::string &utf8);
 
 /**
  *  @brief Gets the index of the last character that is not equal to the character given.
@@ -205,14 +206,12 @@ CC_DLL long getCharacterCountInUTF8String(const std::string& utf8);
  *  @param c     The character to be searched for.
  *  @returns The index of the last character that is not \p c.
  */
-CC_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t>& str, char16_t c);
+CC_DLL unsigned int getIndexOfLastNotChar16(const std::vector<char16_t> &str, char16_t c);
 
 /**
  *  @brief Gets char16_t vector from a given utf16 string.
  */
-CC_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string& utf16);
-
-
+CC_DLL std::vector<char16_t> getChar16VectorFromUTF16String(const std::u16string &utf16);
 
 /**
 * Utf8 sequence
@@ -225,27 +224,38 @@ public:
     struct CharUTF8
     {
         std::string _char;
-        bool isASCII() const { return _char.size() == 1; }
+
+        bool isASCII() const
+        {
+            return _char.size() == 1;
+        }
     };
     typedef std::vector<CharUTF8> CharUTF8Store;
 
     StringUTF8();
-    StringUTF8(const std::string& newStr);
+    StringUTF8(const std::string &newStr);
     ~StringUTF8();
 
     std::size_t length() const;
-    void replace(const std::string& newStr);
+    void replace(const std::string &newStr);
 
     std::string getAsCharSequence() const;
     std::string getAsCharSequence(std::size_t pos) const;
     std::string getAsCharSequence(std::size_t pos, std::size_t len) const;
 
     bool deleteChar(std::size_t pos);
-    bool insert(std::size_t pos, const std::string& insertStr);
-    bool insert(std::size_t pos, const StringUTF8& insertStr);
+    bool insert(std::size_t pos, const std::string &insertStr);
+    bool insert(std::size_t pos, const StringUTF8 &insertStr);
 
-    CharUTF8Store& getString() { return _str; }
-    const CharUTF8Store& getString() const { return _str; }
+    CharUTF8Store &getString()
+    {
+        return _str;
+    }
+
+    const CharUTF8Store &getString() const
+    {
+        return _str;
+    }
 
 private:
     CharUTF8Store _str;

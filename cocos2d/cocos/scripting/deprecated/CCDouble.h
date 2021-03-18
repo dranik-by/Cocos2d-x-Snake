@@ -41,12 +41,18 @@ class CC_DLL __Double : public Ref, public Clonable
 {
 public:
     __Double(double v)
-        : _value(v) {}
-    double getValue() const {return _value;}
+    : _value(v)
+    {
+    }
+
+    double getValue() const
+    {
+        return _value;
+    }
 
     static __Double* create(double v)
     {
-        __Double* pRet = new (std::nothrow) __Double(v);
+        __Double* pRet = new(std::nothrow) __Double(v);
         if (pRet)
         {
             pRet->autorelease();
@@ -55,12 +61,16 @@ public:
     }
 
     /* override functions */
-    virtual void acceptVisitor(DataVisitor &visitor) { visitor.visit(this); }
-    
+    virtual void acceptVisitor(DataVisitor &visitor)
+    {
+        visitor.visit(this);
+    }
+
     virtual __Double* clone() const override
     {
         return __Double::create(_value);
     }
+
 private:
     double _value;
 };

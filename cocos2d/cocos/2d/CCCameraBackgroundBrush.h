@@ -42,9 +42,10 @@ class CameraBackgroundDepthBrush;
 class CameraBackgroundSkyBoxBrush;
 class Camera;
 
-namespace backend {
-    class ProgramState;
-    class Buffer;
+namespace backend
+{
+class ProgramState;
+class Buffer;
 }
 
 /**
@@ -64,35 +65,37 @@ public:
         COLOR, // color brush. See CameraBackgroundColorBrush
         SKYBOX, // skybox brush. See CameraBackgroundSkyBoxBrush
     };
-    
+
     /**
      * get brush type
      * @return BrushType
      */
-    virtual BrushType getBrushType() const { return BrushType::NONE; }
-    
+    virtual BrushType getBrushType() const
+    {
+        return BrushType::NONE;
+    }
+
     /**
      * Creates a none brush, it does nothing when clear the background
      * @return Created brush.
      */
     static CameraBackgroundBrush* createNoneBrush();
-    
+
     /**
      * Creates a depth brush, which clears depth buffer with a given depth.
      * @param depth Depth used to clear depth buffer
      * @return Created brush
      */
     static CameraBackgroundDepthBrush* createDepthBrush(float depth = 1.f);
-    
+
     /**
      * Creates a color brush
      * @param color Color of brush
      * @param depth Depth used to clear depth buffer
      * @return Created brush
      */
-    static CameraBackgroundColorBrush* createColorBrush(const Color4F& color, float depth);
-    
-    
+    static CameraBackgroundColorBrush* createColorBrush(const Color4F &color, float depth);
+
     /** Creates a Skybox brush with 6 textures.
      @param positive_x texture for the right side of the texture cube face.
      @param negative_x texture for the up side of the texture cube face.
@@ -102,22 +105,31 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new brush inited with given parameters.
      */
-    static CameraBackgroundSkyBoxBrush* createSkyboxBrush(const std::string& positive_x, const std::string& negative_x,
-                                                          const std::string& positive_y, const std::string& negative_y,
-                                                          const std::string& positive_z, const std::string& negative_z);
+    static CameraBackgroundSkyBoxBrush* createSkyboxBrush(const std::string &positive_x, const std::string &negative_x,
+                                                          const std::string &positive_y, const std::string &negative_y,
+                                                          const std::string &positive_z, const std::string &negative_z);
+
     /**
      * draw the background
      */
-    virtual void drawBackground(Camera* /*camera*/) {}
+    virtual void drawBackground(Camera* /*camera*/)
+    {
+    }
 
-    virtual bool isValid() { return true; }
+    virtual bool isValid()
+    {
+        return true;
+    }
 
 CC_CONSTRUCTOR_ACCESS :
     CameraBackgroundBrush();
     virtual ~CameraBackgroundBrush();
 
-    virtual bool init() { return true; }
-    
+    virtual bool init()
+    {
+        return true;
+    }
+
 protected:
     backend::ProgramState* _programState = nullptr;
 };
@@ -134,24 +146,30 @@ public:
      * @return Created brush
      */
     static CameraBackgroundDepthBrush* create(float depth);
-    
+
     /**
      * Get brush type. Should be BrushType::DEPTH
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::DEPTH; }
-    
+    virtual BrushType getBrushType() const override
+    {
+        return BrushType::DEPTH;
+    }
+
     /**
      * Draw background
      */
     virtual void drawBackground(Camera* camera) override;
-    
+
     /**
      * Set depth
      * @param depth Depth used to clear depth buffer
      */
-    void setDepth(float depth) { _depth = depth; }
-    
+    void setDepth(float depth)
+    {
+        _depth = depth;
+    }
+
 CC_CONSTRUCTOR_ACCESS:
     CameraBackgroundDepthBrush();
     virtual ~CameraBackgroundDepthBrush();
@@ -161,9 +179,9 @@ private:
     void onBeforeDraw();
     void onAfterDraw();
 protected:
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
-#endif
+    #endif
     void initBuffer();
 
 protected:
@@ -174,7 +192,8 @@ protected:
 
     bool _clearColor;
     std::vector<V3F_C4B_T2F> _vertices;
-    struct {
+    struct
+    {
         uint32_t stencilWriteMask = 0;
         bool depthTest = true;
         backend::CompareFunction compareFunc = backend::CompareFunction::ALWAYS;
@@ -192,33 +211,36 @@ public:
      * Get brush type. Should be BrushType::COLOR
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::COLOR; }
-    
+    virtual BrushType getBrushType() const override
+    {
+        return BrushType::COLOR;
+    }
+
     /**
      * Create a color brush
      * @param color Color used to clear the color buffer
      * @param depth Depth used to clear the depth buffer
      * @return Created brush
      */
-    static CameraBackgroundColorBrush* create(const Color4F& color, float depth);
-    
+    static CameraBackgroundColorBrush* create(const Color4F &color, float depth);
+
     /**
      * Draw background
      */
     virtual void drawBackground(Camera* camera) override;
-    
+
     /**
      * Set clear color
      * @param color Color used to clear the color buffer
      */
-    void setColor(const Color4F& color);
+    void setColor(const Color4F &color);
 
 CC_CONSTRUCTOR_ACCESS:
     CameraBackgroundColorBrush();
     virtual ~CameraBackgroundColorBrush();
 
     virtual bool init() override;
-    
+
 protected:
     Color4F _color;
 };
@@ -237,8 +259,11 @@ public:
      * Get brush type. Should be BrushType::SKYBOX
      * @return brush type
      */
-    virtual BrushType getBrushType() const override { return BrushType::SKYBOX; }
-    
+    virtual BrushType getBrushType() const override
+    {
+        return BrushType::SKYBOX;
+    }
+
     /** Creates a Skybox brush with 6 textures.
      @param positive_x texture for the right side of the texture cube face.
      @param negative_x texture for the up side of the texture cube face.
@@ -248,10 +273,10 @@ public:
      @param negative_z texture for the rear side of the texture cube face.
      @return  A new brush inited with given parameters.
      */
-    static CameraBackgroundSkyBoxBrush* create(const std::string& positive_x, const std::string& negative_x,
-                                        const std::string& positive_y, const std::string& negative_y,
-                                        const std::string& positive_z, const std::string& negative_z);
-    
+    static CameraBackgroundSkyBoxBrush* create(const std::string &positive_x, const std::string &negative_x,
+                                               const std::string &positive_y, const std::string &negative_y,
+                                               const std::string &positive_z, const std::string &negative_z);
+
     /** Creates a Skybox brush with 6 textures.
      */
     static CameraBackgroundSkyBoxBrush* create();
@@ -259,8 +284,8 @@ public:
      * Set skybox texture 
      * @param texture Skybox texture
      */
-    void setTexture(TextureCube*  texture);
-    
+    void setTexture(TextureCube* texture);
+
     /**
      * Draw background
      */
@@ -269,12 +294,12 @@ public:
     bool isActived() const;
     void setActived(bool actived);
     virtual void setTextureValid(bool valid);
-    virtual bool isValid()override;
+    virtual bool isValid() override;
 
 CC_CONSTRUCTOR_ACCESS :
     CameraBackgroundSkyBoxBrush();
     virtual ~CameraBackgroundSkyBoxBrush();
-    
+
     /**
      * init Skybox.
      */
@@ -286,12 +311,12 @@ private:
 
 protected:
     void initBuffer();
-    
-    TextureCube*  _texture;
-    
-#if CC_ENABLE_CACHE_TEXTURE_DATA
+
+    TextureCube* _texture;
+
+    #if CC_ENABLE_CACHE_TEXTURE_DATA
     EventListenerCustom* _backToForegroundListener;
-#endif
+    #endif
 
 private:
     bool _actived;
@@ -304,12 +329,13 @@ private:
     backend::UniformLocation _uniformCameraRotLoc;
     backend::UniformLocation _uniformEnvLoc;
 
-    struct {
+    struct
+    {
         bool depthTest = true;
         bool depthWrite = true;
         backend::CompareFunction depthFunc = backend::CompareFunction::ALWAYS;
         backend::CullMode cullMode = backend::CullMode::BACK;
-    }_stateBlock;
+    } _stateBlock;
 };
 
 NS_CC_END

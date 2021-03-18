@@ -32,8 +32,8 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CocosStudioExport.h"
 #include <queue>
 
-namespace cocostudio {
-
+namespace cocostudio
+{
 
 enum MovementEventType
 {
@@ -42,19 +42,18 @@ enum MovementEventType
     LOOP_COMPLETE
 };
 
-
 class Armature;
 class Bone;
 
-typedef void (cocos2d::Ref::*SEL_MovementEventCallFunc)(Armature *, MovementEventType, const std::string&);
-typedef void (cocos2d::Ref::*SEL_FrameEventCallFunc)(Bone *, const std::string&, int, int);
+typedef void (cocos2d::Ref::*SEL_MovementEventCallFunc)(Armature*, MovementEventType, const std::string &);
+typedef void (cocos2d::Ref::*SEL_FrameEventCallFunc)(Bone*, const std::string &, int, int);
 
 #define movementEvent_selector(_SELECTOR) (cocostudio::SEL_MovementEventCallFunc)(&_SELECTOR)
 #define frameEvent_selector(_SELECTOR) (cocostudio::SEL_FrameEventCallFunc)(&_SELECTOR)
 
 struct FrameEvent
 {
-    Bone *bone;
+    Bone* bone;
     std::string frameEventName;
     int originFrameIndex;
     int currentFrameIndex;
@@ -62,19 +61,19 @@ struct FrameEvent
 
 struct MovementEvent
 {
-    Armature *armature;
+    Armature* armature;
     MovementEventType movementType;
     std::string movementID;
 };
 
-class  CC_STUDIO_DLL ArmatureAnimation : public ProcessBase
+class CC_STUDIO_DLL ArmatureAnimation : public ProcessBase
 {
 public:
     /**
      * Create with a Armature
      * @param armature The Armature ArmatureAnimation will bind to
      */
-    static ArmatureAnimation *create(Armature *armature);
+    static ArmatureAnimation* create(Armature* armature);
 public:
     /**
      * @js ctor
@@ -90,7 +89,7 @@ public:
      * Init with a Armature
      * @param armature The Armature ArmatureAnimation will bind to
      */
-    virtual bool init(Armature *armature);
+    virtual bool init(Armature* armature);
 
     /**
      * Scale animation play speed.
@@ -108,7 +107,9 @@ public:
     virtual float getSpeedScale() const;
 
     //! The animation update speed
-    CC_DEPRECATED_ATTRIBUTE virtual void setAnimationInternal(float animationInternal) {}
+    CC_DEPRECATED_ATTRIBUTE virtual void setAnimationInternal(float animationInternal)
+    {
+    }
 
     using ProcessBase::play;
     /**
@@ -125,18 +126,18 @@ public:
      *         loop = 0 : this animation is not loop
      *         loop > 0 : this animation is loop
      */
-    virtual void play(const std::string& animationName, int durationTo = -1,  int loop = -1);
+    virtual void play(const std::string &animationName, int durationTo = -1, int loop = -1);
 
     /**
      * Play animation by index, the other param is the same to play.
      * @deprecated, please use playWithIndex
      * @param  animationIndex  the animation index you want to play
      */
-    CC_DEPRECATED_ATTRIBUTE virtual void playByIndex(int animationIndex,  int durationTo = -1, int loop = -1);
-    virtual void playWithIndex(int animationIndex,  int durationTo = -1, int loop = -1);
+    CC_DEPRECATED_ATTRIBUTE virtual void playByIndex(int animationIndex, int durationTo = -1, int loop = -1);
+    virtual void playWithIndex(int animationIndex, int durationTo = -1, int loop = -1);
 
-    virtual void playWithNames(const std::vector<std::string>& movementNames, int durationTo = -1, bool loop = true);
-    virtual void playWithIndexes(const std::vector<int>& movementIndexes, int durationTo = -1, bool loop = true);
+    virtual void playWithNames(const std::vector<std::string> &movementNames, int durationTo = -1, bool loop = true);
+    virtual void playWithIndexes(const std::vector<int> &movementIndexes, int durationTo = -1, bool loop = true);
 
     /**
      * Go to specified frame and play current movement.
@@ -168,7 +169,6 @@ public:
      */
     virtual void stop() override;
 
-
     /**
      * Get movement count
      */
@@ -186,30 +186,35 @@ public:
      * Set armature's movement event callback function
      * To disconnect this event, just setMovementEventCallFunc(nullptr, nullptr);
      */
-    CC_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(cocos2d::Ref *target, SEL_MovementEventCallFunc callFunc);
+    CC_DEPRECATED_ATTRIBUTE void setMovementEventCallFunc(cocos2d::Ref* target, SEL_MovementEventCallFunc callFunc);
 
     /**
      * Set armature's frame event callback function
      * To disconnect this event, just setFrameEventCallFunc(nullptr, nullptr);
      */
-    CC_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(cocos2d::Ref *target, SEL_FrameEventCallFunc callFunc);
-    
-    void setMovementEventCallFunc(std::function<void(Armature *armature, MovementEventType movementType, const std::string& movementID)> listener);
-    void setFrameEventCallFunc(std::function<void(Bone *bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex)> listener);
+    CC_DEPRECATED_ATTRIBUTE void setFrameEventCallFunc(cocos2d::Ref* target, SEL_FrameEventCallFunc callFunc);
 
-    virtual void setAnimationData(AnimationData *data) 
+    void setMovementEventCallFunc(
+    std::function<void(Armature* armature, MovementEventType movementType, const std::string &movementID)> listener);
+    void setFrameEventCallFunc(std::function<void(Bone* bone, const std::string &frameEventName, int originFrameIndex,
+                                                  int currentFrameIndex)> listener);
+
+    virtual void setAnimationData(AnimationData* data)
     {
         if (_animationData != data)
         {
             CC_SAFE_RETAIN(data);
             CC_SAFE_RELEASE(_animationData);
-            _animationData = data; 
+            _animationData = data;
         }
     }
-    virtual AnimationData *getAnimationData() const { return _animationData; }
 
+    virtual AnimationData* getAnimationData() const
+    {
+        return _animationData;
+    }
 
-    /** 
+    /**
      * Returns a user assigned Object
      * 
      * Similar to userData, but instead of holding a void* it holds an object
@@ -218,12 +223,19 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual Ref* getUserObject() { return _userObject; }
-    /** 
+    virtual Ref* getUserObject()
+    {
+        return _userObject;
+    }
+
+    /**
     * @js NA
     * @lua NA
     */
-    virtual const Ref* getUserObject() const { return _userObject; }
+    virtual const Ref* getUserObject() const
+    {
+        return _userObject;
+    }
 
     /**
      * Returns a user assigned Object
@@ -235,7 +247,7 @@ public:
      *
      * @param userObject    A user assigned Object
      */
-    virtual void setUserObject(Ref *userObject);
+    virtual void setUserObject(Ref* userObject);
 protected:
 
     /**
@@ -257,28 +269,31 @@ protected:
      * @js NA
      * @lua NA
      */
-    void frameEvent(Bone *bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex);
+    void frameEvent(Bone* bone, const std::string &frameEventName, int originFrameIndex, int currentFrameIndex);
 
     /**
      * Emit a movement event
      */
-    void movementEvent(Armature *armature, MovementEventType movementType, const std::string& movementID);
+    void movementEvent(Armature* armature, MovementEventType movementType, const std::string &movementID);
 
     void updateMovementList();
 
-    bool isIgnoreFrameEvent() const { return _ignoreFrameEvent; }
+    bool isIgnoreFrameEvent() const
+    {
+        return _ignoreFrameEvent;
+    }
 
     friend class Tween;
 protected:
     //! AnimationData save all MovementDatas this animation used.
-    AnimationData *_animationData;
+    AnimationData* _animationData;
 
     //! Scale the animation speed
     float _speedScale;
 
-    MovementData *_movementData;                //! MovementData save all MovementFrameDatas this animation used.
+    MovementData* _movementData;                //! MovementData save all MovementFrameDatas this animation used.
 
-    Armature *_armature;                        //! A weak reference of armature
+    Armature* _armature;                        //! A weak reference of armature
 
     std::string _movementID;                //! Current movement's name
 
@@ -287,18 +302,18 @@ protected:
     std::vector<Tween*> _tweenList;
 
     bool _ignoreFrameEvent;
-    
+
     std::queue<FrameEvent*> _frameEventQueue;
     std::queue<MovementEvent*> _movementEventQueue;
 
     std::vector<std::string> _movementList;
-    
+
     bool _onMovementList;
     bool _movementListLoop;
     unsigned int _movementIndex;
     int _movementListDurationTo;
 
-    cocos2d::Ref *_userObject;
+    cocos2d::Ref* _userObject;
 protected:
     /**
      * MovementEvent CallFunc.
@@ -317,13 +332,13 @@ protected:
      */
     SEL_FrameEventCallFunc _frameEventCallFunc;
 
+    cocos2d::Ref* _movementEventTarget;
+    cocos2d::Ref* _frameEventTarget;
 
-    cocos2d::Ref *_movementEventTarget;
-    cocos2d::Ref *_frameEventTarget;
-    
-    
-    std::function<void(Armature *armature, MovementEventType movementType, const std::string& movementID)> _movementEventListener;
-    std::function<void(Bone *bone, const std::string& frameEventName, int originFrameIndex, int currentFrameIndex)> _frameEventListener;
+    std::function<void(Armature* armature, MovementEventType movementType,
+                       const std::string &movementID)> _movementEventListener;
+    std::function<void(Bone* bone, const std::string &frameEventName, int originFrameIndex,
+                       int currentFrameIndex)> _frameEventListener;
 };
 
 }

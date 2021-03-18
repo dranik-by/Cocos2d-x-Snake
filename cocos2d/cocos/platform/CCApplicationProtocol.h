@@ -65,7 +65,8 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ApplicationProtocol(){
+    virtual ~ApplicationProtocol()
+    {
         /** clean auto release pool. */
         PoolManager::destroyInstance();
     }
@@ -109,7 +110,9 @@ public:
     *     GLView::setGLContextAttrs(glContextAttrs);
     * }
     */
-    virtual void initGLContextAttrs() {}
+    virtual void initGLContextAttrs()
+    {
+    }
 
     /**
     @brief Get current language config.
@@ -118,29 +121,29 @@ public:
     * @lua NA
     */
     virtual LanguageType getCurrentLanguage() = 0;
-    
+
     /**
      @brief Get current language iso 639-1 code.
      @return Current language iso 639-1 code.
      * @js NA
      * @lua NA
      */
-    virtual const char * getCurrentLanguageCode() = 0;
-    
+    virtual const char* getCurrentLanguageCode() = 0;
+
     /**
      @brief Get target platform.
      * @js NA
      * @lua NA
      */
     virtual Platform getTargetPlatform() = 0;
-    
+
     /**
      @brief Get application version.
      * @js NA
      * @lua NA
      */
     virtual std::string getVersion() = 0;
-    
+
     /**
      @brief Open url in default browser.
      @param String with url to open.

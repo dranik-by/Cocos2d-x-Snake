@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include "editor-support/cocostudio/CCDatas.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 /*
  * use to calculate the matrix of node from parent node

@@ -37,30 +37,33 @@ class RapidXmlSaxHander : public rapidxml::xml_sax2_handler
 {
 
 public:
-    RapidXmlSaxHander() :_ccsaxParserImp(0) {};
+    RapidXmlSaxHander()
+    : _ccsaxParserImp(0)
+    {
+    };
 
     void setSAXParserImp(SAXParser* parser)
     {
         _ccsaxParserImp = parser;
     }
 
-    void xmlSAX2StartElement(const char *name, size_t /*len*/, const char **atts, size_t /*attslen*/) override
+    void xmlSAX2StartElement(const char* name, size_t /*len*/, const char** atts, size_t /*attslen*/) override
     {
-        SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR *)name, (const CC_XML_CHAR **)atts);
+        SAXParser::startElement(_ccsaxParserImp, (const CC_XML_CHAR*)name, (const CC_XML_CHAR**)atts);
     }
 
-    void xmlSAX2EndElement(const char *name, size_t /*len*/) override
+    void xmlSAX2EndElement(const char* name, size_t /*len*/) override
     {
-        SAXParser::endElement(_ccsaxParserImp, (const CC_XML_CHAR *)name);
+        SAXParser::endElement(_ccsaxParserImp, (const CC_XML_CHAR*)name);
     }
 
-    void xmlSAX2Text(const char *s, size_t len) override
+    void xmlSAX2Text(const char* s, size_t len) override
     {
-        SAXParser::textHandler(_ccsaxParserImp, (const CC_XML_CHAR *)s, len);
+        SAXParser::textHandler(_ccsaxParserImp, (const CC_XML_CHAR*)s, len);
     }
 
 private:
-    SAXParser *_ccsaxParserImp;
+    SAXParser* _ccsaxParserImp;
 };
 
 SAXParser::SAXParser()
@@ -80,14 +83,15 @@ bool SAXParser::init(const char* /*encoding*/)
 
 bool SAXParser::parse(const char* xmlData, size_t dataLength)
 {
-    if(xmlData != nullptr && dataLength > 0) {
+    if (xmlData != nullptr && dataLength > 0)
+    {
         std::string mutableData(xmlData, dataLength);
         return this->parseIntrusive(&mutableData.front(), dataLength);
     }
     return false;
 }
 
-bool SAXParser::parse(const std::string& filename)
+bool SAXParser::parse(const std::string &filename)
 {
     bool ret = false;
     Data data = FileUtils::getInstance()->getDataFromFile(filename);
@@ -105,11 +109,12 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
     printer.setSAXParserImp(this);
 
     rapidxml::xml_sax3_parser<> parser(&printer);
-    try {
+    try
+    {
         parser.parse<>(xmlData, static_cast<int>(dataLength));
         return true;
     }
-    catch (rapidxml::parse_error& e)
+    catch (rapidxml::parse_error &e)
     {
         CCLOG("cocos2d: SAXParser: Error parsing xml: %s at %s", e.what(), e.where<char>());
         return false;
@@ -118,19 +123,21 @@ bool SAXParser::parseIntrusive(char* xmlData, size_t dataLength)
     return false;
 }
 
-void SAXParser::startElement(void *ctx, const CC_XML_CHAR *name, const CC_XML_CHAR **atts)
+void SAXParser::startElement(void* ctx, const CC_XML_CHAR* name, const CC_XML_CHAR** atts)
 {
     ((SAXParser*)(ctx))->_delegator->startElement(ctx, (char*)name, (const char**)atts);
 }
 
-void SAXParser::endElement(void *ctx, const CC_XML_CHAR *name)
+void SAXParser::endElement(void* ctx, const CC_XML_CHAR* name)
 {
     ((SAXParser*)(ctx))->_delegator->endElement(ctx, (char*)name);
 }
-void SAXParser::textHandler(void *ctx, const CC_XML_CHAR *name, size_t len)
+
+void SAXParser::textHandler(void* ctx, const CC_XML_CHAR* name, size_t len)
 {
     ((SAXParser*)(ctx))->_delegator->textHandler(ctx, (char*)name, len);
 }
+
 void SAXParser::setDelegator(SAXDelegator* delegator)
 {
     _delegator = delegator;

@@ -28,12 +28,18 @@
 NS_CC_MATH_BEGIN
 
 Vec4::Vec4()
-    : x(0.0f), y(0.0f), z(0.0f), w(0.0f)
+: x(0.0f)
+, y(0.0f)
+, z(0.0f)
+, w(0.0f)
 {
 }
 
 Vec4::Vec4(float xx, float yy, float zz, float ww)
-    : x(xx), y(yy), z(zz), w(ww)
+: x(xx)
+, y(yy)
+, z(zz)
+, w(ww)
 {
 }
 
@@ -42,12 +48,12 @@ Vec4::Vec4(const float* src)
     set(src);
 }
 
-Vec4::Vec4(const Vec4& p1, const Vec4& p2)
+Vec4::Vec4(const Vec4 &p1, const Vec4 &p2)
 {
     set(p1, p2);
 }
 
-Vec4::Vec4(const Vec4& copy)
+Vec4::Vec4(const Vec4 &copy)
 {
     set(copy);
 }
@@ -58,7 +64,7 @@ Vec4 Vec4::fromColor(unsigned int color)
     int componentIndex = 0;
     for (int i = 3; i >= 0; --i)
     {
-        int component = (color >> i*8) & 0x000000ff;
+        int component = (color >> i * 8) & 0x000000ff;
 
         components[componentIndex++] = static_cast<float>(component) / 255.0f;
     }
@@ -81,7 +87,7 @@ bool Vec4::isOne() const
     return x == 1.0f && y == 1.0f && z == 1.0f && w == 1.0f;
 }
 
-float Vec4::angle(const Vec4& v1, const Vec4& v2)
+float Vec4::angle(const Vec4 &v1, const Vec4 &v2)
 {
     float dx = v1.w * v2.x - v1.x * v2.w - v1.y * v2.z + v1.z * v2.y;
     float dy = v1.w * v2.y - v1.y * v2.w - v1.z * v2.x + v1.x * v2.z;
@@ -90,7 +96,7 @@ float Vec4::angle(const Vec4& v1, const Vec4& v2)
     return std::atan2(std::sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
-void Vec4::add(const Vec4& v)
+void Vec4::add(const Vec4 &v)
 {
     x += v.x;
     y += v.y;
@@ -98,7 +104,7 @@ void Vec4::add(const Vec4& v)
     w += v.w;
 }
 
-void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
+void Vec4::add(const Vec4 &v1, const Vec4 &v2, Vec4* dst)
 {
     GP_ASSERT(dst);
 
@@ -108,7 +114,7 @@ void Vec4::add(const Vec4& v1, const Vec4& v2, Vec4* dst)
     dst->w = v1.w + v2.w;
 }
 
-void Vec4::clamp(const Vec4& min, const Vec4& max)
+void Vec4::clamp(const Vec4 &min, const Vec4 &max)
 {
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
 
@@ -137,7 +143,7 @@ void Vec4::clamp(const Vec4& min, const Vec4& max)
         w = max.w;
 }
 
-void Vec4::clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst)
+void Vec4::clamp(const Vec4 &v, const Vec4 &min, const Vec4 &max, Vec4* dst)
 {
     GP_ASSERT(dst);
     GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z || min.w > max.w));
@@ -171,7 +177,7 @@ void Vec4::clamp(const Vec4& v, const Vec4& min, const Vec4& max, Vec4* dst)
         dst->w = max.w;
 }
 
-float Vec4::distance(const Vec4& v) const
+float Vec4::distance(const Vec4 &v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -181,7 +187,7 @@ float Vec4::distance(const Vec4& v) const
     return std::sqrt(dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vec4::distanceSquared(const Vec4& v) const
+float Vec4::distanceSquared(const Vec4 &v) const
 {
     float dx = v.x - x;
     float dy = v.y - y;
@@ -191,12 +197,12 @@ float Vec4::distanceSquared(const Vec4& v) const
     return (dx * dx + dy * dy + dz * dz + dw * dw);
 }
 
-float Vec4::dot(const Vec4& v) const
+float Vec4::dot(const Vec4 &v) const
 {
     return (x * v.x + y * v.y + z * v.z + w * v.w);
 }
 
-float Vec4::dot(const Vec4& v1, const Vec4& v2)
+float Vec4::dot(const Vec4 &v1, const Vec4 &v2)
 {
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
 }
@@ -205,7 +211,6 @@ float Vec4::length() const
 {
     return std::sqrt(x * x + y * y + z * z + w * w);
 }
-
 
 float Vec4::lengthSquared() const
 {
@@ -226,12 +231,12 @@ void Vec4::normalize()
     // Already normalized.
     if (n == 1.0f)
         return;
-    
+
     n = std::sqrt(n);
     // Too close to zero.
     if (n < MATH_TOLERANCE)
         return;
-    
+
     n = 1.0f / n;
     x *= n;
     y *= n;
@@ -272,7 +277,7 @@ void Vec4::set(const float* array)
     w = array[3];
 }
 
-void Vec4::set(const Vec4& v)
+void Vec4::set(const Vec4 &v)
 {
     this->x = v.x;
     this->y = v.y;
@@ -280,7 +285,7 @@ void Vec4::set(const Vec4& v)
     this->w = v.w;
 }
 
-void Vec4::set(const Vec4& p1, const Vec4& p2)
+void Vec4::set(const Vec4 &p1, const Vec4 &p2)
 {
     x = p2.x - p1.x;
     y = p2.y - p1.y;
@@ -288,7 +293,7 @@ void Vec4::set(const Vec4& p1, const Vec4& p2)
     w = p2.w - p1.w;
 }
 
-void Vec4::subtract(const Vec4& v)
+void Vec4::subtract(const Vec4 &v)
 {
     x -= v.x;
     y -= v.y;
@@ -296,7 +301,7 @@ void Vec4::subtract(const Vec4& v)
     w -= v.w;
 }
 
-void Vec4::subtract(const Vec4& v1, const Vec4& v2, Vec4* dst)
+void Vec4::subtract(const Vec4 &v1, const Vec4 &v2, Vec4* dst)
 {
     GP_ASSERT(dst);
 

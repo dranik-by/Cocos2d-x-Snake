@@ -58,12 +58,12 @@ public:
         WAITING,
         TRACKING_TOUCH,
     };
-    
+
     /**
      *@brief Creates an empty Menu.
      */
     static Menu* create();
-    
+
     /** Creates a Menu with MenuItem objects. */
     static Menu* create(MenuItem* item, ...) CC_REQUIRES_NULL_TERMINATION;
 
@@ -71,7 +71,7 @@ public:
      * Creates a Menu with a Array of MenuItem objects.
      * @js NA
      */
-    static Menu* createWithArray(const Vector<MenuItem*>& arrayOfItems);
+    static Menu* createWithArray(const Vector<MenuItem*> &arrayOfItems);
 
     /**
      * Creates a Menu with it's item, then use addChild() to add 
@@ -80,11 +80,11 @@ public:
      * @js NA
      */
     static Menu* createWithItem(MenuItem* item);
-    
+
     /** Creates a Menu with MenuItem objects.
      * @js NA
      */
-    static Menu* createWithItems(MenuItem *firstItem, va_list args);
+    static Menu* createWithItems(MenuItem* firstItem, va_list args);
 
     /** Align items vertically. */
     void alignItemsVertically();
@@ -96,7 +96,7 @@ public:
 
     /** Align items horizontally. */
     void alignItemsHorizontally();
-    
+
     /** Align items horizontally with padding.
     @since v0.7.2
     */
@@ -104,32 +104,35 @@ public:
 
     /** Align items in rows of columns. */
     void alignItemsInColumns(int columns, ...) CC_REQUIRES_NULL_TERMINATION;
-    
+
     /** Align items in rows of columns. */
     void alignItemsInColumns(int columns, va_list args);
-    
+
     /** Align items in array of columns.
      * @js NA
      */
-    void alignItemsInColumnsWithArray(const ValueVector& rows);
+    void alignItemsInColumnsWithArray(const ValueVector &rows);
 
     /** Align items in columns of rows. */
     void alignItemsInRows(int rows, ...) CC_REQUIRES_NULL_TERMINATION;
-    
+
     /** Align items in columns of rows. */
     void alignItemsInRows(int rows, va_list args);
-    
+
     /** Align items in array of rows.
      * @js NA
      */
-    void alignItemsInRowsWithArray(const ValueVector& columns);
+    void alignItemsInRowsWithArray(const ValueVector &columns);
 
     /**
      * Determines if the menu is enabled.
      * @see `setEnabled(bool)`.
      * @return whether the menu is enabled or not.
      */
-    virtual bool isEnabled() const { return _enabled; }
+    virtual bool isEnabled() const
+    {
+        return _enabled;
+    }
 
     /**
      * Set whether the menu is enabled. If set to false, interacting with the menu
@@ -137,21 +140,24 @@ public:
      * The default value is true, a menu is enabled by default.
      * @param value true if menu is to be enabled, false if menu is to be disabled.
      */
-    virtual void setEnabled(bool value) { _enabled = value; };
+    virtual void setEnabled(bool value)
+    {
+        _enabled = value;
+    };
 
     virtual bool onTouchBegan(Touch* touch, Event* event) override;
     virtual void onTouchEnded(Touch* touch, Event* event) override;
     virtual void onTouchCancelled(Touch* touch, Event* event) override;
     virtual void onTouchMoved(Touch* touch, Event* event) override;
-    
+
     // overrides
     virtual void removeChild(Node* child, bool cleanup) override;
-    
-    virtual void addChild(Node * child) override;
-    virtual void addChild(Node * child, int zOrder) override;
-    virtual void addChild(Node * child, int zOrder, int tag) override;
-    virtual void addChild(Node * child, int zOrder, const std::string &name) override;
-    
+
+    virtual void addChild(Node* child) override;
+    virtual void addChild(Node* child, int zOrder) override;
+    virtual void addChild(Node* child, int zOrder, int tag) override;
+    virtual void addChild(Node* child, int zOrder, const std::string &name) override;
+
     virtual void onEnter() override;
     virtual void onExit() override;
     virtual void setOpacityModifyRGB(bool value) override;
@@ -160,31 +166,34 @@ public:
     virtual std::string getDescription() const override;
 
 CC_CONSTRUCTOR_ACCESS:
+
     /**
      * @js ctor
      */
-    Menu() : _selectedItem(nullptr), _selectedWithCamera(nullptr) {}
+    Menu()
+    : _selectedItem(nullptr)
+    , _selectedWithCamera(nullptr)
+    {
+    }
+
     virtual ~Menu();
 
     /** initializes an empty Menu */
     bool init() override;
 
     /** initializes a Menu with a NSArray of MenuItem objects */
-    bool initWithArray(const Vector<MenuItem*>& arrayOfItems);
+    bool initWithArray(const Vector<MenuItem*> &arrayOfItems);
 
 protected:
-
-
 
     /** whether or not the menu will receive events */
     bool _enabled;
 
-    virtual MenuItem* getItemForTouch(Touch * touch, const Camera *camera);
+    virtual MenuItem* getItemForTouch(Touch* touch, const Camera* camera);
     State _state;
-    MenuItem *_selectedItem;
-    const Camera *_selectedWithCamera;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(Menu);
+    MenuItem* _selectedItem;
+    const Camera* _selectedWithCamera;
+private: CC_DISALLOW_COPY_AND_ASSIGN(Menu);
 };
 
 // end of _2d group

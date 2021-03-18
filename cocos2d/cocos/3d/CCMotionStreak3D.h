@@ -56,7 +56,8 @@ public:
      * @param path The texture file name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B &color,
+                                  const std::string &path);
     /** Creates and initializes a motion streak with fade in seconds, minimum segments, stroke's width, color, texture.
      * 
      * @param fade The fade time, in seconds.
@@ -66,51 +67,62 @@ public:
      * @param texture The texture name of stoke.
      * @return An autoreleased MotionStreak3D object.
      */
-    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    static MotionStreak3D* create(float fade, float minSeg, float stroke, const Color3B &color, Texture2D* texture);
 
     /** Color used for the tint.
      *
      * @param colors The color used for the tint.
      */
-    void tintWithColor(const Color3B& colors);
+    void tintWithColor(const Color3B &colors);
 
     /** Remove all living segments of the ribbon.
      */
     void reset();
-    
+
     /** Get stroke.
      *
      * @return float stroke.
      */
-    float getStroke() const { return _stroke; }
+    float getStroke() const
+    {
+        return _stroke;
+    }
+
     /** Set stroke.
      *
      * @param stroke The width of stroke.
      */
-    void setStroke(float stroke) { _stroke = stroke; }
+    void setStroke(float stroke)
+    {
+        _stroke = stroke;
+    }
 
     /** Is the starting position initialized or not.
      *
      * @return True if the starting position is initialized.
      */
-    bool isStartingPositionInitialized() const { return _startingPositionInitialized; }
+    bool isStartingPositionInitialized() const
+    {
+        return _startingPositionInitialized;
+    }
+
     /** Sets the starting position initialized or not.
      *
      * @param bStartingPositionInitialized True if initialized the starting position.
      */
     void setStartingPositionInitialized(bool bStartingPositionInitialized)
     {
-        _startingPositionInitialized = bStartingPositionInitialized; 
+        _startingPositionInitialized = bStartingPositionInitialized;
     }
 
     // Overrides
-    virtual void setPosition(const Vec2& position) override;
+    virtual void setPosition(const Vec2 &position) override;
     virtual void setPosition(float x, float y) override;
-    virtual void setPosition3D(const Vec3& position) override;
-    virtual void setRotation3D(const Vec3& rotation) override;
-    virtual void setRotationQuat(const Quaternion& quat) override;
-    
-    virtual const Vec2& getPosition() const override;
+    virtual void setPosition3D(const Vec3 &position) override;
+    virtual void setRotation3D(const Vec3 &rotation) override;
+    virtual void setRotationQuat(const Quaternion &quat) override;
+
+    virtual const Vec2 &getPosition() const override;
     virtual void getPosition(float* x, float* y) const override;
     virtual void setPositionX(float x) override;
     virtual void setPositionY(float y) override;
@@ -121,13 +133,13 @@ public:
     * @js NA
     * @lua NA
     */
-    virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+    virtual void draw(Renderer* renderer, const Mat4 &transform, uint32_t flags) override;
     /**
     * @lua NA
     */
     virtual void update(float delta) override;
     virtual Texture2D* getTexture() const override;
-    virtual void setTexture(Texture2D *texture) override;
+    virtual void setTexture(Texture2D* texture) override;
     /**
     * @js NA
     * @lua NA
@@ -137,32 +149,38 @@ public:
     * @js NA
     * @lua NA
     */
-    virtual const BlendFunc& getBlendFunc() const override;
+    virtual const BlendFunc &getBlendFunc() const override;
     virtual uint8_t getOpacity() const override;
     virtual void setOpacity(uint8_t opacity) override;
     virtual void setOpacityModifyRGB(bool value) override;
     virtual bool isOpacityModifyRGB() const override;
-    
+
     /**
      * Set the direction of sweeping line segment.
      * @param sweepAxis Direction of sweeping line segment
      */
-    void setSweepAxis(const Vec3& sweepAxis) { _sweepAxis = sweepAxis.getNormalized(); }
-    
+    void setSweepAxis(const Vec3 &sweepAxis)
+    {
+        _sweepAxis = sweepAxis.getNormalized();
+    }
+
     /**
      * Get the direction of sweeping line segment
      */
-    const Vec3& getSweepAxis() const { return _sweepAxis; }
-    
+    const Vec3 &getSweepAxis() const
+    {
+        return _sweepAxis;
+    }
+
 CC_CONSTRUCTOR_ACCESS:
     MotionStreak3D();
     virtual ~MotionStreak3D();
-    
+
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture filename */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, const std::string& path);
-    
+    bool initWithFade(float fade, float minSeg, float stroke, const Color3B &color, const std::string &path);
+
     /** initializes a motion streak with fade in seconds, minimum segments, stroke's width, color and texture  */
-    bool initWithFade(float fade, float minSeg, float stroke, const Color3B& color, Texture2D* texture);
+    bool initWithFade(float fade, float minSeg, float stroke, const Color3B &color, Texture2D* texture);
 
 protected:
     //renderer callback
@@ -183,8 +201,7 @@ protected:
     BlendFunc _blendFunc;
     Vec3 _positionR;
     mutable Vec2 _positionR2D;
-    Vec3         _sweepAxis;
-    
+    Vec3 _sweepAxis;
 
     float _stroke;
     float _fadeDelta;
@@ -199,10 +216,9 @@ protected:
     std::vector<float> _pointState;
 
     std::vector<VertexData> _vertexData;
-    
+
     CustomCommand _customCommand;
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(MotionStreak3D);
+private: CC_DISALLOW_COPY_AND_ASSIGN(MotionStreak3D);
 
     CallbackCommand _beforeCommand;
     CallbackCommand _afterCommand;

@@ -44,30 +44,30 @@ class CC_DLL EventListenerAcceleration : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a acceleration EventListener.
      *
      * @param callback The acceleration callback method.
      * @return An autoreleased EventListenerAcceleration object.
      */
-    static EventListenerAcceleration* create(const std::function<void(Acceleration*, Event*)>& callback);
-    
+    static EventListenerAcceleration* create(const std::function<void(Acceleration * , Event * )> &callback);
+
     /** Destructor.
      */
     virtual ~EventListenerAcceleration();
-    
+
     /// Overrides
     virtual EventListenerAcceleration* clone() override;
     virtual bool checkAvailable() override;
-    
+
 CC_CONSTRUCTOR_ACCESS:
     EventListenerAcceleration();
-    
-    bool init(const std::function<void(Acceleration*, Event* event)>& callback);
-    
+
+    bool init(const std::function<void(Acceleration * , Event * event)> &callback);
+
 private:
-    std::function<void(Acceleration*, Event*)> onAccelerationEvent;
-    
+    std::function<void(Acceleration * , Event * )> onAccelerationEvent;
+
     friend class LuaEventListenerAcceleration;
 };
 

@@ -48,26 +48,26 @@ class CC_DLL EventListenerController : public EventListener
 {
 public:
     static const std::string LISTENER_ID;
-    
+
     /** Create a controller event listener.
      *
      * @return An autoreleased EventListenerController object.
      */
-	static EventListenerController* create();
-    
+    static EventListenerController* create();
+
     /// Overrides
     virtual bool checkAvailable() override;
     virtual EventListenerController* clone() override;
-    
-	std::function<void(Controller*, Event*)> onConnected;
-	std::function<void(Controller*, Event*)> onDisconnected;
-    
+
+    std::function<void(Controller*, Event*)> onConnected;
+    std::function<void(Controller*, Event*)> onDisconnected;
+
     std::function<void(Controller*, int, Event*)> onKeyDown;
     std::function<void(Controller*, int, Event*)> onKeyUp;
-	std::function<void(Controller*, int, Event*)> onKeyRepeat;
-    
-	std::function<void(Controller*, int, Event*)> onAxisEvent;
-    
+    std::function<void(Controller*, int, Event*)> onKeyRepeat;
+
+    std::function<void(Controller*, int, Event*)> onAxisEvent;
+
 protected:
     bool init();
 };

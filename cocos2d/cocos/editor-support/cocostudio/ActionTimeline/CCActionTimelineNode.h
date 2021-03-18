@@ -38,25 +38,24 @@ class CC_STUDIO_DLL ActionTimelineNode : public cocos2d::Node
 {
 public:
     static ActionTimelineNode* create(cocos2d::Node* root, ActionTimeline* action);
-    
+
     ActionTimelineNode();
     ~ActionTimelineNode();
-    
+
     bool init() override;
     bool init(cocos2d::Node* root, ActionTimeline* action);
-    
+
     virtual void setRoot(cocos2d::Node* root);
     virtual cocos2d::Node* getRoot();
-    
+
     virtual void setActionTimeline(ActionTimeline* action);
     virtual ActionTimeline* getActionTimeline();
-    
+
 protected:
     cocos2d::Node* _root;
     ActionTimeline* _action;
 };
 
 NS_TIMELINE_END
-
 
 #endif /*__COCOSSTUDIO_CCACTIONTIMELINENODE_H__*/

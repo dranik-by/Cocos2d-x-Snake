@@ -28,22 +28,23 @@ THE SOFTWARE.
 #include "audio/android/OpenSLHelper.h"
 #include "audio/android/PcmData.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 PcmData::PcmData()
 {
-//    ALOGV("In the constructor of PcmData (%p)", this);
+    //    ALOGV("In the constructor of PcmData (%p)", this);
     reset();
 }
 
 PcmData::~PcmData()
 {
-//    ALOGV("In the destructor of PcmData (%p)", this);
+    //    ALOGV("In the destructor of PcmData (%p)", this);
 }
 
 PcmData::PcmData(const PcmData &o)
 {
-//    ALOGV("In the copy constructor of PcmData (%p)", this);
+    //    ALOGV("In the copy constructor of PcmData (%p)", this);
     numChannels = o.numChannels;
     sampleRate = o.sampleRate;
     bitsPerSample = o.bitsPerSample;
@@ -57,7 +58,7 @@ PcmData::PcmData(const PcmData &o)
 
 PcmData::PcmData(PcmData &&o)
 {
-//    ALOGV("In the move constructor of PcmData (%p)", this);
+    //    ALOGV("In the move constructor of PcmData (%p)", this);
     numChannels = o.numChannels;
     sampleRate = o.sampleRate;
     bitsPerSample = o.bitsPerSample;
@@ -72,7 +73,7 @@ PcmData::PcmData(PcmData &&o)
 
 PcmData &PcmData::operator=(const PcmData &o)
 {
-//    ALOGV("In the copy assignment of PcmData");
+    //    ALOGV("In the copy assignment of PcmData");
     numChannels = o.numChannels;
     sampleRate = o.sampleRate;
     bitsPerSample = o.bitsPerSample;
@@ -87,7 +88,7 @@ PcmData &PcmData::operator=(const PcmData &o)
 
 PcmData &PcmData::operator=(PcmData &&o)
 {
-//    ALOGV("In the move assignment of PcmData");
+    //    ALOGV("In the move assignment of PcmData");
     numChannels = o.numChannels;
     sampleRate = o.sampleRate;
     bitsPerSample = o.bitsPerSample;
@@ -116,8 +117,7 @@ void PcmData::reset()
 
 bool PcmData::isValid() const
 {
-    return numChannels > 0 && sampleRate > 0 && bitsPerSample > 0 && containerSize > 0
-           && numFrames > 0 && duration > 0 && pcmBuffer != nullptr;
+    return numChannels > 0 && sampleRate > 0 && bitsPerSample > 0 && containerSize > 0 && numFrames > 0 && duration > 0 && pcmBuffer != nullptr;
 }
 
 std::string PcmData::toString() const
@@ -125,12 +125,9 @@ std::string PcmData::toString() const
     std::string ret;
     char buf[256] = {0};
 
-    snprintf(buf, sizeof(buf),
-             "numChannels: %d, sampleRate: %d, bitPerSample: %d, containerSize: %d, "
-                     "channelMask: %d, endianness: %d, numFrames: %d, duration: %f",
-             numChannels, sampleRate, bitsPerSample, containerSize, channelMask, endianness,
-             numFrames, duration
-    );
+    snprintf(buf, sizeof(buf), "numChannels: %d, sampleRate: %d, bitPerSample: %d, containerSize: %d, "
+                               "channelMask: %d, endianness: %d, numFrames: %d, duration: %f", numChannels, sampleRate,
+             bitsPerSample, containerSize, channelMask, endianness, numFrames, duration);
 
     ret = buf;
     return ret;

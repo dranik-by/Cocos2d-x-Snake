@@ -57,7 +57,7 @@ static bool compareRenderCommand(RenderCommand* a, RenderCommand* b)
 
 static bool compare3DCommand(RenderCommand* a, RenderCommand* b)
 {
-    return  a->getDepth() > b->getDepth();
+    return a->getDepth() > b->getDepth();
 }
 
 // queue
@@ -68,19 +68,19 @@ RenderQueue::RenderQueue()
 void RenderQueue::push_back(RenderCommand* command)
 {
     float z = command->getGlobalOrder();
-    if(z < 0)
+    if (z < 0)
     {
         _commands[QUEUE_GROUP::GLOBALZ_NEG].push_back(command);
     }
-    else if(z > 0)
+    else if (z > 0)
     {
         _commands[QUEUE_GROUP::GLOBALZ_POS].push_back(command);
     }
     else
     {
-        if(command->is3D())
+        if (command->is3D())
         {
-            if(command->isTransparent())
+            if (command->isTransparent())
             {
                 _commands[QUEUE_GROUP::TRANSPARENT_3D].push_back(command);
             }
@@ -99,41 +99,44 @@ void RenderQueue::push_back(RenderCommand* command)
 ssize_t RenderQueue::size() const
 {
     ssize_t result(0);
-    for(int index = 0; index < QUEUE_GROUP::QUEUE_COUNT; ++index)
+    for (int index = 0; index < QUEUE_GROUP::QUEUE_COUNT; ++index)
     {
         result += _commands[index].size();
     }
-    
+
     return result;
 }
 
 void RenderQueue::sort()
 {
     // Don't sort _queue0, it already comes sorted
-    std::stable_sort(std::begin(_commands[QUEUE_GROUP::TRANSPARENT_3D]), std::end(_commands[QUEUE_GROUP::TRANSPARENT_3D]), compare3DCommand);
-    std::stable_sort(std::begin(_commands[QUEUE_GROUP::GLOBALZ_NEG]), std::end(_commands[QUEUE_GROUP::GLOBALZ_NEG]), compareRenderCommand);
-    std::stable_sort(std::begin(_commands[QUEUE_GROUP::GLOBALZ_POS]), std::end(_commands[QUEUE_GROUP::GLOBALZ_POS]), compareRenderCommand);
+    std::stable_sort(std::begin(_commands[QUEUE_GROUP::TRANSPARENT_3D]),
+                     std::end(_commands[QUEUE_GROUP::TRANSPARENT_3D]), compare3DCommand);
+    std::stable_sort(std::begin(_commands[QUEUE_GROUP::GLOBALZ_NEG]), std::end(_commands[QUEUE_GROUP::GLOBALZ_NEG]),
+                     compareRenderCommand);
+    std::stable_sort(std::begin(_commands[QUEUE_GROUP::GLOBALZ_POS]), std::end(_commands[QUEUE_GROUP::GLOBALZ_POS]),
+                     compareRenderCommand);
 }
 
 RenderCommand* RenderQueue::operator[](ssize_t index) const
 {
-    for(int queIndex = 0; queIndex < QUEUE_GROUP::QUEUE_COUNT; ++queIndex)
+    for (int queIndex = 0; queIndex < QUEUE_GROUP::QUEUE_COUNT; ++queIndex)
     {
-        if(index < static_cast<ssize_t>(_commands[queIndex].size()))
+        if (index < static_cast<ssize_t>(_commands[queIndex].size()))
             return _commands[queIndex][index];
         else
         {
             index -= _commands[queIndex].size();
         }
     }
-    
+
     CCASSERT(false, "invalid index");
     return nullptr;
 }
 
 void RenderQueue::clear()
 {
-    for(int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
+    for (int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
     {
         _commands[i].clear();
     }
@@ -141,7 +144,7 @@ void RenderQueue::clear()
 
 void RenderQueue::realloc(size_t reserveSize)
 {
-    for(int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
+    for (int i = 0; i < QUEUE_GROUP::QUEUE_COUNT; ++i)
     {
         _commands[i] = std::vector<RenderCommand*>();
         _commands[i].reserve(reserveSize);
@@ -158,25 +161,25 @@ static const int DEFAULT_RENDER_QUEUE = 0;
 //
 Renderer::Renderer()
 {
-    _groupCommandManager = new (std::nothrow) GroupCommandManager();
-    
+    _groupCommandManager = new(std::nothrow) GroupCommandManager();
+
     _commandGroupStack.push(DEFAULT_RENDER_QUEUE);
-    
+
     RenderQueue defaultRenderQueue;
     _renderGroups.push_back(defaultRenderQueue);
     _queuedTriangleCommands.reserve(BATCH_TRIAGCOMMAND_RESERVED_SIZE);
 
     // for the batched TriangleCommand
-    _triBatchesToDraw = (TriBatchToDraw*) malloc(sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
+    _triBatchesToDraw = (TriBatchToDraw*)malloc(sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
 }
 
 Renderer::~Renderer()
 {
     _renderGroups.clear();
     _groupCommandManager->release();
-    
+
     free(_triBatchesToDraw);
-    
+
     CC_SAFE_RELEASE(_commandBuffer);
     CC_SAFE_RELEASE(_renderPipeline);
 }
@@ -196,14 +199,14 @@ void Renderer::init()
 
 void Renderer::addCommand(RenderCommand* command)
 {
-    int renderQueueID =_commandGroupStack.top();
+    int renderQueueID = _commandGroupStack.top();
     addCommand(command, renderQueueID);
 }
 
 void Renderer::addCommand(RenderCommand* command, int renderQueueID)
 {
     CCASSERT(!_isRendering, "Cannot add command while rendering");
-    CCASSERT(renderQueueID >=0, "Invalid render queue");
+    CCASSERT(renderQueueID >= 0, "Invalid render queue");
     CCASSERT(command->getType() != RenderCommand::Type::UNKNOWN_COMMAND, "Invalid Command Type");
 
     _renderGroups[renderQueueID].push_back(command);
@@ -232,7 +235,7 @@ void Renderer::processGroupCommand(GroupCommand* command)
 {
     flush();
 
-    int renderQueueID = ((GroupCommand*) command)->getRenderQueueID();
+    int renderQueueID = ((GroupCommand*)command)->getRenderQueueID();
 
     pushStateBlock();
     //apply default state for all render queues
@@ -246,37 +249,39 @@ void Renderer::processGroupCommand(GroupCommand* command)
 void Renderer::processRenderCommand(RenderCommand* command)
 {
     auto commandType = command->getType();
-    switch(commandType)
+    switch (commandType)
     {
         case RenderCommand::Type::TRIANGLES_COMMAND:
         {
             // flush other queues
             flush3D();
-            
+
             auto cmd = static_cast<TrianglesCommand*>(command);
-            
+
             // flush own queue when buffer is full
-            if(_queuedTotalVertexCount + cmd->getVertexCount() > VBO_SIZE || _queuedTotalIndexCount + cmd->getIndexCount() > INDEX_VBO_SIZE)
+            if (_queuedTotalVertexCount + cmd->getVertexCount() > VBO_SIZE || _queuedTotalIndexCount + cmd->getIndexCount() > INDEX_VBO_SIZE)
             {
-                CCASSERT(cmd->getVertexCount()>= 0 && cmd->getVertexCount() < VBO_SIZE, "VBO for vertex is not big enough, please break the data down or use customized render command");
-                CCASSERT(cmd->getIndexCount()>= 0 && cmd->getIndexCount() < INDEX_VBO_SIZE, "VBO for index is not big enough, please break the data down or use customized render command");
+                CCASSERT(cmd->getVertexCount() >= 0 && cmd->getVertexCount() < VBO_SIZE,
+                         "VBO for vertex is not big enough, please break the data down or use customized render command");
+                CCASSERT(cmd->getIndexCount() >= 0 && cmd->getIndexCount() < INDEX_VBO_SIZE,
+                         "VBO for index is not big enough, please break the data down or use customized render command");
                 drawBatchedTriangles();
 
                 _queuedTotalIndexCount = _queuedTotalVertexCount = 0;
-#ifdef CC_USE_METAL
+                #ifdef CC_USE_METAL
                 _queuedIndexCount = _queuedVertexCount = 0;
                 _triangleCommandBufferManager.prepareNextBuffer();
                 _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
                 _indexBuffer = _triangleCommandBufferManager.getIndexBuffer();
-#endif
+                #endif
             }
-            
+
             // queue it
             _queuedTriangleCommands.push_back(cmd);
-#ifdef CC_USE_METAL
+            #ifdef CC_USE_METAL
             _queuedIndexCount += cmd->getIndexCount();
             _queuedVertexCount += cmd->getVertexCount();
-#endif
+            #endif
             _queuedTotalVertexCount += cmd->getVertexCount();
             _queuedTotalIndexCount += cmd->getIndexCount();
 
@@ -295,7 +300,7 @@ void Renderer::processRenderCommand(RenderCommand* command)
             break;
         case RenderCommand::Type::CALLBACK_COMMAND:
             flush();
-           static_cast<CallbackCommand*>(command)->execute();
+            static_cast<CallbackCommand*>(command)->execute();
             break;
         case RenderCommand::Type::CAPTURE_SCREEN_COMMAND:
             flush();
@@ -307,12 +312,12 @@ void Renderer::processRenderCommand(RenderCommand* command)
     }
 }
 
-void Renderer::captureScreen(RenderCommand *command)
+void Renderer::captureScreen(RenderCommand* command)
 {
     _commandBuffer->captureScreen(static_cast<CaptureScreenCallbackCommand*>(command)->func);
 }
 
-void Renderer::visitRenderQueue(RenderQueue& queue)
+void Renderer::visitRenderQueue(RenderQueue &queue)
 {
     //
     //Process Global-Z < 0 Objects
@@ -327,7 +332,7 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     setDepthWrite(true);
     setCullMode(backend::CullMode::BACK);
     doVisitRenderQueue(queue.getSubQueue(RenderQueue::QUEUE_GROUP::OPAQUE_3D));
-    
+
     //
     //Process 3D Transparent object
     //
@@ -339,7 +344,7 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
     //Process Global-Z = 0 Queue
     //
     doVisitRenderQueue(queue.getSubQueue(RenderQueue::QUEUE_GROUP::GLOBALZ_ZERO));
-        
+
     //
     //Process Global-Z > 0 Queue
     //
@@ -347,9 +352,9 @@ void Renderer::visitRenderQueue(RenderQueue& queue)
 
 }
 
-void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*>& renderCommands)
+void Renderer::doVisitRenderQueue(const std::vector<RenderCommand*> &renderCommands)
 {
-    for (const auto& command : renderCommands)
+    for (const auto &command : renderCommands)
     {
         processRenderCommand(command);
     }
@@ -360,7 +365,7 @@ void Renderer::render()
 {
     //TODO: setup camera or MVP
     _isRendering = true;
-//    if (_glViewAssigned)
+    //    if (_glViewAssigned)
     {
         //Process render commands
         //1. Sort render commands based on ID
@@ -383,11 +388,11 @@ void Renderer::endFrame()
 {
     _commandBuffer->endFrame();
 
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     _triangleCommandBufferManager.putbackAllBuffers();
     _vertexBuffer = _triangleCommandBufferManager.getVertexBuffer();
     _indexBuffer = _triangleCommandBufferManager.getIndexBuffer();
-#endif
+    #endif
     _queuedTotalIndexCount = 0;
     _queuedTotalVertexCount = 0;
 }
@@ -395,7 +400,7 @@ void Renderer::endFrame()
 void Renderer::clean()
 {
     // Clear render group
-    for (size_t j = 0, size = _renderGroups.size() ; j < size; j++)
+    for (size_t j = 0, size = _renderGroups.size(); j < size; j++)
     {
         //commands are owned by nodes
         // for (const auto &cmd : _renderGroups[j])
@@ -457,9 +462,8 @@ void Renderer::setStencilCompareFunction(backend::CompareFunction func, unsigned
     _stencilRef = ref;
 }
 
-void Renderer::setStencilOperation(backend::StencilOperation stencilFailureOp,
-                             backend::StencilOperation depthFailureOp,
-                             backend::StencilOperation stencilDepthPassOp)
+void Renderer::setStencilOperation(backend::StencilOperation stencilFailureOp, backend::StencilOperation depthFailureOp,
+                                   backend::StencilOperation stencilDepthPassOp)
 {
     _depthStencilDescriptor.frontFaceStencil.stencilFailureOperation = stencilFailureOp;
     _depthStencilDescriptor.backFaceStencil.stencilFailureOperation = stencilFailureOp;
@@ -529,14 +533,14 @@ void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int 
 {
     size_t vertexCount = cmd->getVertexCount();
     memcpy(&_verts[_filledVertex], cmd->getVertices(), sizeof(V3F_C4B_T2F) * vertexCount);
-    
+
     // fill vertex, and convert them to world coordinates
-    const Mat4& modelView = cmd->getModelView();
-    for (size_t i=0; i < vertexCount; ++i)
+    const Mat4 &modelView = cmd->getModelView();
+    for (size_t i = 0; i < vertexCount; ++i)
     {
         modelView.transformPoint(&(_verts[i + _filledVertex].vertices));
     }
-    
+
     // fill index
     const unsigned short* indices = cmd->getIndices();
     size_t indexCount = cmd->getIndexCount();
@@ -544,29 +548,29 @@ void Renderer::fillVerticesAndIndices(const TrianglesCommand* cmd, unsigned int 
     {
         _indices[_filledIndex + i] = vertexBufferOffset + _filledVertex + indices[i];
     }
-    
+
     _filledVertex += vertexCount;
     _filledIndex += indexCount;
 }
 
 void Renderer::drawBatchedTriangles()
 {
-    if(_queuedTriangleCommands.empty())
+    if (_queuedTriangleCommands.empty())
         return;
-    
+
     /************** 1: Setup up vertices/indices *************/
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     unsigned int vertexBufferFillOffset = _queuedTotalVertexCount - _queuedVertexCount;
     unsigned int indexBufferFillOffset = _queuedTotalIndexCount - _queuedIndexCount;
-#else
+    #else
     unsigned int vertexBufferFillOffset = 0;
     unsigned int indexBufferFillOffset = 0;
-#endif
+    #endif
 
     _triBatchesToDraw[0].offset = indexBufferFillOffset;
     _triBatchesToDraw[0].indicesToDraw = 0;
     _triBatchesToDraw[0].cmd = nullptr;
-    
+
     int batchesTotal = 0;
     int prevMaterialID = -1;
     bool firstCommand = true;
@@ -574,17 +578,18 @@ void Renderer::drawBatchedTriangles()
     _filledVertex = 0;
     _filledIndex = 0;
 
-    for(const auto& cmd : _queuedTriangleCommands)
+    for (const auto &cmd : _queuedTriangleCommands)
     {
         auto currentMaterialID = cmd->getMaterialID();
         const bool batchable = !cmd->isSkipBatching();
-        
+
         fillVerticesAndIndices(cmd, vertexBufferFillOffset);
-        
+
         // in the same batch ?
         if (batchable && (prevMaterialID == currentMaterialID || firstCommand))
         {
-            CC_ASSERT((firstCommand || _triBatchesToDraw[batchesTotal].cmd->getMaterialID() == cmd->getMaterialID()) && "argh... error in logic");
+            CC_ASSERT(
+            (firstCommand || _triBatchesToDraw[batchesTotal].cmd->getMaterialID() == cmd->getMaterialID()) && "argh... error in logic");
             _triBatchesToDraw[batchesTotal].indicesToDraw += cmd->getIndexCount();
             _triBatchesToDraw[batchesTotal].cmd = cmd;
         }
@@ -594,36 +599,36 @@ void Renderer::drawBatchedTriangles()
             if (!firstCommand)
             {
                 batchesTotal++;
-                _triBatchesToDraw[batchesTotal].offset =
-                    _triBatchesToDraw[batchesTotal-1].offset + _triBatchesToDraw[batchesTotal-1].indicesToDraw;
+                _triBatchesToDraw[batchesTotal].offset = _triBatchesToDraw[batchesTotal - 1].offset + _triBatchesToDraw[batchesTotal - 1].indicesToDraw;
             }
-            
+
             _triBatchesToDraw[batchesTotal].cmd = cmd;
-            _triBatchesToDraw[batchesTotal].indicesToDraw = (int) cmd->getIndexCount();
-            
+            _triBatchesToDraw[batchesTotal].indicesToDraw = (int)cmd->getIndexCount();
+
             // is this a single batch ? Prevent creating a batch group then
             if (!batchable)
                 currentMaterialID = -1;
         }
-        
+
         // capacity full ?
         if (batchesTotal + 1 >= _triBatchesToDrawCapacity)
         {
             _triBatchesToDrawCapacity *= 1.4;
-            _triBatchesToDraw = (TriBatchToDraw*) realloc(_triBatchesToDraw, sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
+            _triBatchesToDraw = (TriBatchToDraw*)realloc(_triBatchesToDraw,
+                                                         sizeof(_triBatchesToDraw[0]) * _triBatchesToDrawCapacity);
         }
-        
+
         prevMaterialID = currentMaterialID;
         firstCommand = false;
     }
     batchesTotal++;
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     _vertexBuffer->updateSubData(_verts, vertexBufferFillOffset * sizeof(_verts[0]), _filledVertex * sizeof(_verts[0]));
     _indexBuffer->updateSubData(_indices, indexBufferFillOffset * sizeof(_indices[0]), _filledIndex * sizeof(_indices[0]));
-#else
+    #else
     _vertexBuffer->updateData(_verts, _filledVertex * sizeof(_verts[0]));
-    _indexBuffer->updateData(_indices,  _filledIndex * sizeof(_indices[0]));
-#endif
+    _indexBuffer->updateData(_indices, _filledIndex * sizeof(_indices[0]));
+    #endif
 
     /************** 2: Draw *************/
     for (int i = 0; i < batchesTotal; ++i)
@@ -631,10 +636,9 @@ void Renderer::drawBatchedTriangles()
         beginRenderPass(_triBatchesToDraw[i].cmd);
         _commandBuffer->setVertexBuffer(_vertexBuffer);
         _commandBuffer->setIndexBuffer(_indexBuffer);
-        auto& pipelineDescriptor = _triBatchesToDraw[i].cmd->getPipelineDescriptor();
+        auto &pipelineDescriptor = _triBatchesToDraw[i].cmd->getPipelineDescriptor();
         _commandBuffer->setProgramState(pipelineDescriptor.programState);
-        _commandBuffer->drawElements(backend::PrimitiveType::TRIANGLE,
-                                     backend::IndexFormat::U_SHORT,
+        _commandBuffer->drawElements(backend::PrimitiveType::TRIANGLE, backend::IndexFormat::U_SHORT,
                                      _triBatchesToDraw[i].indicesToDraw,
                                      _triBatchesToDraw[i].offset * sizeof(_indices[0]));
         _commandBuffer->endRenderPass();
@@ -646,52 +650,49 @@ void Renderer::drawBatchedTriangles()
     /************** 3: Cleanup *************/
     _queuedTriangleCommands.clear();
 
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     _queuedIndexCount = 0;
     _queuedVertexCount = 0;
-#endif
+    #endif
 }
 
-void Renderer::drawCustomCommand(RenderCommand *command)
+void Renderer::drawCustomCommand(RenderCommand* command)
 {
     auto cmd = static_cast<CustomCommand*>(command);
 
-    if (cmd->getBeforeCallback()) cmd->getBeforeCallback()();
+    if (cmd->getBeforeCallback())
+        cmd->getBeforeCallback()();
 
     beginRenderPass(command);
     _commandBuffer->setVertexBuffer(cmd->getVertexBuffer());
     _commandBuffer->setProgramState(cmd->getPipelineDescriptor().programState);
-    
+
     auto drawType = cmd->getDrawType();
     _commandBuffer->setLineWidth(cmd->getLineWidth());
     if (CustomCommand::DrawType::ELEMENT == drawType)
     {
         _commandBuffer->setIndexBuffer(cmd->getIndexBuffer());
-        _commandBuffer->drawElements(cmd->getPrimitiveType(),
-                                     cmd->getIndexFormat(),
-                                     cmd->getIndexDrawCount(),
+        _commandBuffer->drawElements(cmd->getPrimitiveType(), cmd->getIndexFormat(), cmd->getIndexDrawCount(),
                                      cmd->getIndexDrawOffset());
         _drawnVertices += cmd->getIndexDrawCount();
     }
     else
     {
-        _commandBuffer->drawArrays(cmd->getPrimitiveType(),
-                                   cmd->getVertexDrawStart(),
-                                   cmd->getVertexDrawCount());
+        _commandBuffer->drawArrays(cmd->getPrimitiveType(), cmd->getVertexDrawStart(), cmd->getVertexDrawCount());
         _drawnVertices += cmd->getVertexDrawCount();
     }
     _drawnBatches++;
     _commandBuffer->endRenderPass();
 
-    if (cmd->getAfterCallback()) cmd->getAfterCallback()();
+    if (cmd->getAfterCallback())
+        cmd->getAfterCallback()();
 }
 
-void Renderer::drawMeshCommand(RenderCommand *command)
+void Renderer::drawMeshCommand(RenderCommand* command)
 {
     //MeshCommand and CustomCommand are identical while rendering.
     drawCustomCommand(command);
 }
-
 
 void Renderer::flush()
 {
@@ -728,15 +729,17 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     Rect visibleRect(director->getVisibleOrigin(), director->getVisibleSize());
 
     // transform center point to screen space
-    float hSizeX = size.width/2;
-    float hSizeY = size.height/2;
+    float hSizeX = size.width / 2;
+    float hSizeY = size.height / 2;
     Vec3 v3p(hSizeX, hSizeY, 0);
     transform.transformPoint(&v3p);
     Vec2 v2p = Camera::getVisitingCamera()->projectGL(v3p);
 
     // convert content size to world coordinates
-    float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]), fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
-    float wshh = std::max(fabsf(hSizeX * transform.m[1] + hSizeY * transform.m[5]), fabsf(hSizeX * transform.m[1] - hSizeY * transform.m[5]));
+    float wshw = std::max(fabsf(hSizeX * transform.m[0] + hSizeY * transform.m[4]),
+                          fabsf(hSizeX * transform.m[0] - hSizeY * transform.m[4]));
+    float wshh = std::max(fabsf(hSizeX * transform.m[1] + hSizeY * transform.m[5]),
+                          fabsf(hSizeX * transform.m[1] - hSizeY * transform.m[5]));
 
     // enlarge visible rect half size in screen coord
     visibleRect.origin.x -= wshw;
@@ -747,7 +750,8 @@ bool Renderer::checkVisibility(const Mat4 &transform, const Size &size)
     return ret;
 }
 
-void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, const backend::RenderPassDescriptor& renderPassDescriptor)
+void Renderer::setRenderPipeline(const PipelineDescriptor &pipelineDescriptor,
+                                 const backend::RenderPassDescriptor &renderPassDescriptor)
 {
     auto device = backend::Device::getInstance();
     _renderPipeline->update(pipelineDescriptor, renderPassDescriptor);
@@ -758,24 +762,26 @@ void Renderer::setRenderPipeline(const PipelineDescriptor& pipelineDescriptor, c
         depthStencilState = device->createDepthStencilState(_depthStencilDescriptor);
     }
     _commandBuffer->setDepthStencilState(depthStencilState);
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     _commandBuffer->setRenderPipeline(_renderPipeline);
-#endif
+    #endif
 }
 
 void Renderer::beginRenderPass(RenderCommand* cmd)
 {
-     _commandBuffer->beginRenderPass(_renderPassDescriptor);
-     _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);
-     _commandBuffer->setCullMode(_cullMode);
-     _commandBuffer->setWinding(_winding);
-     _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y, _scissorState.rect.width, _scissorState.rect.height);
-     setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassDescriptor);
+    _commandBuffer->beginRenderPass(_renderPassDescriptor);
+    _commandBuffer->setViewport(_viewport.x, _viewport.y, _viewport.w, _viewport.h);
+    _commandBuffer->setCullMode(_cullMode);
+    _commandBuffer->setWinding(_winding);
+    _commandBuffer->setScissorRect(_scissorState.isEnabled, _scissorState.rect.x, _scissorState.rect.y,
+                                   _scissorState.rect.width, _scissorState.rect.height);
+    setRenderPipeline(cmd->getPipelineDescriptor(), _renderPassDescriptor);
 
     _commandBuffer->setStencilReferenceValue(_stencilRef);
 }
 
-void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment, Texture2D* stencilAttachment)
+void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachment, Texture2D* depthAttachment,
+                               Texture2D* stencilAttachment)
 {
     _renderTargetFlag = flags;
     if (flags & RenderTargetFlag::COLOR)
@@ -829,13 +835,14 @@ void Renderer::setRenderTarget(RenderTargetFlag flags, Texture2D* colorAttachmen
     }
 }
 
-void Renderer::clear(ClearFlag flags, const Color4F& color, float depth, unsigned int stencil, float globalOrder)
+void Renderer::clear(ClearFlag flags, const Color4F &color, float depth, unsigned int stencil, float globalOrder)
 {
     _clearFlag = flags;
 
     CallbackCommand* command = new CallbackCommand();
     command->init(globalOrder);
-    command->func = [=]() -> void {
+    command->func = [=]()->void
+    {
         backend::RenderPassDescriptor descriptor;
 
         if (flags & ClearFlag::COLOR)
@@ -884,7 +891,7 @@ Texture2D* Renderer::getStencilAttachment() const
     return _stencilAttachment;
 }
 
-const Color4F& Renderer::getClearColor() const
+const Color4F &Renderer::getClearColor() const
 {
     return _clearColor;
 }
@@ -919,7 +926,7 @@ bool Renderer::getScissorTest() const
     return _scissorState.isEnabled;
 }
 
-const ScissorRect& Renderer::getScissorRect() const
+const ScissorRect &Renderer::getScissorRect() const
 {
     return _scissorState.rect;
 }
@@ -935,10 +942,10 @@ void Renderer::setScissorRect(float x, float y, float width, float height)
 // TriangleCommandBufferManager
 Renderer::TriangleCommandBufferManager::~TriangleCommandBufferManager()
 {
-    for (auto& vertexBuffer : _vertexBufferPool)
+    for (auto &vertexBuffer : _vertexBufferPool)
         vertexBuffer->release();
 
-    for (auto& indexBuffer : _indexBufferPool)
+    for (auto &indexBuffer : _indexBufferPool)
         indexBuffer->release();
 }
 
@@ -978,7 +985,7 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
 {
     auto device = backend::Device::getInstance();
 
-#ifdef CC_USE_METAL
+    #ifdef CC_USE_METAL
     // Metal doesn't need to update buffer to make sure it has the correct size.
     auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(_verts[0]), backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
@@ -990,12 +997,13 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
         vertexBuffer->release();
         return;
     }
-#else
+    #else
     auto tmpData = malloc(Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F));
     if (!tmpData)
         return;
 
-    auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F), backend::BufferType::VERTEX, backend::BufferUsage::DYNAMIC);
+    auto vertexBuffer = device->newBuffer(Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F), backend::BufferType::VERTEX,
+                                          backend::BufferUsage::DYNAMIC);
     if (!vertexBuffer)
     {
         free(tmpData);
@@ -1003,8 +1011,9 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
     }
     vertexBuffer->updateData(tmpData, Renderer::VBO_SIZE * sizeof(V3F_C4B_T2F));
 
-    auto indexBuffer = device->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(unsigned short), backend::BufferType::INDEX, backend::BufferUsage::DYNAMIC);
-    if (! indexBuffer)
+    auto indexBuffer = device->newBuffer(Renderer::INDEX_VBO_SIZE * sizeof(unsigned short), backend::BufferType::INDEX,
+                                         backend::BufferUsage::DYNAMIC);
+    if (!indexBuffer)
     {
         free(tmpData);
         vertexBuffer->release();
@@ -1013,7 +1022,7 @@ void Renderer::TriangleCommandBufferManager::createBuffer()
     indexBuffer->updateData(tmpData, Renderer::INDEX_VBO_SIZE * sizeof(unsigned short));
 
     free(tmpData);
-#endif
+    #endif
 
     _vertexBufferPool.push_back(vertexBuffer);
     _indexBufferPool.push_back(indexBuffer);
@@ -1030,7 +1039,7 @@ void Renderer::pushStateBlock()
 
 void Renderer::popStateBlock()
 {
-    auto & block = _stateBlockStack.back();
+    auto &block = _stateBlockStack.back();
     setDepthTest(block.depthTest);
     setDepthWrite(block.depthWrite);
     setCullMode(block.cullMode);

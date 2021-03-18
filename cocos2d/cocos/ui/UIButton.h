@@ -39,9 +39,10 @@ class Label;
 class SpriteFrame;
 struct CC_DLL ResourceData;
 
-namespace ui{
+namespace ui
+{
 
-    class Scale9Sprite;
+class Scale9Sprite;
 /**
  * Represents a push-button widget.
  * Push-buttons can be pressed, or clicked, by the user to perform an action.
@@ -49,7 +50,7 @@ namespace ui{
 class CC_GUI_DLL Button : public Widget
 {
 
-    DECLARE_CLASS_GUI_INFO
+DECLARE_CLASS_GUI_INFO
 
 public:
 
@@ -79,10 +80,8 @@ public:
      * @param texType    @see `TextureResType`
      * @return a Button instance.
      */
-    static Button* create(const std::string& normalImage,
-                          const std::string& selectedImage = "",
-                          const std::string& disableImage = "",
-                          TextureResType texType = TextureResType::LOCAL);
+    static Button* create(const std::string &normalImage, const std::string &selectedImage = "",
+                          const std::string &disableImage = "", TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load textures for button.
@@ -92,9 +91,7 @@ public:
      * @param disabled    disabled state texture name.
      * @param texType    @see `TextureResType`
      */
-    void loadTextures(const std::string& normal,
-                      const std::string& selected,
-                      const std::string& disabled = "",
+    void loadTextures(const std::string &normal, const std::string &selected, const std::string &disabled = "",
                       TextureResType texType = TextureResType::LOCAL);
 
     /**
@@ -103,7 +100,7 @@ public:
      * @param normal    normal state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureNormal(const std::string& normal, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureNormal(const std::string &normal, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load selected state texture for button.
@@ -111,7 +108,7 @@ public:
      * @param selected    selected state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTexturePressed(const std::string& selected, TextureResType texType = TextureResType::LOCAL);
+    void loadTexturePressed(const std::string &selected, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Load disabled state texture for button.
@@ -119,7 +116,7 @@ public:
      * @param disabled    dark state texture.
      * @param texType    @see `TextureResType`
      */
-    void loadTextureDisabled(const std::string& disabled, TextureResType texType = TextureResType::LOCAL);
+    void loadTextureDisabled(const std::string &disabled, TextureResType texType = TextureResType::LOCAL);
 
     /**
      * Sets capInsets for button.
@@ -140,7 +137,7 @@ public:
      * Return the capInsets of normal state scale9sprite.
      *@return The normal scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsNormalRenderer()const;
+    const Rect &getCapInsetsNormalRenderer() const;
 
     /**
      * Sets capInsets for button, only the pressed state scale9 renderer will be affected.
@@ -153,7 +150,7 @@ public:
      * Return the capInsets of pressed state scale9sprite.
      *@return The pressed scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsPressedRenderer()const;
+    const Rect &getCapInsetsPressedRenderer() const;
 
     /**
      * Sets capInsets for button, only the disabled state scale9 renderer will be affected.
@@ -166,7 +163,7 @@ public:
      * Return the capInsets of disabled state scale9sprite.
      *@return The disabled scale9 renderer capInsets.
      */
-    const Rect& getCapInsetsDisabledRenderer()const;
+    const Rect &getCapInsetsDisabledRenderer() const;
 
     /**
      * Enable scale9 renderer.
@@ -179,7 +176,7 @@ public:
      * Query whether button is using scale9 renderer or not.
      *@return whether button use scale9 renderer or not.
      */
-    bool isScale9Enabled()const;
+    bool isScale9Enabled() const;
 
     /**
      * Enable zooming action when button is pressed.
@@ -199,13 +196,13 @@ public:
      * @return The button title.
      * @since v3.3
      */
-    Label* getTitleRenderer()const;
+    Label* getTitleRenderer() const;
 
     /**
      * Change the content of button's title.
      *@param text The title in std::string.
      */
-    void setTitleText(const std::string& text);
+    void setTitleText(const std::string &text);
 
     /**
      * Query the button title content.
@@ -217,7 +214,7 @@ public:
      * Change the color of button's title.
      *@param color The title color in Color3B.
      */
-    void setTitleColor(const Color3B& color);
+    void setTitleColor(const Color3B &color);
 
     /**
      * Query the button title color.
@@ -241,7 +238,7 @@ public:
      * Change the font name of button's title
      *@param fontName a font name string.
      */
-    void setTitleFontName(const std::string& fontName);
+    void setTitleFontName(const std::string &fontName);
 
     /**
      * Query the font name of button's title
@@ -270,7 +267,6 @@ public:
     /** returns the current Label being used */
     Label* getTitleLabel() const;
 
-
     /** @brief When user pressed the button, the button will zoom to a scale.
      * The final scale of the button  equals (button original scale + _zoomScale)
      * @since v3.3
@@ -282,28 +278,37 @@ public:
      * @return the zoom scale in float
      * @since v3.3
      */
-    float getZoomScale()const;
-    
+    float getZoomScale() const;
+
     /**
      * @brief Return the nine-patch sprite of normal state
      * @return the nine-patch sprite of normal state
      * @since v3.9
      */
-    Scale9Sprite* getRendererNormal() const { return _buttonNormalRenderer; }
-    
+    Scale9Sprite* getRendererNormal() const
+    {
+        return _buttonNormalRenderer;
+    }
+
     /**
      * @brief Return the nine-patch sprite of clicked state
      * @return the nine-patch sprite of clicked state
      * @since v3.9
      */
-    Scale9Sprite* getRendererClicked() const { return _buttonClickedRenderer; }
-    
+    Scale9Sprite* getRendererClicked() const
+    {
+        return _buttonClickedRenderer;
+    }
+
     /**
      * @brief Return the nine-patch sprite of disabled state
      * @return the nine-patch sprite of disabled state
      * @since v3.9
      */
-    Scale9Sprite* getRendererDisabled() const { return _buttonDisabledRenderer; }
+    Scale9Sprite* getRendererDisabled() const
+    {
+        return _buttonDisabledRenderer;
+    }
 
     void resetNormalRender();
     void resetPressedRender();
@@ -315,10 +320,8 @@ public:
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
-    virtual bool init(const std::string& normalImage,
-                      const std::string& selectedImage = "",
-                      const std::string& disableImage = "",
-                      TextureResType texType = TextureResType::LOCAL);
+    virtual bool init(const std::string &normalImage, const std::string &selectedImage = "",
+                      const std::string &disableImage = "", TextureResType texType = TextureResType::LOCAL);
 
     virtual Size getNormalTextureSize() const;
 

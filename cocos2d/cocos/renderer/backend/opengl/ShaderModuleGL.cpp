@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #include "ShaderModuleGL.h"
 
 #include "platform/CCPlatformMacros.h"
@@ -29,7 +29,7 @@
 
 CC_BACKEND_BEGIN
 
-ShaderModuleGL::ShaderModuleGL(ShaderStage stage, const std::string& source)
+ShaderModuleGL::ShaderModuleGL(ShaderStage stage, const std::string &source)
 : ShaderModule(stage)
 {
     compileShader(stage, source);
@@ -47,13 +47,13 @@ void ShaderModuleGL::compileShader(ShaderStage stage, const std::string &source)
     _shader = glCreateShader(shaderType);
     if (!_shader)
         return;
-    
+
     glShaderSource(_shader, 1, &sourcePtr, nullptr);
     glCompileShader(_shader);
-    
+
     GLint status = 0;
     glGetShaderiv(_shader, GL_COMPILE_STATUS, &status);
-    if (! status)
+    if (!status)
     {
         CCLOG("cocos2d: ERROR: Failed to compile shader:\n%s", source.c_str());
         CCLOG("cocos2d: %s", getErrorLog(_shader));

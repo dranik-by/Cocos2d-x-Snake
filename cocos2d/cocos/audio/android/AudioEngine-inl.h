@@ -24,19 +24,19 @@
  ****************************************************************************/
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-#ifndef __AUDIO_ENGINE_INL_H_
-#define __AUDIO_ENGINE_INL_H_
+    #ifndef __AUDIO_ENGINE_INL_H_
+        #define __AUDIO_ENGINE_INL_H_
 
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
-#include <string>
-#include <unordered_map>
-#include "base/CCRef.h"
-#include "base/ccUtils.h"
+        #include <SLES/OpenSLES.h>
+        #include <SLES/OpenSLES_Android.h>
+        #include <string>
+        #include <unordered_map>
+        #include "base/CCRef.h"
+        #include "base/ccUtils.h"
 
-#define MAX_AUDIOINSTANCES 24
+        #define MAX_AUDIOINSTANCES 24
 
-#define ERRORLOG(msg) log("fun:%s,line:%d,msg:%s",__func__,__LINE__,#msg)
+        #define ERRORLOG(msg) log("fun:%s,line:%d,msg:%s",__func__,__LINE__,#msg)
 
 NS_CC_BEGIN
 
@@ -55,8 +55,8 @@ public:
     ~AudioEngineImpl();
 
     bool init();
-    int play2d(const std::string &fileFullPath ,bool loop ,float volume);
-    void setVolume(int audioID,float volume);
+    int play2d(const std::string &fileFullPath, bool loop, float volume);
+    void setVolume(int audioID, float volume);
     void setLoop(int audioID, bool loop);
     void pause(int audioID);
     void resume(int audioID);
@@ -65,11 +65,11 @@ public:
     float getDuration(int audioID);
     float getCurrentTime(int audioID);
     bool setCurrentTime(int audioID, float time);
-    void setFinishCallback(int audioID, const std::function<void (int, const std::string &)> &callback);
+    void setFinishCallback(int audioID, const std::function<void(int, const std::string &)> &callback);
 
-    void uncache(const std::string& filePath);
+    void uncache(const std::string &filePath);
     void uncacheAll();
-    void preload(const std::string& filePath, const std::function<void(bool)>& callback);
+    void preload(const std::string &filePath, const std::function<void(bool)> &callback);
 
     void setAudioFocusForAllPlayers(bool isFocus);
 private:
@@ -85,8 +85,8 @@ private:
     SLObjectItf _outputMixObject;
 
     //audioID,AudioInfo
-    std::unordered_map<int, IAudioPlayer*>  _audioPlayers;
-    std::unordered_map<int, std::function<void (int, const std::string &)>> _callbackMap;
+    std::unordered_map<int, IAudioPlayer*> _audioPlayers;
+    std::unordered_map<int, std::function<void(int, const std::string &)>> _callbackMap;
 
     // UrlAudioPlayers which need to resumed while entering foreground
     std::unordered_map<int, IAudioPlayer*> _urlAudioPlayersNeedResume;
@@ -96,11 +96,11 @@ private:
     EventListener* _onResumeListener;
 
     int _audioIDIndex;
-    
+
     bool _lazyInitLoop;
 };
 
-#endif // __AUDIO_ENGINE_INL_H_
+    #endif // __AUDIO_ENGINE_INL_H_
 
 NS_CC_END
 

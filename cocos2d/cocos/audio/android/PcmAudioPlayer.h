@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "audio/android/PcmData.h"
 #include "audio/android/Track.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 class ICallerThreadUtils;
 class AudioMixerController;
@@ -41,11 +42,20 @@ public:
     bool prepare(const std::string &url, const PcmData &decResult);
 
     // Override Functions Begin
-    virtual int getId() const override { return _id; };
+    virtual int getId() const override
+    {
+        return _id;
+    };
 
-    virtual void setId(int id) override { _id = id; };
+    virtual void setId(int id) override
+    {
+        _id = id;
+    };
 
-    virtual std::string getUrl() const override { return _url; };
+    virtual std::string getUrl() const override
+    {
+        return _url;
+    };
 
     virtual State getState() const override;
 
@@ -80,7 +90,7 @@ public:
     // Override Functions End
 
 private:
-    PcmAudioPlayer(AudioMixerController * controller, ICallerThreadUtils* callerThreadUtils);
+    PcmAudioPlayer(AudioMixerController* controller, ICallerThreadUtils* callerThreadUtils);
     virtual ~PcmAudioPlayer();
 
 private:
@@ -89,7 +99,7 @@ private:
     PcmData _decResult;
     Track* _track;
     PlayEventCallback _playEventCallback;
-    AudioMixerController * _controller;
+    AudioMixerController* _controller;
     ICallerThreadUtils* _callerThreadUtils;
 
     friend class AudioPlayerProvider;

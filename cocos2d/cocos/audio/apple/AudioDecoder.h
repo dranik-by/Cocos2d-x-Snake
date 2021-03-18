@@ -28,7 +28,8 @@
 #include <stdint.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 /**
  * @brief The class for decoding compressed audio file to PCM buffer.

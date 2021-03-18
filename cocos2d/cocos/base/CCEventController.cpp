@@ -35,7 +35,7 @@ EventController::EventController(ControllerEventType type, Controller* controlle
 , _keyCode(keyCode)
 , _isConnected(true)
 {
-    
+
 }
 
 EventController::EventController(ControllerEventType type, Controller* controller, bool isConnected)
@@ -45,7 +45,7 @@ EventController::EventController(ControllerEventType type, Controller* controlle
 , _keyCode(0)
 , _isConnected(isConnected)
 {
-    
+
 }
 
 NS_CC_END

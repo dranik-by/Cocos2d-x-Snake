@@ -46,23 +46,22 @@ public:
     void onAfterVisit();
     void setAlphaThreshold(float alphaThreshold);
     void setInverted(bool inverted);
-    bool isInverted()const;
-    float getAlphaThreshold()const;
+    bool isInverted() const;
+    float getAlphaThreshold() const;
 
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(StencilStateManager);
+private: CC_DISALLOW_COPY_AND_ASSIGN(StencilStateManager);
     static int s_layer;
     /**draw fullscreen quad to clear stencil bits
      */
     void drawFullScreenQuadClearStencil(float globalZOrder);
-    
+
     void updateLayerMask();
     void onBeforeDrawQuadCmd();
     void onAfterDrawQuadCmd();
-    
+
     float _alphaThreshold = 1.f;
     bool _inverted = false;
-    
+
     bool _currentStencilEnabled = false;
     unsigned int _currentStencilWriteMask = ~0;
     backend::CompareFunction _currentStencilFunc = backend::CompareFunction::ALWAYS;
@@ -79,7 +78,7 @@ private:
     CustomCommand _customCommand;
     CallbackCommand _afterDrawStencilCmd;
     CallbackCommand _afterVisitCmd;
-    
+
     backend::UniformLocation _mvpMatrixLocaiton;
     backend::UniformLocation _colorUniformLocation;
     backend::ProgramState* _programState = nullptr;

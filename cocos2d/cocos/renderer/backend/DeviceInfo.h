@@ -21,7 +21,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
 #pragma once
 
 #include <string>
@@ -93,34 +93,46 @@ public:
      * @return true if the feature is supported, false otherwise.
      */
     virtual bool checkForFeatureSupported(FeatureType feature) = 0;
-    
+
     /**
      * Get maximum texture size.
      * @return Maximum texture size.
      */
-    inline int getMaxTextureSize() const { return _maxTextureSize; }
+    inline int getMaxTextureSize() const
+    {
+        return _maxTextureSize;
+    }
 
     /**
      * Get maximum attribute counts.
      * @return Maximum attribute counts.
      */
-    inline int getMaxAttributes() const { return _maxAttributes; }
+    inline int getMaxAttributes() const
+    {
+        return _maxAttributes;
+    }
 
     /**
      * Get maximum texture unit.
      * @return Maximum texture unit.
      */
-    inline int getMaxTextureUnits() const { return _maxTextureUnits; }
+    inline int getMaxTextureUnits() const
+    {
+        return _maxTextureUnits;
+    }
 
     /**
      * Get maximum sampler count.
      * @return Maximum sampler count.
      */
-    inline int getMaxSamplesAllowed() const { return _maxSamplesAllowed; }
-    
+    inline int getMaxSamplesAllowed() const
+    {
+        return _maxSamplesAllowed;
+    }
+
 protected:
     DeviceInfo() = default;
-    
+
     int _maxAttributes = 0; ///< Maximum attribute count.
     int _maxTextureSize = 0; ///< Maximum texture size.
     int _maxTextureUnits = 0; ///< Maximum texture unit.

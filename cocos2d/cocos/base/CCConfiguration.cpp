@@ -58,33 +58,32 @@ Configuration::Configuration()
 , _maxSpotLightInShader(1)
 , _animate3DQuality(Animate3DQuality::QUALITY_LOW)
 {
-    _loadedEvent = new (std::nothrow) EventCustom(CONFIG_FILE_LOADED);
+    _loadedEvent = new(std::nothrow) EventCustom(CONFIG_FILE_LOADED);
 }
 
 bool Configuration::init()
 {
-	_valueDict["cocos2d.x.version"] = Value(cocos2dVersion());
+    _valueDict["cocos2d.x.version"] = Value(cocos2dVersion());
 
+    #if CC_ENABLE_PROFILERS
+    _valueDict["cocos2d.x.compiled_with_profiler"] = Value(true);
+    #else
+    _valueDict["cocos2d.x.compiled_with_profiler"] = Value(false);
+    #endif
 
-#if CC_ENABLE_PROFILERS
-	_valueDict["cocos2d.x.compiled_with_profiler"] = Value(true);
-#else
-	_valueDict["cocos2d.x.compiled_with_profiler"] = Value(false);
-#endif
-
-#if CC_ENABLE_GL_STATE_CACHE == 0
-	_valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(false);
-#else
+    #if CC_ENABLE_GL_STATE_CACHE == 0
+    _valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(false);
+    #else
     _valueDict["cocos2d.x.compiled_with_gl_state_cache"] = Value(true);
-#endif
+    #endif
 
-#if COCOS2D_DEBUG
-	_valueDict["cocos2d.x.build_type"] = Value("DEBUG");
-#else
+    #if COCOS2D_DEBUG
+    _valueDict["cocos2d.x.build_type"] = Value("DEBUG");
+    #else
     _valueDict["cocos2d.x.build_type"] = Value("RELEASE");
-#endif
+    #endif
 
-	return true;
+    return true;
 }
 
 Configuration::~Configuration()
@@ -94,14 +93,14 @@ Configuration::~Configuration()
 
 std::string Configuration::getInfo() const
 {
-	// And Dump some warnings as well
-#if CC_ENABLE_PROFILERS
+    // And Dump some warnings as well
+    #if CC_ENABLE_PROFILERS
     CCLOG("cocos2d: **** WARNING **** CC_ENABLE_PROFILERS is defined. Disable it when you finish profiling (from ccConfig.h)\n");
-#endif
+    #endif
 
-#if CC_ENABLE_GL_STATE_CACHE == 0
+    #if CC_ENABLE_GL_STATE_CACHE == 0
     CCLOG("cocos2d: **** WARNING **** CC_ENABLE_GL_STATE_CACHE is disabled. To improve performance, enable it (from ccConfig.h)\n");
-#endif
+    #endif
 
     // Dump
     Value forDump = Value(_valueDict);
@@ -114,56 +113,56 @@ void Configuration::gatherGPUInfo()
     _valueDict["vendor"] = Value(_deviceInfo->getVendor());
     _valueDict["renderer"] = Value(_deviceInfo->getRenderer());
     _valueDict["version"] = Value(_deviceInfo->getVersion());
-    
+
     _valueDict["max_texture_size"] = Value(_deviceInfo->getMaxTextureSize());
     _valueDict["max_vertex_attributes"] = Value(_deviceInfo->getMaxAttributes());
     _valueDict["max_texture_units"] = Value(_deviceInfo->getMaxTextureUnits());
     _valueDict["max_samples_allowed"] = Value(_deviceInfo->getMaxSamplesAllowed());
-    
+
     _supportsNPOT = true;
     _valueDict["supports_NPOT"] = Value(_supportsNPOT);
-    
+
     _supportsETC1 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::ETC1);
     _valueDict["supports_ETC1"] = Value(_supportsETC1);
-    
+
     _supportsS3TC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::S3TC);
     _valueDict["supports_S3TC"] = Value(_supportsS3TC);
-    
+
     _supportsATITC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::AMD_COMPRESSED_ATC);
     _valueDict["supports_ATITC"] = Value(_supportsATITC);
-    
+
     _supportsPVRTC = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PVRTC);
     _valueDict["supports_PVRTC"] = Value(_supportsPVRTC);
-    
+
     _supportsBGRA8888 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::IMG_FORMAT_BGRA8888);
     _valueDict["supports_BGRA8888"] = Value(_supportsBGRA8888);
-    
+
     _supportsDiscardFramebuffer = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DISCARD_FRAMEBUFFER);
     _valueDict["supports_discard_framebuffer"] = Value(_supportsDiscardFramebuffer);
-    
+
     _supportsOESPackedDepthStencil = _deviceInfo->checkForFeatureSupported(backend::FeatureType::PACKED_DEPTH_STENCIL);
     _valueDict["supports_OES_packed_depth_stencil"] = Value(_supportsOESPackedDepthStencil);
-    
+
     _supportsShareableVAO = _deviceInfo->checkForFeatureSupported(backend::FeatureType::VAO);
     _valueDict["supports_vertex_array_object"] = Value(_supportsShareableVAO);
-    
+
     _supportsOESMapBuffer = _deviceInfo->checkForFeatureSupported(backend::FeatureType::MAPBUFFER);
     _valueDict["supports_OES_map_buffer"] = Value(_supportsOESMapBuffer);
-    
+
     _supportsOESDepth24 = _deviceInfo->checkForFeatureSupported(backend::FeatureType::DEPTH24);
     _valueDict["supports_OES_depth24"] = Value(_supportsOESDepth24);
-    
+
     _glExtensions = _deviceInfo->getExtension();
 }
 
 Configuration* Configuration::getInstance()
 {
-    if (! s_sharedConfiguration)
+    if (!s_sharedConfiguration)
     {
-        s_sharedConfiguration = new (std::nothrow) Configuration();
+        s_sharedConfiguration = new(std::nothrow) Configuration();
         s_sharedConfiguration->init();
     }
-    
+
     return s_sharedConfiguration;
 }
 
@@ -171,7 +170,6 @@ void Configuration::destroyInstance()
 {
     CC_SAFE_RELEASE_NULL(s_sharedConfiguration);
 }
-
 
 bool Configuration::checkForGLExtension(const std::string &searchName) const
 {
@@ -190,7 +188,7 @@ int Configuration::getMaxTextureSize() const
 
 int Configuration::getMaxModelviewStackDepth() const
 {
-	return _maxModelviewStackDepth;
+    return _maxModelviewStackDepth;
 }
 
 int Configuration::getMaxTextureUnits() const
@@ -201,12 +199,12 @@ int Configuration::getMaxTextureUnits() const
 
 bool Configuration::supportsNPOT() const
 {
-	return _supportsNPOT;
+    return _supportsNPOT;
 }
 
 bool Configuration::supportsPVRTC() const
 {
-	return _supportsPVRTC;
+    return _supportsPVRTC;
 }
 
 bool Configuration::supportsETC() const
@@ -226,21 +224,21 @@ bool Configuration::supportsATITC() const
 
 bool Configuration::supportsBGRA8888() const
 {
-	return _supportsBGRA8888;
+    return _supportsBGRA8888;
 }
 
 bool Configuration::supportsDiscardFramebuffer() const
 {
-	return _supportsDiscardFramebuffer;
+    return _supportsDiscardFramebuffer;
 }
 
 bool Configuration::supportsShareableVAO() const
 {
-#if CC_TEXTURE_ATLAS_USE_VAO
+    #if CC_TEXTURE_ATLAS_USE_VAO
     return _supportsShareableVAO;
-#else
+    #else
     return false;
-#endif
+    #endif
 }
 
 bool Configuration::supportsMapBuffer() const
@@ -253,18 +251,19 @@ bool Configuration::supportsMapBuffer() const
     // is always implemented in OpenGL.
 
     // XXX: Warning. On iOS this is always `true`. Avoiding the comparison.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     return _supportsOESMapBuffer;
-#else
+    #else
     return true;
-#endif
+    #endif
 }
 
 bool Configuration::supportsOESDepth24() const
 {
     return _supportsOESDepth24;
-    
+
 }
+
 bool Configuration::supportsOESPackedDepthStencil() const
 {
     return _supportsOESPackedDepthStencil;
@@ -293,7 +292,7 @@ Animate3DQuality Configuration::getAnimate3DQuality() const
 //
 // generic getters for properties
 //
-const Value& Configuration::getValue(const std::string& key, const Value& defaultValue) const
+const Value &Configuration::getValue(const std::string &key, const Value &defaultValue) const
 {
     auto iter = _valueDict.find(key);
     if (iter != _valueDict.cend())
@@ -302,90 +301,89 @@ const Value& Configuration::getValue(const std::string& key, const Value& defaul
     return defaultValue;
 }
 
-void Configuration::setValue(const std::string& key, const Value& value)
+void Configuration::setValue(const std::string &key, const Value &value)
 {
-	_valueDict[key] = value;
+    _valueDict[key] = value;
 }
-
 
 //
 // load file
 //
-void Configuration::loadConfigFile(const std::string& filename)
+void Configuration::loadConfigFile(const std::string &filename)
 {
-	ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
-	CCASSERT(!dict.empty(), "cannot create dictionary");
+    ValueMap dict = FileUtils::getInstance()->getValueMapFromFile(filename);
+    CCASSERT(!dict.empty(), "cannot create dictionary");
 
-	// search for metadata
-	bool validMetadata = false;
-	auto metadataIter = dict.find("metadata");
-	if (metadataIter != dict.cend() && metadataIter->second.getType() == Value::Type::MAP)
+    // search for metadata
+    bool validMetadata = false;
+    auto metadataIter = dict.find("metadata");
+    if (metadataIter != dict.cend() && metadataIter->second.getType() == Value::Type::MAP)
     {
-        
-		const auto& metadata = metadataIter->second.asValueMap();
+
+        const auto &metadata = metadataIter->second.asValueMap();
         auto formatIter = metadata.find("format");
-        
-		if (formatIter != metadata.cend())
+
+        if (formatIter != metadata.cend())
         {
-			int format = formatIter->second.asInt();
+            int format = formatIter->second.asInt();
 
-			// Support format: 1
-			if (format == 1)
+            // Support format: 1
+            if (format == 1)
             {
-				validMetadata = true;
-			}
-		}
-	}
+                validMetadata = true;
+            }
+        }
+    }
 
-	if (! validMetadata)
+    if (!validMetadata)
     {
-		CCLOG("Invalid config format for file: %s", filename.c_str());
-		return;
-	}
+        CCLOG("Invalid config format for file: %s", filename.c_str());
+        return;
+    }
 
-	auto dataIter = dict.find("data");
-	if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
+    auto dataIter = dict.find("data");
+    if (dataIter == dict.cend() || dataIter->second.getType() != Value::Type::MAP)
     {
-		CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.c_str());
-		return;
-	}
+        CCLOG("Expected 'data' dict, but not found. Config file: %s", filename.c_str());
+        return;
+    }
 
-	// Add all keys in the existing dictionary
-    
-	const auto& dataMap = dataIter->second.asValueMap();
-    for (const auto& dataMapIter : dataMap)
+    // Add all keys in the existing dictionary
+
+    const auto &dataMap = dataIter->second.asValueMap();
+    for (const auto &dataMapIter : dataMap)
     {
         if (_valueDict.find(dataMapIter.first) == _valueDict.cend())
             _valueDict[dataMapIter.first] = dataMapIter.second;
         else
-            CCLOG("Key already present. Ignoring '%s'",dataMapIter.first.c_str());
+            CCLOG("Key already present. Ignoring '%s'", dataMapIter.first.c_str());
     }
-    
+
     //light info
     std::string name = "cocos2d.x.3d.max_dir_light_in_shader";
-	if (_valueDict.find(name) != _valueDict.end())
+    if (_valueDict.find(name) != _valueDict.end())
         _maxDirLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxDirLightInShader);
-    
+
     name = "cocos2d.x.3d.max_point_light_in_shader";
-	if (_valueDict.find(name) != _valueDict.end())
+    if (_valueDict.find(name) != _valueDict.end())
         _maxPointLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxPointLightInShader);
-    
+
     name = "cocos2d.x.3d.max_spot_light_in_shader";
-	if (_valueDict.find(name) != _valueDict.end())
+    if (_valueDict.find(name) != _valueDict.end())
         _maxSpotLightInShader = _valueDict[name].asInt();
     else
         _valueDict[name] = Value(_maxSpotLightInShader);
-    
+
     name = "cocos2d.x.3d.animate_quality";
     if (_valueDict.find(name) != _valueDict.end())
         _animate3DQuality = (Animate3DQuality)_valueDict[name].asInt();
     else
         _valueDict[name] = Value((int)_animate3DQuality);
-    
+
     Director::getInstance()->getEventDispatcher()->dispatchEvent(_loadedEvent);
 }
 

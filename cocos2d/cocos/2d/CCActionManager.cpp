@@ -41,19 +41,19 @@ NS_CC_BEGIN
 //
 typedef struct _hashElement
 {
-    struct _ccArray     *actions;
-    Node                *target;
-    int                 actionIndex;
-    Action              *currentAction;
-    bool                currentActionSalvaged;
-    bool                paused;
-    UT_hash_handle      hh;
+    struct _ccArray* actions;
+    Node* target;
+    int actionIndex;
+    Action* currentAction;
+    bool currentActionSalvaged;
+    bool paused;
+    UT_hash_handle hh;
 } tHashElement;
 
 ActionManager::ActionManager()
-: _targets(nullptr),
-  _currentTarget(nullptr),
-  _currentTargetSalvaged(false)
+: _targets(nullptr)
+, _currentTarget(nullptr)
+, _currentTargetSalvaged(false)
 {
 
 }
@@ -67,7 +67,7 @@ ActionManager::~ActionManager()
 
 // private
 
-void ActionManager::deleteHashElement(tHashElement *element)
+void ActionManager::deleteHashElement(tHashElement* element)
 {
     ccArrayFree(element->actions);
     HASH_DEL(_targets, element);
@@ -75,25 +75,25 @@ void ActionManager::deleteHashElement(tHashElement *element)
     free(element);
 }
 
-void ActionManager::actionAllocWithHashElement(tHashElement *element)
+void ActionManager::actionAllocWithHashElement(tHashElement* element)
 {
     // 4 actions per Node by default
     if (element->actions == nullptr)
     {
         element->actions = ccArrayNew(4);
-    }else 
-    if (element->actions->num == element->actions->max)
+    }
+    else if (element->actions->num == element->actions->max)
     {
         ccArrayDoubleCapacity(element->actions);
     }
 
 }
 
-void ActionManager::removeActionAtIndex(ssize_t index, tHashElement *element)
+void ActionManager::removeActionAtIndex(ssize_t index, tHashElement* element)
 {
-    Action *action = static_cast<Action*>(element->actions->arr[index]);
+    Action* action = static_cast<Action*>(element->actions->arr[index]);
 
-    if (action == element->currentAction && (! element->currentActionSalvaged))
+    if (action == element->currentAction && (!element->currentActionSalvaged))
     {
         element->currentAction->retain();
         element->currentActionSalvaged = true;
@@ -122,9 +122,9 @@ void ActionManager::removeActionAtIndex(ssize_t index, tHashElement *element)
 
 // pause / resume
 
-void ActionManager::pauseTarget(Node *target)
+void ActionManager::pauseTarget(Node* target)
 {
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
@@ -132,9 +132,9 @@ void ActionManager::pauseTarget(Node *target)
     }
 }
 
-void ActionManager::resumeTarget(Node *target)
+void ActionManager::resumeTarget(Node* target)
 {
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
@@ -145,22 +145,22 @@ void ActionManager::resumeTarget(Node *target)
 Vector<Node*> ActionManager::pauseAllRunningActions()
 {
     Vector<Node*> idsWithActions;
-    
-    for (tHashElement *element=_targets; element != nullptr; element = (tHashElement *)element->hh.next) 
+
+    for (tHashElement* element = _targets; element != nullptr; element = (tHashElement*)element->hh.next)
     {
-        if (! element->paused) 
+        if (!element->paused)
         {
             element->paused = true;
             idsWithActions.pushBack(element->target);
         }
-    }    
-    
+    }
+
     return idsWithActions;
 }
 
-void ActionManager::resumeTargets(const Vector<Node*>& targetsToResume)
+void ActionManager::resumeTargets(const Vector<Node*> &targetsToResume)
 {
-    for(const auto &node : targetsToResume)
+    for (const auto &node : targetsToResume)
     {
         this->resumeTarget(node);
     }
@@ -168,18 +168,18 @@ void ActionManager::resumeTargets(const Vector<Node*>& targetsToResume)
 
 // run
 
-void ActionManager::addAction(Action *action, Node *target, bool paused)
+void ActionManager::addAction(Action* action, Node* target, bool paused)
 {
     CCASSERT(action != nullptr, "action can't be nullptr!");
     CCASSERT(target != nullptr, "target can't be nullptr!");
-    if(action == nullptr || target == nullptr)
+    if (action == nullptr || target == nullptr)
         return;
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     // we should convert it to Ref*, because we save it as Ref*
-    Ref *tmp = target;
+    Ref* tmp = target;
     HASH_FIND_PTR(_targets, &tmp, element);
-    if (! element)
+    if (!element)
     {
         element = (tHashElement*)calloc(sizeof(*element), 1);
         element->paused = paused;
@@ -188,19 +188,19 @@ void ActionManager::addAction(Action *action, Node *target, bool paused)
         HASH_ADD_PTR(_targets, target, element);
     }
 
-     actionAllocWithHashElement(element);
- 
-     CCASSERT(! ccArrayContainsObject(element->actions, action), "action already be added!");
-     ccArrayAppendObject(element->actions, action);
- 
-     action->startWithTarget(target);
+    actionAllocWithHashElement(element);
+
+    CCASSERT(!ccArrayContainsObject(element->actions, action), "action already be added!");
+    ccArrayAppendObject(element->actions, action);
+
+    action->startWithTarget(target);
 }
 
 // remove
 
 void ActionManager::removeAllActions()
 {
-    for (tHashElement *element = _targets; element != nullptr; )
+    for (tHashElement* element = _targets; element != nullptr;)
     {
         auto target = element->target;
         element = (tHashElement*)element->hh.next;
@@ -208,7 +208,7 @@ void ActionManager::removeAllActions()
     }
 }
 
-void ActionManager::removeAllActionsFromTarget(Node *target)
+void ActionManager::removeAllActionsFromTarget(Node* target)
 {
     // explicit null handling
     if (target == nullptr)
@@ -216,11 +216,11 @@ void ActionManager::removeAllActionsFromTarget(Node *target)
         return;
     }
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
-        if (ccArrayContainsObject(element->actions, element->currentAction) && (! element->currentActionSalvaged))
+        if (ccArrayContainsObject(element->actions, element->currentAction) && (!element->currentActionSalvaged))
         {
             element->currentAction->retain();
             element->currentActionSalvaged = true;
@@ -238,7 +238,7 @@ void ActionManager::removeAllActionsFromTarget(Node *target)
     }
 }
 
-void ActionManager::removeAction(Action *action)
+void ActionManager::removeAction(Action* action)
 {
     // explicit null handling
     if (action == nullptr)
@@ -246,8 +246,8 @@ void ActionManager::removeAction(Action *action)
         return;
     }
 
-    tHashElement *element = nullptr;
-    Ref *target = action->getOriginalTarget();
+    tHashElement* element = nullptr;
+    Ref* target = action->getOriginalTarget();
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
@@ -259,7 +259,7 @@ void ActionManager::removeAction(Action *action)
     }
 }
 
-void ActionManager::removeActionByTag(int tag, Node *target)
+void ActionManager::removeActionByTag(int tag, Node* target)
 {
     CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
     CCASSERT(target != nullptr, "target can't be nullptr!");
@@ -268,7 +268,7 @@ void ActionManager::removeActionByTag(int tag, Node *target)
         return;
     }
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
 
     if (element)
@@ -276,7 +276,7 @@ void ActionManager::removeActionByTag(int tag, Node *target)
         auto limit = element->actions->num;
         for (int i = 0; i < limit; ++i)
         {
-            Action *action = static_cast<Action*>(element->actions->arr[i]);
+            Action* action = static_cast<Action*>(element->actions->arr[i]);
 
             if (action->getTag() == (int)tag && action->getOriginalTarget() == target)
             {
@@ -287,7 +287,7 @@ void ActionManager::removeActionByTag(int tag, Node *target)
     }
 }
 
-void ActionManager::removeAllActionsByTag(int tag, Node *target)
+void ActionManager::removeAllActionsByTag(int tag, Node* target)
 {
     CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
     CCASSERT(target != nullptr, "target can't be nullptr!");
@@ -295,16 +295,16 @@ void ActionManager::removeAllActionsByTag(int tag, Node *target)
     {
         return;
     }
-    
-    tHashElement *element = nullptr;
+
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
-    
+
     if (element)
     {
         auto limit = element->actions->num;
         for (int i = 0; i < limit;)
         {
-            Action *action = static_cast<Action*>(element->actions->arr[i]);
+            Action* action = static_cast<Action*>(element->actions->arr[i]);
 
             if (action->getTag() == (int)tag && action->getOriginalTarget() == target)
             {
@@ -319,7 +319,7 @@ void ActionManager::removeAllActionsByTag(int tag, Node *target)
     }
 }
 
-void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
+void ActionManager::removeActionsByFlags(unsigned int flags, Node* target)
 {
     if (flags == 0)
     {
@@ -331,7 +331,7 @@ void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
         return;
     }
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
 
     if (element)
@@ -339,7 +339,7 @@ void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
         auto limit = element->actions->num;
         for (int i = 0; i < limit;)
         {
-            Action *action = static_cast<Action*>(element->actions->arr[i]);
+            Action* action = static_cast<Action*>(element->actions->arr[i]);
 
             if ((action->getFlags() & flags) != 0 && action->getOriginalTarget() == target)
             {
@@ -358,11 +358,11 @@ void ActionManager::removeActionsByFlags(unsigned int flags, Node *target)
 
 // FIXME: Passing "const O *" instead of "const O&" because HASH_FIND_IT requires the address of a pointer
 // and, it is not possible to get the address of a reference
-Action* ActionManager::getActionByTag(int tag, const Node *target) const
+Action* ActionManager::getActionByTag(int tag, const Node* target) const
 {
     CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
 
     if (element)
@@ -372,7 +372,7 @@ Action* ActionManager::getActionByTag(int tag, const Node *target) const
             auto limit = element->actions->num;
             for (int i = 0; i < limit; ++i)
             {
-                Action *action = static_cast<Action*>(element->actions->arr[i]);
+                Action* action = static_cast<Action*>(element->actions->arr[i]);
 
                 if (action->getTag() == (int)tag)
                 {
@@ -387,9 +387,9 @@ Action* ActionManager::getActionByTag(int tag, const Node *target) const
 
 // FIXME: Passing "const O *" instead of "const O&" because HASH_FIND_IT requires the address of a pointer
 // and, it is not possible to get the address of a reference
-ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node *target) const
+ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node* target) const
 {
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
     if (element)
     {
@@ -401,23 +401,22 @@ ssize_t ActionManager::getNumberOfRunningActionsInTarget(const Node *target) con
 
 // FIXME: Passing "const O *" instead of "const O&" because HASH_FIND_IT requires the address of a pointer
 // and, it is not possible to get the address of a reference
-size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node *target,
-                                                             int tag)
+size_t ActionManager::getNumberOfRunningActionsInTargetByTag(const Node* target, int tag)
 {
     CCASSERT(tag != Action::INVALID_TAG, "Invalid tag value!");
 
-    tHashElement *element = nullptr;
+    tHashElement* element = nullptr;
     HASH_FIND_PTR(_targets, &target, element);
 
-    if(!element || !element->actions)
+    if (!element || !element->actions)
         return 0;
 
     int count = 0;
     auto limit = element->actions->num;
-    for(int i = 0; i < limit; ++i)
+    for (int i = 0; i < limit; ++i)
     {
         auto action = static_cast<Action*>(element->actions->arr[i]);
-        if(action->getTag() == tag)
+        if (action->getTag() == tag)
             ++count;
     }
 
@@ -439,16 +438,15 @@ ssize_t ActionManager::getNumberOfRunningActions() const
 // main loop
 void ActionManager::update(float dt)
 {
-    for (tHashElement *elt = _targets; elt != nullptr; )
+    for (tHashElement* elt = _targets; elt != nullptr;)
     {
         _currentTarget = elt;
         _currentTargetSalvaged = false;
 
-        if (! _currentTarget->paused)
+        if (!_currentTarget->paused)
         {
             // The 'actions' MutableArray may change while inside this loop.
-            for (_currentTarget->actionIndex = 0; _currentTarget->actionIndex < _currentTarget->actions->num;
-                _currentTarget->actionIndex++)
+            for (_currentTarget->actionIndex = 0; _currentTarget->actionIndex < _currentTarget->actions->num; _currentTarget->actionIndex++)
             {
                 _currentTarget->currentAction = static_cast<Action*>(_currentTarget->actions->arr[_currentTarget->actionIndex]);
                 if (_currentTarget->currentAction == nullptr)
@@ -466,12 +464,12 @@ void ActionManager::update(float dt)
                     // accidentally deallocating itself before finishing its step, we retained
                     // it. Now that step is done, it's safe to release it.
                     _currentTarget->currentAction->release();
-                } else
-                if (_currentTarget->currentAction->isDone())
+                }
+                else if (_currentTarget->currentAction->isDone())
                 {
                     _currentTarget->currentAction->stop();
 
-                    Action *action = _currentTarget->currentAction;
+                    Action* action = _currentTarget->currentAction;
                     // Make currentAction nil to prevent removeAction from salvaging it.
                     _currentTarget->currentAction = nullptr;
                     removeAction(action);
@@ -490,7 +488,7 @@ void ActionManager::update(float dt)
         {
             deleteHashElement(_currentTarget);
         }
-        //if some node reference 'target', it's reference count >= 2 (issues #14050)
+            //if some node reference 'target', it's reference count >= 2 (issues #14050)
         else if (_currentTarget->target->getReferenceCount() == 1)
         {
             deleteHashElement(_currentTarget);

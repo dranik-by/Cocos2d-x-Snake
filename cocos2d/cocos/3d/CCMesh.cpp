@@ -49,26 +49,24 @@ NS_CC_BEGIN
 // Helpers
 
 //sampler uniform names, only diffuse and normal texture are supported for now
-std::string s_uniformSamplerName[] =
-{
-    "",//NTextureData::Usage::Unknown,
-    "",//NTextureData::Usage::None
-    "",//NTextureData::Usage::Diffuse
-    "",//NTextureData::Usage::Emissive
-    "",//NTextureData::Usage::Ambient
-    "",//NTextureData::Usage::Specular
-    "",//NTextureData::Usage::Shininess
-    "u_normalTex",//NTextureData::Usage::Normal
-    "",//NTextureData::Usage::Bump
-    "",//NTextureData::Usage::Transparency
-    "",//NTextureData::Usage::Reflection
+std::string s_uniformSamplerName[] = {
+"",//NTextureData::Usage::Unknown,
+"",//NTextureData::Usage::None
+"",//NTextureData::Usage::Diffuse
+"",//NTextureData::Usage::Emissive
+"",//NTextureData::Usage::Ambient
+"",//NTextureData::Usage::Specular
+"",//NTextureData::Usage::Shininess
+"u_normalTex",//NTextureData::Usage::Normal
+"",//NTextureData::Usage::Bump
+"",//NTextureData::Usage::Transparency
+"",//NTextureData::Usage::Reflection
 };
-
 
 // helpers
 void Mesh::resetLightUniformValues()
 {
-    const auto& conf = Configuration::getInstance();
+    const auto &conf = Configuration::getInstance();
     int maxDirLight = conf->getMaxSupportDirLightInShader();
     int maxPointLight = conf->getMaxSupportPointLightInShader();
     int maxSpotLight = conf->getMaxSupportSpotLightInShader();
@@ -82,7 +80,7 @@ void Mesh::resetLightUniformValues()
 
     _spotLightUniformColorValues.assign(maxSpotLight, Vec3::ZERO);
     _spotLightUniformPositionValues.assign(maxSpotLight, Vec3::ZERO);
-    
+
     //TODO It's strange that init _spotLightUniformDirValues to zeros will cause no light effects on iPhone6 and iPhone6s, but works well on iPhoneX
     //fix no light effects on iPhone6 and iPhone6s
     _spotLightUniformDirValues.assign(maxSpotLight, Vec3(FLT_EPSILON, 0.0f, 0.0f));
@@ -92,24 +90,23 @@ void Mesh::resetLightUniformValues()
 }
 
 //Generate a dummy texture when the texture file is missing
-static Texture2D * getDummyTexture()
+static Texture2D* getDummyTexture()
 {
     auto texture = Director::getInstance()->getTextureCache()->getTextureForKey("/dummyTexture");
-    if(!texture)
+    if (!texture)
     {
-#ifdef NDEBUG
+        #ifdef NDEBUG
         unsigned char data[] ={0,0,0,0};//1*1 transparent picture
-#else
-        unsigned char data[] ={255,0,0,255};//1*1 red picture
-#endif
-        Image * image =new (std::nothrow) Image();
-        image->initWithRawData(data,sizeof(data),1,1,sizeof(unsigned char));
-        texture=Director::getInstance()->getTextureCache()->addImage(image,"/dummyTexture");
+        #else
+        unsigned char data[] = {255, 0, 0, 255};//1*1 red picture
+        #endif
+        Image* image = new(std::nothrow) Image();
+        image->initWithRawData(data, sizeof(data), 1, 1, sizeof(unsigned char));
+        texture = Director::getInstance()->getTextureCache()->addImage(image, "/dummyTexture");
         image->release();
     }
     return texture;
 }
-
 
 Mesh::Mesh()
 : _skin(nullptr)
@@ -122,11 +119,13 @@ Mesh::Mesh()
 , _material(nullptr)
 , _texFile("")
 {
-    
+
 }
+
 Mesh::~Mesh()
 {
-    for (auto &tex : _textures){
+    for (auto &tex : _textures)
+    {
         CC_SAFE_RELEASE(tex.second);
     }
     CC_SAFE_RELEASE(_skin);
@@ -149,7 +148,7 @@ ssize_t Mesh::getMeshVertexAttribCount() const
     return _meshIndexData->getMeshVertexData()->getMeshVertexAttribCount();
 }
 
-const MeshVertexAttrib& Mesh::getMeshVertexAttribute(int idx)
+const MeshVertexAttrib &Mesh::getMeshVertexAttribute(int idx)
 {
     return _meshIndexData->getMeshVertexData()->getMeshVertexAttrib(idx);
 }
@@ -159,14 +158,15 @@ int Mesh::getVertexSizeInBytes() const
     return _meshIndexData->getMeshVertexData()->getSizePerVertex();
 }
 
-Mesh* Mesh::create(const std::vector<float>& positions, const std::vector<float>& normals, const std::vector<float>& texs, const IndexArray& indices)
+Mesh* Mesh::create(const std::vector<float> &positions, const std::vector<float> &normals,
+                   const std::vector<float> &texs, const IndexArray &indices)
 {
     int perVertexSizeInFloat = 0;
     std::vector<float> vertices;
     std::vector<MeshVertexAttrib> attribs;
     MeshVertexAttrib att;
     att.type = backend::VertexFormat::FLOAT3;
-    
+
     if (positions.size())
     {
         perVertexSizeInFloat += 3;
@@ -186,12 +186,12 @@ Mesh* Mesh::create(const std::vector<float>& positions, const std::vector<float>
         att.vertexAttrib = shaderinfos::VertexKey::VERTEX_ATTRIB_TEX_COORD;
         attribs.push_back(att);
     }
-    
+
     bool hasNormal = (normals.size() != 0);
     bool hasTexCoord = (texs.size() != 0);
     //position, normal, texCoordinate into _vertexs
     size_t vertexNum = positions.size() / 3;
-    for(size_t i = 0; i < vertexNum; i++)
+    for (size_t i = 0; i < vertexNum; i++)
     {
         vertices.push_back(positions[i * 3]);
         vertices.push_back(positions[i * 3 + 1]);
@@ -203,7 +203,7 @@ Mesh* Mesh::create(const std::vector<float>& positions, const std::vector<float>
             vertices.push_back(normals[i * 3 + 1]);
             vertices.push_back(normals[i * 3 + 2]);
         }
-    
+
         if (hasTexCoord)
         {
             vertices.push_back(texs[i * 2]);
@@ -213,7 +213,8 @@ Mesh* Mesh::create(const std::vector<float>& positions, const std::vector<float>
     return create(vertices, perVertexSizeInFloat, indices, attribs);
 }
 
-Mesh* Mesh::create(const std::vector<float>& vertices, int /*perVertexSizeInFloat*/, const IndexArray& indices, const std::vector<MeshVertexAttrib>& attribs)
+Mesh* Mesh::create(const std::vector<float> &vertices, int /*perVertexSizeInFloat*/, const IndexArray &indices,
+                   const std::vector<MeshVertexAttrib> &attribs)
 {
     MeshData meshdata;
     meshdata.attribs = attribs;
@@ -222,19 +223,19 @@ Mesh* Mesh::create(const std::vector<float>& vertices, int /*perVertexSizeInFloa
     meshdata.subMeshIds.push_back("");
     auto meshvertexdata = MeshVertexData::create(meshdata);
     auto indexData = meshvertexdata->getMeshIndexDataByIndex(0);
-    
+
     return create("", indexData);
 }
 
-Mesh* Mesh::create(const std::string& name, MeshIndexData* indexData, MeshSkin* skin)
+Mesh* Mesh::create(const std::string &name, MeshIndexData* indexData, MeshSkin* skin)
 {
-    auto state = new (std::nothrow) Mesh();
+    auto state = new(std::nothrow) Mesh();
     state->autorelease();
     state->bindMeshCommand();
     state->_name = name;
     state->setMeshIndexData(indexData);
     state->setSkin(skin);
-    
+
     return state;
 }
 
@@ -253,7 +254,7 @@ bool Mesh::isVisible() const
     return _visible;
 }
 
-void Mesh::setTexture(const std::string& texPath)
+void Mesh::setTexture(const std::string &texPath)
 {
     _texFile = texPath;
     auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
@@ -272,29 +273,32 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
     // This functionality is added for compatibility issues
     if (tex == nullptr)
         tex = getDummyTexture();
-    
+
     CC_SAFE_RETAIN(tex);
     CC_SAFE_RELEASE(_textures[usage]);
-    _textures[usage] = tex;   
-    
-    if (usage == NTextureData::Usage::Diffuse){
-        if (_material) {
+    _textures[usage] = tex;
+
+    if (usage == NTextureData::Usage::Diffuse)
+    {
+        if (_material)
+        {
             auto technique = _material->_currentTechnique;
-            for(auto& pass: technique->_passes)
+            for (auto &pass: technique->_passes)
             {
                 pass->setUniformTexture(0, tex->getBackendTexture());
             }
         }
-        
+
         bindMeshCommand();
         if (cacheFileName)
             _texFile = tex->getPath();
     }
     else if (usage == NTextureData::Usage::Normal) // currently only diffuse and normal are supported
     {
-        if (_material){
+        if (_material)
+        {
             auto technique = _material->_currentTechnique;
-            for(auto& pass: technique->_passes)
+            for (auto &pass: technique->_passes)
             {
                 pass->setUniformNormTexture(1, tex->getBackendTexture());
             }
@@ -302,7 +306,7 @@ void Mesh::setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileN
     }
 }
 
-void Mesh::setTexture(const std::string& texPath, NTextureData::Usage usage)
+void Mesh::setTexture(const std::string &texPath, NTextureData::Usage usage)
 {
     auto tex = Director::getInstance()->getTextureCache()->addImage(texPath);
     setTexture(tex, usage);
@@ -320,7 +324,8 @@ Texture2D* Mesh::getTexture(NTextureData::Usage usage)
 
 void Mesh::setMaterial(Material* material)
 {
-    if (_material != material) {
+    if (_material != material)
+    {
         CC_SAFE_RELEASE(_material);
         _material = material;
         CC_SAFE_RETAIN(_material);
@@ -335,21 +340,21 @@ void Mesh::setMaterial(Material* material)
             //allocate MeshCommand for each pass
             _meshCommands[technique->getName()] = std::vector<MeshCommand>(technique->getPasses().size());
             auto &list = _meshCommands[technique->getName()];
-            
+
             int i = 0;
             for (auto pass: technique->getPasses())
             {
-#ifdef COCOS2D_DEBUG
+                #ifdef COCOS2D_DEBUG
                 //make it crashed when missing attribute data
-                if(_material->getTechnique()->getName().compare(technique->getName()) == 0)
+                if (_material->getTechnique()->getName().compare(technique->getName()) == 0)
                 {
                     auto program = pass->getProgramState()->getProgram();
-                    auto& attributes = program->getActiveAttributes();
+                    auto &attributes = program->getActiveAttributes();
                     auto meshVertexData = _meshIndexData->getMeshVertexData();
                     auto attributeCount = meshVertexData->getMeshVertexAttribCount();
                     CCASSERT(attributes.size() <= attributeCount, "missing attribute data");
                 }
-#endif
+                #endif
                 //TODO
                 auto vertexAttribBinding = VertexAttribBinding::create(_meshIndexData, pass, &list[i]);
                 pass->setVertexAttribBinding(vertexAttribBinding);
@@ -358,13 +363,12 @@ void Mesh::setMaterial(Material* material)
         }
     }
     // Was the texture set before the GLProgramState ? Set it
-    for(auto& tex : _textures)
+    for (auto &tex : _textures)
         setTexture(tex.second, tex.first);
-        
-    
+
     if (_blendDirty)
         setBlendFunc(_blend);
-    
+
     bindMeshCommand();
 }
 
@@ -373,9 +377,10 @@ Material* Mesh::getMaterial() const
     return _material;
 }
 
-void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, uint32_t flags, unsigned int lightMask, const Vec4& color, bool forceDepthWrite)
+void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4 &transform, uint32_t flags, unsigned int lightMask,
+                const Vec4 &color, bool forceDepthWrite)
 {
-    if (! isVisible())
+    if (!isVisible())
         return;
 
     bool isTransparent = (_isTransparent || color.w < 1.f);
@@ -383,16 +388,16 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
     if (isTransparent)
         flags |= Node::FLAGS_RENDER_AS_3D;
 
-//TODO
-//    _meshCommand.init(globalZ,
-//                      _material,
-//                      getVertexBuffer(),
-//                      getIndexBuffer(),
-//                      getPrimitiveType(),
-//                      getIndexFormat(),
-//                      getIndexCount(),
-//                      transform,
-//                      flags);
+    //TODO
+    //    _meshCommand.init(globalZ,
+    //                      _material,
+    //                      getVertexBuffer(),
+    //                      getIndexBuffer(),
+    //                      getPrimitiveType(),
+    //                      getIndexFormat(),
+    //                      getIndexCount(),
+    //                      transform,
+    //                      flags);
 
 
     if (isTransparent && !forceDepthWrite)
@@ -406,7 +411,7 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
     // 'u_color' and others
     const auto scene = Director::getInstance()->getRunningScene();
     auto technique = _material->_currentTechnique;
-    for(const auto pass : technique->_passes)
+    for (const auto pass : technique->_passes)
     {
         pass->setUniformColor(&color, sizeof(color));
 
@@ -428,13 +433,8 @@ void Mesh::draw(Renderer* renderer, float globalZOrder, const Mat4& transform, u
         command.set3D(!_force2DQueue);
     }
 
-    _material->draw(commands.data(), globalZ,
-                    getVertexBuffer(),
-                    getIndexBuffer(),
-                    getPrimitiveType(),
-                    getIndexFormat(),
-                    getIndexCount(),
-                    transform);
+    _material->draw(commands.data(), globalZ, getVertexBuffer(), getIndexBuffer(), getPrimitiveType(), getIndexFormat(),
+                    getIndexCount(), transform);
 
 }
 
@@ -489,10 +489,12 @@ void Mesh::calculateAABB()
             if (_skin->_skinBones.size())
             {
                 root = _skin->_skinBones.at(0);
-                while (root) {
+                while (root)
+                {
                     auto parent = root->getParentBone();
                     bool parentInSkinBone = false;
-                    for (const auto& bone : _skin->_skinBones) {
+                    for (const auto &bone : _skin->_skinBones)
+                    {
                         if (bone == parent)
                         {
                             parentInSkinBone = true;
@@ -504,7 +506,7 @@ void Mesh::calculateAABB()
                     root = parent;
                 }
             }
-            
+
             if (root)
             {
                 _aabb.transform(root->getWorldMat() * _skin->getInvBindPose(root));
@@ -522,20 +524,20 @@ void Mesh::bindMeshCommand()
     }
 }
 
-void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask)
+void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4 &color, unsigned int lightmask)
 {
     CCASSERT(pass, "Invalid Pass");
     CCASSERT(scene, "Invalid scene");
 
-    const auto& conf = Configuration::getInstance();
+    const auto &conf = Configuration::getInstance();
     int maxDirLight = conf->getMaxSupportDirLightInShader();
     int maxPointLight = conf->getMaxSupportPointLightInShader();
     int maxSpotLight = conf->getMaxSupportSpotLightInShader();
     auto &lights = scene->getLights();
 
-    auto bindings= pass->getVertexAttributeBinding();
+    auto bindings = pass->getVertexAttributeBinding();
 
-    if (bindings &&  bindings->hasAttribute(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL))
+    if (bindings && bindings->hasAttribute(shaderinfos::VertexKey::VERTEX_ATTRIB_NORMAL))
     {
         resetLightUniformValues();
 
@@ -543,7 +545,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
         int enabledPointLightNum = 0;
         int enabledSpotLightNum = 0;
         Vec3 ambientColor;
-        for (const auto& light : lights)
+        for (const auto &light : lights)
         {
             bool useLight = light->isEnabled() && ((unsigned int)light->getLightFlag() & lightmask);
             if (useLight)
@@ -553,13 +555,15 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                 {
                     case LightType::DIRECTIONAL:
                     {
-                        if(enabledDirLightNum < maxDirLight)
+                        if (enabledDirLightNum < maxDirLight)
                         {
-                            auto dirLight = static_cast<DirectionLight *>(light);
+                            auto dirLight = static_cast<DirectionLight*>(light);
                             Vec3 dir = dirLight->getDirectionInWorld();
                             dir.normalize();
                             const Color3B &col = dirLight->getDisplayedColor();
-                            _dirLightUniformColorValues[enabledDirLightNum].set(col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
+                            _dirLightUniformColorValues[enabledDirLightNum].set(col.r / 255.0f * intensity,
+                                                                                col.g / 255.0f * intensity,
+                                                                                col.b / 255.0f * intensity);
                             _dirLightUniformDirValues[enabledDirLightNum] = dir;
                             ++enabledDirLightNum;
                         }
@@ -568,12 +572,14 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                         break;
                     case LightType::POINT:
                     {
-                        if(enabledPointLightNum < maxPointLight)
+                        if (enabledPointLightNum < maxPointLight)
                         {
-                            auto pointLight = static_cast<PointLight *>(light);
-                            Mat4 mat= pointLight->getNodeToWorldTransform();
+                            auto pointLight = static_cast<PointLight*>(light);
+                            Mat4 mat = pointLight->getNodeToWorldTransform();
                             const Color3B &col = pointLight->getDisplayedColor();
-                            _pointLightUniformColorValues[enabledPointLightNum].set(col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
+                            _pointLightUniformColorValues[enabledPointLightNum].set(col.r / 255.0f * intensity,
+                                                                                    col.g / 255.0f * intensity,
+                                                                                    col.b / 255.0f * intensity);
                             _pointLightUniformPositionValues[enabledPointLightNum].set(mat.m[12], mat.m[13], mat.m[14]);
                             _pointLightUniformRangeInverseValues[enabledPointLightNum] = 1.0f / pointLight->getRange();
                             ++enabledPointLightNum;
@@ -582,14 +588,16 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                         break;
                     case LightType::SPOT:
                     {
-                        if(enabledSpotLightNum < maxSpotLight)
+                        if (enabledSpotLightNum < maxSpotLight)
                         {
-                            auto spotLight = static_cast<SpotLight *>(light);
+                            auto spotLight = static_cast<SpotLight*>(light);
                             Vec3 dir = spotLight->getDirectionInWorld();
                             dir.normalize();
-                            Mat4 mat= light->getNodeToWorldTransform();
+                            Mat4 mat = light->getNodeToWorldTransform();
                             const Color3B &col = spotLight->getDisplayedColor();
-                            _spotLightUniformColorValues[enabledSpotLightNum].set(col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
+                            _spotLightUniformColorValues[enabledSpotLightNum].set(col.r / 255.0f * intensity,
+                                                                                  col.g / 255.0f * intensity,
+                                                                                  col.b / 255.0f * intensity);
                             _spotLightUniformPositionValues[enabledSpotLightNum].set(mat.m[12], mat.m[13], mat.m[14]);
                             _spotLightUniformDirValues[enabledSpotLightNum] = dir;
                             _spotLightUniformInnerAngleCosValues[enabledSpotLightNum] = spotLight->getCosInnerAngle();
@@ -601,9 +609,10 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
                         break;
                     case LightType::AMBIENT:
                     {
-                        auto ambLight = static_cast<AmbientLight *>(light);
+                        auto ambLight = static_cast<AmbientLight*>(light);
                         const Color3B &col = ambLight->getDisplayedColor();
-                        ambientColor.add(col.r / 255.0f * intensity, col.g / 255.0f * intensity, col.b / 255.0f * intensity);
+                        ambientColor.add(col.r / 255.0f * intensity, col.g / 255.0f * intensity,
+                                         col.b / 255.0f * intensity);
                     }
                         break;
                     default:
@@ -613,25 +622,36 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
         }
         if (0 < maxDirLight)
         {
-            pass->setUniformDirLightColor(&_dirLightUniformColorValues[0], _dirLightUniformColorValues.size() * sizeof(_dirLightUniformColorValues[0]));
-            pass->setUniformDirLightDir(&_dirLightUniformDirValues[0], _dirLightUniformDirValues.size() * sizeof(_dirLightUniformDirValues[0]));
+            pass->setUniformDirLightColor(&_dirLightUniformColorValues[0],
+                                          _dirLightUniformColorValues.size() * sizeof(_dirLightUniformColorValues[0]));
+            pass->setUniformDirLightDir(&_dirLightUniformDirValues[0],
+                                        _dirLightUniformDirValues.size() * sizeof(_dirLightUniformDirValues[0]));
         }
 
         if (0 < maxPointLight)
         {
-            pass->setUniformPointLightColor(&_pointLightUniformColorValues[0], _pointLightUniformColorValues.size() * sizeof(_pointLightUniformColorValues[0]));
-            pass->setUniformPointLightPosition(&_pointLightUniformPositionValues[0], _pointLightUniformPositionValues.size() * sizeof(_pointLightUniformPositionValues[0]));
-            pass->setUniformPointLightRangeInverse(&_pointLightUniformRangeInverseValues[0], _pointLightUniformRangeInverseValues.size() * sizeof(_pointLightUniformRangeInverseValues[0]));
+            pass->setUniformPointLightColor(&_pointLightUniformColorValues[0],
+                                            _pointLightUniformColorValues.size() * sizeof(_pointLightUniformColorValues[0]));
+            pass->setUniformPointLightPosition(&_pointLightUniformPositionValues[0],
+                                               _pointLightUniformPositionValues.size() * sizeof(_pointLightUniformPositionValues[0]));
+            pass->setUniformPointLightRangeInverse(&_pointLightUniformRangeInverseValues[0],
+                                                   _pointLightUniformRangeInverseValues.size() * sizeof(_pointLightUniformRangeInverseValues[0]));
         }
 
         if (0 < maxSpotLight)
         {
-            pass->setUniformSpotLightColor(&_spotLightUniformColorValues[0], _spotLightUniformColorValues.size() * sizeof(_spotLightUniformColorValues[0]));
-            pass->setUniformSpotLightPosition(&_spotLightUniformPositionValues[0], _spotLightUniformPositionValues.size() * sizeof(_spotLightUniformPositionValues[0]));
-            pass->setUniformSpotLightDir(&_spotLightUniformDirValues[0], _spotLightUniformDirValues.size() * sizeof(_spotLightUniformDirValues[0]));
-            pass->setUniformSpotLightInnerAngleCos(&_spotLightUniformInnerAngleCosValues[0], _spotLightUniformInnerAngleCosValues.size() * sizeof(_spotLightUniformInnerAngleCosValues[0]));
-            pass->setUniformSpotLightOuterAngleCos(&_spotLightUniformOuterAngleCosValues[0], _spotLightUniformOuterAngleCosValues.size() * sizeof(_spotLightUniformOuterAngleCosValues[0]));
-            pass->setUniformSpotLightRangeInverse(&_spotLightUniformRangeInverseValues[0], _spotLightUniformRangeInverseValues.size() * sizeof(_spotLightUniformRangeInverseValues[0]));
+            pass->setUniformSpotLightColor(&_spotLightUniformColorValues[0],
+                                           _spotLightUniformColorValues.size() * sizeof(_spotLightUniformColorValues[0]));
+            pass->setUniformSpotLightPosition(&_spotLightUniformPositionValues[0],
+                                              _spotLightUniformPositionValues.size() * sizeof(_spotLightUniformPositionValues[0]));
+            pass->setUniformSpotLightDir(&_spotLightUniformDirValues[0],
+                                         _spotLightUniformDirValues.size() * sizeof(_spotLightUniformDirValues[0]));
+            pass->setUniformSpotLightInnerAngleCos(&_spotLightUniformInnerAngleCosValues[0],
+                                                   _spotLightUniformInnerAngleCosValues.size() * sizeof(_spotLightUniformInnerAngleCosValues[0]));
+            pass->setUniformSpotLightOuterAngleCos(&_spotLightUniformOuterAngleCosValues[0],
+                                                   _spotLightUniformOuterAngleCosValues.size() * sizeof(_spotLightUniformOuterAngleCosValues[0]));
+            pass->setUniformSpotLightRangeInverse(&_spotLightUniformRangeInverseValues[0],
+                                                  _spotLightUniformRangeInverseValues.size() * sizeof(_spotLightUniformRangeInverseValues[0]));
         }
 
         auto ambientLightColor = Vec3(ambientColor.x, ambientColor.y, ambientColor.z);
@@ -641,7 +661,7 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
     {
         Vec3 ambient(0.0f, 0.0f, 0.0f);
         bool hasAmbient = false;
-        for (const auto& light : lights)
+        for (const auto &light : lights)
         {
             if (light->getLightType() == LightType::AMBIENT)
             {
@@ -658,7 +678,9 @@ void Mesh::setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigne
         }
         if (hasAmbient)
         {
-            ambient.x /= 255.f; ambient.y /= 255.f; ambient.z /= 255.f;
+            ambient.x /= 255.f;
+            ambient.y /= 255.f;
+            ambient.z /= 255.f;
             //override the uniform value of u_color using the calculated color
             auto fcolor = Vec4(color.x * ambient.x, color.y * ambient.y, color.z * ambient.z, color.w);
             pass->setUniformColor(&fcolor, sizeof(fcolor));
@@ -671,22 +693,23 @@ void Mesh::setBlendFunc(const BlendFunc &blendFunc)
     // Blend must be saved for future use
     // it doesn't matter if the material is already set or not
     // This functionality is added for compatibility issues
-    if(_blend != blendFunc)
+    if (_blend != blendFunc)
     {
         _blendDirty = true;
         _blend = blendFunc;
     }
 
-    if (_material) {
+    if (_material)
+    {
         //TODO set blend to Pass
         _material->getStateBlock().setBlendFunc(blendFunc);
         bindMeshCommand();
     }
 }
 
-const BlendFunc& Mesh::getBlendFunc() const
+const BlendFunc &Mesh::getBlendFunc() const
 {
-// return _material->_currentTechnique->_passes.at(0)->getBlendFunc();
+    // return _material->_currentTechnique->_passes.at(0)->getBlendFunc();
     return _blend;
 }
 

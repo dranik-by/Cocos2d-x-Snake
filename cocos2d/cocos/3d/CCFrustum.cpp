@@ -34,7 +34,8 @@ bool Frustum::initFrustum(const Camera* camera)
     createPlane(camera);
     return true;
 }
-bool Frustum::isOutOfFrustum(const AABB& aabb) const
+
+bool Frustum::isOutOfFrustum(const AABB &aabb) const
 {
     if (_initialized)
     {
@@ -43,19 +44,19 @@ bool Frustum::isOutOfFrustum(const AABB& aabb) const
         int plane = _clipZ ? 6 : 4;
         for (int i = 0; i < plane; i++)
         {
-            const Vec3& normal = _plane[i].getNormal();
+            const Vec3 &normal = _plane[i].getNormal();
             point.x = normal.x < 0 ? aabb._max.x : aabb._min.x;
             point.y = normal.y < 0 ? aabb._max.y : aabb._min.y;
             point.z = normal.z < 0 ? aabb._max.z : aabb._min.z;
-            
-            if (_plane[i].getSide(point) == PointSide::FRONT_PLANE )
+
+            if (_plane[i].getSide(point) == PointSide::FRONT_PLANE)
                 return true;
         }
     }
     return false;
 }
 
-bool Frustum::isOutOfFrustum(const OBB& obb) const
+bool Frustum::isOutOfFrustum(const OBB &obb) const
 {
     if (_initialized)
     {
@@ -64,10 +65,10 @@ bool Frustum::isOutOfFrustum(const OBB& obb) const
         Vec3 obbExtentX = obb._xAxis * obb._extents.x;
         Vec3 obbExtentY = obb._yAxis * obb._extents.y;
         Vec3 obbExtentZ = obb._zAxis * obb._extents.z;
-        
+
         for (int i = 0; i < plane; i++)
         {
-            const Vec3& normal = _plane[i].getNormal();
+            const Vec3 &normal = _plane[i].getNormal();
             point = obb._center;
             point = normal.dot(obb._xAxis) > 0 ? point - obbExtentX : point + obbExtentX;
             point = normal.dot(obb._yAxis) > 0 ? point - obbExtentY : point + obbExtentY;
@@ -77,20 +78,26 @@ bool Frustum::isOutOfFrustum(const OBB& obb) const
                 return true;
         }
     }
-    return  false;
+    return false;
 }
 
 void Frustum::createPlane(const Camera* camera)
 {
-    const Mat4& mat = camera->getViewProjectionMatrix();
+    const Mat4 &mat = camera->getViewProjectionMatrix();
     //ref http://www.lighthouse3d.com/tutorials/view-frustum-culling/clip-space-approach-extracting-the-planes/
     //extract frustum plane
-    _plane[0].initPlane(-Vec3(mat.m[3] + mat.m[0], mat.m[7] + mat.m[4], mat.m[11] + mat.m[8]), (mat.m[15] + mat.m[12]));//left
-    _plane[1].initPlane(-Vec3(mat.m[3] - mat.m[0], mat.m[7] - mat.m[4], mat.m[11] - mat.m[8]), (mat.m[15] - mat.m[12]));//right
-    _plane[2].initPlane(-Vec3(mat.m[3] + mat.m[1], mat.m[7] + mat.m[5], mat.m[11] + mat.m[9]), (mat.m[15] + mat.m[13]));//bottom
-    _plane[3].initPlane(-Vec3(mat.m[3] - mat.m[1], mat.m[7] - mat.m[5], mat.m[11] - mat.m[9]), (mat.m[15] - mat.m[13]));//top
-    _plane[4].initPlane(-Vec3(mat.m[3] + mat.m[2], mat.m[7] + mat.m[6], mat.m[11] + mat.m[10]), (mat.m[15] + mat.m[14]));//near
-    _plane[5].initPlane(-Vec3(mat.m[3] - mat.m[2], mat.m[7] - mat.m[6], mat.m[11] - mat.m[10]), (mat.m[15] - mat.m[14]));//far
+    _plane[0].initPlane(-Vec3(mat.m[3] + mat.m[0], mat.m[7] + mat.m[4], mat.m[11] + mat.m[8]),
+                        (mat.m[15] + mat.m[12]));//left
+    _plane[1].initPlane(-Vec3(mat.m[3] - mat.m[0], mat.m[7] - mat.m[4], mat.m[11] - mat.m[8]),
+                        (mat.m[15] - mat.m[12]));//right
+    _plane[2].initPlane(-Vec3(mat.m[3] + mat.m[1], mat.m[7] + mat.m[5], mat.m[11] + mat.m[9]),
+                        (mat.m[15] + mat.m[13]));//bottom
+    _plane[3].initPlane(-Vec3(mat.m[3] - mat.m[1], mat.m[7] - mat.m[5], mat.m[11] - mat.m[9]),
+                        (mat.m[15] - mat.m[13]));//top
+    _plane[4].initPlane(-Vec3(mat.m[3] + mat.m[2], mat.m[7] + mat.m[6], mat.m[11] + mat.m[10]),
+                        (mat.m[15] + mat.m[14]));//near
+    _plane[5].initPlane(-Vec3(mat.m[3] - mat.m[2], mat.m[7] - mat.m[6], mat.m[11] - mat.m[10]),
+                        (mat.m[15] - mat.m[14]));//far
 }
 
 NS_CC_END

@@ -23,17 +23,18 @@
  THE SOFTWARE.
  ****************************************************************************/
 #include "navmesh/CCNavMesh.h"
+
 #if CC_USE_NAVMESH
 
-#include "platform/CCFileUtils.h"
-#include "renderer/CCRenderer.h"
-#include "recast/Detour/DetourCommon.h"
-#include "recast/DebugUtils/DetourDebugDraw.h"
-#include <sstream>
+    #include "platform/CCFileUtils.h"
+    #include "renderer/CCRenderer.h"
+    #include "recast/Detour/DetourCommon.h"
+    #include "recast/DebugUtils/DetourDebugDraw.h"
+    #include <sstream>
 
 NS_CC_BEGIN
 
-#pragma pack(push,1)
+    #pragma pack(push, 1)
 struct TileCacheSetHeader
 {
     int32_t magic;
@@ -48,7 +49,7 @@ struct TileCacheTileHeader
     dtCompressedTileRef tileRef;
     int32_t dataSize;
 };
-#pragma pack(pop)
+    #pragma pack(pop)
 
 static unsigned char* parseRow(unsigned char* buf, unsigned char* bufEnd, char* row, int len)
 {
@@ -62,21 +63,23 @@ static unsigned char* parseRow(unsigned char* buf, unsigned char* bufEnd, char* 
         // multirow
         switch (c)
         {
-        case '\n':
-            if (start) break;
-            done = true;
-            break;
-        case '\r':
-            break;
-        case '\t':
-        case ' ':
-            if (start) break;
-        default:
-            start = false;
-            row[n++] = c;
-            if (n >= len - 1)
+            case '\n':
+                if (start)
+                    break;
                 done = true;
-            break;
+                break;
+            case '\r':
+                break;
+            case '\t':
+            case ' ':
+                if (start)
+                    break;
+            default:
+                start = false;
+                row[n++] = c;
+                if (n >= len - 1)
+                    done = true;
+                break;
         }
     }
     row[n] = '\0';
@@ -89,7 +92,7 @@ static const int MAX_AGENTS = 128;
 
 NavMesh* NavMesh::create(const std::string &navFilePath, const std::string &geomFilePath)
 {
-    auto ref = new (std::nothrow) NavMesh();
+    auto ref = new(std::nothrow) NavMesh();
     if (ref && ref->initWithFilePath(navFilePath, geomFilePath))
     {
         ref->autorelease();
@@ -100,15 +103,15 @@ NavMesh* NavMesh::create(const std::string &navFilePath, const std::string &geom
 }
 
 NavMesh::NavMesh()
-    : _navMesh(nullptr)
-    , _navMeshQuery(nullptr)
-    , _crowed(nullptr)
-    , _tileCache(nullptr)
-    , _allocator(nullptr)
-    , _compressor(nullptr)
-    , _meshProcess(nullptr)
-    , _geomData(nullptr)
-    , _isDebugDrawEnabled(false)
+: _navMesh(nullptr)
+, _navMeshQuery(nullptr)
+, _crowed(nullptr)
+, _tileCache(nullptr)
+, _allocator(nullptr)
+, _compressor(nullptr)
+, _meshProcess(nullptr)
+, _geomData(nullptr)
+, _isDebugDrawEnabled(false)
 {
 
 }
@@ -124,12 +127,14 @@ NavMesh::~NavMesh()
     CC_SAFE_DELETE(_meshProcess);
     CC_SAFE_DELETE(_geomData);
 
-    for (auto iter : _agentList){
+    for (auto iter : _agentList)
+    {
         CC_SAFE_RELEASE(iter);
     }
     _agentList.clear();
 
-    for (auto iter : _obstacleList){
+    for (auto iter : _obstacleList)
+    {
         CC_SAFE_RELEASE(iter);
     }
     _obstacleList.clear();
@@ -139,14 +144,17 @@ bool NavMesh::initWithFilePath(const std::string &navFilePath, const std::string
 {
     _navFilePath = navFilePath;
     _geomFilePath = geomFilePath;
-    if (!read()) return false;
+    if (!read())
+        return false;
     return true;
 }
 
 bool NavMesh::read()
 {
-    if (!loadGeomFile()) return false;
-    if (!loadNavMeshFile()) return false;
+    if (!loadGeomFile())
+        return false;
+    if (!loadNavMeshFile())
+        return false;
 
     return true;
 }
@@ -154,7 +162,8 @@ bool NavMesh::read()
 bool NavMesh::loadNavMeshFile()
 {
     auto data = FileUtils::getInstance()->getDataFromFile(_navFilePath);
-    if (data.isNull()) return false;
+    if (data.isNull())
+        return false;
 
     // Read header.
     unsigned int offset = 0;
@@ -186,9 +195,9 @@ bool NavMesh::loadNavMeshFile()
         return false;
     }
 
-    _allocator = new (std::nothrow) LinearAllocator(32000);
-    _compressor = new (std::nothrow) FastLZCompressor;
-    _meshProcess = new (std::nothrow) MeshProcess(_geomData);
+    _allocator = new(std::nothrow) LinearAllocator(32000);
+    _compressor = new(std::nothrow) FastLZCompressor;
+    _meshProcess = new(std::nothrow) MeshProcess(_geomData);
     status = _tileCache->init(&header.cacheParams, _allocator, _compressor, _meshProcess);
 
     if (dtStatusFailed(status))
@@ -205,7 +214,8 @@ bool NavMesh::loadNavMeshFile()
             break;
 
         unsigned char* tileData = (unsigned char*)dtAlloc(tileHeader.dataSize, DT_ALLOC_PERM);
-        if (!tileData) break;
+        if (!tileData)
+            break;
         memcpy(tileData, (data.getBytes() + offset), tileHeader.dataSize);
         offset += tileHeader.dataSize;
 
@@ -234,9 +244,10 @@ bool NavMesh::loadGeomFile()
 {
     unsigned char* buf = nullptr;
     auto data = FileUtils::getInstance()->getDataFromFile(_geomFilePath);
-    if (data.isNull()) return false;
+    if (data.isNull())
+        return false;
     buf = data.getBytes();
-    _geomData = new (std::nothrow) GeomData;
+    _geomData = new(std::nothrow) GeomData;
     _geomData->offMeshConCount = 0;
 
     unsigned char* src = buf;
@@ -255,8 +266,8 @@ bool NavMesh::loadGeomFile()
                 float* v = &_geomData->offMeshConVerts[_geomData->offMeshConCount * 3 * 2];
                 int bidir, area = 0, flags = 0;
                 float rad;
-                sscanf(row + 1, "%f %f %f  %f %f %f %f %d %d %d",
-                    &v[0], &v[1], &v[2], &v[3], &v[4], &v[5], &rad, &bidir, &area, &flags);
+                sscanf(row + 1, "%f %f %f  %f %f %f %f %d %d %d", &v[0], &v[1], &v[2], &v[3], &v[4], &v[5], &rad,
+                       &bidir, &area, &flags);
                 _geomData->offMeshConRads[_geomData->offMeshConCount] = rad;
                 _geomData->offMeshConDirs[_geomData->offMeshConCount] = (unsigned char)bidir;
                 _geomData->offMeshConAreas[_geomData->offMeshConCount] = (unsigned char)area;
@@ -273,7 +284,8 @@ void NavMesh::dtDraw()
 {
     drawObstacles();
     _debugDraw.depthMask(false);
-    duDebugDrawNavMeshWithClosedList(&_debugDraw, *_navMesh, *_navMeshQuery, DU_DRAWNAVMESH_OFFMESHCONS | DU_DRAWNAVMESH_CLOSEDLIST/* | DU_DRAWNAVMESH_COLOR_TILES*/);
+    duDebugDrawNavMeshWithClosedList(&_debugDraw, *_navMesh, *_navMeshQuery,
+                                     DU_DRAWNAVMESH_OFFMESHCONS | DU_DRAWNAVMESH_CLOSEDLIST/* | DU_DRAWNAVMESH_COLOR_TILES*/);
     drawAgents();
     drawOffMeshConnections();
     _debugDraw.depthMask(true);
@@ -300,7 +312,7 @@ void cocos2d::NavMesh::drawOffMeshConnections()
         if (/*hilight*/true)
         {
             duAppendArc(&_debugDraw, v[0], v[1], v[2], v[3], v[4], v[5], 0.25f,
-                (_geomData->offMeshConDirs[i] & 1) ? 0.6f : 0.0f, 0.6f, conColor);
+                        (_geomData->offMeshConDirs[i] & 1) ? 0.6f : 0.0f, 0.6f, conColor);
         }
     }
     _debugDraw.end();
@@ -311,9 +323,11 @@ void cocos2d::NavMesh::drawObstacles()
     // Draw obstacles
     for (auto iter : _obstacleList)
     {
-        if (iter){
+        if (iter)
+        {
             const dtTileCacheObstacle* ob = _tileCache->getObstacleByRef(iter->_obstacleID);
-            if (ob->state == DT_OBSTACLE_EMPTY) continue;
+            if (ob->state == DT_OBSTACLE_EMPTY)
+                continue;
             float bmin[3], bmax[3];
             _tileCache->getObstacleBounds(ob, bmin, bmax);
 
@@ -326,7 +340,8 @@ void cocos2d::NavMesh::drawObstacles()
                 col = duRGBA(220, 0, 0, 128);
 
             duDebugDrawCylinder(&_debugDraw, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], col);
-            duDebugDrawCylinderWire(&_debugDraw, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], duDarkenCol(col), 2);
+            duDebugDrawCylinderWire(&_debugDraw, bmin[0], bmin[1], bmin[2], bmax[0], bmax[1], bmax[2], duDarkenCol(col),
+                                    2);
         }
     }
 }
@@ -335,7 +350,8 @@ void cocos2d::NavMesh::drawAgents()
 {
     for (auto iter : _agentList)
     {
-        if (iter){
+        if (iter)
+        {
             auto agent = _crowed->getAgent(iter->_agentID);
             float r = iter->getRadius();
             float h = iter->getHeight();
@@ -353,8 +369,8 @@ void cocos2d::NavMesh::drawAgents()
             else if (agent->targetState == DT_CROWDAGENT_TARGET_VELOCITY)
                 col = duLerpCol(col, duRGBA(64, 255, 0, 128), 128);
 
-            duDebugDrawCylinder(&_debugDraw, agent->npos[0] - r, agent->npos[1] + r*0.1f, agent->npos[2] - r,
-                agent->npos[0] + r, agent->npos[1] + h, agent->npos[2] + r, col);
+            duDebugDrawCylinder(&_debugDraw, agent->npos[0] - r, agent->npos[1] + r * 0.1f, agent->npos[2] - r,
+                                agent->npos[0] + r, agent->npos[1] + h, agent->npos[2] + r, col);
 
         }
     }
@@ -362,14 +378,15 @@ void cocos2d::NavMesh::drawAgents()
     // Velocity stuff.
     for (auto iter : _agentList)
     {
-        if (iter){
+        if (iter)
+        {
             auto agent = _crowed->getAgent(iter->_agentID);
 
             const float radius = agent->params.radius;
             const float height = agent->params.height;
             const float* pos = agent->npos;
             const float* vel = agent->vel;
-//            const float* dvel = agent->dvel;
+            //            const float* dvel = agent->dvel;
 
             unsigned int col = duRGBA(220, 220, 220, 192);
             if (agent->targetState == DT_CROWDAGENT_TARGET_REQUESTING || agent->targetState == DT_CROWDAGENT_TARGET_WAITING_FOR_QUEUE)
@@ -387,37 +404,39 @@ void cocos2d::NavMesh::drawAgents()
             //    pos[0] + dvel[0], pos[1] + height + dvel[1], pos[2] + dvel[2],
             //    0.0f, 0.4f, duRGBA(0, 192, 255, 192), 2.0f);
 
-            duDebugDrawArrow(&_debugDraw, pos[0], pos[1] + height, pos[2],
-                pos[0] + vel[0], pos[1] + height + vel[1], pos[2] + vel[2],
-                0.0f, 0.4f, duRGBA(0, 0, 0, 160), 2.0f);
+            duDebugDrawArrow(&_debugDraw, pos[0], pos[1] + height, pos[2], pos[0] + vel[0], pos[1] + height + vel[1],
+                             pos[2] + vel[2], 0.0f, 0.4f, duRGBA(0, 0, 0, 160), 2.0f);
         }
     }
 }
 
-void NavMesh::removeNavMeshObstacle(NavMeshObstacle *obstacle)
+void NavMesh::removeNavMeshObstacle(NavMeshObstacle* obstacle)
 {
     auto iter = std::find(_obstacleList.begin(), _obstacleList.end(), obstacle);
-    if (iter != _obstacleList.end()){
+    if (iter != _obstacleList.end())
+    {
         obstacle->removeFrom(_tileCache);
         obstacle->release();
         _obstacleList[iter - _obstacleList.begin()] = nullptr;
     }
 }
 
-void NavMesh::addNavMeshObstacle(NavMeshObstacle *obstacle)
+void NavMesh::addNavMeshObstacle(NavMeshObstacle* obstacle)
 {
     auto iter = std::find(_obstacleList.begin(), _obstacleList.end(), nullptr);
-    if (iter != _obstacleList.end()){
+    if (iter != _obstacleList.end())
+    {
         obstacle->addTo(_tileCache);
         obstacle->retain();
         _obstacleList[iter - _obstacleList.begin()] = obstacle;
     }
 }
 
-void NavMesh::removeNavMeshAgent(NavMeshAgent *agent)
+void NavMesh::removeNavMeshAgent(NavMeshAgent* agent)
 {
     auto iter = std::find(_agentList.begin(), _agentList.end(), agent);
-    if (iter != _agentList.end()){
+    if (iter != _agentList.end())
+    {
         agent->removeFrom(_crowed);
         agent->setNavMeshQuery(nullptr);
         agent->release();
@@ -425,10 +444,11 @@ void NavMesh::removeNavMeshAgent(NavMeshAgent *agent)
     }
 }
 
-void NavMesh::addNavMeshAgent(NavMeshAgent *agent)
+void NavMesh::addNavMeshAgent(NavMeshAgent* agent)
 {
     auto iter = std::find(_agentList.begin(), _agentList.end(), nullptr);
-    if (iter != _agentList.end()){
+    if (iter != _agentList.end())
+    {
         agent->addTo(_crowed);
         agent->setNavMeshQuery(_navMeshQuery);
         agent->retain();
@@ -448,7 +468,8 @@ void NavMesh::setDebugDrawEnable(bool enable)
 
 void NavMesh::debugDraw(Renderer* renderer)
 {
-    if (_isDebugDrawEnabled){
+    if (_isDebugDrawEnabled)
+    {
         _debugDraw.clear();
         dtDraw();
         _debugDraw.draw(renderer);
@@ -457,12 +478,14 @@ void NavMesh::debugDraw(Renderer* renderer)
 
 void NavMesh::update(float dt)
 {
-    for (auto iter : _agentList){
+    for (auto iter : _agentList)
+    {
         if (iter)
             iter->preUpdate(dt);
     }
 
-    for (auto iter : _obstacleList){
+    for (auto iter : _obstacleList)
+    {
         if (iter)
             iter->preUpdate(dt);
     }
@@ -473,12 +496,14 @@ void NavMesh::update(float dt)
     if (_tileCache)
         _tileCache->update(dt, _navMesh);
 
-    for (auto iter : _agentList){
+    for (auto iter : _agentList)
+    {
         if (iter)
             iter->postUpdate(dt);
     }
 
-    for (auto iter : _obstacleList){
+    for (auto iter : _obstacleList)
+    {
         if (iter)
             iter->postUpdate(dt);
     }
@@ -489,7 +514,9 @@ void cocos2d::NavMesh::findPath(const Vec3 &start, const Vec3 &end, std::vector<
     static const int MAX_POLYS = 256;
     static const int MAX_SMOOTH = 2048;
     float ext[3];
-    ext[0] = 2; ext[1] = 4; ext[2] = 2;
+    ext[0] = 2;
+    ext[1] = 4;
+    ext[2] = 2;
     dtQueryFilter filter;
     dtPolyRef startRef, endRef;
     dtPolyRef polys[MAX_POLYS];
@@ -528,8 +555,8 @@ void cocos2d::NavMesh::findPath(const Vec3 &start, const Vec3 &end, std::vector<
             unsigned char steerPosFlag;
             dtPolyRef steerPosRef;
 
-            if (!getSteerTarget(_navMeshQuery, iterPos, targetPos, SLOP,
-                polys, npolys, steerPos, steerPosFlag, steerPosRef))
+            if (!getSteerTarget(_navMeshQuery, iterPos, targetPos, SLOP, polys, npolys, steerPos, steerPosFlag,
+                                steerPosRef))
                 break;
 
             bool endOfPath = (steerPosFlag & DT_STRAIGHTPATH_END) ? true : false;
@@ -551,8 +578,7 @@ void cocos2d::NavMesh::findPath(const Vec3 &start, const Vec3 &end, std::vector<
             float result[3];
             dtPolyRef visited[16];
             int nvisited = 0;
-            _navMeshQuery->moveAlongSurface(polys[0], iterPos, moveTgt, &filter,
-                result, visited, &nvisited, 16);
+            _navMeshQuery->moveAlongSurface(polys[0], iterPos, moveTgt, &filter, result, visited, &nvisited, 16);
 
             npolys = fixupCorridor(polys, npolys, MAX_POLYS, visited, nvisited);
             npolys = fixupShortcuts(polys, npolys, _navMeshQuery);

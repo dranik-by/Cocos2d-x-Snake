@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 # ****************************************************************************/
 
-if(ANDROID)
+if (ANDROID)
     # refer to target: cocos/platform/android/CMakeLists.txt
     set(COCOS_PLATFORM_SPECIFIC_SRC
         platform/android/CCApplication-android.cpp
@@ -30,8 +30,8 @@ if(ANDROID)
         platform/android/CCGLViewImpl-android.cpp
         platform/android/CCFileUtils-android.cpp
         platform/android/CCEnhanceAPI-android.cpp
-    )
-elseif(WINDOWS)
+        )
+elseif (WINDOWS)
     set(COCOS_PLATFORM_SPECIFIC_HEADER
         platform/win32/compat/stdint.h
         platform/win32/CCApplication-win32.h
@@ -54,7 +54,7 @@ elseif(WINDOWS)
         platform/desktop/CCGLViewImpl-desktop.cpp
         )
 
-elseif(APPLE)
+elseif (APPLE)
     set(COCOS_PLATFORM_SPECIFIC_HEADER
         platform/apple/CCFileUtils-apple.h
         platform/apple/CCDevice-apple.h
@@ -63,14 +63,14 @@ elseif(APPLE)
         platform/apple/CCFileUtils-apple.mm
         platform/apple/CCDevice-apple.mm
         )
-    if(MACOSX)
+    if (MACOSX)
         set(COCOS_PLATFORM_SPECIFIC_HEADER
             ${COCOS_PLATFORM_SPECIFIC_HEADER}
             platform/mac/CCStdC-mac.h
             platform/mac/CCGLViewImpl-mac.h
             platform/mac/CCPlatformDefine-mac.h
             platform/mac/CCApplication-mac.h
-           # platform/desktop/CCGLViewImpl-desktop.h
+            # platform/desktop/CCGLViewImpl-desktop.h
             )
         set(COCOS_PLATFORM_SPECIFIC_SRC
             ${COCOS_PLATFORM_SPECIFIC_SRC}
@@ -78,9 +78,9 @@ elseif(APPLE)
             platform/mac/CCGLViewImpl-mac.mm
             platform/mac/CCCommon-mac.mm
             platform/mac/CCDevice-mac.mm
-           # platform/desktop/CCGLViewImpl-desktop.cpp
+            # platform/desktop/CCGLViewImpl-desktop.cpp
             )
-    elseif(IOS)
+    elseif (IOS)
         set(COCOS_PLATFORM_SPECIFIC_HEADER
             ${COCOS_PLATFORM_SPECIFIC_HEADER}
             platform/ios/CCApplication-ios.h
@@ -102,17 +102,17 @@ elseif(APPLE)
             platform/ios/CCImage-ios.mm
             platform/ios/CCInputView-ios.mm
             )
-    endif()
+    endif ()
 
-elseif(LINUX)
+elseif (LINUX)
 
-    if(NOT CMAKE_CROSSCOMPILING)
+    if (NOT CMAKE_CROSSCOMPILING)
         include_directories(
                 /usr/include
                 /usr/include/GLFW
                 /usr/local/include/GLFW
         )
-    endif(NOT CMAKE_CROSSCOMPILING)
+    endif (NOT CMAKE_CROSSCOMPILING)
 
     set(COCOS_PLATFORM_SPECIFIC_HEADER
         platform/linux/CCApplication-linux.h
@@ -129,7 +129,7 @@ elseif(LINUX)
         platform/linux/CCDevice-linux.cpp
         platform/desktop/CCGLViewImpl-desktop.cpp
         )
-endif()
+endif ()
 
 set(COCOS_PLATFORM_HEADER
     ${COCOS_PLATFORM_SPECIFIC_HEADER}

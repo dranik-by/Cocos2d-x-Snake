@@ -28,24 +28,24 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-#define kLabelZOrder  9999
+    #define kLabelZOrder  9999
 
-#include "ui/UIEditBox/UIEditBox.h"
-#include "base/CCDirector.h"
-#include "2d/CCLabel.h"
-#import "platform/ios/CCEAGLView-ios.h"
+    #include "ui/UIEditBox/UIEditBox.h"
+    #include "base/CCDirector.h"
+    #include "2d/CCLabel.h"
+    #import "platform/ios/CCEAGLView-ios.h"
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
 
-#import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
+    #import "ui/UIEditBox/iOS/CCUIEditBoxIOS.h"
 
-#define getEditBoxImplIOS() ((cocos2d::ui::EditBoxImplIOS *)_editBox)
-
+    #define getEditBoxImplIOS() ((cocos2d::ui::EditBoxImplIOS *)_editBox)
 
 NS_CC_BEGIN
 
-namespace ui {
+namespace ui
+{
 
 EditBoxImpl* __createSystemEditBox(EditBox* pEditBox)
 {
@@ -56,7 +56,7 @@ EditBoxImplIOS::EditBoxImplIOS(EditBox* pEditText)
 : EditBoxImplCommon(pEditText)
 , _systemControl(nullptr)
 {
-    
+
 }
 
 EditBoxImplIOS::~EditBoxImplIOS()
@@ -64,8 +64,8 @@ EditBoxImplIOS::~EditBoxImplIOS()
     [_systemControl release];
     _systemControl = nil;
 }
-    
-void EditBoxImplIOS::createNativeControl(const Rect& frame)
+
+void EditBoxImplIOS::createNativeControl(const Rect &frame)
 {
     auto glview = cocos2d::Director::getInstance()->getOpenGLView();
 
@@ -75,12 +75,10 @@ void EditBoxImplIOS::createNativeControl(const Rect& frame)
 
     rect.size.width /= factor;
     rect.size.height /= factor;
-    
-    _systemControl = [[UIEditBoxImplIOS_objc alloc] initWithFrame:CGRectMake(rect.origin.x,
-                                                                             rect.origin.y,
+
+    _systemControl = [[UIEditBoxImplIOS_objc alloc]                                            initWithFrame:CGRectMake(rect.origin.x, rect.origin.y,
                                                                              rect.size.width,
-                                                                             rect.size.height)
-                                                          editBox:this];
+                                                                             rect.size.height) editBox:this];
 
 }
 
@@ -91,42 +89,39 @@ bool EditBoxImplIOS::isEditing()
 
 void EditBoxImplIOS::doAnimationWhenKeyboardMove(float duration, float distance)
 {
-    if ([_systemControl isEditState] || distance < 0.0f) {
+    if ([_systemControl isEditState] || distance < 0.0f)
+    {
         [_systemControl doAnimationWhenKeyboardMoveWithDuration:duration distance:distance];
     }
 }
-    
+
 void EditBoxImplIOS::setNativeFont(const char* pFontName, int fontSize)
 {
     UIFont* textFont = constructFont(pFontName, fontSize);
-    if (textFont != nil) {
+    if (textFont != nil)
+    {
         [_systemControl setFont:textFont];
     }
 }
-    
-void EditBoxImplIOS::setNativeFontColor(const Color4B& color)
+
+void EditBoxImplIOS::setNativeFontColor(const Color4B &color)
 {
-    _systemControl.textColor = [UIColor colorWithRed:color.r / 255.0f
-                                                         green:color.g / 255.0f
-                                                          blue:color.b / 255.0f
-                                                         alpha:color.a / 255.f];
+    _systemControl.textColor = [UIColor colorWithRed:color.r / 255.0f green:color.g / 255.0f blue:color.b / 255.0f alpha:color.a / 255.f];
 
 }
 
 void EditBoxImplIOS::setNativePlaceholderFont(const char* pFontName, int fontSize)
 {
     UIFont* textFont = constructFont(pFontName, fontSize);
-    if (textFont != nil) {
+    if (textFont != nil)
+    {
         [_systemControl setPlaceholderFont:textFont];
     }
 }
 
-void EditBoxImplIOS::setNativePlaceholderFontColor(const Color4B& color)
+void EditBoxImplIOS::setNativePlaceholderFontColor(const Color4B &color)
 {
-    [_systemControl setPlaceholderTextColor:[UIColor colorWithRed:color.r / 255.0f
-                                                         green:color.g / 255.0f
-                                                          blue:color.b / 255.0f
-                                                         alpha:color.a / 255.f]];
+    [_systemControl setPlaceholderTextColor:[UIColor colorWithRed:color.r / 255.0f green:color.g / 255.0f blue:color.b / 255.0f alpha:color.a / 255.f]];
 }
 
 void EditBoxImplIOS::setNativeInputMode(EditBox::InputMode inputMode)
@@ -134,7 +129,7 @@ void EditBoxImplIOS::setNativeInputMode(EditBox::InputMode inputMode)
     [_systemControl setInputMode:inputMode];
 
     auto oldPos = _editBox->getPosition();
-    _editBox->setPosition(oldPos + Vec2(10,10));
+    _editBox->setPosition(oldPos + Vec2(10, 10));
     _editBox->setPosition(oldPos);
 }
 
@@ -142,7 +137,7 @@ void EditBoxImplIOS::setNativeInputFlag(EditBox::InputFlag inputFlag)
 {
     [_systemControl setInputFlag:inputFlag];
 }
-    
+
 NSString* removeSiriString(NSString* str)
 {
     NSString* siriString = @"\xef\xbf\xbc";
@@ -153,7 +148,6 @@ const char* EditBoxImplIOS::getText()
 {
     return [removeSiriString(_systemControl.text) UTF8String];
 }
-
 
 void EditBoxImplIOS::setNativeReturnType(EditBox::KeyboardReturnType returnType)
 {
@@ -167,8 +161,9 @@ void EditBoxImplIOS::setNativeTextHorizontalAlignment(cocos2d::TextHAlignment al
 
 void EditBoxImplIOS::setNativeText(const char* pText)
 {
-    NSString* nsText =[NSString stringWithUTF8String:pText];
-    if ([nsText compare:_systemControl.text] != NSOrderedSame) {
+    NSString* nsText = [NSString stringWithUTF8String:pText];
+    if ([nsText compare:_systemControl.text] != NSOrderedSame)
+    {
         _systemControl.text = nsText;
     }
 }
@@ -183,16 +178,14 @@ void EditBoxImplIOS::setNativeVisible(bool visible)
     [_systemControl setVisible:visible];
 }
 
-void EditBoxImplIOS::updateNativeFrame(const Rect& rect)
+void EditBoxImplIOS::updateNativeFrame(const Rect &rect)
 {
     auto glview = cocos2d::Director::getInstance()->getOpenGLView();
-    CCEAGLView *eaglview = (CCEAGLView *) glview->getEAGLView();
+    CCEAGLView* eaglview = (CCEAGLView*)glview->getEAGLView();
 
     float factor = eaglview.contentScaleFactor;
-    
-    [_systemControl updateFrame:CGRectMake(rect.origin.x / factor,
-                                           rect.origin.y / factor,
-                                           rect.size.width / factor,
+
+    [_systemControl updateFrame:CGRectMake(rect.origin.x / factor, rect.origin.y / factor, rect.size.width / factor,
                                            rect.size.height / factor)];
 
 }
@@ -213,33 +206,34 @@ void EditBoxImplIOS::nativeCloseKeyboard()
 {
     [_systemControl closeKeyboard];
 }
-    
-UIFont* EditBoxImplIOS::constructFont(const char *fontName, int fontSize)
+
+UIFont* EditBoxImplIOS::constructFont(const char* fontName, int fontSize)
 {
     CCASSERT(fontName != nullptr, "fontName can't be nullptr");
-    CCEAGLView *eaglview = static_cast<CCEAGLView *>(cocos2d::Director::getInstance()->getOpenGLView()->getEAGLView());
+    CCEAGLView* eaglview = static_cast<CCEAGLView*>(cocos2d::Director::getInstance()->getOpenGLView()->getEAGLView());
     float retinaFactor = eaglview.contentScaleFactor;
-    NSString * fntName = [NSString stringWithUTF8String:fontName];
-    
+    NSString* fntName = [NSString stringWithUTF8String:fontName];
+
     fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
-    
+
     auto glview = cocos2d::Director::getInstance()->getOpenGLView();
     float scaleFactor = glview->getScaleX();
-    
+
     if (fontSize == -1)
     {
-        fontSize = _systemControl.frameRect.size.height*2/3;
+        fontSize = _systemControl.frameRect.size.height * 2 / 3;
     }
     else
     {
         fontSize = fontSize * scaleFactor / retinaFactor;
     }
-    
-    UIFont *textFont = nil;
+
+    UIFont* textFont = nil;
     if (strlen(fontName) > 0)
     {
         textFont = [UIFont fontWithName:fntName size:fontSize];
-        if (textFont == nil) {
+        if (textFont == nil)
+        {
             textFont = [UIFont systemFontOfSize:fontSize];
         }
     }

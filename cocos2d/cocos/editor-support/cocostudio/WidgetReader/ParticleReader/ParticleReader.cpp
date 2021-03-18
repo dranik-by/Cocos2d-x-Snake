@@ -40,187 +40,183 @@ using namespace flatbuffers;
 
 namespace cocostudio
 {
-    IMPLEMENT_CLASS_NODE_READER_INFO(ParticleReader)
-    
-    ParticleReader::ParticleReader()
+IMPLEMENT_CLASS_NODE_READER_INFO(ParticleReader)
+
+ParticleReader::ParticleReader()
+{
+
+}
+
+ParticleReader::~ParticleReader()
+{
+
+}
+
+static ParticleReader* _instanceParticleReader = nullptr;
+
+ParticleReader* ParticleReader::getInstance()
+{
+    if (!_instanceParticleReader)
     {
-        
+        _instanceParticleReader = new(std::nothrow) ParticleReader();
     }
-    
-    ParticleReader::~ParticleReader()
+
+    return _instanceParticleReader;
+}
+
+void ParticleReader::purge()
+{
+    CC_SAFE_DELETE(_instanceParticleReader);
+}
+
+void ParticleReader::destroyInstance()
+{
+    CC_SAFE_DELETE(_instanceParticleReader);
+}
+
+Offset<Table> ParticleReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement* objectData,
+                                                           flatbuffers::FlatBufferBuilder* builder)
+{
+    auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
+    auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
+
+    std::string path = "";
+    std::string plistFile = "";
+    int resourceType = 0;
+
+    cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
+
+    // child elements
+    const tinyxml2::XMLElement* child = objectData->FirstChildElement();
+    while (child)
     {
-        
-    }
-    
-    static ParticleReader* _instanceParticleReader = nullptr;
-    
-    ParticleReader* ParticleReader::getInstance()
-    {
-        if (!_instanceParticleReader)
+        std::string name = child->Name();
+
+        if (name == "FileData")
         {
-            _instanceParticleReader = new (std::nothrow) ParticleReader();
+            const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+
+            while (attribute)
+            {
+                name = attribute->Name();
+                std::string value = attribute->Value();
+
+                if (name == "Path")
+                {
+                    path = value;
+                }
+                else if (name == "Type")
+                {
+                    resourceType = 0;
+                }
+                else if (name == "Plist")
+                {
+                    plistFile = value;
+                }
+
+                attribute = attribute->Next();
+            }
         }
-        
-        return _instanceParticleReader;
+        else if (name == "BlendFunc")
+        {
+            const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
+
+            while (attribute)
+            {
+                name = attribute->Name();
+                std::string value = attribute->Value();
+
+                if (name == "Src")
+                {
+                    blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
+                }
+                else if (name == "Dst")
+                {
+                    blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
+                }
+
+                attribute = attribute->Next();
+            }
+        }
+
+        child = child->NextSiblingElement();
     }
-    
-    void ParticleReader::purge()
+
+    flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
+
+    auto options = CreateParticleSystemOptions(*builder, nodeOptions,
+                                               CreateResourceData(*builder, builder->CreateString(path),
+                                                                  builder->CreateString(plistFile), resourceType),
+                                               &f_blendFunc);
+
+    return *(Offset<Table>*)(&options);
+}
+
+void ParticleReader::setPropsWithFlatBuffers(cocos2d::Node* node, const flatbuffers::Table* particleOptions)
+{
+    auto particle = dynamic_cast<ParticleSystemQuad*>(node);
+    auto options = (ParticleSystemOptions*)particleOptions;
+
+    auto f_blendFunc = options->blendFunc();
+    if (particle && f_blendFunc)
     {
-        CC_SAFE_DELETE(_instanceParticleReader);
-    }
-    
-    void ParticleReader::destroyInstance()
-    {
-        CC_SAFE_DELETE(_instanceParticleReader);
-    }
-    
-    Offset<Table> ParticleReader::createOptionsWithFlatBuffers(const tinyxml2::XMLElement *objectData,
-                                                               flatbuffers::FlatBufferBuilder *builder)
-    {
-        auto temp = NodeReader::getInstance()->createOptionsWithFlatBuffers(objectData, builder);
-        auto nodeOptions = *(Offset<WidgetOptions>*)(&temp);
-        
-        std::string path = "";
-        std::string plistFile = "";
-        int resourceType = 0;
-        
         cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-        
-        // child elements
-        const tinyxml2::XMLElement* child = objectData->FirstChildElement();
-        while (child)
-        {
-            std::string name = child->Name();
-            
-            if (name == "FileData")
-            {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
-                
-                while (attribute)
-                {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
-                    
-                    if (name == "Path")
-                    {
-                        path = value;
-                    }
-                    else if (name == "Type")
-                    {
-                        resourceType = 0;
-                    }
-                    else if (name == "Plist")
-                    {
-                        plistFile = value;
-                    }
-                    
-                    attribute = attribute->Next();
-                }
-            }
-            else if (name == "BlendFunc")
-            {
-                const tinyxml2::XMLAttribute* attribute = child->FirstAttribute();
-                
-                while (attribute)
-                {
-                    name = attribute->Name();
-                    std::string value = attribute->Value();
-                    
-                    if (name == "Src")
-                    {
-                        blendFunc.src = utils::toBackendBlendFactor(atoi(value.c_str()));
-                    }
-                    else if (name == "Dst")
-                    {
-                        blendFunc.dst = utils::toBackendBlendFactor(atoi(value.c_str()));
-                    }
-                    
-                    attribute = attribute->Next();
-                }
-            }
-            
-            child = child->NextSiblingElement();
-        }
-        
-        flatbuffers::BlendFunc f_blendFunc(utils::toGLBlendFactor(blendFunc.src), utils::toGLBlendFactor(blendFunc.dst));
-        
-        auto options = CreateParticleSystemOptions(*builder,
-                                                   nodeOptions,
-                                                   CreateResourceData(*builder,
-                                                                      builder->CreateString(path),
-                                                                      builder->CreateString(plistFile),
-                                                                      resourceType),
-                                                   &f_blendFunc);
-        
-        return *(Offset<Table>*)(&options);
+        blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
+        blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
+        particle->setBlendFunc(blendFunc);
     }
-    
-    void ParticleReader::setPropsWithFlatBuffers(cocos2d::Node *node,
-                                                 const flatbuffers::Table *particleOptions)
+
+    auto nodeReader = NodeReader::getInstance();
+    nodeReader->setPropsWithFlatBuffers(node, (Table*)options->nodeOptions());
+}
+
+Node* ParticleReader::createNodeWithFlatBuffers(const flatbuffers::Table* particleOptions)
+{
+    ParticleSystemQuad* particle = nullptr;
+
+    auto options = (ParticleSystemOptions*)particleOptions;
+    auto fileNameData = options->fileNameData();
+
+    bool fileExist = false;
+    std::string errorFilePath = "";
+    std::string path = fileNameData->path()->c_str();
+    int resourceType = fileNameData->resourceType();
+    switch (resourceType)
     {
-        auto particle = dynamic_cast<ParticleSystemQuad*>(node);
-        auto options = (ParticleSystemOptions*)particleOptions;
-        
-        auto f_blendFunc = options->blendFunc();
-        if (particle && f_blendFunc)
+        case 0:
         {
-            cocos2d::BlendFunc blendFunc = cocos2d::BlendFunc::ALPHA_PREMULTIPLIED;
-            blendFunc.src = utils::toBackendBlendFactor(f_blendFunc->src());
-            blendFunc.dst = utils::toBackendBlendFactor(f_blendFunc->dst());
-            particle->setBlendFunc(blendFunc);
+            if (FileUtils::getInstance()->isFileExist(path))
+            {
+                fileExist = true;
+            }
+            else
+            {
+                errorFilePath = path;
+                fileExist = false;
+            }
+            break;
         }
-        
-        auto nodeReader = NodeReader::getInstance();
-        nodeReader->setPropsWithFlatBuffers(node, (Table*)options->nodeOptions());
+
+        default:
+            break;
     }
-    
-    Node* ParticleReader::createNodeWithFlatBuffers(const flatbuffers::Table *particleOptions)
+    if (fileExist)
     {
-        ParticleSystemQuad* particle = nullptr;
-        
-        auto options = (ParticleSystemOptions*)particleOptions;
-        auto fileNameData = options->fileNameData();
-        
-        bool fileExist = false;
-        std::string errorFilePath = "";
-        std::string path = fileNameData->path()->c_str();
-        int resourceType = fileNameData->resourceType();
-        switch (resourceType)
+        particle = ParticleSystemQuad::create(path);
+        if (particle)
         {
-            case 0:
-            {
-                if (FileUtils::getInstance()->isFileExist(path))
-                {
-                    fileExist = true;
-                }
-                else
-                {
-                    errorFilePath = path;
-                    fileExist = false;
-                }
-                break;
-            }
-                
-            default:
-                break;
+            setPropsWithFlatBuffers(particle, (Table*)particleOptions);
+            particle->setPositionType(ParticleSystem::PositionType::GROUPED);
         }
-        if (fileExist)
-        {
-            particle = ParticleSystemQuad::create(path);
-            if (particle)
-            {
-                setPropsWithFlatBuffers(particle, (Table*)particleOptions);
-                particle->setPositionType(ParticleSystem::PositionType::GROUPED);
-            }
-        }
-        else
-        {
-            Node* node = Node::create();
-            setPropsWithFlatBuffers(node, (Table*)particleOptions);
-            return node;
-        }
-        
-        return particle;
     }
-    
+    else
+    {
+        Node* node = Node::create();
+        setPropsWithFlatBuffers(node, (Table*)particleOptions);
+        return node;
+    }
+
+    return particle;
+}
+
 }

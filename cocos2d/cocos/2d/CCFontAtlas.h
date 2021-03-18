@@ -73,27 +73,40 @@ public:
      * @lua NA
      */
     virtual ~FontAtlas();
-    
+
     void addLetterDefinition(char32_t utf32Char, const FontLetterDefinition &letterDefinition);
     bool getLetterDefinitionForChar(char32_t utf32Char, FontLetterDefinition &letterDefinition);
-    
-    bool prepareLetterDefinitions(const std::u32string& utf16String);
 
-    const std::unordered_map<ssize_t, Texture2D*>& getTextures() const { return _atlasTextures; }
-    void  addTexture(Texture2D *texture, int slot);
-    float getLineHeight() const { return _lineHeight; }
-    void  setLineHeight(float newHeight);
-    
+    bool prepareLetterDefinitions(const std::u32string &utf16String);
+
+    const std::unordered_map<ssize_t, Texture2D*> &getTextures() const
+    {
+        return _atlasTextures;
+    }
+
+    void addTexture(Texture2D* texture, int slot);
+
+    float getLineHeight() const
+    {
+        return _lineHeight;
+    }
+
+    void setLineHeight(float newHeight);
+
     std::string getFontName() const;
 
     Texture2D* getTexture(int slot);
-    const Font* getFont() const { return _font; }
+
+    const Font* getFont() const
+    {
+        return _font;
+    }
 
     /** listen the event that renderer was recreated on Android/WP8
      It only has effect on Android and WP8.
      */
-    void listenRendererRecreated(EventCustom *event);
-    
+    void listenRendererRecreated(EventCustom* event);
+
     /** Removes textures atlas.
      It will purge the textures atlas and if multiple texture exist in the FontAtlas.
      */
@@ -103,26 +116,27 @@ public:
      - GL_TEXTURE_MIN_FILTER = GL_LINEAR
      - GL_TEXTURE_MAG_FILTER = GL_LINEAR
      */
-     void setAntiAliasTexParameters();
+    void setAntiAliasTexParameters();
 
-     /** sets font texture parameters:
-     - GL_TEXTURE_MIN_FILTER = GL_NEAREST
-     - GL_TEXTURE_MAG_FILTER = GL_NEAREST
-     */
-     void setAliasTexParameters();
+    /** sets font texture parameters:
+    - GL_TEXTURE_MIN_FILTER = GL_NEAREST
+    - GL_TEXTURE_MAG_FILTER = GL_NEAREST
+    */
+    void setAliasTexParameters();
 
 protected:
     void reset();
-    
+
     void reinit();
-    
+
     void releaseTextures();
 
-    void findNewCharacters(const std::u32string& u32Text, std::unordered_map<unsigned int, unsigned int>& charCodeMap);
+    void findNewCharacters(const std::u32string &u32Text, std::unordered_map<unsigned int, unsigned int> &charCodeMap);
 
-    void conversionU32TOGB2312(const std::u32string& u32Text, std::unordered_map<unsigned int, unsigned int>& charCodeMap);
+    void conversionU32TOGB2312(const std::u32string &u32Text,
+                               std::unordered_map<unsigned int, unsigned int> &charCodeMap);
 
-    void initTextureWithZeros(Texture2D *texture);
+    void initTextureWithZeros(Texture2D* texture);
 
     /**
      * Scale each font letter by scaleFactor.
@@ -130,7 +144,7 @@ protected:
      * @param scaleFactor A float scale factor for scaling font letter info.
      */
     void scaleFontLetterDefinition(float scaleFactor);
-    
+
     void updateTextureContent(backend::PixelFormat format, int startY);
 
     std::unordered_map<ssize_t, Texture2D*> _atlasTextures;
@@ -142,8 +156,8 @@ protected:
 
     // Dynamic GlyphCollection related stuff
     int _currentPage = 0;
-    unsigned char *_currentPageData = nullptr;
-    unsigned char *_currentPageDataRGBA = nullptr;
+    unsigned char* _currentPageData = nullptr;
+    unsigned char* _currentPageDataRGBA = nullptr;
     int _currentPageDataSize = 0;
     int _currentPageDataSizeRGBA = 0;
     float _currentPageOrigX = 0;

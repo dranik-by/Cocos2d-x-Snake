@@ -38,7 +38,8 @@ NS_CC_BEGIN
 
 class EventFocusListener;
 
-namespace ui {
+namespace ui
+{
 
 class ScrollViewBar;
 
@@ -49,7 +50,7 @@ class ScrollViewBar;
 class CC_GUI_DLL ScrollView : public Layout
 {
 
-    DECLARE_CLASS_GUI_INFO
+DECLARE_CLASS_GUI_INFO
 
 public:
     /**
@@ -78,15 +79,15 @@ public:
         BOUNCE_LEFT,
         BOUNCE_RIGHT,
         CONTAINER_MOVED,
-		SCROLLING_BEGAN,
-		SCROLLING_ENDED,
+        SCROLLING_BEGAN,
+        SCROLLING_ENDED,
         AUTOSCROLL_ENDED
     };
 
     /**
      * A callback which would be called when a ScrollView is scrolling.
      */
-    typedef std::function<void(Ref*, EventType)> ccScrollViewCallback;
+    typedef std::function<void(Ref * , EventType)> ccScrollViewCallback;
 
     /**
      * Default constructor
@@ -123,7 +124,7 @@ public:
      *
      * @return Scrollview scroll direction.
      */
-    Direction getDirection()const;
+    Direction getDirection() const;
 
     /**
      * Get inner container of scrollview.
@@ -132,7 +133,7 @@ public:
      *
      * @return Inner container pointer.
      */
-    Layout* getInnerContainer()const;
+    Layout* getInnerContainer() const;
 
     /**
      * Immediately stops inner container scroll (auto scrolling is not affected).
@@ -227,19 +228,19 @@ public:
      * @param timeInSec Time in seconds.
      * @param attenuated Whether scroll speed attenuate or not.
      */
-    virtual void scrollToPercentBothDirection(const Vec2& percent, float timeInSec, bool attenuated);
-	
-	/**
-	 * @return How far the scroll view is scrolled in the vertical axis
-	 */
+    virtual void scrollToPercentBothDirection(const Vec2 &percent, float timeInSec, bool attenuated);
+
+    /**
+     * @return How far the scroll view is scrolled in the vertical axis
+     */
     float getScrolledPercentVertical() const;
-	/**
-	 * @return How far the scroll view is scrolled in the horizontal axis
-	 */
+    /**
+     * @return How far the scroll view is scrolled in the horizontal axis
+     */
     float getScrolledPercentHorizontal() const;
-	/**
-	 * @return How far the scroll view is scrolled in both axes, combined as a Vec2
-	 */
+    /**
+     * @return How far the scroll view is scrolled in both axes, combined as a Vec2
+     */
     Vec2 getScrolledPercentBothDirection() const;
 
     /**
@@ -298,7 +299,7 @@ public:
      * Move inner container to both direction percent position of scrollview.
      * @param percent   A value between 0 and 100.
      */
-    virtual void jumpToPercentBothDirection(const Vec2& percent);
+    virtual void jumpToPercentBothDirection(const Vec2 &percent);
 
     /**
      * Change inner container size of scrollview.
@@ -316,46 +317,46 @@ public:
      *
      * @return The inner container size.
      */
-    const Size& getInnerContainerSize() const;
-    
+    const Size &getInnerContainerSize() const;
+
     /**
      * Set inner container position
      *
      * @param pos Inner container position.
      */
     void setInnerContainerPosition(const Vec2 &pos);
-    
+
     /**
      * Get inner container position
      *
      * @return The inner container position.
      */
-    const Vec2& getInnerContainerPosition() const;
+    const Vec2 &getInnerContainerPosition() const;
 
     /**
      * Add callback function which will be called  when scrollview event triggered.
      * @param callback A callback function with type of `ccScrollViewCallback`.
      */
-    virtual void addEventListener(const ccScrollViewCallback& callback);
+    virtual void addEventListener(const ccScrollViewCallback &callback);
 
     //override functions
-    virtual void addChild(Node* child)override;
-    virtual void addChild(Node * child, int localZOrder)override;
+    virtual void addChild(Node* child) override;
+    virtual void addChild(Node* child, int localZOrder) override;
     virtual void addChild(Node* child, int localZOrder, int tag) override;
     virtual void addChild(Node* child, int localZOrder, const std::string &name) override;
     virtual void removeAllChildren() override;
     virtual void removeAllChildrenWithCleanup(bool cleanup) override;
     virtual void removeChild(Node* child, bool cleanup = true) override;
-    virtual Vector<Node*>& getChildren() override;
-    virtual const Vector<Node*>& getChildren() const override;
+    virtual Vector<Node*> &getChildren() override;
+    virtual const Vector<Node*> &getChildren() const override;
     virtual ssize_t getChildrenCount() const override;
-    virtual Node * getChildByTag(int tag) const override;
-    virtual Node* getChildByName(const std::string& name)const override;
+    virtual Node* getChildByTag(int tag) const override;
+    virtual Node* getChildByName(const std::string &name) const override;
     //touch event callback
-    virtual bool onTouchBegan(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchMoved(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchEnded(Touch *touch, Event *unusedEvent) override;
-    virtual void onTouchCancelled(Touch *touch, Event *unusedEvent) override;
+    virtual bool onTouchBegan(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchMoved(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchEnded(Touch* touch, Event* unusedEvent) override;
+    virtual void onTouchCancelled(Touch* touch, Event* unusedEvent) override;
     virtual void update(float dt) override;
 
     /**
@@ -385,140 +386,140 @@ public:
      * @return True if inertia is enabled, false otherwise.
      */
     bool isInertiaScrollEnabled() const;
-    
+
     /**
      * @brief Toggle scroll bar enabled.
      *
      * @param enabled True if enable scroll bar, false otherwise.
      */
     void setScrollBarEnabled(bool enabled);
-    
+
     /**
      * @brief Query scroll bar state.
      *
      * @return True if scroll bar is enabled, false otherwise.
      */
     bool isScrollBarEnabled() const;
-    
+
     /**
      * @brief Set the scroll bar positions from the left-bottom corner (horizontal) and right-top corner (vertical).
      *
      * @param positionFromCorner The position from the left-bottom corner (horizontal) and right-top corner (vertical).
      */
-    void setScrollBarPositionFromCorner(const Vec2& positionFromCorner);
-    
+    void setScrollBarPositionFromCorner(const Vec2 &positionFromCorner);
+
     /**
      * @brief Set the vertical scroll bar position from right-top corner.
      *
      * @param positionFromCorner The position from right-top corner
      */
-    void setScrollBarPositionFromCornerForVertical(const Vec2& positionFromCorner);
-    
+    void setScrollBarPositionFromCornerForVertical(const Vec2 &positionFromCorner);
+
     /**
      * @brief Get the vertical scroll bar's position from right-top corner.
      *
      * @return positionFromCorner
      */
     Vec2 getScrollBarPositionFromCornerForVertical() const;
-    
+
     /**
      * @brief Set the horizontal scroll bar position from left-bottom corner.
      *
      * @param positionFromCorner The position from left-bottom corner
      */
-    void setScrollBarPositionFromCornerForHorizontal(const Vec2& positionFromCorner);
-    
+    void setScrollBarPositionFromCornerForHorizontal(const Vec2 &positionFromCorner);
+
     /**
      * @brief Get the horizontal scroll bar's position from right-top corner.
      *
      * @return positionFromCorner
      */
     Vec2 getScrollBarPositionFromCornerForHorizontal() const;
-    
+
     /**
      * @brief Set the scroll bar's width
      *
      * @param width The scroll bar's width
      */
     void setScrollBarWidth(float width);
-    
+
     /**
      * @brief Get the scroll bar's width
      *
      * @return the scroll bar's width
      */
     float getScrollBarWidth() const;
-    
+
     /**
      * @brief Set the scroll bar's color
      *
      * @param the scroll bar's color
      */
-    void setScrollBarColor(const Color3B& color);
-    
+    void setScrollBarColor(const Color3B &color);
+
     /**
      * @brief Get the scroll bar's color
      *
      * @return the scroll bar's color
      */
-    const Color3B& getScrollBarColor() const;
-    
+    const Color3B &getScrollBarColor() const;
+
     /**
      * @brief Set the scroll bar's opacity
      *
      * @param the scroll bar's opacity
      */
     void setScrollBarOpacity(uint8_t opacity);
-    
+
     /**
      * @brief Get the scroll bar's opacity
      *
      * @return the scroll bar's opacity
      */
     uint8_t getScrollBarOpacity() const;
-    
+
     /**
      * @brief Set scroll bar auto hide state
      *
      * @param scroll bar auto hide state
      */
     void setScrollBarAutoHideEnabled(bool autoHideEnabled);
-    
+
     /**
      * @brief Query scroll bar auto hide state
      *
      * @return True if scroll bar auto hide is enabled, false otherwise.
      */
     bool isScrollBarAutoHideEnabled() const;
-    
+
     /**
      * @brief Set scroll bar auto hide time
      *
      * @param scroll bar auto hide time
      */
     void setScrollBarAutoHideTime(float autoHideTime);
-    
+
     /**
      * @brief Get the scroll bar's auto hide time
      *
      * @return the scroll bar's auto hide time
      */
     float getScrollBarAutoHideTime() const;
-    
+
     /**
      * @brief Set the touch total time threshold
      *
      * @param the touch total time threshold
      */
     void setTouchTotalTimeThreshold(float touchTotalTimeThreshold);
-    
+
     /**
      * @brief Get the touch total time threshold
      *
      * @return the touch total time threshold
      */
     float getTouchTotalTimeThreshold() const;
-    
+
     /**
      * Set layout type for scrollview.
      *
@@ -558,15 +559,22 @@ public:
      *@return the next focused widget in a layout
      */
     virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
-	
-	/**
-	 * @return Whether the user is currently dragging the ScrollView to scroll it
-	 */
-	bool isScrolling() const { return _scrolling; }
-	/**
-	 * @return Whether the ScrollView is currently scrolling because of a bounceback or inertia slowdown.
-	 */
-	bool isAutoScrolling() const { return _autoScrolling; }
+
+    /**
+     * @return Whether the user is currently dragging the ScrollView to scroll it
+     */
+    bool isScrolling() const
+    {
+        return _scrolling;
+    }
+
+    /**
+     * @return Whether the ScrollView is currently scrolling because of a bounceback or inertia slowdown.
+     */
+    bool isAutoScrolling() const
+    {
+        return _autoScrolling;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
@@ -579,7 +587,7 @@ protected:
         LEFT,
         RIGHT,
     };
-    
+
     virtual void initRenderer() override;
 
     virtual void onSizeChanged() override;
@@ -588,52 +596,52 @@ protected:
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void copyClonedWidgetChildren(Widget* model) override;
-    
+
     virtual void initScrollBar();
     virtual void removeScrollBar();
-    
-    Vec2 flattenVectorByDirection(const Vec2& vector);
-    
-    virtual Vec2 getHowMuchOutOfBoundary(const Vec2& addition = Vec2::ZERO);
+
+    Vec2 flattenVectorByDirection(const Vec2 &vector);
+
+    virtual Vec2 getHowMuchOutOfBoundary(const Vec2 &addition = Vec2::ZERO);
     bool isOutOfBoundary(MoveDirection dir);
     bool isOutOfBoundary();
 
-    virtual void moveInnerContainer(const Vec2& deltaMove, bool canStartBounceBack);
+    virtual void moveInnerContainer(const Vec2 &deltaMove, bool canStartBounceBack);
 
     bool calculateCurrAndPrevTouchPoints(Touch* touch, Vec3* currPt, Vec3* prevPt);
-    void gatherTouchMove(const Vec2& delta);
+    void gatherTouchMove(const Vec2 &delta);
     Vec2 calculateTouchMoveVelocity() const;
-    
-    virtual void startAttenuatingAutoScroll(const Vec2& deltaMove, const Vec2& initialVelocity);
-    void startAutoScroll(const Vec2& deltaMove, float timeInSec, bool attenuated);
-    void startAutoScrollToDestination(const Vec2& des, float timeInSec, bool attenuated);
+
+    virtual void startAttenuatingAutoScroll(const Vec2 &deltaMove, const Vec2 &initialVelocity);
+    void startAutoScroll(const Vec2 &deltaMove, float timeInSec, bool attenuated);
+    void startAutoScrollToDestination(const Vec2 &des, float timeInSec, bool attenuated);
     bool isNecessaryAutoScrollBrake();
     void processAutoScrolling(float deltaTime);
 
-    void startInertiaScroll(const Vec2& touchMoveVelocity);
-    
+    void startInertiaScroll(const Vec2 &touchMoveVelocity);
+
     bool startBounceBackIfNeeded();
 
-    void jumpToDestination(const Vec2& des);
+    void jumpToDestination(const Vec2 &des);
 
-    virtual void scrollChildren(const Vec2& deltaMove);
+    virtual void scrollChildren(const Vec2 &deltaMove);
 
-    virtual void handlePressLogic(Touch *touch);
-    virtual void handleMoveLogic(Touch *touch);
-    virtual void handleReleaseLogic(Touch *touch);
+    virtual void handlePressLogic(Touch* touch);
+    virtual void handleMoveLogic(Touch* touch);
+    virtual void handleReleaseLogic(Touch* touch);
 
-    virtual void interceptTouchEvent(Widget::TouchEventType event,Widget* sender,Touch *touch) override;
-    
+    virtual void interceptTouchEvent(Widget::TouchEventType event, Widget* sender, Touch* touch) override;
+
     void processScrollEvent(MoveDirection dir, bool bounce);
     void processScrollingEvent();
-	void processScrollingEndedEvent();
+    void processScrollingEndedEvent();
     void dispatchEvent(EventType eventType);
 
-    void updateScrollBar(const Vec2& outOfBoundary);
-	
+    void updateScrollBar(const Vec2 &outOfBoundary);
+
 protected:
     virtual float getAutoScrollStopEpsilon() const;
-    bool fltEqualZero(const Vec2& point) const;
+    bool fltEqualZero(const Vec2 &point) const;
     Layout* _innerContainer;
 
     Direction _direction;
@@ -646,15 +654,15 @@ protected:
     bool _bePressed;
 
     float _childFocusCancelOffsetInInch;
-    
+
     // Touch move speed
     std::list<Vec2> _touchMoveDisplacements;
     std::list<float> _touchMoveTimeDeltas;
     long long _touchMovePreviousTimestamp;
     float _touchTotalTimeThreshold;
-	
-	bool _scrolling;
-    
+
+    bool _scrolling;
+
     bool _autoScrolling;
     bool _autoScrollAttenuate;
     Vec2 _autoScrollStartPosition;
@@ -664,18 +672,18 @@ protected:
     bool _autoScrollCurrentlyOutOfBoundary;
     bool _autoScrollBraking;
     Vec2 _autoScrollBrakingStartPosition;
-    
+
     bool _inertiaScrollEnabled;
 
     bool _bounceEnabled;
-    
+
     Vec2 _outOfBoundaryAmount;
     bool _outOfBoundaryAmountDirty;
-    
+
     bool _scrollBarEnabled;
     ScrollViewBar* _verticalScrollBar;
     ScrollViewBar* _horizontalScrollBar;
-    
+
     Ref* _scrollViewEventListener;
     ccScrollViewCallback _eventCallback;
 };

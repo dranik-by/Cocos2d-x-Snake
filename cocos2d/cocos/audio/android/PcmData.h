@@ -30,7 +30,8 @@ THE SOFTWARE.
 #include <vector>
 #include <memory>
 
-namespace cocos2d {
+namespace cocos2d
+{
 
 struct PcmData
 {

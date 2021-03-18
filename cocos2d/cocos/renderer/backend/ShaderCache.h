@@ -45,32 +45,32 @@ class ShaderCache : public Ref
 public:
     /** returns the shared instance */
     static ShaderCache* getInstance();
-    
+
     /** purges the cache. It releases the retained instance. */
     static void destroyInstance();
-    
+
     /** 
      * Create a vertex shader module and add it to cache.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newVertexShaderModule(const std::string& shaderSource);
-    
+    static backend::ShaderModule* newVertexShaderModule(const std::string &shaderSource);
+
     /** 
      * Create a fragment shader module.
      * If it is created before, then just return the cached shader module.
      * @param shaderSource The source code of the shader.
      */
-    static backend::ShaderModule* newFragmentShaderModule(const std::string& shaderSource);
-    
+    static backend::ShaderModule* newFragmentShaderModule(const std::string &shaderSource);
+
     /**
      * Remove all unused shaders.
      */
     void removeUnusedShader();
-    
+
 protected:
     virtual ~ShaderCache();
-    
+
     /**
      * Initial shader cache.
      * @return true if initial successful, otherwise false.
@@ -85,8 +85,8 @@ protected:
      * @param source Specifies shader source.
      * @return A ShaderModule object.
      */
-    static backend::ShaderModule* newShaderModule(backend::ShaderStage stage, const std::string& shaderSource);
-    
+    static backend::ShaderModule* newShaderModule(backend::ShaderStage stage, const std::string &shaderSource);
+
     static std::unordered_map<std::size_t, backend::ShaderModule*> _cachedShaders;
     static ShaderCache* _sharedShaderCache;
 };

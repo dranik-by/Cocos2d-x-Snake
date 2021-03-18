@@ -32,9 +32,9 @@
 #define QUOTEME(x) QUOTEME_(x)
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define ALOGV(fmt, ...) printf("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "\n", ##__VA_ARGS__)
+    #define ALOGV(fmt, ...) printf("V/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "\n", ##__VA_ARGS__)
 #else
-#define ALOGV(fmt, ...) do {} while(false)
+    #define ALOGV(fmt, ...) do {} while(false)
 #endif
 #define ALOGD(fmt, ...) printf("D/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "\n", ##__VA_ARGS__)
 #define ALOGI(fmt, ...) printf("I/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "\n", ##__VA_ARGS__)
@@ -42,7 +42,7 @@
 #define ALOGE(fmt, ...) printf("E/" LOG_TAG " (" QUOTEME(__LINE__) "): " fmt "\n", ##__VA_ARGS__)
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG > 0
-#define CHECK_AL_ERROR_DEBUG() \
+    #define CHECK_AL_ERROR_DEBUG() \
 do { \
     auto __error = alGetError(); \
     if (__error) { \
@@ -50,7 +50,7 @@ do { \
     } \
 } while (false)
 #else
-#define CHECK_AL_ERROR_DEBUG()
+    #define CHECK_AL_ERROR_DEBUG()
 #endif
 
 #define BREAK_IF(condition) \

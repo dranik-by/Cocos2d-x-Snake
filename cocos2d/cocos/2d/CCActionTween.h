@@ -52,14 +52,16 @@ public:
      * @js NA
      * @lua NA
      */
-    virtual ~ActionTweenDelegate() {}
+    virtual ~ActionTweenDelegate()
+    {
+    }
 
     /**
     @brief The callback function when ActionTween is running.
     @param value The new value of the specified key.
     @param key The key of property which should be updated.
     */
-    virtual void updateTweenAction(float value, const std::string& key) = 0;
+    virtual void updateTweenAction(float value, const std::string &key) = 0;
 };
 
 /** ActionTween
@@ -93,14 +95,14 @@ public:
      * @param to The value of the specified property when the action end.
      * @return If the creation success, return a pointer of ActionTween; otherwise, return nil.
      */
-    static ActionTween* create(float duration, const std::string& key, float from, float to);
+    static ActionTween* create(float duration, const std::string &key, float from, float to);
 
     // Overrides
-    void startWithTarget(Node *target) override;
+    void startWithTarget(Node* target) override;
     void update(float dt) override;
     ActionTween* reverse() const override;
-    ActionTween *clone() const override;
-    
+    ActionTween* clone() const override;
+
 CC_CONSTRUCTOR_ACCESS:
     /** 
      * @brief Initializes the action with the property name (key), and the from and to parameters.
@@ -110,12 +112,12 @@ CC_CONSTRUCTOR_ACCESS:
      * @param to The value of the specified property when the action end.
      * @return If the initialization success, return true; otherwise, return false.
      */
-    bool initWithDuration(float duration, const std::string& key, float from, float to);
+    bool initWithDuration(float duration, const std::string &key, float from, float to);
 
 protected:
-    std::string       _key;
-    float            _from, _to;
-    float            _delta;
+    std::string _key;
+    float _from, _to;
+    float _delta;
 };
 
 // end of actions group

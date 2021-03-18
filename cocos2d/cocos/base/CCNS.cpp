@@ -38,18 +38,18 @@ NS_CC_BEGIN
 typedef std::vector<std::string> strArray;
 
 // string toolkit
-static inline void split(const std::string& src, const std::string& token, strArray& vect)
+static inline void split(const std::string &src, const std::string &token, strArray &vect)
 {
     size_t nend = 0;
     size_t nbegin = 0;
     size_t tokenSize = token.size();
-    while(nend != std::string::npos)
+    while (nend != std::string::npos)
     {
         nend = src.find(token, nbegin);
-        if(nend == std::string::npos)
-            vect.push_back(src.substr(nbegin, src.length()-nbegin));
+        if (nend == std::string::npos)
+            vect.push_back(src.substr(nbegin, src.length() - nbegin));
         else
-            vect.push_back(src.substr(nbegin, nend-nbegin));
+            vect.push_back(src.substr(nbegin, nend - nbegin));
         nbegin = nend + tokenSize;
     }
 }
@@ -58,15 +58,15 @@ static inline void split(const std::string& src, const std::string& token, strAr
 // if the form is right,the string will be split into the parameter strs;
 // or the parameter strs will be empty.
 // if the form is right return true,else return false.
-static bool splitWithForm(const std::string& content, strArray& strs)
+static bool splitWithForm(const std::string &content, strArray &strs)
 {
     bool bRet = false;
 
-    do 
+    do
     {
         CC_BREAK_IF(content.empty());
 
-        size_t nPosLeft  = content.find('{');
+        size_t nPosLeft = content.find('{');
         size_t nPosRight = content.find('}');
 
         // don't have '{' and '}'
@@ -98,17 +98,17 @@ static bool splitWithForm(const std::string& content, strArray& strs)
 
 // implement the functions
 
-Rect RectFromString(const std::string& str)
+Rect RectFromString(const std::string &str)
 {
     Rect result = Rect::ZERO;
 
-    do 
+    do
     {
         CC_BREAK_IF(str.empty());
         std::string content = str;
 
         // find the first '{' and the third '}'
-        size_t nPosLeft  = content.find('{');
+        size_t nPosLeft = content.find('{');
         size_t nPosRight = content.find('}');
         for (int i = 1; i < 3; ++i)
         {
@@ -128,7 +128,7 @@ Rect RectFromString(const std::string& str)
 
         // get the point string and size string
         const std::string pointStr = content.substr(0, nPointEnd);
-        const std::string sizeStr  = content.substr(nPointEnd + 1, content.length() - nPointEnd);
+        const std::string sizeStr = content.substr(nPointEnd + 1, content.length() - nPointEnd);
 
         // split the string with ','
         strArray pointInfo;
@@ -136,10 +136,10 @@ Rect RectFromString(const std::string& str)
         strArray sizeInfo;
         CC_BREAK_IF(!splitWithForm(sizeStr, sizeInfo));
 
-        float x = (float) utils::atof(pointInfo[0].c_str());
-        float y = (float) utils::atof(pointInfo[1].c_str());
-        float width  = (float) utils::atof(sizeInfo[0].c_str());
-        float height = (float) utils::atof(sizeInfo[1].c_str());
+        float x = (float)utils::atof(pointInfo[0].c_str());
+        float y = (float)utils::atof(pointInfo[1].c_str());
+        float width = (float)utils::atof(sizeInfo[0].c_str());
+        float height = (float)utils::atof(sizeInfo[1].c_str());
 
         result = Rect(x, y, width, height);
     } while (0);
@@ -147,17 +147,17 @@ Rect RectFromString(const std::string& str)
     return result;
 }
 
-Vec2 PointFromString(const std::string& str)
+Vec2 PointFromString(const std::string &str)
 {
     Vec2 ret;
 
-    do 
+    do
     {
         strArray strs;
         CC_BREAK_IF(!splitWithForm(str, strs));
 
-        float x = (float) utils::atof(strs[0].c_str());
-        float y = (float) utils::atof(strs[1].c_str());
+        float x = (float)utils::atof(strs[0].c_str());
+        float y = (float)utils::atof(strs[1].c_str());
 
         ret.set(x, y);
     } while (0);
@@ -165,17 +165,17 @@ Vec2 PointFromString(const std::string& str)
     return ret;
 }
 
-Size SizeFromString(const std::string& pszContent)
+Size SizeFromString(const std::string &pszContent)
 {
     Size ret = Size::ZERO;
 
-    do 
+    do
     {
         strArray strs;
         CC_BREAK_IF(!splitWithForm(pszContent, strs));
 
-        float width  = (float) utils::atof(strs[0].c_str());
-        float height = (float) utils::atof(strs[1].c_str());
+        float width = (float)utils::atof(strs[0].c_str());
+        float height = (float)utils::atof(strs[1].c_str());
 
         ret = Size(width, height);
     } while (0);

@@ -46,8 +46,8 @@ public:
      *
      * @param acc A given Acceleration.
      */
-    EventAcceleration(const Acceleration& acc);
-    
+    EventAcceleration(const Acceleration &acc);
+
 private:
     Acceleration _acc;
     friend class EventListenerAcceleration;

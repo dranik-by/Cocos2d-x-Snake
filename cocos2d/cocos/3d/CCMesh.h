@@ -53,7 +53,7 @@ class Pass;
 
 namespace backend
 {
-    class Buffer;
+class Buffer;
 }
 
 /** 
@@ -65,19 +65,21 @@ class CC_DLL Mesh : public Ref
 public:
     typedef std::vector<unsigned short> IndexArray;
     /**create mesh from positions, normals, and so on, single SubMesh*/
-    static Mesh* create(const std::vector<float>& positions, const std::vector<float>& normals, const std::vector<float>& texs, const IndexArray& indices);
-    
+    static Mesh* create(const std::vector<float> &positions, const std::vector<float> &normals,
+                        const std::vector<float> &texs, const IndexArray &indices);
+
     /**
      * @lua NA
      */
-    static Mesh* create(const std::vector<float>& vertices, int perVertexSizeInFloat, const IndexArray& indices, const std::vector<MeshVertexAttrib>& attribs);
-    
+    static Mesh* create(const std::vector<float> &vertices, int perVertexSizeInFloat, const IndexArray &indices,
+                        const std::vector<MeshVertexAttrib> &attribs);
+
     /** 
      * create mesh
      * @lua NA
      */
-    static Mesh* create(const std::string& name, MeshIndexData* indexData, MeshSkin* skin = nullptr);
-    
+    static Mesh* create(const std::string &name, MeshIndexData* indexData, MeshSkin* skin = nullptr);
+
     /**
      * get vertex buffer
      * 
@@ -93,7 +95,7 @@ public:
     /**get mesh vertex attribute count*/
     ssize_t getMeshVertexAttribCount() const;
     /**get MeshVertexAttribute by index*/
-    const MeshVertexAttrib& getMeshVertexAttribute(int idx);
+    const MeshVertexAttrib &getMeshVertexAttribute(int idx);
     /**get per vertex size in bytes*/
     int getVertexSizeInBytes() const;
 
@@ -101,7 +103,7 @@ public:
      * set texture (diffuse), which is responsible for the main appearance. It is also means main texture, you can also call setTexture(texPath, NTextureData::Usage::Diffuse)
      * @param texPath texture path
      */
-    void setTexture(const std::string& texPath);
+    void setTexture(const std::string &texPath);
     /**
      * set texture (diffuse), which is responsible for the main appearance. It is also means main texture, you can also call setTexture(texPath, NTextureData::Usage::Diffuse)
      * @param tex texture to be set
@@ -113,13 +115,13 @@ public:
      * @param usage Usage of this texture
      * @param whether refresh the cache file name
      */
-    void setTexture(Texture2D* tex, NTextureData::Usage usage,bool cacheFileName = true);
+    void setTexture(Texture2D* tex, NTextureData::Usage usage, bool cacheFileName = true);
     /**
      * set texture
      * @param texPath texture path
      * @param usage Usage of this texture
      */
-    void setTexture(const std::string& texPath, NTextureData::Usage usage);
+    void setTexture(const std::string &texPath, NTextureData::Usage usage);
     /**
      * Get texture (diffuse), which is responsible for the main appearance. It is also means main texture, you can also call getTexture(NTextureData::Usage::Diffuse)
      * @return Texture used, return the texture of first mesh if multiple meshes exist
@@ -131,38 +133,47 @@ public:
      * @return The texture of this usage, return the texture of first mesh if multiple meshes exist
      */
     Texture2D* getTexture(NTextureData::Usage usage);
-    
+
     /**visible getter and setter*/
     void setVisible(bool visible);
     bool isVisible() const;
-    
+
     /**
      * skin getter
      *
      * @lua NA
      */
-    MeshSkin* getSkin() const { return _skin; }
-    
+    MeshSkin* getSkin() const
+    {
+        return _skin;
+    }
+
     /**
      * mesh index data getter
      *
      * @lua NA
      */
-    MeshIndexData* getMeshIndexData() const { return _meshIndexData; }
-    
+    MeshIndexData* getMeshIndexData() const
+    {
+        return _meshIndexData;
+    }
+
     /**
      * get ProgramState
      * 
      * @lua NA
      */
     backend::ProgramState* getProgramState() const;
-    
+
     /**name getter */
-    const std::string& getName() const { return _name; }
-    
+    const std::string &getName() const
+    {
+        return _name;
+    }
+
     void setBlendFunc(const BlendFunc &blendFunc);
     const BlendFunc &getBlendFunc() const;
-    
+
     /** 
      * get primitive type
      *
@@ -187,9 +198,12 @@ public:
      * @lua NA
      */
     backend::Buffer* getIndexBuffer() const;
-    
+
     /**get AABB*/
-    const AABB& getAABB() const { return _aabb; }
+    const AABB &getAABB() const
+    {
+        return _aabb;
+    }
 
     /**  Sets a new ProgramState for the Mesh
      * A new Material will be created for it
@@ -202,27 +216,38 @@ public:
     /** Returns the Material being used by the Mesh */
     Material* getMaterial() const;
 
-    void draw(Renderer* renderer, float globalZ, const Mat4& transform, uint32_t flags, unsigned int lightMask, const Vec4& color, bool forceDepthWrite);
+    void draw(Renderer* renderer, float globalZ, const Mat4 &transform, uint32_t flags, unsigned int lightMask,
+              const Vec4 &color, bool forceDepthWrite);
 
     /**skin setter*/
     void setSkin(MeshSkin* skin);
     /**Mesh index data setter*/
     void setMeshIndexData(MeshIndexData* indexdata);
+
     /**name setter*/
-    void setName(const std::string& name) { _name = name; }
- 
+    void setName(const std::string &name)
+    {
+        _name = name;
+    }
+
     /** 
      * calculate the AABB of the mesh
      * @note the AABB is in the local space, not the world space
      */
     void calculateAABB();
-    
+
     /**
      * force set this Sprite3D to 2D render queue
      */
-    void setForce2DQueue(bool force2D) { _force2DQueue = force2D; }
+    void setForce2DQueue(bool force2D)
+    {
+        _force2DQueue = force2D;
+    }
 
-    std::string getTextureFileName(){ return _texFile; }
+    std::string getTextureFileName()
+    {
+        return _texFile;
+    }
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -231,33 +256,33 @@ CC_CONSTRUCTOR_ACCESS:
 
 protected:
     void resetLightUniformValues();
-    void setLightUniforms(Pass* pass, Scene* scene, const Vec4& color, unsigned int lightmask);
+    void setLightUniforms(Pass* pass, Scene* scene, const Vec4 &color, unsigned int lightmask);
     void bindMeshCommand();
 
     std::map<NTextureData::Usage, Texture2D*> _textures; //textures that submesh is using
-    MeshSkin*           _skin;     //skin
-    bool                _visible; // is the submesh visible
-    bool                _isTransparent; // is this mesh transparent, it is a property of material in fact
-    bool                _force2DQueue; // add this mesh to 2D render queue
-    
-    std::string         _name;
-    MeshIndexData*      _meshIndexData;
+    MeshSkin* _skin;     //skin
+    bool _visible; // is the submesh visible
+    bool _isTransparent; // is this mesh transparent, it is a property of material in fact
+    bool _force2DQueue; // add this mesh to 2D render queue
+
+    std::string _name;
+    MeshIndexData* _meshIndexData;
     //GLProgramState*     _glProgramState;
-    BlendFunc           _blend;
-    bool                _blendDirty;
-    Material*           _material;
-    AABB                _aabb;
-    std::function<void()>       _visibleChanged;
-    std::unordered_map<std::string, std::vector<MeshCommand> >    _meshCommands;
-    
+    BlendFunc _blend;
+    bool _blendDirty;
+    Material* _material;
+    AABB _aabb;
+    std::function<void()> _visibleChanged;
+    std::unordered_map<std::string, std::vector<MeshCommand> > _meshCommands;
+
     ///light parameters
-    std::vector<Vec3>   _dirLightUniformColorValues;
-    std::vector<Vec3>   _dirLightUniformDirValues;
-    
+    std::vector<Vec3> _dirLightUniformColorValues;
+    std::vector<Vec3> _dirLightUniformDirValues;
+
     std::vector<Vec3> _pointLightUniformColorValues;
     std::vector<Vec3> _pointLightUniformPositionValues;
     std::vector<float> _pointLightUniformRangeInverseValues;
-    
+
     std::vector<Vec3> _spotLightUniformColorValues;
     std::vector<Vec3> _spotLightUniformPositionValues;
     std::vector<Vec3> _spotLightUniformDirValues;

@@ -20,7 +20,8 @@
 #include <stdint.h>
 #include "audio/android/utils/Errors.h"
 
-namespace cocos2d {
+namespace cocos2d
+{
 // ----------------------------------------------------------------------------
 
 class AudioBufferProvider
@@ -29,17 +30,26 @@ public:
 
     // FIXME merge with AudioTrackShared::Buffer, AudioTrack::Buffer, and AudioRecord::Buffer
     //       and rename getNextBuffer() to obtainBuffer()
-    struct Buffer {
-        Buffer() : raw(NULL), frameCount(0) { }
-        union {
-            void*       raw;
-            short*      i16;
-            int8_t*     i8;
+    struct Buffer
+    {
+        Buffer()
+        : raw(NULL)
+        , frameCount(0)
+        {
+        }
+
+        union
+        {
+            void* raw;
+            short* i16;
+            int8_t* i8;
         };
         size_t frameCount;
     };
 
-    virtual ~AudioBufferProvider() {}
+    virtual ~AudioBufferProvider()
+    {
+    }
 
     // value representing an invalid presentation timestamp
     static const int64_t kInvalidPTS = 0x7FFFFFFFFFFFFFFFLL;    // <stdint.h> is too painful

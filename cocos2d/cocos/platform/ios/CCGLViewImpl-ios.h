@@ -31,7 +31,6 @@
 
 NS_CC_BEGIN
 
-
 /** Class that represent the OpenGL View
  */
 class CC_DLL GLViewImpl : public GLView
@@ -41,14 +40,14 @@ public:
     static GLViewImpl* createWithEAGLView(void* eaGLView);
 
     /** creates a GLViewImpl with a title name in fullscreen mode */
-    static GLViewImpl* create(const std::string& viewName);
+    static GLViewImpl* create(const std::string &viewName);
 
     /** creates a GLViewImpl with a title name, a rect and the zoom factor */
-    static GLViewImpl* createWithRect(const std::string& viewName, const Rect& rect, float frameZoomFactor = 1.0f);
+    static GLViewImpl* createWithRect(const std::string &viewName, const Rect &rect, float frameZoomFactor = 1.0f);
 
     /** creates a GLViewImpl with a name in fullscreen mode */
-    static GLViewImpl* createWithFullScreen(const std::string& viewName);
-    
+    static GLViewImpl* createWithFullScreen(const std::string &viewName);
+
     static void convertAttrs();
     static void* _pixelFormat;
     static int _depthFormat;
@@ -61,10 +60,16 @@ public:
     virtual float getContentScaleFactor() const override;
 
     /** returns whether or not the view is in Retina Display mode */
-    virtual bool isRetinaDisplay() const override { return getContentScaleFactor() == 2.0; }
+    virtual bool isRetinaDisplay() const override
+    {
+        return getContentScaleFactor() == 2.0;
+    }
 
     /** returns the objective-c CCEAGLView instance */
-    virtual void* getEAGLView() const override { return _eaglview; }
+    virtual void* getEAGLView() const override
+    {
+        return _eaglview;
+    }
 
     // overrides
     virtual bool isOpenGLReady() override;
@@ -79,11 +84,11 @@ protected:
     virtual ~GLViewImpl();
 
     bool initWithEAGLView(void* eaGLView);
-    bool initWithRect(const std::string& viewName, const Rect& rect, float frameZoomFactor);
-    bool initWithFullScreen(const std::string& viewName);
+    bool initWithRect(const std::string &viewName, const Rect &rect, float frameZoomFactor);
+    bool initWithFullScreen(const std::string &viewName);
 
     // the objective-c CCEAGLView instance
-    void *_eaglview;
+    void* _eaglview;
 };
 
 NS_CC_END

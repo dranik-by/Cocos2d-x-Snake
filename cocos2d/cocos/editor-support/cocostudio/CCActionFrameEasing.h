@@ -29,7 +29,8 @@ THE SOFTWARE.
 #include "base/CCRef.h"
 #include "editor-support/cocostudio/CocosStudioExport.h"
 
-namespace cocostudio {
+namespace cocostudio
+{
 
 enum FrameEasingType
 {
@@ -58,7 +59,7 @@ enum FrameEasingType
 *  @js NA
 *  @lua NA
 */
-class CC_STUDIO_DLL ActionFrameEasing:public cocos2d::Ref
+class CC_STUDIO_DLL ActionFrameEasing : public cocos2d::Ref
 {
 protected:
     FrameEasingType _type;
