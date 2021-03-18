@@ -99,8 +99,7 @@ private:
     cocos2d::Vec2 _squareVertices[8];
     VertexData _vertexData[8];
 
-    std::map<std::string, std::map<std::string, std::string> > _skinGroupMap; // map< suit name, map< bone name, skin name> > CC_DISALLOW_COPY_AND_ASSIGN(
-    SkeletonNode);
+    std::map<std::string, std::map<std::string, std::string> > _skinGroupMap; // map< suit name, map< bone name, skin name> > CC_DISALLOW_COPY_AND_ASSIGN(SkeletonNode);
 
     void checkSubBonesDirty();
     // for draw skins as ordered bones' local z
