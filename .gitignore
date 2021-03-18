@@ -3,8 +3,6 @@
 
 cocos2d/cmake
 cocos2d/docs
-cocos2d/extensions
-cocos2d/external
 cocos2d/licenses
 cocos2d/tools
 cocos2d/.appveyor.yml
